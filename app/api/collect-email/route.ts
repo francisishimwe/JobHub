@@ -1,13 +1,23 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Create client only if env vars are available
+const supabase = supabaseUrl && supabaseAnonKey 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null
 
 // Test endpoint to verify Supabase connection
 export async function GET() {
+  if (!supabase) {
+    return NextResponse.json({
+      status: 'error',
+      message: 'Supabase is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables.'
+    }, { status: 500 })
+  }
+
   try {
     // Try to query the table
     const { data, error } = await supabase
@@ -40,6 +50,12 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!supabase) {
+    return NextResponse.json({
+      error: 'Supabase is not configured. Please set environment variables.'
+    }, { status: 500 })
+  }
+
   try {
     const { email } = await request.json()
 
