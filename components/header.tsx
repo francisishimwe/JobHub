@@ -28,7 +28,7 @@ export function Header() {
 
   const handleJoinWhatsApp = () => {
     // Replace with your actual WhatsApp group/channel link
-    window.open('https://chat.whatsapp.com/YOUR_GROUP_LINK', '_blank')
+    window.open('https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI?mode=wwt', '_blank')
   }
 
   const navigationLinks = [
