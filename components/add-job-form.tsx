@@ -94,7 +94,16 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     e.preventDefault()
     setLoading(true)
 
+    // Validate company is selected
+    if (!formData.companyId) {
+      alert("Please select a company")
+      setLoading(false)
+      return
+    }
+
     try {
+      console.log("Form data being submitted:", formData)
+      
       await addJob({
         ...formData,
         featured: false,

@@ -88,25 +88,28 @@ export function JobProvider({ children }: { children: ReactNode }) {
 
   const addJob = async (job: Omit<Job, "id" | "postedDate" | "applicants">) => {
     try {
-      console.log("Attempting to add job:", job)
+      console.log("🔍 addJob called with:", job)
+      console.log("🔍 companyId value:", job.companyId, "type:", typeof job.companyId)
+      
+      const insertData = {
+        title: job.title,
+        company_id: job.companyId,
+        description: job.description,
+        location: job.location,
+        location_type: job.locationType,
+        job_type: job.jobType,
+        opportunity_type: job.opportunityType,
+        experience_level: job.experienceLevel,
+        deadline: job.deadline || null,
+        featured: job.featured || false,
+        application_link: job.applicationLink,
+      }
+      
+      console.log("🔍 Inserting data:", insertData)
       
       const { data, error } = await supabase
         .from("jobs")
-        .insert([
-          {
-            title: job.title,
-            company_id: job.companyId,
-            description: job.description,
-            location: job.location,
-            location_type: job.locationType,
-            job_type: job.jobType,
-            opportunity_type: job.opportunityType,
-            experience_level: job.experienceLevel,
-            deadline: job.deadline,
-            featured: job.featured || false,
-            application_link: job.applicationLink,
-          },
-        ])
+        .insert([insertData])
         .select()
         .single()
 

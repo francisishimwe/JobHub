@@ -106,7 +106,7 @@ export default function JobDetailPage() {
   }
 
   const shareToWhatsApp = () => {
-    const message = `🔔 *${job.title}* at *${company.name}*\n\n${company.name} is hiring!\n\n📍 Location: ${job.location}\n💼 Type: ${job.jobType}\n📊 Level: ${job.experienceLevel}\n\n🔗 Apply now: ${window.location.href}`
+    const message = `🔔 *${job.title}* at *${company.name}*\n\n${company.name} is hiring!\n\n📍 Location: ${job.location}\n💼 Type: ${job.jobType}\n📊 Level: ${job.experienceLevel}\n\n🔗 Apply now: ${window.location.href}\n\n💬 Join our WhatsApp group for more opportunities:\nhttps://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI`
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')
   }
