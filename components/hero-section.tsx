@@ -1,14 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { SearchIcon, MapPinned, X, BriefcaseBusiness, GraduationCap, Award } from "lucide-react"
+import { SearchIcon, MapPinned, X, BriefcaseBusiness, GraduationCap, Award, BookOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { useJobs } from "@/lib/job-context"
 
 export function HeroSection() {
-  const { filters, setFilters } = useJobs()
+  const { filters, setFilters, jobs } = useJobs()
   const [searchValue, setSearchValue] = useState("")
   const [locationValue, setLocationValue] = useState("")
 
@@ -16,14 +16,17 @@ export function HeroSection() {
     { value: "Job", label: "Jobs", icon: BriefcaseBusiness },
     { value: "Internship", label: "Internships", icon: GraduationCap },
     { value: "Scholarship", label: "Scholarships", icon: Award },
+    { value: "Education", label: "Education", icon: BookOpen },
   ]
 
+  // Calculate counts for each opportunity type
+  const getCount = (type: string) => {
+    return jobs.filter(job => job.opportunityType === type).length
+  }
+
   const toggleOpportunityType = (type: string) => {
-    const current = filters.opportunityTypes
-    const updated = current.includes(type)
-      ? current.filter((t) => t !== type)
-      : [...current, type]
-    setFilters({ opportunityTypes: updated })
+    // Set only the clicked type as active (single selection)
+    setFilters({ opportunityTypes: [type] })
   }
 
   const handleSearch = () => {
@@ -83,21 +86,36 @@ export function HeroSection() {
           </div>
 
           {/* Opportunity Type Filters */}
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            {opportunityTypes.map(({ value, label, icon: Icon }) => (
-              <Badge
-                key={value}
-                variant={filters.opportunityTypes.includes(value) ? "default" : "secondary"}
-                className="cursor-pointer px-4 py-2 text-sm gap-2 transition-colors text-black"
-                style={{ 
-                  backgroundColor: filters.opportunityTypes.includes(value) ? '#76c893' : undefined,
-                }}
-                onClick={() => toggleOpportunityType(value)}
-              >
-                <Icon className="h-4 w-4" />
-                {label}
-              </Badge>
-            ))}
+          <div className="mt-6 max-w-md mx-auto grid grid-cols-2 gap-3">
+            {opportunityTypes.map(({ value, label, icon: Icon }) => {
+              const count = getCount(value)
+              const isActive = filters.opportunityTypes.includes(value)
+              
+              return (
+                <button
+                  key={value}
+                  onClick={() => toggleOpportunityType(value)}
+                  className="flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors"
+                  style={{ 
+                    backgroundColor: isActive ? '#16A34A' : 'white',
+                    color: isActive ? 'white' : '#16A34A',
+                    border: '2px solid #16A34A',
+                  }}
+                >
+                  <Icon className="h-4 w-4" />
+                  <span>{label}</span>
+                  <span 
+                    className="ml-auto rounded-md px-2 py-0.5 text-xs font-semibold"
+                    style={{
+                      backgroundColor: isActive ? 'rgba(255, 255, 255, 0.2)' : 'rgba(22, 163, 74, 0.1)',
+                      color: isActive ? 'white' : '#16A34A',
+                    }}
+                  >
+                    {count}
+                  </span>
+                </button>
+              )
+            })}
           </div>
         </div>
       </div>

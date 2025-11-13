@@ -44,11 +44,18 @@ export function Header() {
       {/* Logo Header */}
       <header className="bg-white border-b">
         <div className="container mx-auto px-4 py-3">
-          <Link href="/" className="flex items-center justify-center">
+          <Link href="/" className="flex items-center justify-center gap-3">
+            {/* Mobile: Logo only */}
             <img 
               src="/rwandajobhub.png" 
               alt="RwandaJobHub" 
-              className="h-16 md:h-20 w-auto object-contain" 
+              className="h-12 w-auto object-contain md:hidden" 
+            />
+            {/* Desktop: Logo with name */}
+            <img 
+              src="/rwandajobhub.png" 
+              alt="RwandaJobHub" 
+              className="hidden md:block h-20 w-auto object-contain" 
               style={{ maxWidth: '250px' }}
             />
           </Link>
@@ -63,7 +70,7 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-base font-medium text-white hover:text-gray-300 transition-colors"
+                className="text-lg font-medium text-white hover:text-gray-300 transition-colors"
               >
                 {link.label}
               </Link>
