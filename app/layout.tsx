@@ -2,13 +2,14 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Lato } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
 import { JobProvider } from "@/lib/job-context"
 import { CompanyProvider } from "@/lib/company-context"
 import { AuthProvider } from "@/lib/auth-context"
 import { ExamProvider } from "@/lib/exam-context"
 
-const lato = Lato({ 
+const lato = Lato({
   subsets: ["latin"],
   weight: ["100", "300", "400", "700", "900"]
 })
@@ -43,6 +44,7 @@ export default function RootLayout({
           </CompanyProvider>
         </AuthProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

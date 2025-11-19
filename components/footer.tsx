@@ -1,3 +1,5 @@
+"use client"
+
 import { MapPinned, Mail, Phone } from "lucide-react"
 import { useEffect } from "react"
 

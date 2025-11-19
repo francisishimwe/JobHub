@@ -7,19 +7,20 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { JobList } from "@/components/job-list"
 import { ExamList } from "@/components/exam-list"
+import { AnalyticsDashboard } from "@/components/analytics-dashboard"
 import { LoginForm } from "@/components/login-form"
 import { Button } from "@/components/ui/button"
-import { Plus, BriefcaseBusiness, GraduationCap } from "lucide-react"
+import { Plus, BriefcaseBusiness, GraduationCap, BarChart3 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function DashboardPage() {
   const { isAuthenticated } = useAuth()
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState("jobs")
+  const [activeTab, setActiveTab] = useState("analytics")
 
   // Show login form if not authenticated
   if (!isAuthenticated) {
-    return <LoginForm onSuccess={() => {}} />
+    return <LoginForm onSuccess={() => { }} />
   }
 
   return (
@@ -29,7 +30,7 @@ export default function DashboardPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-          <p className="text-muted-foreground">Manage your job postings and exams</p>
+          <p className="text-muted-foreground">Manage your job postings, exams, and view analytics</p>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
@@ -43,11 +44,15 @@ export default function DashboardPage() {
                 <GraduationCap className="h-4 w-4" />
                 Exams
               </TabsTrigger>
+              <TabsTrigger value="analytics" className="gap-2">
+                <BarChart3 className="h-4 w-4" />
+                Analytics
+              </TabsTrigger>
             </TabsList>
 
             {activeTab === "jobs" && (
-              <Button 
-                className="gap-2 text-black hover:opacity-90" 
+              <Button
+                className="gap-2 text-black hover:opacity-90"
                 style={{ backgroundColor: '#76c893' }}
                 onClick={() => router.push("/dashboard/add-job")}
               >
@@ -57,8 +62,8 @@ export default function DashboardPage() {
             )}
 
             {activeTab === "exams" && (
-              <Button 
-                className="gap-2 text-black hover:opacity-90" 
+              <Button
+                className="gap-2 text-black hover:opacity-90"
                 style={{ backgroundColor: '#76c893' }}
                 onClick={() => router.push("/dashboard/add-exam")}
               >
@@ -67,6 +72,10 @@ export default function DashboardPage() {
               </Button>
             )}
           </div>
+
+          <TabsContent value="analytics" className="space-y-6">
+            <AnalyticsDashboard />
+          </TabsContent>
 
           <TabsContent value="jobs" className="space-y-6">
             <JobList />
@@ -77,7 +86,7 @@ export default function DashboardPage() {
           </TabsContent>
         </Tabs>
       </div>
-      
+
       <Footer />
     </div>
   )
