@@ -18,12 +18,6 @@ export const metadata: Metadata = {
   title: "RwandaJobHub - The #1 job board for Rwandan jobs",
   description: "Created with by maximillien",
   generator: "v0.app",
-  icons: {
-    icon: [
-      { url: '/rwandajobhub.png' },
-      { url: '/icon.png' },
-    ],
-  },
 }
 
 export default function RootLayout({

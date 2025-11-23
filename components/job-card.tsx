@@ -60,7 +60,7 @@ export function JobCard({ job }: JobCardProps) {
 
               <div className="mb-2 flex flex-wrap items-center gap-2 md:gap-3 text-xs md:text-sm text-muted-foreground">
                 <span className="font-medium" style={{ color: '#16A34A' }}>{company.name}</span>
-                
+
                 <div className="flex items-center gap-1">
                   <MapPin className="h-3 w-3 md:h-4 md:w-4" />
                   <span>{job.location}</span>
@@ -73,11 +73,11 @@ export function JobCard({ job }: JobCardProps) {
                   <div className={`flex items-center gap-1 ${daysRemaining <= 3 ? 'text-red-600 font-semibold' : daysRemaining <= 7 ? 'text-orange-600' : ''}`}>
                     <Clock className="h-3 w-3 md:h-4 md:w-4" />
                     <span>
-                      {daysRemaining > 0 
+                      {daysRemaining > 0
                         ? `${daysRemaining} day${daysRemaining !== 1 ? 's' : ''} left`
-                        : daysRemaining === 0 
-                        ? 'Last day!' 
-                        : 'Expired'}
+                        : daysRemaining === 0
+                          ? 'Last day!'
+                          : 'Expired'}
                     </span>
                   </div>
                 )}

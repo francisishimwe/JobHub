@@ -76,13 +76,13 @@ export function HeroSection() {
             {opportunityTypes.map(({ value, label, icon: Icon }) => {
               const count = getCount(value)
               const isActive = filters.opportunityTypes.includes(value)
-              
+
               return (
                 <button
                   key={value}
                   onClick={() => toggleOpportunityType(value)}
                   className="flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors"
-                  style={{ 
+                  style={{
                     backgroundColor: isActive ? '#16A34A' : 'white',
                     color: isActive ? 'white' : '#16A34A',
                     border: '2px solid #16A34A',
@@ -90,7 +90,7 @@ export function HeroSection() {
                 >
                   <Icon className="h-4 w-4" />
                   <span>{label}</span>
-                  <span 
+                  <span
                     className="ml-auto rounded-md px-2 py-0.5 text-xs font-semibold"
                     style={{
                       backgroundColor: isActive ? 'rgba(255, 255, 255, 0.2)' : 'rgba(22, 163, 74, 0.1)',

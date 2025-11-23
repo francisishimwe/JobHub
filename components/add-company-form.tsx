@@ -47,7 +47,7 @@ export function AddCompanyForm({ onSuccess }: AddCompanyFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!formData.name.trim()) {
       alert("Please enter a company name")
       return
@@ -102,7 +102,7 @@ export function AddCompanyForm({ onSuccess }: AddCompanyFormProps) {
                   <Building2 className="h-10 w-10 text-muted-foreground" />
                 </AvatarFallback>
               </Avatar>
-              
+
               <div className="flex-1 space-y-2">
                 {!imagePreview ? (
                   <div>
@@ -138,7 +138,7 @@ export function AddCompanyForm({ onSuccess }: AddCompanyFormProps) {
                 )}
               </div>
             </div>
-            
+
             {/* Or use URL */}
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -148,7 +148,7 @@ export function AddCompanyForm({ onSuccess }: AddCompanyFormProps) {
                 <span className="bg-background px-2 text-muted-foreground">Or use URL</span>
               </div>
             </div>
-            
+
             <Input
               id="company-logo-url"
               value={formData.logo}
@@ -189,9 +189,9 @@ export function AddCompanyForm({ onSuccess }: AddCompanyFormProps) {
 
           {/* Actions */}
           <div className="flex justify-end gap-3 pt-2">
-            <Button 
-              type="button" 
-              variant="outline" 
+            <Button
+              type="button"
+              variant="outline"
               onClick={() => setOpen(false)}
               disabled={loading}
             >

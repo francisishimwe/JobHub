@@ -84,9 +84,9 @@ export function JobList() {
                   <TableCell>{job.applicants}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         className="h-8 w-8"
                         onClick={() => setJobToEdit(job)}
                       >
