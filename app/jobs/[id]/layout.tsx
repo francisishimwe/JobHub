@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     // Fetch job data
     const { data: jobData, error: jobError } = await supabase
       .from('jobs')
-      .select('title, description, company_id')
+      .select('title, description, company_id, location, opportunity_type, deadline')
       .eq('id', id)
       .single()
 
@@ -30,7 +30,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       return getDefaultMetadata()
     }
 
-    const title = `${jobData.title} at ${companyData.name} | RwandaJobHub`
+    const formattedDeadline = jobData.deadline
+      ? new Date(jobData.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      : 'Open'
+
+    const title = `${companyData.name} is hiring ${jobData.title} location: ${jobData.location} opportunity type: ${jobData.opportunity_type} deadline is ${formattedDeadline}`
     const description = jobData.description?.substring(0, 160) || 'Find your next career opportunity in Rwanda'
 
     return {
@@ -63,15 +67,21 @@ function getDefaultMetadata(): Metadata {
   return {
     title: 'Job Opportunity | RwandaJobHub',
     description: 'Find your next career opportunity in Rwanda',
+    icons: {
+      icon: '/favicon-.png',
+      apple: '/favicon-.png',
+    },
     openGraph: {
       title: 'Job Opportunity | RwandaJobHub',
       description: 'Find your next career opportunity in Rwanda',
       type: 'website',
+      images: [{ url: '/favicon-.png' }],
     },
     twitter: {
       card: 'summary_large_image',
       title: 'Job Opportunity | RwandaJobHub',
       description: 'Find your next career opportunity in Rwanda',
+      images: ['/favicon-.png'],
     },
   }
 }

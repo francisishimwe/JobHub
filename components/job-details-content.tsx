@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { MapPin, Briefcase, Clock, ExternalLink, ArrowLeft } from "lucide-react"
+import { MapPin, Briefcase, Clock, ExternalLink, ArrowLeft, Share2 } from "lucide-react"
 import Image from "next/image"
 import type { Job } from "@/lib/types"
 import { useCompanies } from "@/lib/company-context"
@@ -19,6 +19,17 @@ export function JobDetailsContent({ job }: JobDetailsContentProps) {
         if (job.applicationLink) {
             window.open(job.applicationLink, "_blank", "noopener,noreferrer")
         }
+    }
+
+    const handleShareWhatsApp = () => {
+        const formattedDeadline = job.deadline
+            ? new Date(job.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            : 'Open'
+
+        const shareText = `${company?.name || 'Company'} is hiring ${job.title}\nLocation: ${job.location}\nOpportunity Type: ${job.opportunityType}\nDeadline: ${formattedDeadline}\n\nApply here: ${window.location.href}`
+
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`
+        window.open(whatsappUrl, "_blank", "noopener,noreferrer")
     }
 
     return (
@@ -59,34 +70,48 @@ export function JobDetailsContent({ job }: JobDetailsContentProps) {
             </div>
 
             <div className="space-y-8">
-                {/* Job Overview */}
-                <div className="grid gap-4 sm:grid-cols-3 p-4 bg-muted/30 rounded-lg border">
-                    <div className="flex items-center gap-3 text-sm">
-                        <div className="p-2 bg-background rounded-full border">
-                            <MapPin className="h-4 w-4 text-muted-foreground" />
+                {/* Job Overview with Apply Button */}
+                <div className="flex flex-col lg:flex-row gap-4">
+                    <div className="flex-1 grid gap-4 sm:grid-cols-3 p-4 bg-muted/30 rounded-lg border">
+                        <div className="flex items-center gap-3 text-sm">
+                            <div className="p-2 bg-background rounded-full border">
+                                <MapPin className="h-4 w-4 text-muted-foreground" />
+                            </div>
+                            <div>
+                                <p className="text-xs text-muted-foreground font-medium">Location</p>
+                                <p className="font-medium">{job.location} ({job.locationType})</p>
+                            </div>
                         </div>
-                        <div>
-                            <p className="text-xs text-muted-foreground font-medium">Location</p>
-                            <p className="font-medium">{job.location} ({job.locationType})</p>
+                        <div className="flex items-center gap-3 text-sm">
+                            <div className="p-2 bg-background rounded-full border">
+                                <Briefcase className="h-4 w-4 text-muted-foreground" />
+                            </div>
+                            <div>
+                                <p className="text-xs text-muted-foreground font-medium">Job Type</p>
+                                <p className="font-medium">{job.jobType}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3 text-sm">
+                            <div className="p-2 bg-background rounded-full border">
+                                <Clock className="h-4 w-4 text-muted-foreground" />
+                            </div>
+                            <div>
+                                <p className="text-xs text-muted-foreground font-medium">Experience</p>
+                                <p className="font-medium">{job.experienceLevel}</p>
+                            </div>
                         </div>
                     </div>
-                    <div className="flex items-center gap-3 text-sm">
-                        <div className="p-2 bg-background rounded-full border">
-                            <Briefcase className="h-4 w-4 text-muted-foreground" />
-                        </div>
-                        <div>
-                            <p className="text-xs text-muted-foreground font-medium">Job Type</p>
-                            <p className="font-medium">{job.jobType}</p>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-3 text-sm">
-                        <div className="p-2 bg-background rounded-full border">
-                            <Clock className="h-4 w-4 text-muted-foreground" />
-                        </div>
-                        <div>
-                            <p className="text-xs text-muted-foreground font-medium">Experience</p>
-                            <p className="font-medium">{job.experienceLevel}</p>
-                        </div>
+
+                    {/* Apply Now Button - Right side */}
+                    <div className="lg:w-48 flex items-center">
+                        <Button
+                            onClick={handleApply}
+                            size="lg"
+                            className="w-full bg-foreground text-background hover:bg-foreground/90 text-base font-medium h-12"
+                        >
+                            Apply Now
+                            <ExternalLink className="ml-2 h-5 w-5" />
+                        </Button>
                     </div>
                 </div>
 
@@ -123,15 +148,16 @@ export function JobDetailsContent({ job }: JobDetailsContentProps) {
                     <span className="text-lg font-bold">{job.applicants}</span>
                 </div>
 
-                {/* Apply Button */}
+                {/* Share on WhatsApp Button */}
                 <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t">
                     <Button
-                        onClick={handleApply}
+                        onClick={handleShareWhatsApp}
                         size="lg"
-                        className="flex-1 bg-foreground text-background hover:bg-foreground/90 text-base font-medium h-12"
+                        variant="outline"
+                        className="flex-1 text-base font-medium h-12 border-2 hover:bg-[#25D366] hover:text-white hover:border-[#25D366] transition-colors"
                     >
-                        Apply Now
-                        <ExternalLink className="ml-2 h-5 w-5" />
+                        <Share2 className="mr-2 h-5 w-5" />
+                        Share on WhatsApp
                     </Button>
                 </div>
             </div>
