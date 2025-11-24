@@ -1,9 +1,41 @@
 import { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
+import { headers } from 'next/headers'
+
+// Helper function to strip HTML tags and decode HTML entities
+function stripHtmlAndDecode(html: string): string {
+  // Remove HTML tags
+  let text = html.replace(/<[^>]*>/g, '')
+
+  // Decode common HTML entities
+  const entities: Record<string, string> = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&quot;': '"',
+    '&#39;': "'",
+    '&nbsp;': ' ',
+  }
+
+  Object.keys(entities).forEach(entity => {
+    text = text.replace(new RegExp(entity, 'g'), entities[entity])
+  })
+
+  // Remove extra whitespace
+  text = text.replace(/\s+/g, ' ').trim()
+
+  return text
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params
   const supabase = await createClient()
+
+  // Get the base URL for absolute URLs
+  const headersList = await headers()
+  const host = headersList.get('host') || 'localhost:3000'
+  const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http'
+  const baseUrl = `${protocol}://${host}`
 
   try {
     // Fetch job data
@@ -15,7 +47,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
     if (jobError || !jobData) {
       console.error('Error fetching job for metadata:', jobError?.message || jobError)
-      return getDefaultMetadata()
+      return getDefaultMetadata(baseUrl)
     }
 
     // Fetch company data to get logo
@@ -27,7 +59,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
     if (companyError || !companyData) {
       console.error('Error fetching company for metadata:', companyError?.message || companyError)
-      return getDefaultMetadata()
+      return getDefaultMetadata(baseUrl)
     }
 
     const formattedDeadline = jobData.deadline
@@ -35,35 +67,48 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       : 'Open'
 
     const title = `${companyData.name} is hiring ${jobData.title} location: ${jobData.location} opportunity type: ${jobData.opportunity_type} deadline is ${formattedDeadline}`
-    const description = jobData.description?.substring(0, 160) || 'Find your next career opportunity in Rwanda'
+
+    // Strip HTML tags and decode entities from description
+    const cleanDescription = jobData.description
+      ? stripHtmlAndDecode(jobData.description).substring(0, 160)
+      : 'Find your next career opportunity in Rwanda'
+
+    // Ensure logo URL is absolute
+    const logoUrl = companyData.logo?.startsWith('http')
+      ? companyData.logo
+      : companyData.logo
+        ? `${baseUrl}${companyData.logo}`
+        : `${baseUrl}/favicon-.png`
 
     return {
       title,
-      description,
+      description: cleanDescription,
       icons: {
         icon: companyData.logo || '/favicon-.png',
         apple: companyData.logo || '/favicon-.png',
       },
       openGraph: {
         title,
-        description,
+        description: cleanDescription,
         type: 'website',
-        images: companyData.logo ? [{ url: companyData.logo }] : [],
+        images: [{ url: logoUrl }],
       },
       twitter: {
         card: 'summary_large_image',
         title,
-        description,
-        images: companyData.logo ? [companyData.logo] : [],
+        description: cleanDescription,
+        images: [logoUrl],
       },
     }
   } catch (error) {
     console.error('Error generating metadata:', error)
-    return getDefaultMetadata()
+    return getDefaultMetadata(baseUrl)
   }
 }
 
-function getDefaultMetadata(): Metadata {
+function getDefaultMetadata(baseUrl: string): Metadata {
+  const defaultLogoUrl = `${baseUrl}/favicon-.png`
+
   return {
     title: 'Job Opportunity | RwandaJobHub',
     description: 'Find your next career opportunity in Rwanda',
@@ -75,13 +120,13 @@ function getDefaultMetadata(): Metadata {
       title: 'Job Opportunity | RwandaJobHub',
       description: 'Find your next career opportunity in Rwanda',
       type: 'website',
-      images: [{ url: '/favicon-.png' }],
+      images: [{ url: defaultLogoUrl }],
     },
     twitter: {
       card: 'summary_large_image',
       title: 'Job Opportunity | RwandaJobHub',
       description: 'Find your next career opportunity in Rwanda',
-      images: ['/favicon-.png'],
+      images: [defaultLogoUrl],
     },
   }
 }
