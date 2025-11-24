@@ -73,12 +73,20 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       ? stripHtmlAndDecode(jobData.description).substring(0, 160)
       : 'Find your next career opportunity in Rwanda'
 
-    // Ensure logo URL is absolute
-    const logoUrl = companyData.logo?.startsWith('http')
-      ? companyData.logo
-      : companyData.logo
-        ? `${baseUrl}${companyData.logo}`
-        : `${baseUrl}/favicon-.png`
+    // Ensure logo URL is absolute and publicly accessible
+    let logoUrl: string
+
+    if (!companyData.logo) {
+      logoUrl = `${baseUrl}/favicon-.png`
+    } else if (companyData.logo.startsWith('http://') || companyData.logo.startsWith('https://')) {
+      logoUrl = companyData.logo
+    } else if (companyData.logo.startsWith('/')) {
+      logoUrl = `${baseUrl}${companyData.logo}`
+    } else {
+      logoUrl = `${baseUrl}/${companyData.logo}`
+    }
+
+    console.log('🖼️ OG Image:', { company: companyData.name, original: companyData.logo, generated: logoUrl })
 
     return {
       title,
