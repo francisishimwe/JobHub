@@ -17,6 +17,7 @@ const lato = Lato({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.rwandajobhub.com"),
   title: "RwandaJobHub - The #1 job board for Rwandan jobs",
   description: "Created with by maximillien",
   generator: "v0.app",
