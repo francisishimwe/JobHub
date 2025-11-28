@@ -15,9 +15,31 @@ export function JobDetailsContent({ job }: JobDetailsContentProps) {
     const { getCompanyById } = useCompanies()
     const company = getCompanyById(job.companyId)
 
-    const handleApply = () => {
+    const handleApply = async () => {
         if (job.applicationLink) {
+            // Open link immediately to avoid popup blockers
             window.open(job.applicationLink, "_blank", "noopener,noreferrer")
+
+            // Track in Google Analytics
+            if (typeof window !== 'undefined' && (window as any).gtag) {
+                (window as any).gtag('event', 'apply', {
+                    event_category: 'engagement',
+                    event_label: job.title,
+                    job_id: job.id,
+                    company_name: company?.name
+                })
+            }
+
+            // Track in Database
+            try {
+                await fetch('/api/track-application', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ jobId: job.id }),
+                })
+            } catch (error) {
+                console.error('Error tracking application:', error)
+            }
         }
     }
 
