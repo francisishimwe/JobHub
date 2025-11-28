@@ -108,6 +108,14 @@ export default function HomePage() {
           <div className="hidden lg:block">
             <div className="sticky top-4 rounded-lg border bg-card p-6">
               <JobFilters />
+
+              {/* 
+                Space for Google AdSense Ad Unit
+                To place a manual ad here:
+                1. Create a "Display ad unit" in Google AdSense
+                2. Get the <ins>...</ins> code
+                3. Paste it here inside a <div>
+              */}
             </div>
           </div>
         </div>

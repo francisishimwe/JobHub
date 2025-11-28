@@ -31,6 +31,13 @@ export function Footer() {
 
   return (
     <footer className="text-white py-8" style={{ backgroundColor: '#003566' }}>
+      {/* 
+        Space for Google AdSense Ad Unit (Footer)
+        To place a manual ad here:
+        1. Create a "Display ad unit" in Google AdSense
+        2. Get the <ins>...</ins> code
+        3. Paste it here inside a <div>
+      */}
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <h3 className="text-xl font-semibold mb-6 text-center">Get in Touch</h3>

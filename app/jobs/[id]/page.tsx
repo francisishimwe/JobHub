@@ -69,6 +69,14 @@ export default function JobPage() {
 
                 <main className="flex-1 container mx-auto px-4 py-8 md:py-12">
                     <JobDetailsContent job={job} />
+
+                    {/* 
+                      Space for Google AdSense Ad Unit
+                      To place a manual ad here:
+                      1. Create a "Display ad unit" in Google AdSense
+                      2. Get the <ins>...</ins> code
+                      3. Paste it here inside a <div>
+                    */}
                 </main>
 
                 <Footer />
