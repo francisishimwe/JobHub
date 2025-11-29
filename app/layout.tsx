@@ -59,11 +59,12 @@ export default function RootLayout({
         </AuthProvider>
         <Analytics />
         <SpeedInsights />
-        <Script
+        <Analytics />
+        <SpeedInsights />
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1412133449814385"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
         <GoogleAnalytics />
       </body>
