@@ -3,17 +3,19 @@
 import { Button } from "@/components/ui/button"
 import { MapPin, Briefcase, Clock, ExternalLink, ArrowLeft, Share2 } from "lucide-react"
 import Image from "next/image"
-import type { Job } from "@/lib/types"
+import type { Job, Company } from "@/lib/types"
 import { useCompanies } from "@/lib/company-context"
 import Link from "next/link"
 
 interface JobDetailsContentProps {
     job: Job
+    initialCompany?: Company | null
 }
 
-export function JobDetailsContent({ job }: JobDetailsContentProps) {
+export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProps) {
     const { getCompanyById } = useCompanies()
-    const company = getCompanyById(job.companyId)
+    const contextCompany = getCompanyById(job.companyId)
+    const company = initialCompany || contextCompany
 
     const handleApply = async () => {
         if (job.applicationLink) {

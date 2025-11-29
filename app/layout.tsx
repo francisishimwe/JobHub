@@ -29,13 +29,11 @@ export const metadata: Metadata = {
     title: "RwandaJobHub - The #1 job board for Rwandan jobs",
     description: "Find your next career opportunity in Rwanda",
     type: 'website',
-    images: [{ url: '/favicon-.png' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: "RwandaJobHub - The #1 job board for Rwandan jobs",
     description: "Find your next career opportunity in Rwanda",
-    images: ['/favicon-.png'],
   },
 }
 

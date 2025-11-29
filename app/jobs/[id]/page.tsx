@@ -1,84 +1,104 @@
-'use client'
-
-import { useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { Metadata } from 'next'
+import { createClient } from '@/lib/supabase/server'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { JobDetailsContent } from '@/components/job-details-content'
-import { DynamicFavicon } from '@/components/dynamic-favicon'
-import { useJobs } from '@/lib/job-context'
-import { useCompanies } from '@/lib/company-context'
-import { Loader2 } from 'lucide-react'
+import { JobViewTracker } from '@/components/job-view-tracker'
+import { notFound } from 'next/navigation'
+import { Job, Company } from '@/lib/types'
 
-export default function JobPage() {
-    const params = useParams()
-    const router = useRouter()
-    const { jobs } = useJobs()
-    const { getCompanyById } = useCompanies()
+type Props = {
+    params: { id: string }
+}
 
-    const jobId = params.id as string
-    const job = jobs.find(j => j.id === jobId)
-    const company = job ? getCompanyById(job.companyId) : null
+async function getJob(id: string) {
+    const supabase = await createClient()
+    const { data: job } = await supabase
+        .from('jobs')
+        .select('*')
+        .eq('id', id)
+        .single()
+    return job
+}
 
-    useEffect(() => {
-        // Track page view
-        const trackView = async () => {
-            try {
-                await fetch('/api/track-view', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        content_type: 'job',
-                        content_id: jobId,
-                    }),
-                })
-            } catch (error) {
-                console.error('Error tracking view:', error)
-            }
-        }
+async function getCompany(id: string) {
+    const supabase = await createClient()
+    const { data: company } = await supabase
+        .from('companies')
+        .select('*')
+        .eq('id', id)
+        .single()
+    return company
+}
 
-        if (jobId) {
-            trackView()
-        }
-    }, [jobId])
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const job = await getJob(params.id)
+    if (!job) return {}
 
+    const company = await getCompany(job.company_id)
+    const title = `${job.title} at ${company?.name || 'RwandaJobHub'}`
+    const description = `Apply for ${job.title} at ${company?.name} in ${job.location}. ${job.job_type} opportunity.`
+    const logoUrl = company?.logo || '/favicon-.png'
 
-
-    if (!job || !company) {
-        return (
-            <div className="min-h-screen bg-background flex flex-col">
-                <Header />
-                <main className="flex-1 container mx-auto px-4 py-8 flex items-center justify-center">
-                    <div className="text-center">
-                        <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-muted-foreground" />
-                        <p className="text-muted-foreground">Loading job details...</p>
-                    </div>
-                </main>
-                <Footer />
-            </div>
-        )
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            images: [logoUrl],
+        },
+        icons: {
+            icon: logoUrl,
+            shortcut: logoUrl,
+            apple: logoUrl,
+        },
     }
+}
+
+export default async function JobPage({ params }: Props) {
+    const jobData = await getJob(params.id)
+
+    if (!jobData) {
+        notFound()
+    }
+
+    const companyData = await getCompany(jobData.company_id)
+
+    // Map DB job to Component Job
+    const job: Job = {
+        id: jobData.id,
+        title: jobData.title,
+        companyId: jobData.company_id,
+        description: jobData.description,
+        location: jobData.location,
+        locationType: jobData.location_type,
+        jobType: jobData.job_type,
+        opportunityType: jobData.opportunity_type,
+        experienceLevel: jobData.experience_level,
+        deadline: jobData.deadline,
+        applicants: jobData.applicants || 0,
+        postedDate: new Date(jobData.created_at),
+        featured: jobData.featured,
+        applicationLink: jobData.application_link,
+    }
+
+    // Map DB company to Component Company
+    const company: Company | null = companyData ? {
+        id: companyData.id,
+        name: companyData.name,
+        logo: companyData.logo,
+        createdDate: new Date(companyData.created_at),
+    } : null
 
     return (
         <>
-            {/* Dynamic favicon component */}
-            <DynamicFavicon companyLogo={company.logo} />
-
+            <JobViewTracker jobId={job.id} />
             <div className="min-h-screen bg-background flex flex-col">
                 <Header />
-
                 <main className="flex-1 container mx-auto px-4 py-8 md:py-12">
-                    <JobDetailsContent job={job} />
-
-                    {/* 
-                      Space for Google AdSense Ad Unit
-                      To place a manual ad here:
-                      1. Create a "Display ad unit" in Google AdSense
-                      2. Get the <ins>...</ins> code
-                      3. Paste it here inside a <div>
-                    */}
+                    <JobDetailsContent job={job} initialCompany={company} />
                 </main>
-
                 <Footer />
             </div>
         </>
