@@ -35,6 +35,9 @@ export const metadata: Metadata = {
     title: "RwandaJobHub - The #1 job board for Rwandan jobs",
     description: "Find your next career opportunity in Rwanda",
   },
+  other: {
+    "google-adsense-account": "ca-pub-1412133449814385",
+  },
 }
 
 export default function RootLayout({
@@ -58,7 +61,7 @@ export default function RootLayout({
         <SpeedInsights />
         <Script
           async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1412133449814305"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1412133449814385"
           crossOrigin="anonymous"
         />
         <GoogleAnalytics />
