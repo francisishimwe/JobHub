@@ -48,27 +48,46 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     if (!job) return {}
 
     const company = await getCompany(job.company_id)
-    const title = `${job.title} at ${company?.name || 'RwandaJobHub'}`
+    const title = `${company?.name || 'Company'} is hiring ${job.title}`
 
-    let description = `Apply for ${job.title} at ${company?.name} in ${job.location}. ${job.job_type} opportunity.`
-    if (job.opportunity_type === 'Scholarship') {
-        description = `${company?.name} is offering a Scholarship: ${job.title}. Apply before ${new Date(job.deadline).toLocaleDateString()}.`
-    }
+    const description = "RwandaJobHub is Rwanda's premier job portal connecting talented professionals with top employers. Find opportunities in tech, finance, NGOs, and more."
 
-    const logoUrl = company?.logo || '/favicon-.png'
+    const faviconUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/favicon.png`
+    const previewImage = company?.logo || faviconUrl
 
     return {
-        title,
+        title: {
+            absolute: title
+        },
         description,
         openGraph: {
+            title: {
+                absolute: title
+            },
+            description,
+            url: `${process.env.NEXT_PUBLIC_SITE_URL}/jobs/${job.id}`,
+            siteName: 'RwandaJobHub',
+            images: [
+                {
+                    url: previewImage,
+                    width: 800,
+                    height: 600,
+                    alt: company?.name || 'RwandaJobHub',
+                }
+            ],
+            locale: 'en_US',
+            type: 'website',
+        },
+        twitter: {
+            card: 'summary_large_image',
             title,
             description,
-            images: [logoUrl],
+            images: [previewImage],
         },
         icons: {
-            icon: logoUrl,
-            shortcut: logoUrl,
-            apple: logoUrl,
+            icon: faviconUrl,
+            shortcut: faviconUrl,
+            apple: faviconUrl,
         },
     }
 }
