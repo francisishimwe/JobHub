@@ -8,7 +8,7 @@ import { notFound } from 'next/navigation'
 import { Job, Company } from '@/lib/types'
 
 type Props = {
-    params: { id: string }
+    params: Promise<{ id: string }>
 }
 
 async function getJob(id: string) {
@@ -43,7 +43,8 @@ async function getCompany(id: string) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const job = await getJob(params.id)
+    const { id } = await params
+    const job = await getJob(id)
     if (!job) return {}
 
     const company = await getCompany(job.company_id)
@@ -68,7 +69,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function JobPage({ params }: Props) {
-    const jobData = await getJob(params.id)
+    const { id } = await params
+    const jobData = await getJob(id)
 
     if (!jobData) {
         notFound()
