@@ -13,21 +13,32 @@ type Props = {
 
 async function getJob(id: string) {
     const supabase = await createClient()
-    const { data: job } = await supabase
+    const { data: job, error } = await supabase
         .from('jobs')
         .select('*')
         .eq('id', id)
         .single()
+
+    if (error) {
+        console.error('Error fetching job:', error)
+        return null
+    }
     return job
 }
 
 async function getCompany(id: string) {
+    if (!id) return null
     const supabase = await createClient()
-    const { data: company } = await supabase
+    const { data: company, error } = await supabase
         .from('companies')
         .select('*')
         .eq('id', id)
         .single()
+
+    if (error) {
+        console.error('Error fetching company:', error)
+        return null
+    }
     return company
 }
 
