@@ -60,7 +60,11 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
             ? new Date(job.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
             : 'Open'
 
-        const shareText = `${company?.name || 'Company'} is hiring ${job.title}\nLocation: ${job.location}\nOpportunity Type: ${job.opportunityType}\nDeadline: ${formattedDeadline}\n\nApply here: ${window.location.href}`
+        let shareText = `${company?.name || 'Company'} is hiring ${job.title}\nLocation: ${job.location}\nOpportunity Type: ${job.opportunityType}\nDeadline: ${formattedDeadline}\n\nApply here: ${window.location.href}`
+
+        if (job.opportunityType === 'Scholarship') {
+            shareText = `🎓 Scholarship Opportunity!\n\n${company?.name || 'Company'} is offering: ${job.title}\nDeadline: ${formattedDeadline}\n\nApply here: ${window.location.href}`
+        }
 
         const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`
         window.open(whatsappUrl, "_blank", "noopener,noreferrer")

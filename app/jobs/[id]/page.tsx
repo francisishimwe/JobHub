@@ -49,7 +49,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const company = await getCompany(job.company_id)
     const title = `${job.title} at ${company?.name || 'RwandaJobHub'}`
-    const description = `Apply for ${job.title} at ${company?.name} in ${job.location}. ${job.job_type} opportunity.`
+
+    let description = `Apply for ${job.title} at ${company?.name} in ${job.location}. ${job.job_type} opportunity.`
+    if (job.opportunity_type === 'Scholarship') {
+        description = `${company?.name} is offering a Scholarship: ${job.title}. Apply before ${new Date(job.deadline).toLocaleDateString()}.`
+    }
+
     const logoUrl = company?.logo || '/favicon-.png'
 
     return {
