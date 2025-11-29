@@ -58,7 +58,7 @@ async function testSupabase() {
       .insert([{
         title: 'Test Job ' + Date.now(),
         company_id: newCompany.id,
-        description: 'This is a test job description',
+        description: 'This is a test description',
         location: 'Kigali, Rwanda',
         location_type: 'Remote',
         job_type: 'Full-time',

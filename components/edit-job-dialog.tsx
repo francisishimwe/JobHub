@@ -110,7 +110,7 @@ export function EditJobDialog({ job, open, onOpenChange }: EditJobDialogProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Job Description *</Label>
+              <Label htmlFor="description">Description *</Label>
               <RichTextEditor
                 value={formData.description}
                 onChange={(value) => setFormData({ ...formData, description: value })}

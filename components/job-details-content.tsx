@@ -19,8 +19,24 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
     const handleApply = async () => {
         if (job.applicationLink) {
-            // Open link immediately to avoid popup blockers
-            window.open(job.applicationLink, "_blank", "noopener,noreferrer")
+            // Track in Database FIRST (before opening link)
+            try {
+                const response = await fetch('/api/track-application', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ jobId: job.id }),
+                })
+
+                const data = await response.json()
+
+                if (!response.ok) {
+                    console.error('Failed to track application:', data.error)
+                } else {
+                    console.log('Application tracked successfully:', data)
+                }
+            } catch (error) {
+                console.error('Error tracking application:', error)
+            }
 
             // Track in Google Analytics
             if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -32,16 +48,10 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 })
             }
 
-            // Track in Database
-            try {
-                await fetch('/api/track-application', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ jobId: job.id }),
-                })
-            } catch (error) {
-                console.error('Error tracking application:', error)
-            }
+            // Open link AFTER tracking (with small delay to ensure tracking completes)
+            setTimeout(() => {
+                window.open(job.applicationLink, "_blank", "noopener,noreferrer")
+            }, 100)
         }
     }
 
@@ -96,38 +106,40 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
             <div className="space-y-8">
                 {/* Job Overview with Apply Button */}
                 <div className="flex flex-col lg:flex-row gap-4">
-                    <div className="flex-1 grid gap-4 sm:grid-cols-3 p-4 bg-muted/30 rounded-lg border">
-                        <div className="flex items-center gap-3 text-sm">
-                            <div className="p-2 bg-background rounded-full border">
-                                <MapPin className="h-4 w-4 text-muted-foreground" />
+                    {job.opportunityType !== "Scholarship" && (
+                        <div className="flex-1 grid gap-4 sm:grid-cols-3 p-4 bg-muted/30 rounded-lg border">
+                            <div className="flex items-center gap-3 text-sm">
+                                <div className="p-2 bg-background rounded-full border">
+                                    <MapPin className="h-4 w-4 text-muted-foreground" />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-muted-foreground font-medium">Location</p>
+                                    <p className="font-medium">{job.location} ({job.locationType})</p>
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground font-medium">Location</p>
-                                <p className="font-medium">{job.location} ({job.locationType})</p>
+                            <div className="flex items-center gap-3 text-sm">
+                                <div className="p-2 bg-background rounded-full border">
+                                    <Briefcase className="h-4 w-4 text-muted-foreground" />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-muted-foreground font-medium">Job Type</p>
+                                    <p className="font-medium">{job.jobType}</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 text-sm">
+                                <div className="p-2 bg-background rounded-full border">
+                                    <Clock className="h-4 w-4 text-muted-foreground" />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-muted-foreground font-medium">Experience</p>
+                                    <p className="font-medium">{job.experienceLevel}</p>
+                                </div>
                             </div>
                         </div>
-                        <div className="flex items-center gap-3 text-sm">
-                            <div className="p-2 bg-background rounded-full border">
-                                <Briefcase className="h-4 w-4 text-muted-foreground" />
-                            </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground font-medium">Job Type</p>
-                                <p className="font-medium">{job.jobType}</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-3 text-sm">
-                            <div className="p-2 bg-background rounded-full border">
-                                <Clock className="h-4 w-4 text-muted-foreground" />
-                            </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground font-medium">Experience</p>
-                                <p className="font-medium">{job.experienceLevel}</p>
-                            </div>
-                        </div>
-                    </div>
+                    )}
 
                     {/* Apply Now Button - Right side */}
-                    <div className="lg:w-48 flex items-center">
+                    <div className={job.opportunityType === "Scholarship" ? "w-full" : "lg:w-48 flex items-center"}>
                         <Button
                             onClick={handleApply}
                             size="lg"
@@ -141,7 +153,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Description */}
                 <div>
-                    <h3 className="text-lg font-semibold mb-4">Job Description</h3>
+                    <h3 className="text-lg font-semibold mb-4">Description</h3>
                     <div
                         className="prose prose-sm max-w-none text-muted-foreground leading-relaxed
                             [&_p]:mb-4 [&_p]:leading-7

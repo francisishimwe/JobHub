@@ -66,7 +66,7 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
 
           {/* Description */}
           <div>
-            <h3 className="mb-2 text-sm font-semibold">Job Description</h3>
+            <h3 className="mb-2 text-sm font-semibold">Description</h3>
             <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">{job.description}</p>
           </div>
 
