@@ -48,9 +48,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     if (!job) return {}
 
     const company = await getCompany(job.company_id)
-    const title = `${company?.name || 'Company'} is hiring ${job.title}`
+    const companyName = company?.name || 'Company'
+    const pageTitle = `${companyName} - ${job.title}`
+    const ogTitle = `${companyName} is hiring ${job.title}`
 
-    const description = job.description?.substring(0, 160) || "RwandaJobHub is Rwanda's premier job portal connecting talented professionals with top employers. Find opportunities in tech, finance, NGOs, and more."
+    // Strip HTML tags from description
+    const cleanDescription = job.description
+        ?.replace(/<[^>]*>/g, '')
+        ?.replace(/&nbsp;/g, ' ')
+        ?.replace(/&amp;/g, '&')
+        ?.replace(/&lt;/g, '<')
+        ?.replace(/&gt;/g, '>')
+        ?.replace(/&quot;/g, '"')
+        ?.trim()
+        ?.substring(0, 160) || "Find your next career opportunity in Rwanda. Browse jobs, tenders, internships, scholarships, and more at RwandaJobHub."
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://rwandajobhub.com'
     const jobUrl = `${siteUrl}/jobs/${job.id}`
@@ -63,14 +74,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     return {
         title: {
-            absolute: title
+            absolute: pageTitle
         },
-        description,
+        description: cleanDescription,
         openGraph: {
             title: {
-                absolute: title
+                absolute: ogTitle
             },
-            description,
+            description: cleanDescription,
             url: jobUrl,
             siteName: 'RwandaJobHub',
             images: [

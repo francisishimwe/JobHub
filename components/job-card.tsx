@@ -36,7 +36,7 @@ export function JobCard({ job }: JobCardProps) {
     await trackInteraction('share')
     
     const jobUrl = `${window.location.origin}/jobs/${job.id}`
-    const message = `Check out this job opportunity: ${job.title} at ${company?.name || 'Unknown Company'}. Apply now: ${jobUrl}`
+    const message = `Check out this job opportunity: ${job.title} at ${company?.name || 'Unknown Company'}. Apply now: ${jobUrl}\n\nJoin our group: https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI`
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')
   }

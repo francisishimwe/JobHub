@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     siteName: "RwandaJobHub",
     images: [
       {
-        url: '/favicon-.png',
+        url: '/rwandajobhub-.png',
         width: 1200,
         height: 630,
         alt: 'RwandaJobHub',

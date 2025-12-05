@@ -57,10 +57,10 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
             ? new Date(job.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
             : 'Open'
 
-        let shareText = `${company?.name || 'Company'} is hiring ${job.title}\nLocation: ${job.location}\nOpportunity Type: ${job.opportunityType}\nDeadline: ${formattedDeadline}\n\nApply here: ${window.location.href}`
+        let shareText = `${company?.name || 'Company'} is hiring ${job.title}\nLocation: ${job.location}\nOpportunity Type: ${job.opportunityType}\nDeadline: ${formattedDeadline}\n\nApply here: ${window.location.href}\n\nJoin our group: https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI`
 
         if (job.opportunityType === 'Scholarship') {
-            shareText = `🎓 Scholarship Opportunity!\n\n${company?.name || 'Company'} is offering: ${job.title}\nDeadline: ${formattedDeadline}\n\nApply here: ${window.location.href}`
+            shareText = `🎓 Scholarship Opportunity!\n\n${company?.name || 'Company'} is offering: ${job.title}\nDeadline: ${formattedDeadline}\n\nApply here: ${window.location.href}\n\nJoin our group: https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI`
         }
 
         const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`
