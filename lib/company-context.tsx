@@ -1,11 +1,13 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { createContext, useContext, useEffect, type ReactNode } from "react"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "./supabase"
 import type { Company } from "./types"
 
 interface CompanyContextType {
   companies: Company[]
+  isLoading: boolean
   addCompany: (company: Omit<Company, "id" | "createdDate">) => Promise<void>
   updateCompany: (id: string, company: Partial<Company>) => Promise<void>
   deleteCompany: (id: string) => Promise<void>
@@ -14,20 +16,43 @@ interface CompanyContextType {
 
 const CompanyContext = createContext<CompanyContextType | undefined>(undefined)
 
-export function CompanyProvider({ children }: { children: ReactNode }) {
-  const [companies, setCompanies] = useState<Company[]>([])
+// Fetch companies function
+const fetchCompanies = async (): Promise<Company[]> => {
+  const { data, error } = await supabase
+    .from("companies")
+    .select("*")
+    .order("created_at", { ascending: false })
 
-  // Fetch companies from Supabase
+  if (error) throw error
+
+  return (data || []).map((company) => ({
+    id: company.id,
+    name: company.name,
+    logo: company.logo,
+    createdDate: new Date(company.created_at),
+  }))
+}
+
+export function CompanyProvider({ children }: { children: ReactNode }) {
+  const queryClient = useQueryClient()
+
+  // Use React Query for companies with caching
+  const { data: companies = [], isLoading } = useQuery({
+    queryKey: ['companies'],
+    queryFn: fetchCompanies,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: 15 * 60 * 1000, // 15 minutes
+    refetchOnMount: false,
+  })
+
+  // Set up real-time subscription
   useEffect(() => {
-    fetchCompanies()
-    
-    // Set up real-time subscription for company changes
     const subscription = supabase
       .channel('companies_changes')
       .on('postgres_changes', 
         { event: '*', schema: 'public', table: 'companies' },
         () => {
-          fetchCompanies()
+          queryClient.invalidateQueries({ queryKey: ['companies'] })
         }
       )
       .subscribe()
@@ -35,93 +60,41 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     return () => {
       subscription.unsubscribe()
     }
-  }, [])
-
-  const fetchCompanies = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("companies")
-        .select("*")
-        .order("created_date", { ascending: false })
-
-      if (error) throw error
-
-      const formattedCompanies: Company[] = (data || []).map((company) => ({
-        id: company.id,
-        name: company.name,
-        logo: company.logo,
-        createdDate: new Date(company.created_date),
-      }))
-
-      setCompanies(formattedCompanies)
-    } catch (error) {
-      console.error("Error fetching companies:", error)
-    }
-  }
+  }, [queryClient])
 
   const addCompany = async (company: Omit<Company, "id" | "createdDate">) => {
-    try {
-      const { data, error } = await supabase
-        .from("companies")
-        .insert([
-          {
-            name: company.name,
-            logo: company.logo,
-          },
-        ])
-        .select()
-        .single()
+    const { error } = await supabase
+      .from("companies")
+      .insert([{
+        name: company.name,
+        logo: company.logo,
+      }])
 
-      if (error) throw error
+    if (error) throw error
 
-      const newCompany: Company = {
-        id: data.id,
-        name: data.name,
-        logo: data.logo,
-        createdDate: new Date(data.created_date),
-      }
-
-      setCompanies([newCompany, ...companies])
-    } catch (error) {
-      console.error("Error adding company:", error)
-      throw error
-    }
+    queryClient.invalidateQueries({ queryKey: ['companies'] })
   }
 
   const updateCompany = async (id: string, updatedCompany: Partial<Company>) => {
-    try {
-      const { error } = await supabase
-        .from("companies")
-        .update({
-          name: updatedCompany.name,
-          logo: updatedCompany.logo,
-        })
-        .eq("id", id)
+    const { error } = await supabase
+      .from("companies")
+      .update({
+        name: updatedCompany.name,
+        logo: updatedCompany.logo,
+      })
+      .eq("id", id)
 
-      if (error) throw error
+    if (error) throw error
 
-      setCompanies(
-        companies.map((company) =>
-          company.id === id ? { ...company, ...updatedCompany } : company
-        )
-      )
-    } catch (error) {
-      console.error("Error updating company:", error)
-      throw error
-    }
+    queryClient.invalidateQueries({ queryKey: ['companies'] })
   }
 
   const deleteCompany = async (id: string) => {
-    try {
-      const { error } = await supabase.from("companies").delete().eq("id", id)
+    const { error } = await supabase.from("companies").delete().eq("id", id)
 
-      if (error) throw error
+    if (error) throw error
 
-      setCompanies(companies.filter((company) => company.id !== id))
-    } catch (error) {
-      console.error("Error deleting company:", error)
-      throw error
-    }
+    queryClient.invalidateQueries({ queryKey: ['companies'] })
   }
 
   const getCompanyById = (id: string) => {
@@ -132,6 +105,7 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     <CompanyContext.Provider
       value={{
         companies,
+        isLoading,
         addCompany,
         updateCompany,
         deleteCompany,

@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Script from "next/script"
 import "./globals.css"
+import { ReactQueryProvider } from "@/lib/react-query-provider"
 import { JobProvider } from "@/lib/job-context"
 import { CompanyProvider } from "@/lib/company-context"
 import { AuthProvider } from "@/lib/auth-context"
@@ -60,17 +61,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${lato.className} font-sans antialiased`}>
-        <AuthProvider>
-          <CompanyProvider>
-            <JobProvider>
-              <ExamProvider>
-                {children}
-              </ExamProvider>
-            </JobProvider>
-          </CompanyProvider>
-        </AuthProvider>
-        <Analytics />
-        <SpeedInsights />
+        <ReactQueryProvider>
+          <AuthProvider>
+            <CompanyProvider>
+              <JobProvider>
+                <ExamProvider>
+                  {children}
+                </ExamProvider>
+              </JobProvider>
+            </CompanyProvider>
+          </AuthProvider>
+        </ReactQueryProvider>
         <Analytics />
         <SpeedInsights />
         <script

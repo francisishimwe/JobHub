@@ -1,11 +1,13 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "./supabase"
 import type { Job, JobFilters } from "./types"
 
 interface JobContextType {
   jobs: Job[]
+  isLoading: boolean
   addJob: (job: Omit<Job, "id" | "postedDate" | "applicants">) => Promise<void>
   updateJob: (id: string, job: Partial<Job>) => Promise<void>
   deleteJob: (id: string) => Promise<void>
@@ -17,8 +19,38 @@ interface JobContextType {
 
 const JobContext = createContext<JobContextType | undefined>(undefined)
 
+// Fetch jobs function
+const fetchJobs = async (): Promise<Job[]> => {
+  const { data, error } = await supabase
+    .from("jobs")
+    .select("*")
+    .order("created_at", { ascending: false })
+
+  if (error) {
+    console.error("Supabase error fetching jobs:", error)
+    throw error
+  }
+
+  return (data || []).map((job) => ({
+    id: job.id,
+    title: job.title,
+    companyId: job.company_id,
+    description: job.description,
+    location: job.location,
+    locationType: job.location_type,
+    jobType: job.job_type,
+    opportunityType: job.opportunity_type,
+    experienceLevel: job.experience_level,
+    deadline: job.deadline,
+    applicants: job.applicants || 0,
+    postedDate: new Date(job.created_at),
+    featured: job.featured || false,
+    applicationLink: job.application_link,
+  }))
+}
+
 export function JobProvider({ children }: { children: ReactNode }) {
-  const [jobs, setJobs] = useState<Job[]>([])
+  const queryClient = useQueryClient()
   const [filters, setFiltersState] = useState<JobFilters>({
     search: "",
     location: "",
@@ -27,17 +59,23 @@ export function JobProvider({ children }: { children: ReactNode }) {
     opportunityTypes: [],
   })
 
-  // Fetch jobs from Supabase
+  // Use React Query for jobs with caching
+  const { data: jobs = [], isLoading } = useQuery({
+    queryKey: ['jobs'],
+    queryFn: fetchJobs,
+    staleTime: 3 * 60 * 1000, // 3 minutes
+    cacheTime: 10 * 60 * 1000, // 10 minutes
+    refetchOnMount: false,
+  })
+
+  // Set up real-time subscription
   useEffect(() => {
-    fetchJobs()
-    
-    // Set up real-time subscription for job changes
     const subscription = supabase
       .channel('jobs_changes')
       .on('postgres_changes', 
         { event: '*', schema: 'public', table: 'jobs' },
         () => {
-          fetchJobs()
+          queryClient.invalidateQueries({ queryKey: ['jobs'] })
         }
       )
       .subscribe()
@@ -45,175 +83,82 @@ export function JobProvider({ children }: { children: ReactNode }) {
     return () => {
       subscription.unsubscribe()
     }
-  }, [])
-
-  const fetchJobs = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("jobs")
-        .select("*")
-        .order("posted_date", { ascending: false })
-
-      if (error) {
-        console.error("Supabase error fetching jobs:", {
-          message: error.message,
-          details: error.details,
-          hint: error.hint,
-          code: error.code
-        })
-        throw error
-      }
-
-      const formattedJobs: Job[] = (data || []).map((job) => ({
-        id: job.id,
-        title: job.title,
-        companyId: job.company_id,
-        description: job.description,
-        location: job.location,
-        locationType: job.location_type,
-        jobType: job.job_type,
-        opportunityType: job.opportunity_type,
-        experienceLevel: job.experience_level,
-        deadline: job.deadline,
-        applicants: job.applicants || 0,
-        postedDate: new Date(job.posted_date),
-        featured: job.featured || false,
-        applicationLink: job.application_link,
-      }))
-
-      setJobs(formattedJobs)
-    } catch (error) {
-      console.error("Error fetching jobs:", error)
-    }
-  }
+  }, [queryClient])
 
   const addJob = async (job: Omit<Job, "id" | "postedDate" | "applicants">) => {
-    try {
-      console.log("🔍 addJob called with:", job)
-      console.log("🔍 companyId value:", job.companyId, "type:", typeof job.companyId)
-      
-      const insertData = {
-        title: job.title,
-        company_id: job.companyId,
-        description: job.description,
-        location: job.location,
-        location_type: job.locationType,
-        job_type: job.jobType,
-        opportunity_type: job.opportunityType,
-        experience_level: job.experienceLevel,
-        deadline: job.deadline || null,
-        featured: job.featured || false,
-        application_link: job.applicationLink,
-      }
-      
-      console.log("🔍 Inserting data:", insertData)
-      
-      const { data, error } = await supabase
-        .from("jobs")
-        .insert([insertData])
-        .select()
-        .single()
+    const insertData = {
+      title: job.title,
+      company_id: job.companyId,
+      description: job.description,
+      location: job.location,
+      location_type: job.locationType,
+      job_type: job.jobType,
+      opportunity_type: job.opportunityType,
+      experience_level: job.experienceLevel,
+      deadline: job.deadline || null,
+      featured: job.featured || false,
+      application_link: job.applicationLink,
+    }
+    
+    const { error } = await supabase
+      .from("jobs")
+      .insert([insertData])
 
-      if (error) {
-        console.error("Supabase error adding job:", {
-          message: error.message,
-          details: error.details,
-          hint: error.hint,
-          code: error.code
-        })
-        throw error
-      }
-
-      console.log("Job added successfully:", data)
-
-      const newJob: Job = {
-        id: data.id,
-        title: data.title,
-        companyId: data.company_id,
-        description: data.description,
-        location: data.location,
-        locationType: data.location_type,
-        jobType: data.job_type,
-        opportunityType: data.opportunity_type,
-        experienceLevel: data.experience_level,
-        deadline: data.deadline,
-        applicants: data.applicants || 0,
-        postedDate: new Date(data.posted_date),
-        featured: data.featured || false,
-        applicationLink: data.application_link,
-      }
-
-      setJobs([newJob, ...jobs])
-    } catch (error) {
-      console.error("Error adding job:", error)
+    if (error) {
+      console.error("Supabase error adding job:", error)
       throw error
     }
+
+    // Invalidate and refetch
+    queryClient.invalidateQueries({ queryKey: ['jobs'] })
   }
 
   const updateJob = async (id: string, updatedJob: Partial<Job>) => {
-    try {
-      const updateData: any = {}
-      if (updatedJob.title !== undefined) updateData.title = updatedJob.title
-      if (updatedJob.companyId !== undefined) updateData.company_id = updatedJob.companyId
-      if (updatedJob.description !== undefined) updateData.description = updatedJob.description
-      if (updatedJob.location !== undefined) updateData.location = updatedJob.location
-      if (updatedJob.locationType !== undefined) updateData.location_type = updatedJob.locationType
-      if (updatedJob.jobType !== undefined) updateData.job_type = updatedJob.jobType
-      if (updatedJob.opportunityType !== undefined) updateData.opportunity_type = updatedJob.opportunityType
-      if (updatedJob.experienceLevel !== undefined) updateData.experience_level = updatedJob.experienceLevel
-      if (updatedJob.deadline !== undefined) updateData.deadline = updatedJob.deadline
-      if (updatedJob.featured !== undefined) updateData.featured = updatedJob.featured
-      if (updatedJob.applicationLink !== undefined) updateData.application_link = updatedJob.applicationLink
+    const updateData: any = {}
+    if (updatedJob.title !== undefined) updateData.title = updatedJob.title
+    if (updatedJob.companyId !== undefined) updateData.company_id = updatedJob.companyId
+    if (updatedJob.description !== undefined) updateData.description = updatedJob.description
+    if (updatedJob.location !== undefined) updateData.location = updatedJob.location
+    if (updatedJob.locationType !== undefined) updateData.location_type = updatedJob.locationType
+    if (updatedJob.jobType !== undefined) updateData.job_type = updatedJob.jobType
+    if (updatedJob.opportunityType !== undefined) updateData.opportunity_type = updatedJob.opportunityType
+    if (updatedJob.experienceLevel !== undefined) updateData.experience_level = updatedJob.experienceLevel
+    if (updatedJob.deadline !== undefined) updateData.deadline = updatedJob.deadline
+    if (updatedJob.featured !== undefined) updateData.featured = updatedJob.featured
+    if (updatedJob.applicationLink !== undefined) updateData.application_link = updatedJob.applicationLink
 
-      const { error } = await supabase.from("jobs").update(updateData).eq("id", id)
+    const { error } = await supabase.from("jobs").update(updateData).eq("id", id)
 
-      if (error) throw error
+    if (error) throw error
 
-      setJobs(jobs.map((job) => (job.id === id ? { ...job, ...updatedJob } : job)))
-    } catch (error) {
-      console.error("Error updating job:", error)
-      throw error
-    }
+    queryClient.invalidateQueries({ queryKey: ['jobs'] })
   }
 
   const deleteJob = async (id: string) => {
-    try {
-      const { error } = await supabase.from("jobs").delete().eq("id", id)
+    const { error } = await supabase.from("jobs").delete().eq("id", id)
 
-      if (error) throw error
+    if (error) throw error
 
-      setJobs(jobs.filter((job) => job.id !== id))
-    } catch (error) {
-      console.error("Error deleting job:", error)
-      throw error
-    }
+    queryClient.invalidateQueries({ queryKey: ['jobs'] })
   }
 
   const trackApplyClick = async (jobId: string) => {
-    try {
-      // Increment the applicants count
-      const job = jobs.find(j => j.id === jobId)
-      if (!job) return
+    const job = jobs.find(j => j.id === jobId)
+    if (!job) return
 
-      const newApplicantCount = (job.applicants || 0) + 1
+    const newApplicantCount = (job.applicants || 0) + 1
 
-      const { error } = await supabase
-        .from("jobs")
-        .update({ applicants: newApplicantCount })
-        .eq("id", jobId)
+    const { error } = await supabase
+      .from("jobs")
+      .update({ applicants: newApplicantCount })
+      .eq("id", jobId)
 
-      if (error) {
-        console.error("Error tracking apply click:", error)
-        throw error
-      }
-
-      // Update local state
-      setJobs(jobs.map((j) => 
-        j.id === jobId ? { ...j, applicants: newApplicantCount } : j
-      ))
-    } catch (error) {
+    if (error) {
       console.error("Error tracking apply click:", error)
+      throw error
     }
+
+    queryClient.invalidateQueries({ queryKey: ['jobs'] })
   }
 
   const setFilters = (newFilters: Partial<JobFilters>) => {
@@ -258,6 +203,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
     <JobContext.Provider
       value={{
         jobs,
+        isLoading,
         addJob,
         updateJob,
         deleteJob,
