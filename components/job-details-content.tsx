@@ -57,10 +57,10 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
             ? new Date(job.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
             : 'Open'
 
-        let shareText = `${company?.name || 'Company'} is hiring ${job.title}\nLocation: ${job.location}\nOpportunity Type: ${job.opportunityType}\nDeadline: ${formattedDeadline}\n\nApply here: ${window.location.href}\n\nJoin our group: https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI`
+        let shareText = `${company?.name || 'Company'} is hiring ${job.title}\nLocation: ${job.location}\nOpportunity Type: ${job.opportunityType}\nDeadline: ${formattedDeadline}\n\nApply here: ${window.location.href}\n\n📢 Join our WhatsApp group:\nhttps://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI\n\n📲 Follow our WhatsApp channel:\nhttps://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
         if (job.opportunityType === 'Scholarship') {
-            shareText = `🎓 Scholarship Opportunity!\n\n${company?.name || 'Company'} is offering: ${job.title}\nDeadline: ${formattedDeadline}\n\nApply here: ${window.location.href}\n\nJoin our group: https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI`
+            shareText = `🎓 Scholarship Opportunity!\n\n${company?.name || 'Company'} is offering: ${job.title}\nDeadline: ${formattedDeadline}\n\nApply here: ${window.location.href}\n\n📢 Join our WhatsApp group:\nhttps://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI\n\n📲 Follow our WhatsApp channel:\nhttps://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
         }
 
         const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`
@@ -182,7 +182,23 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                         <Share2 className="mr-2 h-5 w-5" />
                         Share on WhatsApp
                     </Button>
-                    {job.applicationLink && job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && (
+                    {job.attachmentUrl && (
+                        <Button
+                            onClick={() => window.open(job.attachmentUrl, '_blank')}
+                            size="lg"
+                            className="flex-1 sm:flex-initial sm:min-w-[200px] text-base font-medium h-12 text-white"
+                            style={{ backgroundColor: '#16A34A' }}
+                        >
+                            <ExternalLink className="mr-2 h-5 w-5" />
+                            View attached document
+                        </Button>
+                    )}
+                    {job.applicationLink && 
+                     job.opportunityType !== "Tender" && 
+                     job.opportunityType !== "Blog" && 
+                     job.opportunityType !== "Scholarship" && 
+                     job.opportunityType !== "Education" && 
+                     job.opportunityType !== "Announcement" && (
                         <Button
                             onClick={handleApply}
                             size="lg"

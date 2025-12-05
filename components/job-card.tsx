@@ -42,10 +42,10 @@ Opportunity type: ${job.opportunityType}
 
 Read more and Apply now: ${job.applicationLink}
 
-Join our WhatsApp group for more opportunities:
+Join our WhatsApp group:
 https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI
 
-Join our WhatsApp channel:
+Follow our WhatsApp channel:
 https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')

@@ -83,10 +83,17 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
             <Button variant="outline" onClick={() => onOpenChange(false)} className="flex-1">
               Close
             </Button>
-            <Button onClick={handleApply} className="flex-1 bg-foreground text-background hover:bg-foreground/90">
-              Apply Now
-              <ExternalLink className="ml-2 h-4 w-4" />
-            </Button>
+            {job.applicationLink && 
+             job.opportunityType !== "Tender" && 
+             job.opportunityType !== "Blog" && 
+             job.opportunityType !== "Scholarship" && 
+             job.opportunityType !== "Education" && 
+             job.opportunityType !== "Announcement" && (
+              <Button onClick={handleApply} className="flex-1 bg-foreground text-background hover:bg-foreground/90">
+                Apply Now
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </Button>
+            )}
           </div>
         </div>
       </DialogContent>

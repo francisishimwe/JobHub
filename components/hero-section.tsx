@@ -42,15 +42,14 @@ export function HeroSection() {
   }
 
   const handleSearch = () => {
-    const oppTypes = selectedType && selectedType !== "" ? [selectedType] : []
     setFilters({
-      search: searchValue,
-      opportunityTypes: oppTypes,
+      search: selectedType && selectedType !== "" ? `${searchValue} ${selectedType}`.trim() : searchValue,
     })
   }
 
   const clearSearch = () => {
     setSearchValue("")
+    setSelectedType("")
     setFilters({ search: "" })
   }
 
@@ -80,14 +79,61 @@ export function HeroSection() {
             onChange={(e) => setSelectedType(e.target.value)}
             className="h-8 rounded-md border border-gray-300 px-4 focus:outline-none focus:ring-1 focus:ring-green-500"
           >
-            <option value="">Featured</option>
-            <option value="Job">Job</option>
-            <option value="Tender">Tender</option>
-            <option value="Internship">Internship</option>
-            <option value="Scholarship">Scholarship</option>
+            <option value="">All Categories</option>
+            <option value="Academic">Academic</option>
+            <option value="Accounting">Accounting</option>
+            <option value="Agronomy">Agronomy</option>
+            <option value="Administration">Administration</option>
+            <option value="Agriculture">Agriculture</option>
+            <option value="Procurement">Procurement</option>
+            <option value="Animal science">Animal science</option>
+            <option value="Auditing">Auditing</option>
+            <option value="Banking">Banking</option>
+            <option value="Business">Business</option>
+            <option value="Catering">Catering</option>
+            <option value="Civil engineering">Civil engineering</option>
+            <option value="Communications">Communications</option>
+            <option value="Computer and IT">Computer and IT</option>
+            <option value="Consultancy">Consultancy</option>
+            <option value="Demography and data analysis">Demography and data analysis</option>
+            <option value="Law">Law</option>
             <option value="Education">Education</option>
-            <option value="Blog">Blog</option>
-            <option value="Announcement">Announcement</option>
+            <option value="Electrical engineering">Electrical engineering</option>
+            <option value="Engineering">Engineering</option>
+            <option value="Environmental">Environmental</option>
+            <option value="Finance">Finance</option>
+            <option value="Food Sciences">Food Sciences</option>
+            <option value="Geology">Geology</option>
+            <option value="Management">Management</option>
+            <option value="Healthy">Healthy</option>
+            <option value="Hospitality">Hospitality</option>
+            <option value="Hotel">Hotel</option>
+            <option value="Human resource">Human resource</option>
+            <option value="International relations">International relations</option>
+            <option value="Journalism">Journalism</option>
+            <option value="Land management">Land management</option>
+            <option value="Leisure">Leisure</option>
+            <option value="Logistics">Logistics</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Marketing and sales">Marketing and sales</option>
+            <option value="Mechanical engineering">Mechanical engineering</option>
+            <option value="Medicine">Medicine</option>
+            <option value="Mining">Mining</option>
+            <option value="Office management">Office management</option>
+            <option value="Pharmacy">Pharmacy</option>
+            <option value="Political science">Political science</option>
+            <option value="Project management">Project management</option>
+            <option value="Property management">Property management</option>
+            <option value="Psychology">Psychology</option>
+            <option value="Public Health">Public Health</option>
+            <option value="Research">Research</option>
+            <option value="Secretariat">Secretariat</option>
+            <option value="Social science">Social science</option>
+            <option value="Statistics">Statistics</option>
+            <option value="Telecommunications">Telecommunications</option>
+            <option value="Water engineering">Water engineering</option>
+            <option value="Vehicle Mechanical">Vehicle Mechanical</option>
+            <option value="Other">Other</option>
           </select>
 
           <Button 

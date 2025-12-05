@@ -47,11 +47,13 @@ const fetchJobs = async (): Promise<Job[]> => {
     jobType: job.job_type,
     opportunityType: job.opportunity_type,
     experienceLevel: job.experience_level,
+    category: job.category,
     deadline: job.deadline,
     applicants: job.applicants || 0,
     postedDate: new Date(job.created_at || job.posted_date),
     featured: job.featured || false,
     applicationLink: job.application_link,
+    attachmentUrl: job.attachment_url,
   }))
 
   // Sort by posted date in JavaScript
@@ -104,9 +106,11 @@ export function JobProvider({ children }: { children: ReactNode }) {
       job_type: job.jobType,
       opportunity_type: job.opportunityType,
       experience_level: job.experienceLevel,
+      category: job.category || null,
       deadline: job.deadline || null,
       featured: job.featured || false,
       application_link: job.applicationLink,
+      attachment_url: job.attachmentUrl || null,
     }
     
     const { error } = await supabase
@@ -132,9 +136,11 @@ export function JobProvider({ children }: { children: ReactNode }) {
     if (updatedJob.jobType !== undefined) updateData.job_type = updatedJob.jobType
     if (updatedJob.opportunityType !== undefined) updateData.opportunity_type = updatedJob.opportunityType
     if (updatedJob.experienceLevel !== undefined) updateData.experience_level = updatedJob.experienceLevel
+    if (updatedJob.category !== undefined) updateData.category = updatedJob.category
     if (updatedJob.deadline !== undefined) updateData.deadline = updatedJob.deadline
     if (updatedJob.featured !== undefined) updateData.featured = updatedJob.featured
     if (updatedJob.applicationLink !== undefined) updateData.application_link = updatedJob.applicationLink
+    if (updatedJob.attachmentUrl !== undefined) updateData.attachment_url = updatedJob.attachmentUrl
 
     const { error } = await supabase.from("jobs").update(updateData).eq("id", id)
 
