@@ -24,14 +24,20 @@ const fetchJobs = async (): Promise<Job[]> => {
   const { data, error } = await supabase
     .from("jobs")
     .select("*")
-    .order("created_at", { ascending: false })
 
   if (error) {
     console.error("Supabase error fetching jobs:", error)
     throw error
   }
 
-  return (data || []).map((job) => ({
+  if (!data) {
+    console.log("No jobs data returned from Supabase")
+    return []
+  }
+
+  console.log("Fetched jobs count:", data.length)
+
+  const jobs = data.map((job) => ({
     id: job.id,
     title: job.title,
     companyId: job.company_id,
@@ -43,10 +49,13 @@ const fetchJobs = async (): Promise<Job[]> => {
     experienceLevel: job.experience_level,
     deadline: job.deadline,
     applicants: job.applicants || 0,
-    postedDate: new Date(job.created_at),
+    postedDate: new Date(job.created_at || job.posted_date),
     featured: job.featured || false,
     applicationLink: job.application_link,
   }))
+
+  // Sort by posted date in JavaScript
+  return jobs.sort((a, b) => b.postedDate.getTime() - a.postedDate.getTime())
 }
 
 export function JobProvider({ children }: { children: ReactNode }) {

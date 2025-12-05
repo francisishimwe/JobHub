@@ -21,7 +21,7 @@ const fetchCompanies = async (): Promise<Company[]> => {
   const { data, error } = await supabase
     .from("companies")
     .select("*")
-    .order("created_at", { ascending: false })
+    .order("created_date", { ascending: false })
 
   if (error) throw error
 
@@ -29,7 +29,7 @@ const fetchCompanies = async (): Promise<Company[]> => {
     id: company.id,
     name: company.name,
     logo: company.logo,
-    createdDate: new Date(company.created_at),
+    createdDate: new Date(company.created_date),
   }))
 }
 
@@ -41,7 +41,7 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     queryKey: ['companies'],
     queryFn: fetchCompanies,
     staleTime: 5 * 60 * 1000, // 5 minutes
-    cacheTime: 15 * 60 * 1000, // 15 minutes
+    gcTime: 15 * 60 * 1000, // 15 minutes (formerly cacheTime)
     refetchOnMount: false,
   })
 
@@ -49,14 +49,14 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const subscription = supabase
       .channel('companies_changes')
-      .on('postgres_changes', 
+      .on('postgres_changes',
         { event: '*', schema: 'public', table: 'companies' },
         () => {
           queryClient.invalidateQueries({ queryKey: ['companies'] })
         }
       )
       .subscribe()
-    
+
     return () => {
       subscription.unsubscribe()
     }

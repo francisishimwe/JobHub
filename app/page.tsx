@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export default function HomePage() {
-  const { filteredJobs, filters, setFilters } = useJobs()
+  const { filteredJobs, filters, setFilters, isLoading } = useJobs()
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "deadline">("newest")
 
   const opportunityTypes = [
@@ -95,7 +95,11 @@ export default function HomePage() {
         </div>
 
         <div className="space-y-4">
-          {sortedJobs.length > 0 ? (
+          {isLoading ? (
+            <div className="rounded-lg border bg-card p-12 text-center">
+              <p className="text-muted-foreground">Loading opportunities...</p>
+            </div>
+          ) : sortedJobs.length > 0 ? (
             sortedJobs.map((job) => <JobCard key={job.id} job={job} />)
           ) : (
             <div className="rounded-lg border bg-card p-12 text-center">
