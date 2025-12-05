@@ -37,10 +37,10 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     companyId: "",
     description: "",
     location: "",
-    locationType: "Remote" as "Remote" | "On-site" | "Hybrid",
-    jobType: "Full-time" as "Full-time" | "Part-time" | "Contract" | "Freelance",
-    opportunityType: "Job" as "Job" | "Internship" | "Scholarship" | "Education" | "Tender" | "Blog",
-    experienceLevel: "Intermediate" as "Entry level" | "Intermediate" | "Expert",
+    locationType: "",
+    jobType: "",
+    opportunityType: "Job",
+    experienceLevel: "",
     deadline: "",
     applicationLink: "",
   })
@@ -94,9 +94,9 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     e.preventDefault()
     setLoading(true)
 
-    // Validate company is selected
-    if (!formData.companyId) {
-      alert("Please select a company")
+    // Validate opportunity type is selected
+    if (!formData.opportunityType) {
+      alert("Please select an opportunity type")
       setLoading(false)
       return
     }
@@ -114,10 +114,10 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         companyId: "",
         description: "",
         location: "",
-        locationType: "Remote",
-        jobType: "Full-time",
+        locationType: "",
+        jobType: "",
         opportunityType: "Job",
-        experienceLevel: "Intermediate",
+        experienceLevel: "",
         deadline: "",
         applicationLink: "",
       })
@@ -149,7 +149,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="company">Company *</Label>
+            <Label htmlFor="company">Company (Optional)</Label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="relative">
                 <Input
@@ -208,10 +208,9 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="location">Location *</Label>
+              <Label htmlFor="location">Location (Optional)</Label>
               <Input
                 id="location"
-                required
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                 placeholder="e.g. Remote, New York, USA"
@@ -221,19 +220,13 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
 
             <div className="space-y-2">
               <Label htmlFor="locationType">Location Type (Optional)</Label>
-              <Select
+              <Input
+                id="locationType"
                 value={formData.locationType}
-                onValueChange={(value: any) => setFormData({ ...formData, locationType: value })}
-              >
-                <SelectTrigger className="h-11 text-base">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Remote">Remote</SelectItem>
-                  <SelectItem value="On-site">On-site</SelectItem>
-                  <SelectItem value="Hybrid">Hybrid</SelectItem>
-                </SelectContent>
-              </Select>
+                onChange={(e) => setFormData({ ...formData, locationType: e.target.value })}
+                placeholder="e.g. Remote, On-site, Hybrid"
+                className="h-11 text-base"
+              />
             </div>
           </div>
 
@@ -242,58 +235,43 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
               <Label htmlFor="opportunityType">Opportunity Type *</Label>
               <Select
                 value={formData.opportunityType}
-                onValueChange={(value: any) => setFormData({ ...formData, opportunityType: value })}
+                onValueChange={(value: string) => setFormData({ ...formData, opportunityType: value })}
               >
                 <SelectTrigger className="h-11 text-base">
-                  <SelectValue />
+                  <SelectValue placeholder="Select opportunity type" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Job">Job</SelectItem>
-                  <SelectItem value="Tender">Tender</SelectItem>
                   <SelectItem value="Internship">Internship</SelectItem>
                   <SelectItem value="Scholarship">Scholarship</SelectItem>
                   <SelectItem value="Education">Education</SelectItem>
+                  <SelectItem value="Tender">Tender</SelectItem>
                   <SelectItem value="Blog">Blog</SelectItem>
+                  <SelectItem value="Announcement">Announcement</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="jobType">Job Type *</Label>
-              <Select
+              <Label htmlFor="jobType">Job Type (Optional)</Label>
+              <Input
+                id="jobType"
                 value={formData.jobType}
-                onValueChange={(value: any) => setFormData({ ...formData, jobType: value })}
-              >
-                <SelectTrigger className="h-11 text-base">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {jobTypes.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {type}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                onChange={(e) => setFormData({ ...formData, jobType: e.target.value })}
+                placeholder="e.g. Full-time, Part-time, Contract"
+                className="h-11 text-base"
+              />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="experienceLevel">Experience Level (Optional)</Label>
-              <Select
+              <Input
+                id="experienceLevel"
                 value={formData.experienceLevel}
-                onValueChange={(value: any) => setFormData({ ...formData, experienceLevel: value })}
-              >
-                <SelectTrigger className="h-11 text-base">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {experienceLevels.map((level) => (
-                    <SelectItem key={level} value={level}>
-                      {level}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                onChange={(e) => setFormData({ ...formData, experienceLevel: e.target.value })}
+                placeholder="e.g. Entry level, Intermediate, Expert"
+                className="h-11 text-base"
+              />
             </div>
           </div>
 

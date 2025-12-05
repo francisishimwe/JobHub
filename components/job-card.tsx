@@ -31,22 +31,32 @@ export function JobCard({ job }: JobCardProps) {
   const shareToWhatsApp = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    
+
     // Track share interaction
     await trackInteraction('share')
-    
-    const jobUrl = `${window.location.origin}/jobs/${job.id}`
-    const message = `Check out this job opportunity: ${job.title} at ${company?.name || 'Unknown Company'}. Apply now: ${jobUrl}\n\nJoin our group: https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI`
+
+    const message = `${job.title} at ${company?.name || 'Unknown Company'}
+
+Location: ${job.location}
+Opportunity type: ${job.opportunityType}
+
+Read more and Apply now: ${job.applicationLink}
+
+Join our WhatsApp group for more opportunities:
+https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI
+
+Join our WhatsApp channel:
+https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')
   }
 
   const handleViewDetails = async (e: React.MouseEvent) => {
     e.preventDefault()
-    
+
     // Track view interaction
     await trackInteraction('view')
-    
+
     window.open(`/jobs/${job.id}`, '_blank')
   }
 
@@ -84,12 +94,16 @@ export function JobCard({ job }: JobCardProps) {
               </h3>
 
               <div className="mb-2 flex flex-wrap items-center gap-2 md:gap-3 text-xs md:text-sm text-muted-foreground">
-                <span className="font-medium" style={{ color: '#16A34A' }}>{company.name}</span>
+                {company?.name && (
+                  <span className="font-medium" style={{ color: '#16A34A' }}>{company.name}</span>
+                )}
 
-                <div className="flex items-center gap-1">
-                  <MapPin className="h-3 w-3 md:h-4 md:w-4" />
-                  <span>{job.location}</span>
-                </div>
+                {job.location && (
+                  <div className="flex items-center gap-1">
+                    <MapPin className="h-3 w-3 md:h-4 md:w-4" />
+                    <span>{job.location}</span>
+                  </div>
+                )}
                 <div className="hidden sm:flex items-center gap-1">
                   <UserCheck className="h-4 w-4" />
                   <span>{job.applicants} applicants</span>
@@ -109,9 +123,9 @@ export function JobCard({ job }: JobCardProps) {
               </div>
 
               <div className="flex flex-wrap gap-1.5 md:gap-2">
-                <Badge variant="secondary" className="text-xs">{job.jobType}</Badge>
-                <Badge variant="secondary" className="text-xs">{job.experienceLevel}</Badge>
-                <Badge variant="secondary" className="text-xs">{job.opportunityType}</Badge>
+                {job.jobType && <Badge variant="secondary" className="text-xs">{job.jobType}</Badge>}
+                {job.experienceLevel && <Badge variant="secondary" className="text-xs">{job.experienceLevel}</Badge>}
+                {job.opportunityType && <Badge variant="secondary" className="text-xs">{job.opportunityType}</Badge>}
               </div>
             </div>
           </div>

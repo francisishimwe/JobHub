@@ -26,7 +26,6 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
   const [title, setTitle] = useState("")
   const [category, setCategory] = useState("")
   const [duration, setDuration] = useState("")
-  const [difficulty, setDifficulty] = useState<"Beginner" | "Intermediate" | "Advanced">("Beginner")
   const [description, setDescription] = useState("")
   const [topicInput, setTopicInput] = useState("")
   const [topics, setTopics] = useState<string[]>([])
@@ -129,9 +128,9 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    if (!title.trim() || !category.trim() || !duration || questions.length === 0) {
-      alert("Please fill in all required fields and add at least one question")
+
+    if (!title.trim() || !category.trim() || questions.length === 0) {
+      alert("Please fill in title, category and add at least one question")
       return
     }
 
@@ -150,8 +149,7 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
       await addExam({
         title,
         category,
-        duration: duration,
-        difficulty,
+        duration: duration || "Not specified",
         description,
         topics,
         totalQuestions: questions.length,
@@ -159,16 +157,15 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
       }, examQuestions)
 
       alert("Exam added successfully!")
-      
+
       // Reset form
       setTitle("")
       setCategory("")
       setDuration("")
-      setDifficulty("Beginner")
       setDescription("")
       setTopics([])
       setQuestions([])
-      
+
       onSuccess?.()
     } catch (error) {
       console.error("Error adding exam:", error)
@@ -210,32 +207,14 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="duration">Duration (minutes) *</Label>
-              <Input
-                id="duration"
-                type="number"
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-                placeholder="e.g., 60"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="difficulty">Difficulty *</Label>
-              <Select value={difficulty} onValueChange={(value: any) => setDifficulty(value)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Beginner">Beginner</SelectItem>
-                  <SelectItem value="Intermediate">Intermediate</SelectItem>
-                  <SelectItem value="Advanced">Advanced</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="duration">Duration (Optional)</Label>
+            <Input
+              id="duration"
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)}
+              placeholder="e.g., 60 minutes, 1 hour, etc."
+            />
           </div>
 
           <div className="space-y-2">
@@ -482,11 +461,10 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
                             {(question.options || []).map((option, i) => (
                               <div
                                 key={i}
-                                className={`text-sm px-2 py-1 rounded ${
-                                  option === question.correctAnswer
+                                className={`text-sm px-2 py-1 rounded ${option === question.correctAnswer
                                     ? "bg-green-100 text-green-700 font-medium"
                                     : "text-muted-foreground"
-                                }`}
+                                  }`}
                               >
                                 {option === question.correctAnswer && "✓ "}
                                 {option}

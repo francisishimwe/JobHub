@@ -58,20 +58,26 @@ export function ExamList() {
                   <h3 className="text-xl font-semibold mb-2">{exam.title}</h3>
                   <div className="flex flex-wrap gap-2 mb-3">
                     <Badge variant="outline">{exam.category}</Badge>
-                    <Badge className={getDifficultyColor(exam.difficulty)}>
-                      {exam.difficulty}
-                    </Badge>
+                    {exam.difficulty && (
+                      <Badge className={getDifficultyColor(exam.difficulty)}>
+                        {exam.difficulty}
+                      </Badge>
+                    )}
                   </div>
                 </div>
               </div>
 
-              <p className="text-muted-foreground mb-4 line-clamp-3 leading-relaxed">{exam.description}</p>
+              {exam.description && (
+                <p className="text-muted-foreground mb-4 line-clamp-3 leading-relaxed">{exam.description}</p>
+              )}
 
               <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-4">
-                <div className="flex items-center gap-1">
-                  <Clock className="h-4 w-4" />
-                  {exam.duration}
-                </div>
+                {exam.duration && (
+                  <div className="flex items-center gap-1">
+                    <Clock className="h-4 w-4" />
+                    {exam.duration}
+                  </div>
+                )}
                 <div className="flex items-center gap-1">
                   <GraduationCap className="h-4 w-4" />
                   {exam.totalQuestions || 0} questions

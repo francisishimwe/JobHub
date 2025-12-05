@@ -9,7 +9,7 @@ import { JobFilters } from "@/components/job-filters"
 import { useJobs } from "@/lib/job-context"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ChevronDown, BriefcaseBusiness, GraduationCap, Award } from "lucide-react"
+import { ChevronDown, BriefcaseBusiness, GraduationCap, Award, Megaphone } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +25,7 @@ export default function HomePage() {
     { value: "Job", label: "Jobs", icon: BriefcaseBusiness },
     { value: "Internship", label: "Internships", icon: GraduationCap },
     { value: "Scholarship", label: "Scholarships", icon: Award },
+    { value: "Announcement", label: "Announcements", icon: Megaphone },
   ]
 
   const toggleOpportunityType = (type: string) => {

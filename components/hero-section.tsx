@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { SearchIcon, MapPinned, X, BriefcaseBusiness, GraduationCap, Award, BookOpen, Star, FileText, Newspaper } from "lucide-react"
+import { SearchIcon, MapPinned, X, BriefcaseBusiness, GraduationCap, Award, BookOpen, Star, FileText, Newspaper, Megaphone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
@@ -20,6 +20,7 @@ export function HeroSection() {
     { value: "Scholarship", label: "Scholarships", icon: Award },
     { value: "Education", label: "Education", icon: BookOpen },
     { value: "Blog", label: "Blogs", icon: Newspaper },
+    { value: "Announcement", label: "Announcements", icon: Megaphone },
   ]
 
   // Calculate counts for each opportunity type
@@ -86,6 +87,7 @@ export function HeroSection() {
             <option value="Scholarship">Scholarship</option>
             <option value="Education">Education</option>
             <option value="Blog">Blog</option>
+            <option value="Announcement">Announcement</option>
           </select>
 
           <Button 

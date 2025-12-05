@@ -11,10 +11,10 @@ export interface Job {
   companyId: string
   description: string
   location: string
-  locationType: "Remote" | "On-site" | "Hybrid"
-  jobType: "Full-time" | "Part-time" | "Contract" | "Freelance"
-  opportunityType: "Job" | "Internship" | "Scholarship" | "Education"
-  experienceLevel: "Entry level" | "Intermediate" | "Expert"
+  locationType: string
+  jobType: string
+  opportunityType: string
+  experienceLevel: string
   deadline?: string
   applicants: number
   postedDate: Date
@@ -35,7 +35,7 @@ export interface Exam {
   title: string
   category: string
   duration: string
-  difficulty: "Beginner" | "Intermediate" | "Advanced"
+  difficulty?: string
   participants: number
   rating: number
   description: string
