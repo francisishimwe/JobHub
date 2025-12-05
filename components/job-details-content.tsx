@@ -105,8 +105,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
             </div>
 
             <div className="space-y-8">
-                {/* Job Overview */}
-                {job.opportunityType !== "Scholarship" && (
+                {/* Job Overview - Hidden for Tender and Blog */}
+                {job.opportunityType !== "Scholarship" && job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && (
                     <div className="grid gap-4 sm:grid-cols-3 p-4 bg-muted/30 rounded-lg border">
                         <div className="flex items-center gap-3 text-sm">
                             <div className="p-2 bg-background rounded-full border">
@@ -182,7 +182,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                         <Share2 className="mr-2 h-5 w-5" />
                         Share on WhatsApp
                     </Button>
-                    {job.applicationLink && (
+                    {job.applicationLink && job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && (
                         <Button
                             onClick={handleApply}
                             size="lg"

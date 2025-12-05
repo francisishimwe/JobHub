@@ -72,16 +72,16 @@ export function AnalyticsDashboard() {
             color: "text-green-600"
         },
         {
-            title: "Total Views",
-            value: totalViews,
-            icon: Eye,
-            description: "Page views tracked",
+            title: "Total Applications",
+            value: totalApplicants,
+            icon: Users,
+            description: "Job applications received",
             color: "text-purple-600"
         },
         {
             title: "Exam Participants",
             value: totalExamParticipants,
-            icon: Users,
+            icon: GraduationCap,
             description: `${totalExams} total exams`,
             color: "text-orange-600"
         }
@@ -188,6 +188,7 @@ export function AnalyticsDashboard() {
                                     <TableHead>Job Title</TableHead>
                                     <TableHead>Type</TableHead>
                                     <TableHead className="text-right">Interactions</TableHead>
+                                    <TableHead className="text-right">Applications</TableHead>
                                     <TableHead className="text-right">Posted</TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -197,6 +198,7 @@ export function AnalyticsDashboard() {
                                         <TableCell className="font-medium max-w-[300px] truncate">{job.title}</TableCell>
                                         <TableCell>{job.opportunityType}</TableCell>
                                         <TableCell className="text-right font-semibold">{job.applicants}</TableCell>
+                                        <TableCell className="text-right font-semibold text-blue-600">{job.applicants}</TableCell>
                                         <TableCell className="text-right">
                                             {new Date(job.postedDate).toLocaleDateString('en-US', {
                                                 month: 'short',
@@ -207,7 +209,7 @@ export function AnalyticsDashboard() {
                                 ))}
                                 {topJobs.length === 0 && (
                                     <TableRow>
-                                        <TableCell colSpan={4} className="text-center text-muted-foreground">
+                                        <TableCell colSpan={5} className="text-center text-muted-foreground">
                                             No jobs posted yet
                                         </TableCell>
                                     </TableRow>
@@ -227,14 +229,7 @@ export function AnalyticsDashboard() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid gap-4 md:grid-cols-3">
-                        <div className="space-y-2">
-                            <p className="text-sm font-medium">Engagement Rate</p>
-                            <p className="text-2xl font-bold text-blue-600">
-                                {totalViews > 0 ? ((totalApplicants / totalViews) * 100).toFixed(1) : 0}%
-                            </p>
-                            <p className="text-xs text-muted-foreground">Interactions per view</p>
-                        </div>
+                    <div className="grid gap-4 md:grid-cols-2">
                         <div className="space-y-2">
                             <p className="text-sm font-medium">Total Engagement</p>
                             <p className="text-2xl font-bold text-green-600">

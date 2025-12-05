@@ -47,7 +47,7 @@ export function Header() {
           <Link href="/" className="flex items-center justify-center gap-3">
             {/* Mobile: Logo only */}
             <img 
-              src="/rwandajobhob-.png" 
+              src="/rwandajobhub-.png" 
               alt="RwandaJobHub" 
               className="h-12 w-auto object-contain md:hidden" 
             />

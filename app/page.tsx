@@ -70,8 +70,8 @@ export default function HomePage() {
       <Header />
       <HeroSection />
 
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="mb-6 flex items-center justify-between">
+      <div className="container mx-auto px-2 py-1 max-w-4xl">
+        <div className="mb-1 flex items-center justify-between">
           <p className="text-sm text-muted-foreground">Showing results ({filteredJobs.length})</p>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

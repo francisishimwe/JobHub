@@ -43,70 +43,74 @@ export function JobList() {
 
   return (
     <>
-      <div className="rounded-lg border bg-card">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Job Title</TableHead>
-              <TableHead>Company</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Experience</TableHead>
-              <TableHead>Deadline</TableHead>
-              <TableHead>Posted</TableHead>
-              <TableHead>Applicants</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {jobs.length === 0 ? (
+      <div className="rounded-lg border bg-card max-w-full">
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell colSpan={8} className="text-center text-muted-foreground">
-                  No jobs posted yet. Click "Add New Job" to get started.
-                </TableCell>
+                <TableHead className="w-[180px] max-w-[180px]">Job Title</TableHead>
+                <TableHead className="w-[120px]">Company</TableHead>
+                <TableHead className="w-[100px]">Type</TableHead>
+                <TableHead className="w-[100px]">Experience</TableHead>
+                <TableHead className="w-[100px]">Deadline</TableHead>
+                <TableHead className="w-[90px]">Posted</TableHead>
+                <TableHead className="w-[80px]">Applicants</TableHead>
+                <TableHead className="text-right w-[100px]">Actions</TableHead>
               </TableRow>
-            ) : (
-              jobs.map((job) => (
-                <TableRow key={job.id}>
-                  <TableCell className="font-medium">
-                    <div className="flex items-center gap-2">
-                      {job.title}
-                    </div>
-                  </TableCell>
-                  <TableCell>{getCompanyById(job.companyId)?.name || "Unknown Company"}</TableCell>
-                  <TableCell>
-                    <Badge variant="secondary">{job.jobType}</Badge>
-                  </TableCell>
-                  <TableCell>{job.experienceLevel}</TableCell>
-                  <TableCell>
-                    {job.deadline ? formatDate(new Date(job.deadline)) : "No deadline"}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">{formatDate(job.postedDate)}</TableCell>
-                  <TableCell>{job.applicants}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
-                        onClick={() => setJobToEdit(job)}
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-destructive hover:text-destructive"
-                        onClick={() => setJobToDelete(job.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+            </TableHeader>
+            <TableBody>
+              {jobs.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={8} className="text-center text-muted-foreground">
+                    No jobs posted yet. Click "Add New Job" to get started.
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ) : (
+                jobs.map((job) => (
+                  <TableRow key={job.id}>
+                    <TableCell className="font-medium max-w-[180px]">
+                      <div className="truncate" title={job.title}>
+                        {job.title}
+                      </div>
+                    </TableCell>
+                    <TableCell className="max-w-[120px]">
+                      <div className="truncate">{getCompanyById(job.companyId)?.name || "Unknown Company"}</div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="secondary" className="text-xs">{job.jobType}</Badge>
+                    </TableCell>
+                    <TableCell className="text-sm">{job.experienceLevel}</TableCell>
+                    <TableCell className="text-sm">
+                      {job.deadline ? formatDate(new Date(job.deadline)) : "No deadline"}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-sm">{formatDate(job.postedDate)}</TableCell>
+                    <TableCell className="text-sm">{job.applicants}</TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => setJobToEdit(job)}
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-destructive hover:text-destructive"
+                          onClick={() => setJobToDelete(job.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       {jobToEdit && (
