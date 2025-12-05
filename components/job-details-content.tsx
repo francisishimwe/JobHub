@@ -6,6 +6,7 @@ import Image from "next/image"
 import type { Job, Company } from "@/lib/types"
 import { useCompanies } from "@/lib/company-context"
 import Link from "next/link"
+import { useState, useEffect } from "react"
 
 interface JobDetailsContentProps {
     job: Job
@@ -16,29 +17,27 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     const { getCompanyById } = useCompanies()
     const contextCompany = getCompanyById(job.companyId)
     const company = initialCompany || contextCompany
+    const [applicantCount, setApplicantCount] = useState(job.applicants)
+
+    // Fetch current applicant count on mount
+    useEffect(() => {
+        const fetchApplicantCount = async () => {
+            try {
+                const response = await fetch(`/api/job-stats?jobId=${job.id}`)
+                if (response.ok) {
+                    const data = await response.json()
+                    setApplicantCount(data.applicants)
+                }
+            } catch (error) {
+                console.error('Error fetching applicant count:', error)
+            }
+        }
+        fetchApplicantCount()
+    }, [job.id])
 
     const handleApply = async () => {
         if (job.applicationLink) {
-            // Track in Database FIRST (before opening link)
-            try {
-                const response = await fetch('/api/track-application', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ jobId: job.id }),
-                })
-
-                const data = await response.json()
-
-                if (!response.ok) {
-                    console.error('Failed to track application:', data.error)
-                } else {
-                    console.log('Application tracked successfully:', data)
-                }
-            } catch (error) {
-                console.error('Error tracking application:', error)
-            }
-
-            // Track in Google Analytics
+            // Track in Google Analytics only
             if (typeof window !== 'undefined' && (window as any).gtag) {
                 (window as any).gtag('event', 'apply', {
                     event_category: 'engagement',
@@ -48,10 +47,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 })
             }
 
-            // Open link AFTER tracking (with small delay to ensure tracking completes)
-            setTimeout(() => {
-                window.open(job.applicationLink, "_blank", "noopener,noreferrer")
-            }, 100)
+            // Open application link
+            window.open(job.applicationLink, "_blank", "noopener,noreferrer")
         }
     }
 
@@ -108,56 +105,42 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
             </div>
 
             <div className="space-y-8">
-                {/* Job Overview with Apply Button */}
-                <div className="flex flex-col lg:flex-row gap-4">
-                    {job.opportunityType !== "Scholarship" && (
-                        <div className="flex-1 grid gap-4 sm:grid-cols-3 p-4 bg-muted/30 rounded-lg border">
-                            <div className="flex items-center gap-3 text-sm">
-                                <div className="p-2 bg-background rounded-full border">
-                                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                                </div>
-                                <div>
-                                    <p className="text-xs text-muted-foreground font-medium">Location</p>
-                                    <p className="font-medium">{job.location} ({job.locationType})</p>
-                                </div>
+                {/* Job Overview */}
+                {job.opportunityType !== "Scholarship" && (
+                    <div className="grid gap-4 sm:grid-cols-3 p-4 bg-muted/30 rounded-lg border">
+                        <div className="flex items-center gap-3 text-sm">
+                            <div className="p-2 bg-background rounded-full border">
+                                <MapPin className="h-4 w-4 text-muted-foreground" />
                             </div>
-                            <div className="flex items-center gap-3 text-sm">
-                                <div className="p-2 bg-background rounded-full border">
-                                    <Briefcase className="h-4 w-4 text-muted-foreground" />
-                                </div>
-                                <div>
-                                    <p className="text-xs text-muted-foreground font-medium">Job Type</p>
-                                    <p className="font-medium">{job.jobType}</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-3 text-sm">
-                                <div className="p-2 bg-background rounded-full border">
-                                    <Clock className="h-4 w-4 text-muted-foreground" />
-                                </div>
-                                <div>
-                                    <p className="text-xs text-muted-foreground font-medium">Experience</p>
-                                    <p className="font-medium">{job.experienceLevel}</p>
-                                </div>
+                            <div>
+                                <p className="text-xs text-muted-foreground font-medium">Location</p>
+                                <p className="font-medium">{job.location} ({job.locationType})</p>
                             </div>
                         </div>
-                    )}
-
-                    {/* Apply Now Button - Right side */}
-                    <div className={job.opportunityType === "Scholarship" ? "w-full" : "lg:w-48 flex items-center"}>
-                        <Button
-                            onClick={handleApply}
-                            size="lg"
-                            className="w-full bg-foreground text-background hover:bg-foreground/90 text-base font-medium h-12"
-                        >
-                            Apply Now
-                            <ExternalLink className="ml-2 h-5 w-5" />
-                        </Button>
+                        <div className="flex items-center gap-3 text-sm">
+                            <div className="p-2 bg-background rounded-full border">
+                                <Briefcase className="h-4 w-4 text-muted-foreground" />
+                            </div>
+                            <div>
+                                <p className="text-xs text-muted-foreground font-medium">Job Type</p>
+                                <p className="font-medium">{job.jobType}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3 text-sm">
+                            <div className="p-2 bg-background rounded-full border">
+                                <Clock className="h-4 w-4 text-muted-foreground" />
+                            </div>
+                            <div>
+                                <p className="text-xs text-muted-foreground font-medium">Experience</p>
+                                <p className="font-medium">{job.experienceLevel}</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {/* Description */}
                 <div>
-                    <h3 className="text-lg font-semibold mb-4">Description</h3>
+                    <h3 className="text-lg font-semibold mb-4"></h3>
                     <div
                         className="prose prose-sm max-w-none text-muted-foreground leading-relaxed
                             [&_p]:mb-4 [&_p]:leading-7
@@ -185,10 +168,10 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 {/* Stats */}
                 <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border">
                     <span className="text-sm font-medium text-muted-foreground">Total Applicants</span>
-                    <span className="text-lg font-bold">{job.applicants}</span>
+                    <span className="text-lg font-bold">{applicantCount}</span>
                 </div>
 
-                {/* Share on WhatsApp Button */}
+                {/* Share on WhatsApp and Apply Now Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t">
                     <Button
                         onClick={handleShareWhatsApp}
@@ -199,6 +182,16 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                         <Share2 className="mr-2 h-5 w-5" />
                         Share on WhatsApp
                     </Button>
+                    {job.applicationLink && (
+                        <Button
+                            onClick={handleApply}
+                            size="lg"
+                            className="flex-1 sm:flex-initial sm:min-w-[200px] bg-foreground text-background hover:bg-foreground/90 text-base font-medium h-12"
+                        >
+                            Apply Now
+                            <ExternalLink className="ml-2 h-5 w-5" />
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>

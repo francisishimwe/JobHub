@@ -50,10 +50,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const company = await getCompany(job.company_id)
     const title = `${company?.name || 'Company'} is hiring ${job.title}`
 
-    const description = "RwandaJobHub is Rwanda's premier job portal connecting talented professionals with top employers. Find opportunities in tech, finance, NGOs, and more."
+    const description = job.description?.substring(0, 160) || "RwandaJobHub is Rwanda's premier job portal connecting talented professionals with top employers. Find opportunities in tech, finance, NGOs, and more."
 
-    const faviconUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/favicon.png`
-    const previewImage = company?.logo || faviconUrl
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://rwandajobhub.com'
+    const jobUrl = `${siteUrl}/jobs/${job.id}`
+    
+    // Use company logo as favicon and OG image
+    const companyLogo = company?.logo
+    const defaultFavicon = `${siteUrl}/favicon.png`
+    const faviconUrl = companyLogo || defaultFavicon
+    const ogImageUrl = companyLogo || defaultFavicon
 
     return {
         title: {
@@ -65,14 +71,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
                 absolute: title
             },
             description,
-            url: `${process.env.NEXT_PUBLIC_SITE_URL}/jobs/${job.id}`,
+            url: jobUrl,
             siteName: 'RwandaJobHub',
             images: [
                 {
-                    url: previewImage,
-                    width: 800,
-                    height: 600,
+                    url: ogImageUrl,
+                    width: 1200,
+                    height: 630,
                     alt: company?.name || 'RwandaJobHub',
+                    type: 'image/png',
                 }
             ],
             locale: 'en_US',
@@ -82,12 +89,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             card: 'summary_large_image',
             title,
             description,
-            images: [previewImage],
+            images: [ogImageUrl],
         },
         icons: {
             icon: faviconUrl,
             shortcut: faviconUrl,
             apple: faviconUrl,
+        },
+        alternates: {
+            canonical: jobUrl,
+        },
+        robots: {
+            index: true,
+            follow: true,
         },
     }
 }

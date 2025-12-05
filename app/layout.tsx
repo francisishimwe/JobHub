@@ -19,21 +19,33 @@ const lato = Lato({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.rwandajobhub.rw"),
   title: "RwandaJobHub - The #1 job board for Rwandan jobs",
-  description: "Created with by maximillien",
-  generator: "v0.app",
+  description: "Find your next career opportunity in Rwanda. Browse jobs, tenders, internships, scholarships, and more.",
+  generator: "Maximillien",
   icons: {
     icon: '/favicon-.png',
     apple: '/favicon-.png',
   },
   openGraph: {
     title: "RwandaJobHub - The #1 job board for Rwandan jobs",
-    description: "Find your next career opportunity in Rwanda",
+    description: "Find your next career opportunity in Rwanda. Browse jobs, tenders, internships, scholarships, and more.",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.rwandajobhub.rw",
+    siteName: "RwandaJobHub",
+    images: [
+      {
+        url: '/favicon-.png',
+        width: 1200,
+        height: 630,
+        alt: 'RwandaJobHub',
+      }
+    ],
+    locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: "RwandaJobHub - The #1 job board for Rwandan jobs",
-    description: "Find your next career opportunity in Rwanda",
+    description: "Find your next career opportunity in Rwanda. Browse jobs, tenders, internships, scholarships, and more.",
+    images: ['/favicon-.png'],
   },
   other: {
     "google-adsense-account": "ca-pub-1412133449814385",

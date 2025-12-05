@@ -70,7 +70,7 @@ export default function HomePage() {
       <Header />
       <HeroSection />
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="mb-6 flex items-center justify-between">
           <p className="text-sm text-muted-foreground">Showing results ({filteredJobs.length})</p>
           <DropdownMenu>
@@ -94,30 +94,14 @@ export default function HomePage() {
           </DropdownMenu>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-          <div className="space-y-4">
-            {sortedJobs.length > 0 ? (
-              sortedJobs.map((job) => <JobCard key={job.id} job={job} />)
-            ) : (
-              <div className="rounded-lg border bg-card p-12 text-center">
-                <p className="text-muted-foreground">No jobs found matching your criteria.</p>
-              </div>
-            )}
-          </div>
-
-          <div className="hidden lg:block">
-            <div className="sticky top-4 rounded-lg border bg-card p-6">
-              <JobFilters />
-
-              {/* 
-                Space for Google AdSense Ad Unit
-                To place a manual ad here:
-                1. Create a "Display ad unit" in Google AdSense
-                2. Get the <ins>...</ins> code
-                3. Paste it here inside a <div>
-              */}
+        <div className="space-y-4">
+          {sortedJobs.length > 0 ? (
+            sortedJobs.map((job) => <JobCard key={job.id} job={job} />)
+          ) : (
+            <div className="rounded-lg border bg-card p-12 text-center">
+              <p className="text-muted-foreground">No jobs found matching your criteria.</p>
             </div>
-          </div>
+          )}
         </div>
       </div>
 

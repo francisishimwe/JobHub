@@ -16,13 +16,38 @@ export function JobCard({ job }: JobCardProps) {
   const { getCompanyById } = useCompanies()
   const company = getCompanyById(job.companyId)
 
-  const shareToWhatsApp = (e: React.MouseEvent) => {
+  const trackInteraction = async (type: 'view' | 'share') => {
+    try {
+      await fetch('/api/track-application', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobId: job.id }),
+      })
+    } catch (error) {
+      console.error('Error tracking interaction:', error)
+    }
+  }
+
+  const shareToWhatsApp = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    
+    // Track share interaction
+    await trackInteraction('share')
+    
     const jobUrl = `${window.location.origin}/jobs/${job.id}`
     const message = `Check out this job opportunity: ${job.title} at ${company?.name || 'Unknown Company'}. Apply now: ${jobUrl}`
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')
+  }
+
+  const handleViewDetails = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    
+    // Track view interaction
+    await trackInteraction('view')
+    
+    window.open(`/jobs/${job.id}`, '_blank')
   }
 
   // Calculate days remaining
@@ -96,10 +121,7 @@ export function JobCard({ job }: JobCardProps) {
               size="sm"
               className="text-black hover:opacity-90 flex-1 md:flex-initial text-xs md:text-sm"
               style={{ backgroundColor: '#76c893' }}
-              onClick={(e) => {
-                e.preventDefault()
-                window.open(`/jobs/${job.id}`, '_blank')
-              }}
+              onClick={handleViewDetails}
             >
               View Details
             </Button>
