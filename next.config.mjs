@@ -16,7 +16,6 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96],
   },
   compress: false,
-  swcMinify: false,
   reactStrictMode: true,
   poweredByHeader: false,
   experimental: {

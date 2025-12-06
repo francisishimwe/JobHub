@@ -9,9 +9,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         // Fetch all active jobs
         const { data: jobs, error: jobsError } = await supabase
             .from('jobs')
-            .select('id, created_at, updated_at')
-            .eq('status', 'active')
-            .order('created_at', { ascending: false })
+            .select('id, posted_date')
+            .order('posted_date', { ascending: false })
 
         if (jobsError) {
             console.error('Error fetching jobs for sitemap:', jobsError)
@@ -20,9 +19,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         // Fetch all active companies
         const { data: companies, error: companiesError } = await supabase
             .from('companies')
-            .select('id, created_at, updated_at')
-            .eq('status', 'active')
-            .order('created_at', { ascending: false })
+            .select('id, created_date')
+            .order('created_date', { ascending: false })
 
         if (companiesError) {
             console.error('Error fetching companies for sitemap:', companiesError)
@@ -34,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         // Dynamic job routes
         const jobRoutes = (jobs || []).map((job) => ({
             url: `${baseUrl}/jobs/${job.id}`,
-            lastModified: new Date(job.updated_at || job.created_at),
+            lastModified: new Date(job.posted_date),
             changeFrequency: 'daily' as const,
             priority: 0.9,
         }))
@@ -42,7 +40,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         // Dynamic company routes
         const companyRoutes = (companies || []).map((company) => ({
             url: `${baseUrl}/companies/${company.id}`,
-            lastModified: new Date(company.updated_at || company.created_at),
+            lastModified: new Date(company.created_date),
             changeFrequency: 'weekly' as const,
             priority: 0.8,
         }))
