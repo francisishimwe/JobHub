@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { MapPinned, Mail, Phone, Clock, SendHorizontal } from "lucide-react"
@@ -5,8 +8,56 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { useInquiries } from "@/lib/inquiry-context"
+import { useToast } from "@/hooks/use-toast"
 
 export default function ContactPage() {
+  const { addInquiry } = useInquiries()
+  const { toast } = useToast()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  })
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      await addInquiry(formData)
+      toast({
+        title: "Message sent successfully!",
+        description: "We'll get back to you within 24 hours.",
+      })
+      // Reset form
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      })
+    } catch (error) {
+      console.error("Error submitting inquiry:", error)
+      toast({
+        title: "Error sending message",
+        description: "Please try again later.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value })
+  }
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -50,7 +101,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Email Address</h3>
-                    <p className="text-muted-foreground">rwandajobhub2050@gmail.com</p>
+                    <p className="text-muted-foreground">rwandaiobhub2050@gmail.com</p>
                   </div>
                 </div>
 
@@ -99,31 +150,62 @@ export default function ContactPage() {
             <div className="bg-card border rounded-lg p-8">
               <h2 className="text-2xl font-semibold mb-6">Send us a Message</h2>
               
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="firstName">First Name *</Label>
-                    <Input id="firstName" placeholder="Enter your first name" required />
+                    <Input 
+                      id="firstName" 
+                      placeholder="Enter your first name" 
+                      required 
+                      value={formData.firstName}
+                      onChange={handleChange}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="lastName">Last Name *</Label>
-                    <Input id="lastName" placeholder="Enter your last name" required />
+                    <Input 
+                      id="lastName" 
+                      placeholder="Enter your last name" 
+                      required 
+                      value={formData.lastName}
+                      onChange={handleChange}
+                    />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address *</Label>
-                  <Input id="email" type="email" placeholder="john@example.com" required />
+                  <Input 
+                    id="email" 
+                    type="email" 
+                    placeholder="john@example.com" 
+                    required 
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" type="tel" placeholder="Enter your number" />
+                  <Input 
+                    id="phone" 
+                    type="tel" 
+                    placeholder="Enter your number" 
+                    value={formData.phone}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="subject">Subject *</Label>
-                  <Input id="subject" placeholder="How can we help you?" required />
+                  <Input 
+                    id="subject" 
+                    placeholder="How can we help you?" 
+                    required 
+                    value={formData.subject}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="space-y-2">
@@ -133,6 +215,8 @@ export default function ContactPage() {
                     placeholder="Please describe your inquiry in detail..."
                     className="min-h-[120px]"
                     required 
+                    value={formData.message}
+                    onChange={handleChange}
                   />
                 </div>
 
@@ -144,9 +228,9 @@ export default function ContactPage() {
                     </label>
                   </div>
 
-                  <Button type="submit" className="w-full gap-2">
+                  <Button type="submit" className="w-full gap-2" disabled={isSubmitting}>
                     <SendHorizontal className="h-4 w-4" />
-                    Send Message
+                    {isSubmitting ? "Sending..." : "Send Message"}
                   </Button>
                 </div>
               </form>

@@ -79,6 +79,13 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
       }
     }
 
+    if (currentQuestion.questionType === "short-answer") {
+      if (!currentQuestion.correctAnswer.trim()) {
+        alert("Please enter the correct answer for this short-answer question")
+        return
+      }
+    }
+
     const newQuestion = {
       ...currentQuestion,
       tempId: editingIndex !== null ? questions[editingIndex].tempId : Date.now().toString(),
@@ -129,8 +136,8 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!title.trim() || !category.trim() || questions.length === 0) {
-      alert("Please fill in title, category and add at least one question")
+    if (!title.trim() || questions.length === 0) {
+      alert("Please fill in title and add at least one question")
       return
     }
 
@@ -196,13 +203,12 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="category">Category *</Label>
+              <Label htmlFor="category">Category (Optional)</Label>
               <Input
                 id="category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 placeholder="e.g., Programming"
-                required
               />
             </div>
           </div>
@@ -404,6 +410,24 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
                   </div>
                 )}
 
+                {/* Correct Answer for Short Answer */}
+                {currentQuestion.questionType === "short-answer" && (
+                  <div className="space-y-2">
+                    <Label htmlFor="correctAnswer">Correct Answer *</Label>
+                    <Input
+                      id="correctAnswer"
+                      value={currentQuestion.correctAnswer}
+                      onChange={(e) =>
+                        setCurrentQuestion({ ...currentQuestion, correctAnswer: e.target.value })
+                      }
+                      placeholder="Enter the correct answer..."
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Answer matching is case-insensitive and ignores extra whitespace
+                    </p>
+                  </div>
+                )}
+
                 <div className="space-y-2">
                   <Label htmlFor="explanation">Explanation (Optional)</Label>
                   <Textarea
@@ -462,14 +486,21 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
                               <div
                                 key={i}
                                 className={`text-sm px-2 py-1 rounded ${option === question.correctAnswer
-                                    ? "bg-green-100 text-green-700 font-medium"
-                                    : "text-muted-foreground"
+                                  ? "bg-green-100 text-green-700 font-medium"
+                                  : "text-muted-foreground"
                                   }`}
                               >
                                 {option === question.correctAnswer && "✓ "}
                                 {option}
                               </div>
                             ))}
+                          </div>
+                        )}
+                        {question.questionType === "short-answer" && (
+                          <div className="mt-2">
+                            <div className="text-sm px-2 py-1 rounded bg-green-100 text-green-700 font-medium">
+                              ✓ Correct answer: {question.correctAnswer}
+                            </div>
                           </div>
                         )}
                       </div>

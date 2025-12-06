@@ -57,7 +57,7 @@ export function HeroSection() {
     <div className="relative overflow-hidden bg-white border-b">
       <div className="container mx-auto px-3 py-3">
         {/* Search Bar */}
-        <div className="mx-auto flex max-w-4xl flex-row items-center gap-2">
+        <div className="mx-auto flex max-w-4xl flex-col sm:flex-row items-stretch sm:items-center gap-2">
           <div className="relative flex flex-1 items-center">
             <SearchIcon className="absolute left-3 h-5 w-5 text-muted-foreground" />
             <Input
@@ -65,11 +65,11 @@ export function HeroSection() {
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              className="h-8 border-gray-300 pl-10 pr-8 focus-visible:ring-1 focus-visible:ring-green-500"
+              className="h-8 text-base border-gray-300 pl-10 pr-8 focus-visible:ring-2 focus-visible:ring-green-500"
             />
             {searchValue && (
               <button onClick={clearSearch} className="absolute right-3 text-muted-foreground hover:text-foreground">
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5" />
               </button>
             )}
           </div>
@@ -77,7 +77,7 @@ export function HeroSection() {
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="h-8 rounded-md border border-gray-300 px-4 focus:outline-none focus:ring-1 focus:ring-green-500"
+            className="h-8 text-base rounded-md border-2 border-gray-300 px-3 sm:px-4 bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
           >
             <option value="">All Categories</option>
             <option value="Academic">Academic</option>
@@ -138,7 +138,7 @@ export function HeroSection() {
 
           <Button 
             onClick={handleSearch} 
-            className="h-8 px-6 text-white hover:opacity-90" 
+            className="h-8 px-6 sm:px-8 text-base font-semibold text-white hover:opacity-90" 
             style={{ backgroundColor: '#16A34A' }}
           >
             Search

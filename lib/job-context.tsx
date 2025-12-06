@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from "
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "./supabase"
 import type { Job, JobFilters } from "./types"
+import { filterExpiredJobs, cleanupExpiredJobs } from "./cleanup-jobs"
 
 interface JobContextType {
   jobs: Job[]
@@ -56,8 +57,13 @@ const fetchJobs = async (): Promise<Job[]> => {
     attachmentUrl: job.attachment_url,
   }))
 
+  // Filter out expired jobs
+  const activeJobs = filterExpiredJobs(jobs)
+
+  console.log(`Active jobs: ${activeJobs.length} (filtered ${jobs.length - activeJobs.length} expired)`)
+
   // Sort by posted date in JavaScript
-  return jobs.sort((a, b) => b.postedDate.getTime() - a.postedDate.getTime())
+  return activeJobs.sort((a, b) => b.postedDate.getTime() - a.postedDate.getTime())
 }
 
 export function JobProvider({ children }: { children: ReactNode }) {
@@ -74,25 +80,52 @@ export function JobProvider({ children }: { children: ReactNode }) {
   const { data: jobs = [], isLoading } = useQuery({
     queryKey: ['jobs'],
     queryFn: fetchJobs,
-    staleTime: 3 * 60 * 1000, // 3 minutes
-    cacheTime: 10 * 60 * 1000, // 10 minutes
-    refetchOnMount: false,
+    staleTime: 0, // Always fetch fresh data
+    gcTime: 30 * 1000, // 30 seconds cache only
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   })
 
   // Set up real-time subscription
   useEffect(() => {
     const subscription = supabase
       .channel('jobs_changes')
-      .on('postgres_changes', 
+      .on('postgres_changes',
         { event: '*', schema: 'public', table: 'jobs' },
         () => {
           queryClient.invalidateQueries({ queryKey: ['jobs'] })
         }
       )
       .subscribe()
-    
+
     return () => {
       subscription.unsubscribe()
+    }
+  }, [queryClient])
+
+  // Automatic cleanup of expired jobs - runs once when provider mounts
+  useEffect(() => {
+    const runCleanup = async () => {
+      try {
+        const result = await cleanupExpiredJobs()
+        if (result.deletedCount > 0) {
+          console.log(`Auto-cleanup: ${result.message}`)
+          // Refresh jobs list after cleanup
+          queryClient.invalidateQueries({ queryKey: ['jobs'] })
+        }
+      } catch (error) {
+        console.error("Auto-cleanup failed:", error)
+      }
+    }
+
+    // Run cleanup on mount
+    runCleanup()
+
+    // Set up periodic cleanup (every hour)
+    const cleanupInterval = setInterval(runCleanup, 60 * 60 * 1000)
+
+    return () => {
+      clearInterval(cleanupInterval)
     }
   }, [queryClient])
 
@@ -112,7 +145,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
       application_link: job.applicationLink,
       attachment_url: job.attachmentUrl || null,
     }
-    
+
     const { error } = await supabase
       .from("jobs")
       .insert([insertData])

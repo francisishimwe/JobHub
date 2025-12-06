@@ -45,8 +45,7 @@ export default function TakeExamPage() {
   const [showResults, setShowResults] = useState(false)
   const [score, setScore] = useState(0)
   const [totalPoints, setTotalPoints] = useState(0)
-  const [userEmail, setUserEmail] = useState("")
-  const [emailSubmitted, setEmailSubmitted] = useState(false)
+  const [showAnswers, setShowAnswers] = useState(false)
 
   useEffect(() => {
     fetchExamData()
@@ -128,33 +127,39 @@ export default function TakeExamPage() {
     // Calculate score
     let earnedPoints = 0
     questions.forEach((question) => {
-      if (answers[question.id] === question.correct_answer) {
-        earnedPoints += question.points
+      const userAnswer = answers[question.id]
+      const correctAnswer = question.correct_answer
+
+      // For short-answer questions, do case-insensitive comparison and trim whitespace
+      if (question.question_type === 'short-answer') {
+        if (userAnswer?.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+          earnedPoints += question.points
+        }
+      } else {
+        // For multiple-choice and true-false, exact match
+        if (userAnswer === correctAnswer) {
+          earnedPoints += question.points
+        }
       }
     })
 
     setScore(earnedPoints)
     setShowResults(true)
-  }
 
-  const handleEmailSubmit = async () => {
-    if (!userEmail.trim()) return
-
+    // Save results to database without email
     try {
-      const percentage = (score / totalPoints) * 100
+      const percentage = (earnedPoints / totalPoints) * 100
 
       await supabase.from("exam_submissions").insert([
         {
           exam_id: params.id,
-          user_email: userEmail,
-          score: score,
+          user_email: "anonymous@user.com",
+          score: earnedPoints,
           total_questions: questions.length,
           percentage: percentage,
           answers: answers,
         },
       ])
-
-      setEmailSubmitted(true)
     } catch (error) {
       console.error("Error saving submission:", error)
     }
@@ -164,7 +169,7 @@ export default function TakeExamPage() {
     const hours = Math.floor(seconds / 3600)
     const minutes = Math.floor((seconds % 3600) / 60)
     const secs = seconds % 60
-    
+
     if (hours > 0) {
       return `${hours}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
     }
@@ -193,6 +198,117 @@ export default function TakeExamPage() {
   if (showResults) {
     const percentage = (score / totalPoints) * 100
     const passed = percentage >= 70
+
+    if (showAnswers) {
+      // Show detailed answers and explanations
+      return (
+        <div className="min-h-screen bg-background">
+          <Header />
+          <main className="container mx-auto px-4 py-8">
+            <div className="max-w-4xl mx-auto">
+              <Card className="p-8 mb-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h1 className="text-2xl font-bold">Exam Results & Answer Key</h1>
+                    <p className="text-muted-foreground">Review your answers and explanations</p>
+                  </div>
+                  <Button variant="outline" onClick={() => setShowAnswers(false)}>
+                    Back to Summary
+                  </Button>
+                </div>
+
+                <div className="bg-muted p-4 rounded-lg mb-6">
+                  <div className="grid grid-cols-3 gap-4 text-center">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Score</p>
+                      <p className="text-xl font-bold">{score}/{totalPoints}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Percentage</p>
+                      <p className="text-xl font-bold">{percentage.toFixed(1)}%</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Status</p>
+                      <p className={`text-xl font-bold ${passed ? 'text-green-600' : 'text-orange-600'}`}>
+                        {passed ? 'Passed' : 'Not Passed'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  {questions.map((question, index) => {
+                    const userAnswer = answers[question.id]
+                    const isCorrect = question.question_type === 'short-answer'
+                      ? userAnswer?.trim().toLowerCase() === question.correct_answer.trim().toLowerCase()
+                      : userAnswer === question.correct_answer
+
+                    return (
+                      <Card key={question.id} className={`p-6 ${isCorrect ? 'border-green-500 border-2' : 'border-red-500 border-2'}`}>
+                        <div className="flex items-start gap-3 mb-4">
+                          {isCorrect ? (
+                            <CheckCircle2 className="h-6 w-6 text-green-500 flex-shrink-0 mt-1" />
+                          ) : (
+                            <AlertCircle className="h-6 w-6 text-red-500 flex-shrink-0 mt-1" />
+                          )}
+                          <div className="flex-1">
+                            <p className="font-semibold text-lg mb-2">
+                              Question {index + 1}: {question.question_text}
+                            </p>
+                            <p className="text-sm text-muted-foreground mb-3">
+                              {question.points} point{question.points !== 1 ? 's' : ''}
+                            </p>
+
+                            <div className="space-y-2 mb-4">
+                              <div className="bg-muted p-3 rounded">
+                                <p className="text-sm font-medium text-muted-foreground mb-1">Your Answer:</p>
+                                <p className={`font-medium ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
+                                  {userAnswer || '(Not answered)'}
+                                </p>
+                              </div>
+
+                              {!isCorrect && (
+                                <div className="bg-green-50 dark:bg-green-950 p-3 rounded border border-green-200 dark:border-green-800">
+                                  <p className="text-sm font-medium text-muted-foreground mb-1">Correct Answer:</p>
+                                  <p className="font-medium text-green-700 dark:text-green-400">
+                                    {question.correct_answer}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+
+                            {question.explanation && (
+                              <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded border border-blue-200 dark:border-blue-800">
+                                <p className="text-sm font-medium text-blue-900 dark:text-blue-300 mb-1">Explanation:</p>
+                                <p className="text-sm text-blue-800 dark:text-blue-200">{question.explanation}</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </Card>
+                    )
+                  })}
+                </div>
+
+                <div className="flex gap-4 mt-8">
+                  <Button asChild className="flex-1">
+                    <Link href="/exams">Back to Exams</Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => window.location.reload()}
+                  >
+                    Retake Exam
+                  </Button>
+                </div>
+              </Card>
+            </div>
+          </main>
+          <Footer />
+        </div>
+      )
+    }
 
     return (
       <div className="min-h-screen bg-background">
@@ -236,30 +352,15 @@ export default function TakeExamPage() {
                 </div>
               </div>
 
-              {!emailSubmitted ? (
-                <div className="space-y-4">
-                  <p className="text-sm text-muted-foreground">
-                    Enter your email to save your results
-                  </p>
-                  <div className="flex gap-2">
-                    <input
-                      type="email"
-                      placeholder="your.email@example.com"
-                      value={userEmail}
-                      onChange={(e) => setUserEmail(e.target.value)}
-                      className="flex-1 px-4 py-2 border rounded-md"
-                    />
-                    <Button onClick={handleEmailSubmit}>Save Results</Button>
-                  </div>
-                </div>
-              ) : (
-                <p className="text-green-600 font-semibold mb-4">
-                  ✓ Results saved successfully!
-                </p>
-              )}
+              <Button
+                onClick={() => setShowAnswers(true)}
+                className="w-full mb-4 bg-[#76c893] hover:bg-[#52b69a] text-black"
+              >
+                View Answers & Explanations
+              </Button>
 
-              <div className="flex gap-4 mt-6">
-                <Button asChild className="flex-1">
+              <div className="flex gap-4">
+                <Button asChild variant="outline" className="flex-1">
                   <Link href="/exams">Back to Exams</Link>
                 </Button>
                 <Button
@@ -293,9 +394,8 @@ export default function TakeExamPage() {
                 <h1 className="text-2xl font-bold text-foreground">{exam.title}</h1>
                 <p className="text-muted-foreground">{exam.category}</p>
               </div>
-              <div className={`flex items-center gap-2 text-lg font-semibold ${
-                timeLeft < 300 ? 'text-red-600' : 'text-foreground'
-              }`}>
+              <div className={`flex items-center gap-2 text-lg font-semibold ${timeLeft < 300 ? 'text-red-600' : 'text-foreground'
+                }`}>
                 <Clock className="h-5 w-5" />
                 {formatTime(timeLeft)}
               </div>
@@ -317,32 +417,49 @@ export default function TakeExamPage() {
               </p>
             </div>
 
-            <RadioGroup
-              value={answers[question.id] || ""}
-              onValueChange={(value) => handleAnswerChange(question.id, value)}
-            >
+            {/* Render different input types based on question type */}
+            {question.question_type === 'short-answer' ? (
+              // Text input for short-answer questions
               <div className="space-y-3">
-                {Array.isArray(question.options) && question.options.map((option, index) => (
-                  <label
-                    key={index}
-                    htmlFor={`option-${currentQuestion}-${index}`}
-                    className={`flex items-center space-x-3 border rounded-lg p-4 cursor-pointer transition-colors ${
-                      answers[question.id] === option 
-                        ? 'border-primary bg-primary/10' 
-                        : 'hover:bg-muted'
-                    }`}
-                  >
-                    <RadioGroupItem 
-                      value={option} 
-                      id={`option-${currentQuestion}-${index}`}
-                    />
-                    <span className="flex-1 text-foreground">
-                      {option}
-                    </span>
-                  </label>
-                ))}
+                <input
+                  type="text"
+                  placeholder="Type your answer here..."
+                  value={answers[question.id] || ""}
+                  onChange={(e) => handleAnswerChange(question.id, e.target.value)}
+                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-foreground bg-background"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Enter your answer in the text box above
+                </p>
               </div>
-            </RadioGroup>
+            ) : (
+              // Radio buttons for multiple-choice and true-false questions
+              <RadioGroup
+                value={answers[question.id] || ""}
+                onValueChange={(value) => handleAnswerChange(question.id, value)}
+              >
+                <div className="space-y-3">
+                  {Array.isArray(question.options) && question.options.map((option, index) => (
+                    <label
+                      key={index}
+                      htmlFor={`option-${currentQuestion}-${index}`}
+                      className={`flex items-center space-x-3 border rounded-lg p-4 cursor-pointer transition-colors ${answers[question.id] === option
+                        ? 'border-primary bg-primary/10'
+                        : 'hover:bg-muted'
+                        }`}
+                    >
+                      <RadioGroupItem
+                        value={option}
+                        id={`option-${currentQuestion}-${index}`}
+                      />
+                      <span className="flex-1 text-foreground">
+                        {option}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </RadioGroup>
+            )}
           </Card>
 
           {/* Navigation */}

@@ -231,7 +231,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description *</Label>
+            <Label htmlFor="description">Description (Optional)</Label>
             <RichTextEditor
               value={formData.description}
               onChange={(value) => setFormData({ ...formData, description: value })}

@@ -85,6 +85,8 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
                 alt={`${company.name} logo`}
                 fill
                 className="object-cover"
+                loading="lazy"
+                quality={75}
               />
             </div>
 

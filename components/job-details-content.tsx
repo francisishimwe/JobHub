@@ -68,7 +68,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     }
 
     return (
-        <div className="max-w-3xl mx-auto bg-card rounded-lg border shadow-sm p-6 md:p-8">
+        <div className="bg-card rounded-lg border shadow-sm p-6 md:p-8">
             <div className="mb-6">
                 <Link
                     href="/"
@@ -108,62 +108,70 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 {/* Job Overview - Hidden for Tender and Blog */}
                 {job.opportunityType !== "Scholarship" && job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && (
                     <div className="grid gap-4 sm:grid-cols-3 p-4 bg-muted/30 rounded-lg border">
-                        <div className="flex items-center gap-3 text-sm">
-                            <div className="p-2 bg-background rounded-full border">
-                                <MapPin className="h-4 w-4 text-muted-foreground" />
+                        {job.location && (
+                            <div className="flex items-center gap-3 text-sm">
+                                <div className="p-2 bg-background rounded-full border">
+                                    <MapPin className="h-4 w-4 text-muted-foreground" />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-muted-foreground font-medium">Location</p>
+                                    <p className="font-medium">{job.location}{job.locationType && ` (${job.locationType})`}</p>
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground font-medium">Location</p>
-                                <p className="font-medium">{job.location} ({job.locationType})</p>
+                        )}
+                        {job.jobType && (
+                            <div className="flex items-center gap-3 text-sm">
+                                <div className="p-2 bg-background rounded-full border">
+                                    <Briefcase className="h-4 w-4 text-muted-foreground" />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-muted-foreground font-medium">Job Type</p>
+                                    <p className="font-medium">{job.jobType}</p>
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex items-center gap-3 text-sm">
-                            <div className="p-2 bg-background rounded-full border">
-                                <Briefcase className="h-4 w-4 text-muted-foreground" />
+                        )}
+                        {job.experienceLevel && (
+                            <div className="flex items-center gap-3 text-sm">
+                                <div className="p-2 bg-background rounded-full border">
+                                    <Clock className="h-4 w-4 text-muted-foreground" />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-muted-foreground font-medium">Experience</p>
+                                    <p className="font-medium">{job.experienceLevel}</p>
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground font-medium">Job Type</p>
-                                <p className="font-medium">{job.jobType}</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-3 text-sm">
-                            <div className="p-2 bg-background rounded-full border">
-                                <Clock className="h-4 w-4 text-muted-foreground" />
-                            </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground font-medium">Experience</p>
-                                <p className="font-medium">{job.experienceLevel}</p>
-                            </div>
-                        </div>
+                        )}
                     </div>
                 )}
 
                 {/* Description */}
-                <div>
-                    <h3 className="text-lg font-semibold mb-4"></h3>
-                    <div
-                        className="prose prose-sm max-w-none text-muted-foreground leading-relaxed
-                            [&_p]:mb-4 [&_p]:leading-7
-                            [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4
-                            [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4
-                            [&_li]:mb-2 [&_li]:pl-1
-                            [&_strong]:font-bold [&_strong]:text-foreground
-                            [&_b]:font-bold [&_b]:text-foreground
-                            [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:text-foreground
-                            [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_h2]:text-foreground
-                            [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 [&_h3]:text-foreground
-                            [&_h4]:font-bold [&_h4]:mb-2 [&_h4]:text-foreground
-                            [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary/80
-                            [&_blockquote]:border-l-4 [&_blockquote]:border-muted [&_blockquote]:pl-4 [&_blockquote]:italic
-                            [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded [&_code]:font-mono [&_code]:text-sm
-                            [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-md [&_img]:my-4
-                            [&_table]:w-full [&_table]:border-collapse [&_table]:my-4 [&_table]:overflow-hidden
-                            [&_td]:border [&_td]:border-border [&_td]:p-2 [&_td]:align-top
-                            [&_th]:border [&_th]:border-border [&_th]:p-2 [&_th]:bg-muted/50 [&_th]:font-bold [&_th]:text-left
-                        "
-                        dangerouslySetInnerHTML={{ __html: job.description }}
-                    />
-                </div>
+                {job.description && (
+                    <div>
+                        <h3 className="text-lg font-semibold mb-4"></h3>
+                        <div
+                            className="prose prose-sm max-w-none text-muted-foreground leading-relaxed
+                                [&_p]:mb-4 [&_p]:leading-7
+                                [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4
+                                [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4
+                                [&_li]:mb-2 [&_li]:pl-1
+                                [&_strong]:font-bold [&_strong]:text-foreground
+                                [&_b]:font-bold [&_b]:text-foreground
+                                [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:text-foreground
+                                [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_h2]:text-foreground
+                                [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 [&_h3]:text-foreground
+                                [&_h4]:font-bold [&_h4]:mb-2 [&_h4]:text-foreground
+                                [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary/80
+                                [&_blockquote]:border-l-4 [&_blockquote]:border-muted [&_blockquote]:pl-4 [&_blockquote]:italic
+                                [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded [&_code]:font-mono [&_code]:text-sm
+                                [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-md [&_img]:my-4
+                                [&_table]:w-full [&_table]:border-collapse [&_table]:my-4 [&_table]:overflow-hidden
+                                [&_td]:border [&_td]:border-border [&_td]:p-2 [&_td]:align-top
+                                [&_th]:border [&_th]:border-border [&_th]:p-2 [&_th]:bg-muted/50 [&_th]:font-bold [&_th]:text-left
+                            "
+                            dangerouslySetInnerHTML={{ __html: job.description }}
+                        />
+                    </div>
+                )}
 
                 {/* Stats */}
                 <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border">

@@ -10,42 +10,27 @@ import { JobProvider } from "@/lib/job-context"
 import { CompanyProvider } from "@/lib/company-context"
 import { AuthProvider } from "@/lib/auth-context"
 import { ExamProvider } from "@/lib/exam-context"
+import { InquiryProvider } from "@/lib/inquiry-context"
 import { GoogleAnalytics } from "@/components/google-analytics"
 
 const lato = Lato({
   subsets: ["latin"],
-  weight: ["100", "300", "400", "700", "900"]
+  weight: ["100", "300", "400", "700", "900"],
+  display: 'auto',
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.rwandajobhub.rw"),
-  title: "RwandaJobHub - The #1 job board for Rwandan jobs",
-  description: "Find your next career opportunity in Rwanda. Browse jobs, tenders, internships, scholarships, and more.",
-  generator: "Maximillien",
+  title: "RwandaJobHub",
+  description: "Job opportunities in Rwanda",
   icons: {
     icon: '/favicon-.png',
+    shortcut: '/favicon-.png',
     apple: '/favicon-.png',
   },
   openGraph: {
-    title: "RwandaJobHub - The #1 job board for Rwandan jobs",
-    description: "Find your next career opportunity in Rwanda. Browse jobs, tenders, internships, scholarships, and more.",
+    title: "Apply job at RwandaJobHub",
+    description: "Explore incredible opportunities in rwanda from internships, jobs, and exams.",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.rwandajobhub.rw",
-    siteName: "RwandaJobHub",
-    images: [
-      {
-        url: '/rwandajobhub-.png',
-        width: 1200,
-        height: 630,
-        alt: 'RwandaJobHub',
-      }
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: "RwandaJobHub - The #1 job board for Rwandan jobs",
-    description: "Find your next career opportunity in Rwanda. Browse jobs, tenders, internships, scholarships, and more.",
     images: ['/favicon-.png'],
   },
   other: {
@@ -60,13 +45,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon-.png" type="image/png" />
+        <link rel="shortcut icon" href="/favicon-.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/favicon-.png" />
+      </head>
       <body className={`${lato.className} font-sans antialiased`}>
         <ReactQueryProvider>
           <AuthProvider>
             <CompanyProvider>
               <JobProvider>
                 <ExamProvider>
-                  {children}
+                  <InquiryProvider>
+                    {children}
+                  </InquiryProvider>
                 </ExamProvider>
               </JobProvider>
             </CompanyProvider>

@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { JobDetailsContent } from '@/components/job-details-content'
+import { RecentJobsSidebar } from '@/components/recent-jobs-sidebar'
 import { JobViewTracker } from '@/components/job-view-tracker'
 import { notFound } from 'next/navigation'
 import { Job, Company } from '@/lib/types'
@@ -66,9 +67,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://rwandajobhub.com'
     const jobUrl = `${siteUrl}/jobs/${job.id}`
     
-    // Use company logo as favicon and OG image
+    // Use company logo as favicon and OG image, fallback to site favicon
     const companyLogo = company?.logo
-    const defaultFavicon = `${siteUrl}/favicon.png`
+    const defaultFavicon = `${siteUrl}/favicon-.png`
     const faviconUrl = companyLogo || defaultFavicon
     const ogImageUrl = companyLogo || defaultFavicon
 
@@ -159,7 +160,14 @@ export default async function JobPage({ params }: Props) {
             <div className="min-h-screen bg-background flex flex-col">
                 <Header />
                 <main className="flex-1 container mx-auto px-4 py-8 md:py-12">
-                    <JobDetailsContent job={job} initialCompany={company} />
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div className="lg:col-span-2">
+                            <JobDetailsContent job={job} initialCompany={company} />
+                        </div>
+                        <div className="hidden lg:block">
+                            <RecentJobsSidebar currentJobId={job.id} />
+                        </div>
+                    </div>
                 </main>
                 <Footer />
             </div>

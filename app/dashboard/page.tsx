@@ -7,10 +7,11 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { JobList } from "@/components/job-list"
 import { ExamList } from "@/components/exam-list"
+import { InquiryList } from "@/components/inquiry-list"
 import { AnalyticsDashboard } from "@/components/analytics-dashboard"
 import { LoginForm } from "@/components/login-form"
 import { Button } from "@/components/ui/button"
-import { Plus, BriefcaseBusiness, GraduationCap, BarChart3 } from "lucide-react"
+import { Plus, BriefcaseBusiness, GraduationCap, BarChart3, MessageSquare } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function DashboardPage() {
@@ -43,6 +44,10 @@ export default function DashboardPage() {
               <TabsTrigger value="exams" className="gap-2">
                 <GraduationCap className="h-4 w-4" />
                 Exams
+              </TabsTrigger>
+              <TabsTrigger value="inquiries" className="gap-2">
+                <MessageSquare className="h-4 w-4" />
+                Inquiries
               </TabsTrigger>
               <TabsTrigger value="analytics" className="gap-2">
                 <BarChart3 className="h-4 w-4" />
@@ -83,6 +88,10 @@ export default function DashboardPage() {
 
           <TabsContent value="exams" className="space-y-6">
             <ExamList />
+          </TabsContent>
+
+          <TabsContent value="inquiries" className="space-y-6">
+            <InquiryList />
           </TabsContent>
         </Tabs>
       </div>

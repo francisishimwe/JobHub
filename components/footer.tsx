@@ -55,7 +55,7 @@ export function Footer() {
               <Mail className="h-5 w-5 text-gray-400" />
               <div>
                 <p className="font-medium">Email</p>
-                <p className="text-gray-300 text-sm">rwandajobhub2050@gmail.com</p>
+                <p className="text-gray-300 text-sm">rwandaiobhub2050@gmail.com</p>
               </div>
             </div>
 
