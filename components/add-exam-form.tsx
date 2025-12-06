@@ -81,7 +81,7 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
 
     if (currentQuestion.questionType === "short-answer") {
       if (!currentQuestion.correctAnswer.trim()) {
-        alert("Please enter the correct answer for this short-answer question")
+        alert("Please enter the correct answer for this short-answer question.")
         return
       }
     }
