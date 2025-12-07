@@ -15,6 +15,7 @@ export interface Job {
   jobType: string
   opportunityType: string
   experienceLevel: string
+  category?: string
   deadline?: string
   applicants: number
   postedDate: Date

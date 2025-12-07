@@ -136,9 +136,9 @@ export function HeroSection() {
             <option value="Other">Other</option>
           </select>
 
-          <Button 
-            onClick={handleSearch} 
-            className="h-8 px-6 sm:px-8 text-base font-semibold text-white hover:opacity-90" 
+          <Button
+            onClick={handleSearch}
+            className="h-8 px-6 sm:px-8 text-base font-semibold text-white hover:opacity-90"
             style={{ backgroundColor: '#16A34A' }}
           >
             Search
@@ -147,29 +147,29 @@ export function HeroSection() {
 
         {/* Opportunity Type Filters - Tab Style */}
         <div className="mt-2 mx-auto max-w-4xl">
-          <div className="flex flex-wrap items-center justify-center gap-2 border-b">
+          <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2 border-b">
             {opportunityTypes.map(({ value, label, icon: Icon }) => {
               const count = getCount(value)
-              const isActive = value === "All" 
-                ? filters.opportunityTypes.length === 0 
+              const isActive = value === "All"
+                ? filters.opportunityTypes.length === 0
                 : filters.opportunityTypes.includes(value)
 
               return (
                 <button
                   key={value}
                   onClick={() => toggleOpportunityType(value)}
-                  className="flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors"
+                  className="flex items-center gap-1 sm:gap-2 border-b-2 px-2 py-2 sm:px-4 sm:py-3 text-xs sm:text-sm font-medium transition-colors"
                   style={{
-                    borderBottomColor: isActive ? '#16A34A' : 'transparent',
-                    color: isActive ? '#16A34A' : '#6B7280',
+                    borderBottomColor: isActive ? '#2563EB' : 'transparent', // Blue for active
+                    color: isActive ? '#2563EB' : '#6B7280', // Blue for active text
                   }}
                 >
                   <span>{label}</span>
                   <span
-                    className="rounded-full px-2 py-0.5 text-xs font-semibold"
+                    className="rounded-full px-1.5 py-0.5 sm:px-2 text-[10px] sm:text-xs font-semibold"
                     style={{
-                      backgroundColor: isActive ? '#16A34A' : '#E5E7EB',
-                      color: isActive ? 'white' : '#6B7280',
+                      backgroundColor: isActive ? '#EF4444' : '#E5E7EB', // Red for active badge
+                      color: isActive ? '#000000' : '#6B7280', // Black for active number
                     }}
                   >
                     {count}

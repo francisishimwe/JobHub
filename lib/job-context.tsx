@@ -48,6 +48,7 @@ const fetchJobs = async (): Promise<Job[]> => {
     jobType: job.job_type,
     opportunityType: job.opportunity_type,
     experienceLevel: job.experience_level,
+    category: job.category,
     deadline: job.deadline,
     applicants: job.applicants || 0,
     postedDate: new Date(job.created_at || job.posted_date),
@@ -172,6 +173,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
     if (updatedJob.jobType !== undefined) updateData.job_type = updatedJob.jobType
     if (updatedJob.opportunityType !== undefined) updateData.opportunity_type = updatedJob.opportunityType
     if (updatedJob.experienceLevel !== undefined) updateData.experience_level = updatedJob.experienceLevel
+    if (updatedJob.category !== undefined) updateData.category = updatedJob.category
     if (updatedJob.deadline !== undefined) updateData.deadline = updatedJob.deadline
     if (updatedJob.featured !== undefined) updateData.featured = updatedJob.featured
     if (updatedJob.applicationLink !== undefined) updateData.application_link = updatedJob.applicationLink

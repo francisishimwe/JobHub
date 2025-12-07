@@ -41,6 +41,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     jobType: "",
     opportunityType: "Job",
     experienceLevel: "",
+    category: "",
     deadline: "",
     applicationLink: "",
   })
@@ -101,6 +102,12 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       return
     }
 
+    if (!formData.companyId) {
+      alert("Please select a company")
+      setLoading(false)
+      return
+    }
+
     if (!formData.opportunityType) {
       alert("Please select an opportunity type")
       setLoading(false)
@@ -113,13 +120,14 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       // Clean up empty strings to null for optional fields
       const cleanedData = {
         title: formData.title.trim(),
-        companyId: formData.companyId || null,
+        companyId: formData.companyId, // Required field
         description: formData.description?.trim() || null,
         location: formData.location?.trim() || null,
         locationType: formData.locationType || null,
         jobType: formData.jobType || null,
         opportunityType: formData.opportunityType,
         experienceLevel: formData.experienceLevel || null,
+        category: formData.category?.trim() || null,
         deadline: formData.deadline || null,
         applicationLink: formData.applicationLink?.trim() || null,
         featured: false,
@@ -138,6 +146,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         jobType: "",
         opportunityType: "Job",
         experienceLevel: "",
+        category: "",
         deadline: "",
         applicationLink: "",
       })
@@ -169,7 +178,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="company">Company (Optional)</Label>
+            <Label htmlFor="company">Company *</Label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="relative">
                 <Input
@@ -293,6 +302,74 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                 className="h-11 text-base"
               />
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="category">Category (Optional)</Label>
+            <Select
+              value={formData.category}
+              onValueChange={(value: string) => setFormData({ ...formData, category: value })}
+            >
+              <SelectTrigger className="h-11 text-base">
+                <SelectValue placeholder="Select category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Academic">Academic</SelectItem>
+                <SelectItem value="Accounting">Accounting</SelectItem>
+                <SelectItem value="Agronomy">Agronomy</SelectItem>
+                <SelectItem value="Administration">Administration</SelectItem>
+                <SelectItem value="Agriculture">Agriculture</SelectItem>
+                <SelectItem value="Procurement">Procurement</SelectItem>
+                <SelectItem value="Animal science">Animal science</SelectItem>
+                <SelectItem value="Auditing">Auditing</SelectItem>
+                <SelectItem value="Banking">Banking</SelectItem>
+                <SelectItem value="Business">Business</SelectItem>
+                <SelectItem value="Catering">Catering</SelectItem>
+                <SelectItem value="Civil engineering">Civil engineering</SelectItem>
+                <SelectItem value="Communications">Communications</SelectItem>
+                <SelectItem value="Computer and IT">Computer and IT</SelectItem>
+                <SelectItem value="Consultancy">Consultancy</SelectItem>
+                <SelectItem value="Demography and data analysis">Demography and data analysis</SelectItem>
+                <SelectItem value="Law">Law</SelectItem>
+                <SelectItem value="Education">Education</SelectItem>
+                <SelectItem value="Electrical engineering">Electrical engineering</SelectItem>
+                <SelectItem value="Engineering">Engineering</SelectItem>
+                <SelectItem value="Environmental">Environmental</SelectItem>
+                <SelectItem value="Finance">Finance</SelectItem>
+                <SelectItem value="Food Sciences">Food Sciences</SelectItem>
+                <SelectItem value="Geology">Geology</SelectItem>
+                <SelectItem value="Management">Management</SelectItem>
+                <SelectItem value="Healthy">Healthy</SelectItem>
+                <SelectItem value="Hospitality">Hospitality</SelectItem>
+                <SelectItem value="Hotel">Hotel</SelectItem>
+                <SelectItem value="Human resource">Human resource</SelectItem>
+                <SelectItem value="International relations">International relations</SelectItem>
+                <SelectItem value="Journalism">Journalism</SelectItem>
+                <SelectItem value="Land management">Land management</SelectItem>
+                <SelectItem value="Leisure">Leisure</SelectItem>
+                <SelectItem value="Logistics">Logistics</SelectItem>
+                <SelectItem value="Marketing">Marketing</SelectItem>
+                <SelectItem value="Marketing and sales">Marketing and sales</SelectItem>
+                <SelectItem value="Mechanical engineering">Mechanical engineering</SelectItem>
+                <SelectItem value="Medicine">Medicine</SelectItem>
+                <SelectItem value="Mining">Mining</SelectItem>
+                <SelectItem value="Office management">Office management</SelectItem>
+                <SelectItem value="Pharmacy">Pharmacy</SelectItem>
+                <SelectItem value="Political science">Political science</SelectItem>
+                <SelectItem value="Project management">Project management</SelectItem>
+                <SelectItem value="Property management">Property management</SelectItem>
+                <SelectItem value="Psychology">Psychology</SelectItem>
+                <SelectItem value="Public Health">Public Health</SelectItem>
+                <SelectItem value="Research">Research</SelectItem>
+                <SelectItem value="Secretariat">Secretariat</SelectItem>
+                <SelectItem value="Social science">Social science</SelectItem>
+                <SelectItem value="Statistics">Statistics</SelectItem>
+                <SelectItem value="Telecommunications">Telecommunications</SelectItem>
+                <SelectItem value="Water engineering">Water engineering</SelectItem>
+                <SelectItem value="Vehicle Mechanical">Vehicle Mechanical</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">

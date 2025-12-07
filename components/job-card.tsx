@@ -60,6 +60,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
     window.open(`/jobs/${job.id}`, '_blank')
   }
 
+
   // Calculate days remaining
   const getDaysRemaining = () => {
     if (!job.deadline) return null
@@ -72,6 +73,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
   const daysRemaining = getDaysRemaining()
 
+  // Don't show jobs without companies (company is required)
   if (!company) return null
 
   return (
@@ -96,7 +98,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
               </h3>
 
               <div className="mb-2 flex flex-wrap items-center gap-2 md:gap-3 text-xs md:text-sm text-muted-foreground">
-                {company?.name && (
+                {company.name && (
                   <span className="font-medium" style={{ color: '#16A34A' }}>{company.name}</span>
                 )}
 

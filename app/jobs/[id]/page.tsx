@@ -66,10 +66,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://rwandajobhub.com'
     const jobUrl = `${siteUrl}/jobs/${job.id}`
-    
+
     // Use company logo as favicon and OG image, fallback to site favicon
     const companyLogo = company?.logo
-    const defaultFavicon = `${siteUrl}/favicon-.png`
+    const defaultFavicon = `${siteUrl}/favicon.jpg`
     const faviconUrl = companyLogo || defaultFavicon
     const ogImageUrl = companyLogo || defaultFavicon
 

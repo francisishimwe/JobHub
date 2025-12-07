@@ -8,7 +8,7 @@ interface DynamicFaviconProps {
 
 export function DynamicFavicon({ companyLogo }: DynamicFaviconProps) {
     useEffect(() => {
-        const defaultFavicon = '/favicon-.png'
+        const defaultFavicon = '/favicon.jpg'
         const faviconUrl = companyLogo || defaultFavicon
 
         // Update favicon
@@ -17,11 +17,14 @@ export function DynamicFavicon({ companyLogo }: DynamicFaviconProps) {
             const existingIcons = document.querySelectorAll("link[rel*='icon']")
             existingIcons.forEach((icon) => icon.remove())
 
+            // Determine MIME type based on URL
+            const mimeType = url.endsWith('.jpg') || url.endsWith('.jpeg') ? 'image/jpeg' : 'image/png'
+
             // Add new favicon
             const link = document.createElement('link')
             link.rel = 'icon'
             link.href = url
-            link.type = 'image/png'
+            link.type = mimeType
             document.head.appendChild(link)
 
             // Add apple touch icon

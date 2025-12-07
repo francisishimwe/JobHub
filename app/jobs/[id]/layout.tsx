@@ -77,7 +77,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     let logoUrl: string
 
     if (!companyData.logo) {
-      logoUrl = `${baseUrl}/favicon-.png`
+      logoUrl = `${baseUrl}/favicon.jpg`
     } else if (companyData.logo.startsWith('http://') || companyData.logo.startsWith('https://')) {
       logoUrl = companyData.logo
     } else if (companyData.logo.startsWith('/')) {
@@ -92,8 +92,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       title,
       description: cleanDescription,
       icons: {
-        icon: companyData.logo || '/favicon-.png',
-        apple: companyData.logo || '/favicon-.png',
+        icon: companyData.logo || '/favicon.jpg',
+        apple: companyData.logo || '/favicon.jpg',
       },
       openGraph: {
         title,
@@ -115,14 +115,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 }
 
 function getDefaultMetadata(baseUrl: string): Metadata {
-  const defaultLogoUrl = `${baseUrl}/favicon-.png`
+  const defaultLogoUrl = `${baseUrl}/favicon.jpg`
 
   return {
     title: 'Job Opportunity | RwandaJobHub',
     description: 'Find your next career opportunity in Rwanda',
     icons: {
-      icon: '/favicon-.png',
-      apple: '/favicon-.png',
+      icon: '/favicon.jpg',
+      apple: '/favicon.jpg',
     },
     openGraph: {
       title: 'Job Opportunity | RwandaJobHub',

@@ -23,15 +23,15 @@ export const metadata: Metadata = {
   title: "RwandaJobHub",
   description: "Job opportunities in Rwanda",
   icons: {
-    icon: '/favicon-.png',
-    shortcut: '/favicon-.png',
-    apple: '/favicon-.png',
+    icon: '/favicon.jpg',
+    shortcut: '/favicon.jpg',
+    apple: '/favicon.jpg',
   },
   openGraph: {
     title: "Apply job at RwandaJobHub",
     description: "Explore incredible opportunities in rwanda from internships, jobs, and exams.",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.rwandajobhub.rw",
-    images: ['/favicon-.png'],
+    images: ['/favicon.jpg'],
   },
   other: {
     "google-adsense-account": "ca-pub-1412133449814385",
@@ -46,9 +46,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon-.png" type="image/png" />
-        <link rel="shortcut icon" href="/favicon-.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/favicon-.png" />
+        <link rel="icon" href="/favicon.jpg" type="image/jpeg" />
+        <link rel="shortcut icon" href="/favicon.jpg" type="image/jpeg" />
+        <link rel="apple-touch-icon" href="/favicon.jpg" />
       </head>
       <body className={`${lato.className} font-sans antialiased`}>
         <ReactQueryProvider>
