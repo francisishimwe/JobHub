@@ -93,13 +93,13 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
             </div>
 
             <div className="flex-1 min-w-0">
-              <h3 className="mb-2 text-base md:text-lg font-semibold leading-tight transition-colors" style={{ color: '#1E40AF' }}>
+              <h3 className="mb-2 text-base md:text-lg font-bold leading-tight transition-colors" style={{ color: '#1E40AF' }}>
                 {job.title}
               </h3>
 
               <div className="mb-2 flex flex-wrap items-center gap-2 md:gap-3 text-xs md:text-sm text-muted-foreground">
                 {company.name && (
-                  <span className="font-medium" style={{ color: '#16A34A' }}>{company.name}</span>
+                  <span className="font-semibold text-gray-600">{company.name}</span>
                 )}
 
                 {job.location && (
@@ -113,7 +113,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
                   <span>{job.applicants} applicants</span>
                 </div>
                 {daysRemaining !== null && (
-                  <div className={`flex items-center gap-1 ${daysRemaining <= 3 ? 'text-red-600 font-semibold' : daysRemaining <= 7 ? 'text-orange-600' : ''}`}>
+                  <div className={`flex items-center gap-1 ${daysRemaining <= 3 ? 'text-red-600 font-bold' : daysRemaining <= 7 ? 'text-orange-600 font-semibold' : 'font-medium'}`}>
                     <Clock className="h-3 w-3 md:h-4 md:w-4" />
                     <span>
                       {daysRemaining > 0

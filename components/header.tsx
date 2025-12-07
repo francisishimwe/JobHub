@@ -56,13 +56,13 @@ export function Header() {
           <Link href="/" className="flex items-center justify-center gap-3">
             {/* Mobile: Logo only */}
             <img
-              src="/favicon.jpg"
+              src="/logo.png"
               alt="RwandaJobHub"
               className="h-12 w-auto object-contain md:hidden"
             />
             {/* Desktop: Logo with name */}
             <img
-              src="/favicon.jpg"
+              src="/logo.png"
               alt="RwandaJobHub"
               className="hidden md:block h-20 w-auto object-contain"
               style={{ maxWidth: '250px' }}

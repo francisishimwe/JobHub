@@ -23,9 +23,12 @@ export const metadata: Metadata = {
   title: "RwandaJobHub - The #1 job board for Rwandan jobs",
   description: "Rwanda Job Hub - Find jobs, internships, scholarships, tenders, and education opportunities. Browse Enterprise Applications Manager, Database Administrator, IT Security Engineer, System Administrator, Network Administrator positions and more from Rwanda's top employers.",
   icons: {
-    icon: '/favicon.jpg',
-    shortcut: '/favicon.jpg',
-    apple: '/favicon.jpg',
+    icon: [
+      { url: '/favicon.jpg', type: 'image/jpeg' },
+      { url: '/favicon.jpg?v=2', type: 'image/jpeg' },
+    ],
+    shortcut: [{ url: '/favicon.jpg', type: 'image/jpeg' }],
+    apple: [{ url: '/favicon.jpg', type: 'image/jpeg', sizes: '180x180' }],
   },
   openGraph: {
     title: "RwandaJobHub - The #1 job board for Rwandan jobs",

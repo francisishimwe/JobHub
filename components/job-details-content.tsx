@@ -96,7 +96,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     <div className="flex-1">
                         <h1 className="text-2xl md:text-3xl font-bold text-foreground">{job.title}</h1>
                         <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                            <span className="font-medium text-foreground text-base">{company?.name || 'Unknown Company'}</span>
+                            <span className="font-semibold text-gray-600 text-base">{company?.name || 'Unknown Company'}</span>
                             <span className="hidden md:inline">•</span>
                             <span className="text-muted-foreground">Posted {new Date(job.postedDate).toLocaleDateString()}</span>
                         </div>
@@ -114,8 +114,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                     <MapPin className="h-4 w-4 text-muted-foreground" />
                                 </div>
                                 <div>
-                                    <p className="text-xs text-muted-foreground font-medium">Location</p>
-                                    <p className="font-medium">{job.location}{job.locationType && ` (${job.locationType})`}</p>
+                                    <p className="text-xs text-muted-foreground font-semibold">Location</p>
+                                    <p className="font-semibold">{job.location}{job.locationType && ` (${job.locationType})`}</p>
                                 </div>
                             </div>
                         )}
@@ -125,8 +125,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                     <Briefcase className="h-4 w-4 text-muted-foreground" />
                                 </div>
                                 <div>
-                                    <p className="text-xs text-muted-foreground font-medium">Job Type</p>
-                                    <p className="font-medium">{job.jobType}</p>
+                                    <p className="text-xs text-muted-foreground font-semibold">Job Type</p>
+                                    <p className="font-semibold">{job.jobType}</p>
                                 </div>
                             </div>
                         )}
@@ -136,8 +136,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                     <Clock className="h-4 w-4 text-muted-foreground" />
                                 </div>
                                 <div>
-                                    <p className="text-xs text-muted-foreground font-medium">Experience</p>
-                                    <p className="font-medium">{job.experienceLevel}</p>
+                                    <p className="text-xs text-muted-foreground font-semibold">Experience</p>
+                                    <p className="font-semibold">{job.experienceLevel}</p>
                                 </div>
                             </div>
                         )}
@@ -147,9 +147,9 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 {/* Description */}
                 {job.description && (
                     <div>
-                        <h3 className="text-lg font-semibold mb-4"></h3>
+                        <h3 className="text-lg font-bold mb-4"></h3>
                         <div
-                            className="prose prose-sm max-w-none text-muted-foreground leading-relaxed
+                            className="prose prose-sm max-w-none text-foreground leading-relaxed
                                 [&_p]:mb-4 [&_p]:leading-7
                                 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4
                                 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4
@@ -173,6 +173,44 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 )}
 
+                {/* Attachment Section */}
+                {job.attachmentUrl && (
+                    <div className="p-6 bg-muted/30 rounded-lg border">
+                        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <svg className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                            Attached Document
+                        </h3>
+                        <a
+                            href={job.attachmentUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-between p-4 bg-background rounded-lg border hover:border-blue-500 hover:bg-blue-50/50 transition-all cursor-pointer group"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="p-3 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
+                                    <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p className="font-medium text-foreground group-hover:text-blue-600 transition-colors">
+                                        {decodeURIComponent(job.attachmentUrl.split('/').pop()?.split('?')[0] || 'Document').split('-').slice(1).join('-') || 'Download Document'}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                        {job.attachmentUrl.endsWith('.pdf') && 'PDF Document'}
+                                        {job.attachmentUrl.match(/\.(doc|docx)$/i) && 'Word Document'}
+                                        {job.attachmentUrl.match(/\.(xls|xlsx)$/i) && 'Excel Spreadsheet'}
+                                        {!job.attachmentUrl.match(/\.(pdf|doc|docx|xls|xlsx)$/i) && 'Click to download'}
+                                    </p>
+                                </div>
+                            </div>
+                            <ExternalLink className="h-5 w-5 text-muted-foreground group-hover:text-blue-600 transition-colors" />
+                        </a>
+                    </div>
+                )}
+
                 {/* Stats */}
                 <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border">
                     <span className="text-sm font-medium text-muted-foreground">Total Applicants</span>
@@ -190,32 +228,21 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                         <Share2 className="mr-2 h-5 w-5" />
                         Share on WhatsApp
                     </Button>
-                    {job.attachmentUrl && (
-                        <Button
-                            onClick={() => window.open(job.attachmentUrl, '_blank')}
-                            size="lg"
-                            className="flex-1 sm:flex-initial sm:min-w-[200px] text-base font-medium h-12 text-white"
-                            style={{ backgroundColor: '#16A34A' }}
-                        >
-                            <ExternalLink className="mr-2 h-5 w-5" />
-                            View attached document
-                        </Button>
-                    )}
-                    {job.applicationLink && 
-                     job.opportunityType !== "Tender" && 
-                     job.opportunityType !== "Blog" && 
-                     job.opportunityType !== "Scholarship" && 
-                     job.opportunityType !== "Education" && 
-                     job.opportunityType !== "Announcement" && (
-                        <Button
-                            onClick={handleApply}
-                            size="lg"
-                            className="flex-1 sm:flex-initial sm:min-w-[200px] bg-foreground text-background hover:bg-foreground/90 text-base font-medium h-12"
-                        >
-                            Apply Now
-                            <ExternalLink className="ml-2 h-5 w-5" />
-                        </Button>
-                    )}
+                    {job.applicationLink &&
+                        job.opportunityType !== "Tender" &&
+                        job.opportunityType !== "Blog" &&
+                        job.opportunityType !== "Scholarship" &&
+                        job.opportunityType !== "Education" &&
+                        job.opportunityType !== "Announcement" && (
+                            <Button
+                                onClick={handleApply}
+                                size="lg"
+                                className="flex-1 sm:flex-initial sm:min-w-[200px] bg-foreground text-background hover:bg-foreground/90 text-base font-medium h-12"
+                            >
+                                Apply Now
+                                <ExternalLink className="ml-2 h-5 w-5" />
+                            </Button>
+                        )}
                 </div>
             </div>
         </div>

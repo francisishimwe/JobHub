@@ -2,6 +2,7 @@
 
 import { MapPinned, Mail, Phone } from "lucide-react"
 import { useEffect } from "react"
+import { FaWhatsapp, FaFacebook, FaXTwitter, FaTelegram } from "react-icons/fa6"
 
 export function Footer() {
   useEffect(() => {
@@ -40,13 +41,13 @@ export function Footer() {
       */}
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <h3 className="text-xl font-semibold mb-6 text-center">Get in Touch</h3>
+          <h3 className="text-xl font-bold mb-6 text-center">Get in Touch</h3>
 
           <div className="grid md:grid-cols-3 gap-6 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-3">
               <MapPinned className="h-5 w-5 text-gray-400" />
               <div>
-                <p className="font-medium">Location</p>
+                <p className="font-semibold">Location</p>
                 <p className="text-gray-300 text-sm">Kigali, Rwanda</p>
               </div>
             </div>
@@ -54,7 +55,7 @@ export function Footer() {
             <div className="flex items-center justify-center md:justify-start gap-3">
               <Mail className="h-5 w-5 text-gray-400" />
               <div>
-                <p className="font-medium">Email</p>
+                <p className="font-semibold">Email</p>
                 <p className="text-gray-300 text-sm">rwandaiobhub2050@gmail.com</p>
               </div>
             </div>
@@ -62,13 +63,56 @@ export function Footer() {
             <div className="flex items-center justify-center md:justify-start gap-3">
               <Phone className="h-5 w-5 text-gray-400" />
               <div>
-                <p className="font-medium">Phone</p>
+                <p className="font-semibold">Phone</p>
                 <p className="text-gray-300 text-sm">+250 783 074 056</p>
               </div>
             </div>
           </div>
 
-          <div className="text-center mt-8 pt-6 border-t border-gray-800">
+          {/* Follow Us Section */}
+          <div className="mt-8 pt-6 border-t border-gray-800">
+            <h4 className="text-center font-bold mb-4">Follow Us</h4>
+            <div className="flex items-center justify-center gap-3">
+              <a
+                href="https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#25D366] hover:opacity-80 transition-opacity"
+                aria-label="WhatsApp"
+              >
+                <FaWhatsapp className="h-5 w-5 md:h-6 md:w-6 text-white" />
+              </a>
+              <a
+                href="https://facebook.com/rwandajobhub"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#1877F2] hover:opacity-80 transition-opacity"
+                aria-label="Facebook"
+              >
+                <FaFacebook className="h-5 w-5 md:h-6 md:w-6 text-white" />
+              </a>
+              <a
+                href="https://x.com/rwandajobhub"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-black hover:opacity-80 transition-opacity"
+                aria-label="X (Twitter)"
+              >
+                <FaXTwitter className="h-5 w-5 md:h-6 md:w-6 text-white" />
+              </a>
+              <a
+                href="https://t.me/rwandajobhub"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#0088cc] hover:opacity-80 transition-opacity"
+                aria-label="Telegram"
+              >
+                <FaTelegram className="h-5 w-5 md:h-6 md:w-6 text-white" />
+              </a>
+            </div>
+          </div>
+
+          <div className="text-center mt-6 pt-6 border-t border-gray-800">
             <div className="flex flex-wrap items-center justify-center gap-4 mb-4">
               <a href="/privacy" className="text-gray-300 hover:text-white text-sm transition-colors">
                 Privacy Policy

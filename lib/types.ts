@@ -21,6 +21,7 @@ export interface Job {
   postedDate: Date
   featured?: boolean
   applicationLink: string
+  attachmentUrl?: string  // URL to uploaded file (PDF, DOC, Excel)
 }
 
 export interface JobFilters {

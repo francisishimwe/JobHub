@@ -20,7 +20,6 @@ export function HeroSection() {
     { value: "Scholarship", label: "Scholarships", icon: Award },
     { value: "Education", label: "Education", icon: BookOpen },
     { value: "Blog", label: "Blogs", icon: Newspaper },
-    { value: "Announcement", label: "Announcements", icon: Megaphone },
   ]
 
   // Calculate counts for each opportunity type
@@ -36,8 +35,15 @@ export function HeroSection() {
       // Clear opportunity type filter to show Featured
       setFilters({ opportunityTypes: [] })
     } else {
-      // Set only the clicked type as active (single selection)
-      setFilters({ opportunityTypes: [type] })
+      // If already active, deselect it; otherwise select it
+      const isActive = filters.opportunityTypes.includes(type)
+      if (isActive) {
+        // Deselect: clear filters (show all/featured)
+        setFilters({ opportunityTypes: [] })
+      } else {
+        // Select: show only this type
+        setFilters({ opportunityTypes: [type] })
+      }
     }
   }
 
@@ -147,7 +153,7 @@ export function HeroSection() {
 
         {/* Opportunity Type Filters - Tab Style */}
         <div className="mt-2 mx-auto max-w-4xl">
-          <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2 border-b">
+          <div className="flex flex-wrap items-center justify-center gap-0.5 sm:gap-2 border-b">
             {opportunityTypes.map(({ value, label, icon: Icon }) => {
               const count = getCount(value)
               const isActive = value === "All"
@@ -158,19 +164,11 @@ export function HeroSection() {
                 <button
                   key={value}
                   onClick={() => toggleOpportunityType(value)}
-                  className="flex items-center gap-1 sm:gap-2 border-b-2 px-2 py-2 sm:px-4 sm:py-3 text-xs sm:text-sm font-medium transition-colors"
-                  style={{
-                    borderBottomColor: isActive ? '#2563EB' : 'transparent', // Blue for active
-                    color: isActive ? '#2563EB' : '#6B7280', // Blue for active text
-                  }}
+                  className={`flex items-center gap-0.5 sm:gap-2 border-b-2 border-b-transparent px-1 py-1.5 sm:px-4 sm:py-3 text-[10px] sm:text-sm font-medium transition-colors text-blue-600 hover:text-blue-700 ${isActive ? 'underline decoration-2 underline-offset-4' : ''}`}
                 >
                   <span>{label}</span>
                   <span
-                    className="rounded-full px-1.5 py-0.5 sm:px-2 text-[10px] sm:text-xs font-semibold"
-                    style={{
-                      backgroundColor: isActive ? '#EF4444' : '#E5E7EB', // Red for active badge
-                      color: isActive ? '#000000' : '#6B7280', // Black for active number
-                    }}
+                    className="rounded-full px-1.5 py-0.5 sm:px-2 text-[10px] sm:text-xs font-semibold bg-red-500 text-black"
                   >
                     {count}
                   </span>

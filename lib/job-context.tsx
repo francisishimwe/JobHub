@@ -54,6 +54,7 @@ const fetchJobs = async (): Promise<Job[]> => {
     postedDate: new Date(job.created_at || job.posted_date),
     featured: job.featured || false,
     applicationLink: job.application_link,
+    attachmentUrl: job.attachment_url,
   }))
 
   // Filter out expired jobs
@@ -142,6 +143,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
       deadline: job.deadline || null,
       featured: job.featured || false,
       application_link: job.applicationLink || null,
+      attachment_url: job.attachmentUrl || null,
     }
 
     console.log("Attempting to insert job data:", insertData)
@@ -177,6 +179,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
     if (updatedJob.deadline !== undefined) updateData.deadline = updatedJob.deadline
     if (updatedJob.featured !== undefined) updateData.featured = updatedJob.featured
     if (updatedJob.applicationLink !== undefined) updateData.application_link = updatedJob.applicationLink
+    if (updatedJob.attachmentUrl !== undefined) updateData.attachment_url = updatedJob.attachmentUrl
 
     const { error } = await supabase.from("jobs").update(updateData).eq("id", id)
 

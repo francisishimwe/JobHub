@@ -44,7 +44,11 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     category: "",
     deadline: "",
     applicationLink: "",
+    attachmentUrl: "",
   })
+
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [uploadingFile, setUploadingFile] = useState(false)
 
   // Filter companies based on search
   const filteredCompanies = companies.filter(company =>
@@ -91,6 +95,75 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     }
   }
 
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ]
+
+    if (!allowedTypes.includes(file.type)) {
+      alert("Please upload a PDF, DOC, DOCX, XLS, or XLSX file")
+      return
+    }
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      alert("File size must be less than 10MB")
+      return
+    }
+
+    setSelectedFile(file)
+
+    // Upload file to Supabase Storage
+    setUploadingFile(true)
+    try {
+      const { supabase } = await import('@/lib/supabase')
+
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
+      const filePath = `job-attachments/${fileName}`
+
+      const { data, error } = await supabase.storage
+        .from('attachments')
+        .upload(filePath, file)
+
+      if (error) throw error
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('attachments')
+        .getPublicUrl(filePath)
+
+      setFormData({ ...formData, attachmentUrl: urlData.publicUrl })
+      console.log("File uploaded successfully:", urlData.publicUrl)
+    } catch (error: any) {
+      console.error("Error uploading file:", error)
+
+      // Show more specific error message
+      let errorMessage = "Failed to upload file."
+
+      if (error?.message?.includes('bucket')) {
+        errorMessage = "Storage bucket 'attachments' not found. Please create it in Supabase Storage first."
+      } else if (error?.message?.includes('policy')) {
+        errorMessage = "Storage policy error. Please check bucket permissions in Supabase."
+      } else if (error?.message) {
+        errorMessage = `Upload failed: ${error.message}`
+      }
+
+      alert(errorMessage + "\n\nPlease check the FILE_ATTACHMENT_GUIDE.md for setup instructions.")
+      setSelectedFile(null)
+    } finally {
+      setUploadingFile(false)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -130,6 +203,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         category: formData.category?.trim() || null,
         deadline: formData.deadline || null,
         applicationLink: formData.applicationLink?.trim() || null,
+        attachmentUrl: formData.attachmentUrl?.trim() || null,
         featured: false,
       }
 
@@ -149,7 +223,9 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         category: "",
         deadline: "",
         applicationLink: "",
+        attachmentUrl: "",
       })
+      setSelectedFile(null)
 
       alert("Job added successfully!")
       onSuccess?.()
@@ -276,7 +352,6 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                   <SelectItem value="Education">Education</SelectItem>
                   <SelectItem value="Tender">Tender</SelectItem>
                   <SelectItem value="Blog">Blog</SelectItem>
-                  <SelectItem value="Announcement">Announcement</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -395,6 +470,48 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                 className="h-11 text-base"
               />
             </div>
+          </div>
+
+          {/* File Attachment Upload */}
+          <div className="space-y-2">
+            <Label htmlFor="attachment">Attachment (Optional)</Label>
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <Input
+                  id="attachment"
+                  type="file"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx"
+                  onChange={handleFileSelect}
+                  disabled={uploadingFile}
+                  className="h-11 text-base"
+                />
+              </div>
+              {selectedFile && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedFile(null)
+                    setFormData({ ...formData, attachmentUrl: "" })
+                  }}
+                  className="gap-2"
+                >
+                  <X className="h-4 w-4" />
+                  Clear
+                </Button>
+              )}
+            </div>
+            {selectedFile && (
+              <p className="text-sm text-muted-foreground">
+                Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+              </p>
+            )}
+            {uploadingFile && (
+              <p className="text-sm text-blue-600">Uploading file...</p>
+            )}
+            <p className="text-xs text-muted-foreground">
+              Supported formats: PDF, DOC, DOCX, XLS, XLSX (Max 10MB)
+            </p>
           </div>
         </div>
 

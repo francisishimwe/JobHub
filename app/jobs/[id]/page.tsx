@@ -144,6 +144,7 @@ export default async function JobPage({ params }: Props) {
         postedDate: new Date(jobData.created_at),
         featured: jobData.featured,
         applicationLink: jobData.application_link,
+        attachmentUrl: jobData.attachment_url,
     }
 
     // Map DB company to Component Company
