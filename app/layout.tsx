@@ -20,16 +20,16 @@ const lato = Lato({
 })
 
 export const metadata: Metadata = {
-  title: "RwandaJobHub",
-  description: "Job opportunities in Rwanda",
+  title: "RwandaJobHub - The #1 job board for Rwandan jobs",
+  description: "Rwanda Job Hub - Find jobs, internships, scholarships, tenders, and education opportunities. Browse Enterprise Applications Manager, Database Administrator, IT Security Engineer, System Administrator, Network Administrator positions and more from Rwanda's top employers.",
   icons: {
     icon: '/favicon.jpg',
     shortcut: '/favicon.jpg',
     apple: '/favicon.jpg',
   },
   openGraph: {
-    title: "Apply job at RwandaJobHub",
-    description: "Explore incredible opportunities in rwanda from internships, jobs, and exams.",
+    title: "RwandaJobHub - The #1 job board for Rwandan jobs",
+    description: "Find jobs, internships, scholarships, tenders, and education opportunities in Rwanda. Browse positions from top employers.",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.rwandajobhub.rw",
     images: ['/favicon.jpg'],
   },
