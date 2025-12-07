@@ -133,27 +133,33 @@ export function JobProvider({ children }: { children: ReactNode }) {
     const insertData = {
       title: job.title,
       company_id: job.companyId,
-      description: job.description,
-      location: job.location,
-      location_type: job.locationType,
-      job_type: job.jobType,
+      description: job.description || null,
+      location: job.location || null,
+      location_type: job.locationType || null,
+      job_type: job.jobType || null,
       opportunity_type: job.opportunityType,
-      experience_level: job.experienceLevel,
+      experience_level: job.experienceLevel || null,
       category: job.category || null,
       deadline: job.deadline || null,
       featured: job.featured || false,
-      application_link: job.applicationLink,
+      application_link: job.applicationLink || null,
       attachment_url: job.attachmentUrl || null,
     }
 
-    const { error } = await supabase
+    console.log("Attempting to insert job data:", insertData)
+
+    const { data, error } = await supabase
       .from("jobs")
       .insert([insertData])
+      .select()
 
     if (error) {
       console.error("Supabase error adding job:", error)
+      console.error("Error details:", JSON.stringify(error, null, 2))
       throw error
     }
+
+    console.log("Job inserted successfully:", data)
 
     // Invalidate and refetch
     queryClient.invalidateQueries({ queryKey: ['jobs'] })

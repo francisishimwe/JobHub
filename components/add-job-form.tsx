@@ -123,7 +123,13 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     e.preventDefault()
     setLoading(true)
 
-    // Validate opportunity type is selected
+    // Validate required fields
+    if (!formData.title?.trim()) {
+      alert("Please enter a job title")
+      setLoading(false)
+      return
+    }
+
     if (!formData.opportunityType) {
       alert("Please select an opportunity type")
       setLoading(false)
@@ -133,10 +139,26 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     try {
       console.log("Form data being submitted:", formData)
 
-      await addJob({
-        ...formData,
+      // Clean up empty strings to null for optional fields
+      const cleanedData = {
+        title: formData.title.trim(),
+        companyId: formData.companyId || null,
+        description: formData.description?.trim() || null,
+        location: formData.location?.trim() || null,
+        locationType: formData.locationType || null,
+        jobType: formData.jobType || null,
+        opportunityType: formData.opportunityType,
+        experienceLevel: formData.experienceLevel || null,
+        category: formData.category?.trim() || null,
+        deadline: formData.deadline || null,
+        applicationLink: formData.applicationLink?.trim() || null,
+        attachmentUrl: formData.attachmentUrl?.trim() || null,
         featured: false,
-      })
+      }
+
+      console.log("Cleaned data being sent to addJob:", cleanedData)
+
+      await addJob(cleanedData as any)
 
       setFormData({
         title: "",
