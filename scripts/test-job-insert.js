@@ -14,11 +14,12 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 async function testMinimalJobInsert() {
   console.log('Testing minimal job insert with required fields...\n')
 
-  // Test 1: Title, description, and opportunity_type (minimum required)
-  console.log('Test 1: Inserting job with title, description, and opportunity_type')
+  // Test 1: Title, description, location, and opportunity_type (minimum required)
+  console.log('Test 1: Inserting job with all required fields')
   const test1 = {
     title: 'Test Job - Minimal Required Fields',
     description: 'This is a test job description to verify the database schema.',
+    location: 'Remote',
     opportunity_type: 'Job'
   }
   
@@ -44,8 +45,8 @@ async function testMinimalJobInsert() {
   const test2 = {
     title: 'Test Job - All Fields',
     description: 'Complete test job with all optional fields set to null.',
+    location: 'Kigali, Rwanda',
     company_id: null,
-    location: null,
     location_type: null,
     job_type: null,
     opportunity_type: 'Job',

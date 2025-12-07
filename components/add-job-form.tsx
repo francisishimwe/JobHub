@@ -113,6 +113,12 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       return
     }
 
+    if (!formData.locationType) {
+      alert("Please select a location type")
+      setLoading(false)
+      return
+    }
+
     if (!formData.opportunityType) {
       alert("Please select an opportunity type")
       setLoading(false)
@@ -128,7 +134,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         companyId: formData.companyId || null,
         description: formData.description.trim(), // Required field
         location: formData.location.trim(), // Required field
-        locationType: formData.locationType || null,
+        locationType: formData.locationType, // Required field
         jobType: formData.jobType || null,
         opportunityType: formData.opportunityType,
         experienceLevel: formData.experienceLevel || null,
@@ -251,7 +257,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="locationType">Location Type (Optional)</Label>
+              <Label htmlFor="locationType">Location Type *</Label>
               <Input
                 id="locationType"
                 value={formData.locationType}
