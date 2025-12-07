@@ -101,24 +101,6 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       return
     }
 
-    if (!formData.description?.trim()) {
-      alert("Please enter a job description")
-      setLoading(false)
-      return
-    }
-
-    if (!formData.location?.trim()) {
-      alert("Please enter a job location")
-      setLoading(false)
-      return
-    }
-
-    if (!formData.locationType) {
-      alert("Please select a location type")
-      setLoading(false)
-      return
-    }
-
     if (!formData.opportunityType) {
       alert("Please select an opportunity type")
       setLoading(false)
@@ -132,9 +114,9 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       const cleanedData = {
         title: formData.title.trim(),
         companyId: formData.companyId || null,
-        description: formData.description.trim(), // Required field
-        location: formData.location.trim(), // Required field
-        locationType: formData.locationType, // Required field
+        description: formData.description?.trim() || null,
+        location: formData.location?.trim() || null,
+        locationType: formData.locationType || null,
         jobType: formData.jobType || null,
         opportunityType: formData.opportunityType,
         experienceLevel: formData.experienceLevel || null,
@@ -236,7 +218,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description *</Label>
+            <Label htmlFor="description">Description (Optional)</Label>
             <RichTextEditor
               value={formData.description}
               onChange={(value) => setFormData({ ...formData, description: value })}
@@ -246,7 +228,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="location">Location *</Label>
+              <Label htmlFor="location">Location (Optional)</Label>
               <Input
                 id="location"
                 value={formData.location}
@@ -257,7 +239,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="locationType">Location Type *</Label>
+              <Label htmlFor="locationType">Location Type (Optional)</Label>
               <Input
                 id="locationType"
                 value={formData.locationType}
