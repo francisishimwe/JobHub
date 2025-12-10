@@ -1,5 +1,6 @@
 "use client"
 
+import { memo } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { MapPin, UserCheck, BadgeCheck, Share2, Clock } from "lucide-react"
@@ -12,7 +13,7 @@ interface JobCardProps {
   job: Job
 }
 
-export function JobCard({ job }: JobCardProps) {
+const JobCardComponent = ({ job }: JobCardProps) => {
   const { getCompanyById } = useCompanies()
   const company = getCompanyById(job.companyId)
 
@@ -158,3 +159,6 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
     </Link>
   )
 }
+
+// Export memoized version to prevent unnecessary re-renders
+export const JobCard = memo(JobCardComponent)

@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "./supabase"
 import type { Job, JobFilters } from "./types"
@@ -22,48 +22,56 @@ const JobContext = createContext<JobContextType | undefined>(undefined)
 
 // Fetch jobs function
 const fetchJobs = async (): Promise<Job[]> => {
-  const { data, error } = await supabase
-    .from("jobs")
-    .select("*")
+  try {
+    const { data, error } = await supabase
+      .from("jobs")
+      .select("*")
 
-  if (error) {
-    console.error("Supabase error fetching jobs:", error)
+    if (error) {
+      console.error("Supabase error fetching jobs:", error)
+      console.error("Error details:", JSON.stringify(error, null, 2))
+      throw error
+    }
+
+    if (!data) {
+      console.log("No jobs data returned from Supabase")
+      return []
+    }
+
+    console.log("Fetched jobs count:", data.length)
+
+    const jobs = data.map((job) => ({
+      id: job.id,
+      title: job.title,
+      companyId: job.company_id,
+      description: job.description,
+      location: job.location,
+      locationType: job.location_type,
+      jobType: job.job_type,
+      opportunityType: job.opportunity_type,
+      experienceLevel: job.experience_level,
+      category: job.category,
+      deadline: job.deadline,
+      applicants: job.applicants || 0,
+      postedDate: new Date(job.created_at || job.posted_date),
+      featured: job.featured || false,
+      applicationLink: job.application_link,
+      attachmentUrl: job.attachment_url,
+    }))
+
+    // Filter out expired jobs (Client-side double check matching server logic)
+    // We keep this to ensure consistency with timezone edge cases if any
+    const activeJobs = filterExpiredJobs(jobs)
+
+
+    console.log(`Active jobs: ${activeJobs.length} (filtered ${jobs.length - activeJobs.length} expired)`)
+
+    // Sort by posted date (client-side for now)
+    return activeJobs.sort((a, b) => b.postedDate.getTime() - a.postedDate.getTime())
+  } catch (error) {
+    console.error("Unexpected error fetching jobs:", error)
     throw error
   }
-
-  if (!data) {
-    console.log("No jobs data returned from Supabase")
-    return []
-  }
-
-  console.log("Fetched jobs count:", data.length)
-
-  const jobs = data.map((job) => ({
-    id: job.id,
-    title: job.title,
-    companyId: job.company_id,
-    description: job.description,
-    location: job.location,
-    locationType: job.location_type,
-    jobType: job.job_type,
-    opportunityType: job.opportunity_type,
-    experienceLevel: job.experience_level,
-    category: job.category,
-    deadline: job.deadline,
-    applicants: job.applicants || 0,
-    postedDate: new Date(job.created_at || job.posted_date),
-    featured: job.featured || false,
-    applicationLink: job.application_link,
-    attachmentUrl: job.attachment_url,
-  }))
-
-  // Filter out expired jobs
-  const activeJobs = filterExpiredJobs(jobs)
-
-  console.log(`Active jobs: ${activeJobs.length} (filtered ${jobs.length - activeJobs.length} expired)`)
-
-  // Sort by posted date in JavaScript
-  return activeJobs.sort((a, b) => b.postedDate.getTime() - a.postedDate.getTime())
 }
 
 export function JobProvider({ children }: { children: ReactNode }) {
@@ -80,10 +88,10 @@ export function JobProvider({ children }: { children: ReactNode }) {
   const { data: jobs = [], isLoading } = useQuery({
     queryKey: ['jobs'],
     queryFn: fetchJobs,
-    staleTime: 0, // Always fetch fresh data
-    gcTime: 30 * 1000, // 30 seconds cache only
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
+    staleTime: 60 * 1000, // 1 minute fresh
+    gcTime: 10 * 60 * 1000, // 10 minutes cache
+    refetchOnMount: false, // Don't refetch if fresh
+    refetchOnWindowFocus: false, // Reduce background refetches
   })
 
   // Set up real-time subscription
@@ -103,7 +111,8 @@ export function JobProvider({ children }: { children: ReactNode }) {
     }
   }, [queryClient])
 
-  // Automatic cleanup of expired jobs - runs once when provider mounts
+  // Automatic cleanup of expired jobs - DISABLED as per user request (manual only)
+  /*
   useEffect(() => {
     const runCleanup = async () => {
       try {
@@ -117,17 +126,18 @@ export function JobProvider({ children }: { children: ReactNode }) {
         console.error("Auto-cleanup failed:", error)
       }
     }
-
+ 
     // Run cleanup on mount
     runCleanup()
-
+ 
     // Set up periodic cleanup (every hour)
     const cleanupInterval = setInterval(runCleanup, 60 * 60 * 1000)
-
+ 
     return () => {
       clearInterval(cleanupInterval)
     }
   }, [queryClient])
+  */
 
   const addJob = async (job: Omit<Job, "id" | "postedDate" | "applicants">) => {
     const insertData = {
@@ -219,39 +229,42 @@ export function JobProvider({ children }: { children: ReactNode }) {
     setFiltersState({ ...filters, ...newFilters })
   }
 
-  // Filter jobs based on current filters
-  const filteredJobs = jobs.filter((job) => {
-    // Search filter
-    if (
-      filters.search &&
-      !job.title.toLowerCase().includes(filters.search.toLowerCase()) &&
-      !job.description.toLowerCase().includes(filters.search.toLowerCase())
-    ) {
-      return false
-    }
+  // Filter jobs based on current filters - memoized for performance
+  const filteredJobs = useMemo(() => {
+    return jobs.filter((job) => {
+      // Search filter
+      if (
+        filters.search &&
+        !job.title.toLowerCase().includes(filters.search.toLowerCase()) &&
+        !job.description.toLowerCase().includes(filters.search.toLowerCase())
+      ) {
+        return false
+      }
 
-    // Location filter
-    if (filters.location && !job.location.toLowerCase().includes(filters.location.toLowerCase())) {
-      return false
-    }
+      // Location filter
+      if (filters.location && !job.location.toLowerCase().includes(filters.location.toLowerCase())) {
+        return false
+      }
 
-    // Experience level filter
-    if (filters.experienceLevels.length > 0 && !filters.experienceLevels.includes(job.experienceLevel)) {
-      return false
-    }
+      // Experience filter
+      if (filters.experienceLevels.length > 0 && !filters.experienceLevels.includes(job.experienceLevel)) {
+        return false
+      }
 
-    // Job type filter
-    if (filters.jobTypes.length > 0 && !filters.jobTypes.includes(job.jobType)) {
-      return false
-    }
+      // Job type filter
+      if (filters.jobTypes.length > 0 && !filters.jobTypes.includes(job.jobType)) {
+        return false
+      }
 
-    // Opportunity type filter
-    if (filters.opportunityTypes.length > 0 && !filters.opportunityTypes.includes(job.opportunityType)) {
-      return false
-    }
+      // Opportunity type filter
+      if (filters.opportunityTypes.length > 0 && !filters.opportunityTypes.includes(job.opportunityType)) {
+        return false
+      }
 
-    return true
-  })
+
+      return true
+    })
+  }, [jobs, filters])
 
   return (
     <JobContext.Provider

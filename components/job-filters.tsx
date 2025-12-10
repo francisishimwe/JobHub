@@ -56,9 +56,9 @@ export function JobFilters() {
         </Button>
       </div>
 
-      {/* Experience Level */}
+      {/* Experience */}
       <div className="space-y-3">
-        <Label className="text-sm font-semibold">Experience level</Label>
+        <Label className="text-sm font-semibold">Experience</Label>
         <div className="space-y-3">
           {experienceLevels.map((level) => (
             <div key={level} className="flex items-center justify-between">

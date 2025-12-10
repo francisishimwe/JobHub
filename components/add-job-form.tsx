@@ -368,7 +368,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="experienceLevel">Experience Level (Optional)</Label>
+              <Label htmlFor="experienceLevel">Experience (Optional)</Label>
               <Input
                 id="experienceLevel"
                 value={formData.experienceLevel}

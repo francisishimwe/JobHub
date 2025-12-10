@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server"
 import { supabase } from "@/lib/supabase"
 
-export async function POST(request: Request) {
+// Shared logic for cleanup
+async function handleCleanup(request: Request) {
     try {
         // Optional: Add authentication/authorization check here
         // For example, check for a secret token in headers
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
         if (error) {
             console.error("Error deleting expired jobs:", error)
             return NextResponse.json(
-                { error: "Failed to delete expired jobs", details: error.message },
+                { message: "Failed to delete expired jobs", error: error.message, details: error },
                 { status: 500 }
             )
         }
@@ -43,18 +44,20 @@ export async function POST(request: Request) {
                 deadline: job.deadline
             }))
         })
-    } catch (error) {
+    } catch (error: any) {
         console.error("Unexpected error in cleanup-expired-jobs:", error)
         return NextResponse.json(
-            { error: "Internal server error" },
+            { message: "Internal server error", error: error.message, details: error },
             { status: 500 }
         )
     }
 }
 
+export async function POST(request: Request) {
+    return handleCleanup(request)
+}
+
 // Also support GET requests for manual testing
-export async function GET() {
-    return POST(new Request("http://localhost:3000/api/cleanup-expired-jobs", {
-        method: "POST"
-    }))
+export async function GET(request: Request) {
+    return handleCleanup(request)
 }

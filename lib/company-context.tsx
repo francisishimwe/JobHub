@@ -40,10 +40,10 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
   const { data: companies = [], isLoading } = useQuery({
     queryKey: ['companies'],
     queryFn: fetchCompanies,
-    staleTime: 0, // Always fetch fresh
-    gcTime: 1 * 60 * 1000, // 1 minute cache
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
+    staleTime: 5 * 60 * 1000, // 5 minutes fresh (companies change less frequently)
+    gcTime: 30 * 60 * 1000, // 30 minutes cache
+    refetchOnMount: false, // Don't refetch if fresh
+    refetchOnWindowFocus: false, // Reduce background refetches
   })
 
   // Set up real-time subscription
