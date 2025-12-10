@@ -153,8 +153,9 @@ export function HeroSection() {
 
         {/* Opportunity Type Filters - Tab Style */}
         <div className="mt-2 mx-auto max-w-4xl">
+          {/* Mobile: Flex with forced 2 rows, Desktop: Standard flex */}
           <div className="flex flex-wrap items-center justify-center gap-0.5 sm:gap-2 border-b">
-            {opportunityTypes.map(({ value, label, icon: Icon }) => {
+            {opportunityTypes.map(({ value, label, icon: Icon }, index) => {
               const count = getCount(value)
               const isActive = value === "All"
                 ? filters.opportunityTypes.length === 0
@@ -164,11 +165,12 @@ export function HeroSection() {
                 <button
                   key={value}
                   onClick={() => toggleOpportunityType(value)}
-                  className={`flex items-center gap-0.5 sm:gap-2 border-b-2 border-b-transparent px-1 py-1.5 sm:px-4 sm:py-3 text-[10px] sm:text-sm font-medium transition-colors text-blue-600 hover:text-blue-700 ${isActive ? 'underline decoration-2 underline-offset-4' : ''}`}
+                  className={`flex items-center justify-center gap-1 sm:gap-2 border-b-2 border-b-transparent px-1.5 py-2 sm:px-4 sm:py-3 text-[12px] sm:text-sm font-medium transition-colors text-blue-600 hover:text-blue-700 ${isActive ? 'underline decoration-2 underline-offset-4' : ''} ${index < 4 ? 'basis-[24%]' : 'basis-[32%]'} sm:basis-auto flex-shrink-0`}
                 >
-                  <span>{label}</span>
+                  <span className="whitespace-nowrap">{label}</span>
                   <span
-                    className="rounded-full px-1.5 py-0.5 sm:px-2 text-[10px] sm:text-xs font-semibold bg-red-500 text-black"
+                    className="rounded-full px-2 py-0.5 sm:px-2 text-[11px] sm:text-xs font-semibold"
+                    style={{ backgroundColor: '#000000ff', color: '#ffffffff' }}
                   >
                     {count}
                   </span>
