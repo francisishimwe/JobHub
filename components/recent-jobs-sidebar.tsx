@@ -2,6 +2,7 @@
 
 import { useJobs } from "@/lib/job-context"
 import { useCompanies } from "@/lib/company-context"
+import { AdContainer } from "@/components/ad-container"
 import Link from "next/link"
 import Image from "next/image"
 import { Clock, MapPin, Briefcase } from "lucide-react"
@@ -83,6 +84,9 @@ export function RecentJobsSidebar({ currentJobId }: RecentJobsSidebarProps) {
           )
         })}
       </div>
+
+      {/* Ad in sidebar */}
+      <AdContainer id="sidebar-ad" className="my-4" />
 
       {/* Social Media Links */}
       <div className="mt-6 pt-6 border-t">

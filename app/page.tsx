@@ -6,6 +6,7 @@ import { Footer } from "@/components/footer"
 import { HeroSection } from "@/components/hero-section"
 import { JobCard } from "@/components/job-card"
 import { JobFilters } from "@/components/job-filters"
+import { AdContainer } from "@/components/ad-container"
 import { useJobs } from "@/lib/job-context"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -71,42 +72,74 @@ export default function HomePage() {
       <Header />
       <HeroSection />
 
-      <div className="container mx-auto px-2 py-1 max-w-4xl">
-        <div className="mb-1 flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">Showing results ({filteredJobs.length})</p>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-2 bg-transparent">
-                Sort: {getSortLabel()}
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setSortBy("newest")}>
-                Newest First
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSortBy("oldest")}>
-                Oldest First
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSortBy("deadline")}>
-                Deadline (Soonest)
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+      <div className="container mx-auto px-2 py-1">
+        {/* Three column layout: Left Ad | Content | Right Ad */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-7xl mx-auto">
+          {/* Left Sidebar Ad - Hidden on mobile */}
+          <aside className="hidden lg:block lg:col-span-2">
+            <div className="sticky top-4">
+              <AdContainer id="homepage-left-sidebar" className="min-h-[600px]" />
+            </div>
+          </aside>
 
-        <div className="space-y-4">
-          {isLoading ? (
-            <div className="rounded-lg border bg-card p-12 text-center">
-              <p className="text-muted-foreground">Loading opportunities...</p>
+          {/* Main Content */}
+          <main className="lg:col-span-8">
+            <div className="max-w-4xl mx-auto">
+              <div className="mb-1 flex items-center justify-between">
+                <p className="text-sm text-muted-foreground">Showing results ({filteredJobs.length})</p>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="gap-2 bg-transparent">
+                      Sort: {getSortLabel()}
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => setSortBy("newest")}>
+                      Newest First
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setSortBy("oldest")}>
+                      Oldest First
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setSortBy("deadline")}>
+                      Deadline (Soonest)
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              {/* Ad placement after filters */}
+              <AdContainer id="homepage-top-ad" className="my-4" />
+
+              <div className="space-y-4">
+                {isLoading ? (
+                  <div className="rounded-lg border bg-card p-12 text-center">
+                    <p className="text-muted-foreground">Loading opportunities...</p>
+                  </div>
+                ) : sortedJobs.length > 0 ? (
+                  sortedJobs.map((job) => (
+                    <JobCard key={job.id} job={job} />
+                  ))
+                ) : (
+                  <div className="rounded-lg border bg-card p-12 text-center">
+                    <p className="text-muted-foreground">No jobs found matching your criteria.</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Ad at bottom of job list */}
+              {sortedJobs.length > 0 && (
+                <AdContainer id="homepage-bottom-ad" className="my-6" />
+              )}
             </div>
-          ) : sortedJobs.length > 0 ? (
-            sortedJobs.map((job) => <JobCard key={job.id} job={job} />)
-          ) : (
-            <div className="rounded-lg border bg-card p-12 text-center">
-              <p className="text-muted-foreground">No jobs found matching your criteria.</p>
+          </main>
+
+          {/* Right Sidebar Ad - Hidden on mobile */}
+          <aside className="hidden lg:block lg:col-span-2">
+            <div className="sticky top-4">
+              <AdContainer id="homepage-right-sidebar" className="min-h-[600px]" />
             </div>
-          )}
+          </aside>
         </div>
       </div>
 

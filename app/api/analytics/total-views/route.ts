@@ -1,10 +1,7 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { withRateLimit } from '@/lib/api-middleware'
 
-// This is a simple counter API - in production you'd track actual page views
-// For now, we're returning the sum of all job interactions (applicants field)
-// which represents Views + Shares as tracked by job-card buttons
-
-export async function GET() {
+async function handleTotalViews(request: NextRequest) {
     try {
         // In a real implementation, you'd query your analytics database
         // For now, return a placeholder that will be populated from frontend
@@ -22,3 +19,5 @@ export async function GET() {
         )
     }
 }
+
+export const GET = withRateLimit(handleTotalViews, { maxRequests: 100, windowMs: 60000 })

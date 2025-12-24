@@ -1,8 +1,14 @@
 import { createClient } from '@/lib/supabase/server'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { withRateLimit, isValidOrigin } from '@/lib/api-middleware'
 
-export async function POST(request: Request) {
+async function handleTrackApplication(request: NextRequest) {
     try {
+        // Validate origin
+        if (!isValidOrigin(request)) {
+            return NextResponse.json({ error: 'Invalid origin' }, { status: 403 })
+        }
+
         const { jobId } = await request.json()
 
         console.log('[TRACK-APPLICATION] Received request for jobId:', jobId)
@@ -23,7 +29,7 @@ export async function POST(request: Request) {
 
         if (fetchError) {
             console.error('[TRACK-APPLICATION] Error fetching job:', fetchError)
-            return NextResponse.json({ error: 'Job not found', details: fetchError.message }, { status: 404 })
+            return NextResponse.json({ error: 'Job not found' }, { status: 404 })
         }
 
         console.log('[TRACK-APPLICATION] Current applicants for job:', job.title, '=', job.applicants || 0)
@@ -38,14 +44,16 @@ export async function POST(request: Request) {
 
         if (updateError) {
             console.error('[TRACK-APPLICATION] Error updating applicants:', updateError)
-            return NextResponse.json({ error: 'Failed to update count', details: updateError.message }, { status: 500 })
+            return NextResponse.json({ error: 'Failed to update count' }, { status: 500 })
         }
 
         console.log('[TRACK-APPLICATION] Successfully updated applicants to:', newCount)
 
-        return NextResponse.json({ success: true, applicants: newCount, jobTitle: job.title })
+        return NextResponse.json({ success: true, applicants: newCount })
     } catch (error) {
         console.error('[TRACK-APPLICATION] Unexpected error:', error)
-        return NextResponse.json({ error: 'Internal Server Error', details: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
 }
+
+export const POST = withRateLimit(handleTrackApplication, { maxRequests: 50, windowMs: 60000 })

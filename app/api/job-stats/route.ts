@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { withRateLimit } from '@/lib/api-middleware'
 
-export async function GET(request: Request) {
+async function handleJobStats(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url)
         const jobId = searchParams.get('jobId')
@@ -30,3 +31,5 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
 }
+
+export const GET = withRateLimit(handleJobStats, { maxRequests: 200, windowMs: 60000 })

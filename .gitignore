@@ -16,8 +16,15 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files
-.env*
+# env files (NEVER commit these!)
+.env
+.env*.local
+.env.development
+.env.production
+.env.test
+
+# DO commit this:
+# .env.example
 
 # vercel
 .vercel
@@ -25,3 +32,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Security - Never commit these
+*.pem
+*.key
+.secrets/
+secrets.json
+
+# OS files
+.DS_Store
+Thumbs.db

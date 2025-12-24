@@ -5,6 +5,7 @@ import { MapPin, Briefcase, Clock, ExternalLink, ArrowLeft, Share2 } from "lucid
 import Image from "next/image"
 import type { Job, Company } from "@/lib/types"
 import { useCompanies } from "@/lib/company-context"
+import { AdContainer } from "@/components/ad-container"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 
@@ -173,6 +174,9 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 )}
 
+                {/* Ad after description */}
+                <AdContainer id="job-details-mid-ad" />
+
                 {/* Attachment Section */}
                 {job.attachmentUrl && (
                     <div className="p-6 bg-muted/30 rounded-lg border">
@@ -216,6 +220,9 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     <span className="text-sm font-medium text-muted-foreground">Total Applicants</span>
                     <span className="text-lg font-bold">{applicantCount}</span>
                 </div>
+
+                {/* Ad before action buttons */}
+                <AdContainer id="job-details-bottom-ad" />
 
                 {/* Share on WhatsApp and Apply Now Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t">

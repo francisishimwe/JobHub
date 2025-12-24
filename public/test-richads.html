@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RichAds Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .ad-container {
+            min-height: 250px;
+            border: 2px dashed #ccc;
+            margin: 20px 0;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 RichAds Integration Test</h1>
+    
+    <div id="script-status"></div>
+    <div id="ad-status"></div>
+    
+    <h2>Ad Container Test</h2>
+    <div class="ad-container" id="test-ad">
+        <p>Ad should appear here</p>
+    </div>
+
+    <!-- RichAds Script -->
+    <script src="https://richinfo.co/richpartners/in-page/js/richads-ob.js?pubid=997129&siteid=381547" async></script>
+    
+    <script>
+        // Test script loading
+        setTimeout(() => {
+            const statusDiv = document.getElementById('script-status');
+            const adStatusDiv = document.getElementById('ad-status');
+            
+            // Check if script loaded
+            if (typeof window.richads !== 'undefined' || document.querySelector('script[src*="richads"]')) {
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = '✅ <strong>Script Loaded:</strong> RichAds script is loading correctly';
+            } else {
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = '❌ <strong>Script Failed:</strong> RichAds script did not load';
+            }
+            
+            // Check for ads
+            setTimeout(() => {
+                const hasAds = document.querySelector('[data-ad-slot]') || 
+                               document.querySelector('iframe[src*="rich"]') ||
+                               window.richads;
+                
+                if (hasAds) {
+                    adStatusDiv.className = 'status success';
+                    adStatusDiv.innerHTML = '✅ <strong>Ads Detected:</strong> Ad elements found on page';
+                } else {
+                    adStatusDiv.className = 'status warning';
+                    adStatusDiv.innerHTML = `
+                        ⚠️ <strong>No Ads Showing:</strong> Possible reasons:<br>
+                        • Account pending approval<br>
+                        • Testing on localhost (ads may only work on production)<br>
+                        • Ad blocker is active<br>
+                        • Publisher ID not activated yet<br>
+                        <br>
+                        <strong>Next Steps:</strong><br>
+                        1. Deploy to production (rwandajobhub.rw)<br>
+                        2. Contact RichAds support to verify account status<br>
+                        3. Disable ad blockers and test again
+                    `;
+                }
+            }, 3000);
+            
+        }, 2000);
+        
+        // Log network requests
+        console.log('🔍 RichAds Test Page Loaded');
+        console.log('Publisher ID: 997129');
+        console.log('Site ID: 381547');
+        console.log('Check Network tab for richinfo.co requests');
+    </script>
+</body>
+</html>

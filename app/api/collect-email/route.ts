@@ -1,23 +1,12 @@
-import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDUxOTI4MDAsImV4cCI6MTk2MDc2ODgwMH0.placeholder'
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+import { withRateLimit, isValidOrigin } from '@/lib/api-middleware'
 
 // Test endpoint to verify Supabase connection
-export async function GET() {
-  const isConfigured = process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  
-  if (!isConfigured) {
-    return NextResponse.json({
-      status: 'error',
-      message: 'Supabase is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables.'
-    }, { status: 500 })
-  }
-
+async function handleGetTest(request: NextRequest) {
   try {
+    const supabase = await createClient()
+    
     // Try to query the table
     const { data, error } = await supabase
       .from('email_subscribers')
@@ -28,9 +17,6 @@ export async function GET() {
       return NextResponse.json({
         status: 'error',
         message: 'Cannot connect to email_subscribers table',
-        error: error.message,
-        code: error.code,
-        hint: error.hint
       }, { status: 500 })
     }
     
@@ -42,22 +28,18 @@ export async function GET() {
   } catch (error) {
     return NextResponse.json({
       status: 'error',
-      message: 'Server error',
-      error: String(error)
+      message: 'Server error'
     }, { status: 500 })
   }
 }
 
-export async function POST(request: Request) {
-  const isConfigured = process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  
-  if (!isConfigured) {
-    return NextResponse.json({
-      error: 'Supabase is not configured. Please set environment variables.'
-    }, { status: 500 })
-  }
-
+async function handlePostEmail(request: NextRequest) {
   try {
+    // Validate origin
+    if (!isValidOrigin(request)) {
+      return NextResponse.json({ error: 'Invalid origin' }, { status: 403 })
+    }
+
     const { email } = await request.json()
 
     // Validate email
@@ -76,8 +58,9 @@ export async function POST(request: Request) {
       )
     }
 
+    const supabase = await createClient()
+
     // Insert email into database
-    // Note: Supabase auto-generates subscribed_at with DEFAULT NOW()
     const { data, error } = await supabase
       .from('email_subscribers')
       .insert([
@@ -97,40 +80,24 @@ export async function POST(request: Request) {
         )
       }
 
-      // Log detailed error information
-      console.error('Supabase error details:', {
-        message: error.message,
-        code: error.code,
-        details: error.details,
-        hint: error.hint,
-        fullError: error
-      })
+      console.error('Supabase error:', error.code, error.message)
       
-      // Return more specific error message
-      let errorMessage = error.message || 'Failed to save email'
+      let errorMessage = 'Failed to save email'
       
-      // Common error messages and fixes
       if (error.code === '42P01') {
-        errorMessage = 'Table email_subscribers does not exist. Please run the SQL setup script.'
+        errorMessage = 'Table does not exist'
       } else if (error.code === 'PGRST301') {
-        errorMessage = 'Permission denied. Check RLS policies on email_subscribers table.'
-      } else if (error.message?.includes('JWT')) {
-        errorMessage = 'Authentication error. Check your Supabase keys.'
+        errorMessage = 'Permission denied'
       }
       
       return NextResponse.json(
-        { 
-          error: errorMessage,
-          details: error.message,
-          code: error.code,
-          hint: error.hint
-        },
+        { error: errorMessage },
         { status: 500 }
       )
     }
 
     return NextResponse.json(
-      { message: 'Successfully subscribed', success: true, data },
+      { message: 'Successfully subscribed', success: true },
       { status: 201 }
     )
   } catch (error) {
@@ -141,3 +108,6 @@ export async function POST(request: Request) {
     )
   }
 }
+
+export const GET = withRateLimit(handleGetTest, { maxRequests: 50, windowMs: 60000 })
+export const POST = withRateLimit(handlePostEmail, { maxRequests: 20, windowMs: 60000 })
