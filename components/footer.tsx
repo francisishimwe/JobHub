@@ -83,7 +83,7 @@ export function Footer() {
                 <FaWhatsapp className="h-5 w-5 md:h-6 md:w-6 text-white" />
               </a>
               <a
-                href="https://facebook.com/rwandajobhub"
+                href="https://www.facebook.com/profile.php?id=61584589785023"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#1877F2] hover:opacity-80 transition-opacity"
@@ -92,7 +92,7 @@ export function Footer() {
                 <FaFacebook className="h-5 w-5 md:h-6 md:w-6 text-white" />
               </a>
               <a
-                href="https://x.com/rwandajobhub"
+                href="https://x.com/Rwanda_Job_Hub"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-black hover:opacity-80 transition-opacity"
@@ -101,7 +101,7 @@ export function Footer() {
                 <FaXTwitter className="h-5 w-5 md:h-6 md:w-6 text-white" />
               </a>
               <a
-                href="https://t.me/rwandajobhub"
+                href="https://t.me/RwandaJobHub"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#0088cc] hover:opacity-80 transition-opacity"
