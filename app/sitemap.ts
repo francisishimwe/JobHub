@@ -26,8 +26,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             console.error('Error fetching companies for sitemap:', companiesError)
         }
 
+        // Fetch all active exams
+        const { data: exams, error: examsError } = await supabase
+            .from('exams')
+            .select('id, created_at')
+            .order('created_at', { ascending: false })
+
+        if (examsError) {
+            console.error('Error fetching exams for sitemap:', examsError)
+        }
+
         // Log for debugging
-        console.log(`Sitemap generated: ${jobs?.length || 0} jobs, ${companies?.length || 0} companies`)
+        console.log(`Sitemap generated: ${jobs?.length || 0} jobs, ${companies?.length || 0} companies, ${exams?.length || 0} exams`)
 
         // Dynamic job routes
         const jobRoutes = (jobs || []).map((job) => ({
@@ -41,6 +51,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         const companyRoutes = (companies || []).map((company) => ({
             url: `${baseUrl}/companies/${company.id}`,
             lastModified: new Date(company.created_date),
+            changeFrequency: 'weekly' as const,
+            priority: 0.8,
+        }))
+
+        // Dynamic exam routes
+        const examRoutes = (exams || []).map((exam) => ({
+            url: `${baseUrl}/exams/${exam.id}`,
+            lastModified: new Date(exam.created_at),
             changeFrequency: 'weekly' as const,
             priority: 0.8,
         }))
@@ -60,6 +78,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 priority: 0.9,
             },
             {
+                url: `${baseUrl}/exams`,
+                lastModified: new Date(),
+                changeFrequency: 'daily',
+                priority: 0.8,
+            },
+            {
+                url: `${baseUrl}/employers`,
+                lastModified: new Date(),
+                changeFrequency: 'weekly',
+                priority: 0.8,
+            },
+            {
+                url: `${baseUrl}/dashboard`,
+                lastModified: new Date(),
+                changeFrequency: 'daily',
+                priority: 0.7,
+            },
+            {
+                url: `${baseUrl}/post-advert`,
+                lastModified: new Date(),
+                changeFrequency: 'monthly',
+                priority: 0.7,
+            },
+            {
+                url: `${baseUrl}/edit-cv`,
+                lastModified: new Date(),
+                changeFrequency: 'monthly',
+                priority: 0.7,
+            },
+            {
                 url: `${baseUrl}/about`,
                 lastModified: new Date(),
                 changeFrequency: 'monthly',
@@ -70,6 +118,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 lastModified: new Date(),
                 changeFrequency: 'monthly',
                 priority: 0.7,
+            },
+            {
+                url: `${baseUrl}/testimonials`,
+                lastModified: new Date(),
+                changeFrequency: 'monthly',
+                priority: 0.6,
+            },
+            {
+                url: `${baseUrl}/help`,
+                lastModified: new Date(),
+                changeFrequency: 'monthly',
+                priority: 0.6,
+            },
+            {
+                url: `${baseUrl}/disclaimer`,
+                lastModified: new Date(),
+                changeFrequency: 'yearly',
+                priority: 0.5,
             },
             {
                 url: `${baseUrl}/privacy`,
@@ -85,7 +151,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             },
         ]
 
-        return [...staticRoutes, ...jobRoutes, ...companyRoutes]
+        return [...staticRoutes, ...jobRoutes, ...companyRoutes, ...examRoutes]
     } catch (error) {
         console.error('Error generating sitemap:', error)
 
@@ -104,6 +170,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 priority: 0.9,
             },
             {
+                url: `${baseUrl}/exams`,
+                lastModified: new Date(),
+                changeFrequency: 'daily',
+                priority: 0.8,
+            },
+            {
+                url: `${baseUrl}/employers`,
+                lastModified: new Date(),
+                changeFrequency: 'weekly',
+                priority: 0.8,
+            },
+            {
+                url: `${baseUrl}/dashboard`,
+                lastModified: new Date(),
+                changeFrequency: 'daily',
+                priority: 0.7,
+            },
+            {
+                url: `${baseUrl}/post-advert`,
+                lastModified: new Date(),
+                changeFrequency: 'monthly',
+                priority: 0.7,
+            },
+            {
+                url: `${baseUrl}/edit-cv`,
+                lastModified: new Date(),
+                changeFrequency: 'monthly',
+                priority: 0.7,
+            },
+            {
                 url: `${baseUrl}/about`,
                 lastModified: new Date(),
                 changeFrequency: 'monthly',
@@ -114,6 +210,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 lastModified: new Date(),
                 changeFrequency: 'monthly',
                 priority: 0.7,
+            },
+            {
+                url: `${baseUrl}/testimonials`,
+                lastModified: new Date(),
+                changeFrequency: 'monthly',
+                priority: 0.6,
+            },
+            {
+                url: `${baseUrl}/help`,
+                lastModified: new Date(),
+                changeFrequency: 'monthly',
+                priority: 0.6,
+            },
+            {
+                url: `${baseUrl}/disclaimer`,
+                lastModified: new Date(),
+                changeFrequency: 'yearly',
+                priority: 0.5,
             },
             {
                 url: `${baseUrl}/privacy`,
