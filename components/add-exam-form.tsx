@@ -26,6 +26,7 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
   const [title, setTitle] = useState("")
   const [category, setCategory] = useState("")
   const [duration, setDuration] = useState("")
+  const [difficulty, setDifficulty] = useState("")
   const [description, setDescription] = useState("")
   const [topicInput, setTopicInput] = useState("")
   const [topics, setTopics] = useState<string[]>([])
@@ -157,10 +158,9 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
         title,
         category,
         duration: duration || "Not specified",
+        difficulty,
         description,
         topics,
-        totalQuestions: questions.length,
-        totalPoints: questions.reduce((sum, q) => sum + q.points, 0),
       }, examQuestions)
 
       alert("Exam added successfully!")
@@ -169,6 +169,7 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
       setTitle("")
       setCategory("")
       setDuration("")
+      setDifficulty("")
       setDescription("")
       setTopics([])
       setQuestions([])
@@ -176,7 +177,14 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
       onSuccess?.()
     } catch (error) {
       console.error("Error adding exam:", error)
-      alert("Failed to add exam. Please try again.")
+
+      let errorMessage = "Failed to add exam. Please try again."
+      if (error instanceof Error) {
+        console.error("Error message:", error.message)
+        errorMessage = `Failed to add exam: ${error.message}`
+      }
+
+      alert(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -213,14 +221,26 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="duration">Duration (Optional)</Label>
-            <Input
-              id="duration"
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-              placeholder="e.g., 60 minutes, 1 hour, etc."
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="duration">Duration (Optional)</Label>
+              <Input
+                id="duration"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                placeholder="e.g., 60 minutes, 1 hour, etc."
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="difficulty">Difficulty (Optional)</Label>
+              <Input
+                id="difficulty"
+                value={difficulty}
+                onChange={(e) => setDifficulty(e.target.value)}
+                placeholder="e.g., Beginner, Intermediate, Advanced"
+              />
+            </div>
           </div>
 
           <div className="space-y-2">

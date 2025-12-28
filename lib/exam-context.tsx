@@ -50,6 +50,9 @@ export function ExamProvider({ children }: { children: ReactNode }) {
       setExams(formattedExams)
     } catch (error) {
       console.error("Error fetching exams:", error)
+      if (error instanceof Error) {
+        console.error("Error message:", error.message)
+      }
     }
   }
 
@@ -66,7 +69,7 @@ export function ExamProvider({ children }: { children: ReactNode }) {
             title: examData.title,
             category: examData.category,
             duration: examData.duration,
-            difficulty: examData.difficulty,
+            difficulty: examData.difficulty || null,
             description: examData.description,
             topics: examData.topics,
           },
@@ -111,7 +114,19 @@ export function ExamProvider({ children }: { children: ReactNode }) {
 
       setExams([newExam, ...exams])
     } catch (error) {
-      console.error("Error adding exam:", error)
+      // Log error details for debugging
+      if (error && typeof error === 'object') {
+        const supabaseError = error as any
+        console.error("Error adding exam:", {
+          message: supabaseError.message || 'Unknown error',
+          code: supabaseError.code,
+          details: supabaseError.details,
+          hint: supabaseError.hint,
+        })
+      } else {
+        console.error("Error adding exam:", error)
+      }
+
       throw error
     }
   }
