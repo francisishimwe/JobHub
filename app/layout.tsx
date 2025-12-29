@@ -80,6 +80,13 @@ export default function RootLayout({
           async
         />
         <GoogleAnalytics />
+        {/* Fantastic Multitag */}
+        <script
+          src="https://quge5.com/88/tag.min.js"
+          data-zone="197174"
+          async
+          data-cfasync="false"
+        />
       </body>
     </html>
   )
