@@ -52,6 +52,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.jpg" type="image/jpeg" />
         <link rel="shortcut icon" href="/favicon.jpg" type="image/jpeg" />
         <link rel="apple-touch-icon" href="/favicon.jpg" />
+        <meta name="monetag" content="5395d56707c2bdf5f2a3af13d0f822ca" />
       </head>
       <body className={`${lato.className} font-sans antialiased`}>
         <ReactQueryProvider>
@@ -74,8 +75,8 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1412133449814385"
           crossOrigin="anonymous"
         />
-        <script 
-          src="https://richinfo.co/richpartners/in-page/js/richads-ob.js?pubid=997129&siteid=381547" 
+        <script
+          src="https://richinfo.co/richpartners/in-page/js/richads-ob.js?pubid=997129&siteid=381547"
           async
         />
         <GoogleAnalytics />

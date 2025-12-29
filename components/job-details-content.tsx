@@ -174,8 +174,6 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 )}
 
-                {/* Ad after description */}
-                <AdContainer id="job-details-mid-ad" />
 
                 {/* Attachment Section */}
                 {job.attachmentUrl && (
@@ -221,16 +219,13 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     <span className="text-lg font-bold">{applicantCount}</span>
                 </div>
 
-                {/* Ad before action buttons */}
-                <AdContainer id="job-details-bottom-ad" />
-
                 {/* Share on WhatsApp and Apply Now Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t">
                     <Button
                         onClick={handleShareWhatsApp}
                         size="lg"
                         variant="outline"
-                        className="flex-1 text-base font-medium h-12 border-2 hover:bg-[#25D366] hover:text-white hover:border-[#25D366] transition-colors"
+                        className="flex-1 text-base font-medium h-14 sm:h-12 border-2 hover:bg-[#25D366] hover:text-white hover:border-[#25D366] transition-colors"
                     >
                         <Share2 className="mr-2 h-5 w-5" />
                         Share on WhatsApp
@@ -244,13 +239,17 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             <Button
                                 onClick={handleApply}
                                 size="lg"
-                                className="flex-1 sm:flex-initial sm:min-w-[200px] bg-foreground text-background hover:bg-foreground/90 text-base font-medium h-12"
+                                className="flex-1 sm:flex-initial sm:min-w-[220px] bg-foreground text-background hover:bg-foreground/90 text-xl font-semibold h-16 sm:h-15 px-12"
                             >
                                 Apply Now
-                                <ExternalLink className="ml-2 h-5 w-5" />
+                                <ExternalLink className="ml-2 h-6 w-6" />
                             </Button>
                         )}
                 </div>
+
+
+                {/* Ad before action buttons */}
+                <AdContainer id="job-details-bottom-ad" />
             </div>
         </div>
     )

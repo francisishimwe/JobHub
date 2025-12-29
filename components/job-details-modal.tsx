@@ -39,7 +39,7 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
               <DialogTitle className="text-2xl">{job.title}</DialogTitle>
               <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                 <span className="font-medium text-foreground">{job.company}</span>
-                
+
               </div>
             </div>
           </div>
@@ -80,20 +80,20 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
 
           {/* Apply Button */}
           <div className="flex gap-3 border-t pt-4">
-            <Button variant="outline" onClick={() => onOpenChange(false)} className="flex-1">
+            <Button variant="outline" onClick={() => onOpenChange(false)} className="flex-1 h-14 sm:h-12">
               Close
             </Button>
-            {job.applicationLink && 
-             job.opportunityType !== "Tender" && 
-             job.opportunityType !== "Blog" && 
-             job.opportunityType !== "Scholarship" && 
-             job.opportunityType !== "Education" && 
-             job.opportunityType !== "Announcement" && (
-              <Button onClick={handleApply} className="flex-1 bg-foreground text-background hover:bg-foreground/90">
-                Apply Now
-                <ExternalLink className="ml-2 h-4 w-4" />
-              </Button>
-            )}
+            {job.applicationLink &&
+              job.opportunityType !== "Tender" &&
+              job.opportunityType !== "Blog" &&
+              job.opportunityType !== "Scholarship" &&
+              job.opportunityType !== "Education" &&
+              job.opportunityType !== "Announcement" && (
+                <Button onClick={handleApply} className="flex-1 bg-foreground text-background hover:bg-foreground/90 h-14 sm:h-12">
+                  Apply Now
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </Button>
+              )}
           </div>
         </div>
       </DialogContent>
