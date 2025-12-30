@@ -36,9 +36,7 @@ export const metadata: Metadata = {
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.rwandajobhub.rw",
     images: ['/favicon.jpg'],
   },
-  other: {
-    "google-adsense-account": "ca-pub-1412133449814385",
-  },
+
 }
 
 export default function RootLayout({
@@ -52,7 +50,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.jpg" type="image/jpeg" />
         <link rel="shortcut icon" href="/favicon.jpg" type="image/jpeg" />
         <link rel="apple-touch-icon" href="/favicon.jpg" />
-        <meta name="monetag" content="5395d56707c2bdf5f2a3af13d0f822ca" />
+
       </head>
       <body className={`${lato.className} font-sans antialiased`}>
         <ReactQueryProvider>
@@ -70,20 +68,10 @@ export default function RootLayout({
         </ReactQueryProvider>
         <Analytics />
         <SpeedInsights />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1412133449814385"
-          crossOrigin="anonymous"
-        />
+
 
         <GoogleAnalytics />
-        {/* Fantastic Multitag */}
-        <script
-          src="https://quge5.com/88/tag.min.js"
-          data-zone="197174"
-          async
-          data-cfasync="false"
-        />
+
       </body>
     </html>
   )
