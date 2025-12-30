@@ -5,7 +5,6 @@ import { MapPin, Briefcase, Clock, ExternalLink, ArrowLeft, Share2 } from "lucid
 import Image from "next/image"
 import type { Job, Company } from "@/lib/types"
 import { useCompanies } from "@/lib/company-context"
-import { AdContainer } from "@/components/ad-container"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 
@@ -248,8 +247,6 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 </div>
 
 
-                {/* Ad before action buttons */}
-                <AdContainer id="job-details-bottom-ad" />
             </div>
         </div>
     )

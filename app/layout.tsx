@@ -75,10 +75,7 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1412133449814385"
           crossOrigin="anonymous"
         />
-        <script
-          src="https://richinfo.co/richpartners/in-page/js/richads-ob.js?pubid=997129&siteid=381547"
-          async
-        />
+
         <GoogleAnalytics />
         {/* Fantastic Multitag */}
         <script

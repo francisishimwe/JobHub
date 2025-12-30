@@ -85,8 +85,6 @@ export function RecentJobsSidebar({ currentJobId }: RecentJobsSidebarProps) {
         })}
       </div>
 
-      {/* Ad in sidebar */}
-      <AdContainer id="sidebar-ad" className="my-4" />
 
       {/* Social Media Links */}
       <div className="mt-6 pt-6 border-t">

@@ -78,7 +78,6 @@ export default function HomePage() {
           {/* Left Sidebar Ad - Hidden on mobile */}
           <aside className="hidden lg:block lg:col-span-2">
             <div className="sticky top-4">
-              <AdContainer id="homepage-left-sidebar" className="min-h-[600px]" />
             </div>
           </aside>
 
@@ -108,8 +107,6 @@ export default function HomePage() {
                 </DropdownMenu>
               </div>
 
-              {/* Ad placement after filters */}
-              <AdContainer id="homepage-top-ad" className="my-4" />
 
               <div className="space-y-4">
                 {isLoading ? (
@@ -126,20 +123,8 @@ export default function HomePage() {
                   </div>
                 )}
               </div>
-
-              {/* Ad at bottom of job list */}
-              {sortedJobs.length > 0 && (
-                <AdContainer id="homepage-bottom-ad" className="my-6" />
-              )}
             </div>
           </main>
-
-          {/* Right Sidebar Ad - Hidden on mobile */}
-          <aside className="hidden lg:block lg:col-span-2">
-            <div className="sticky top-4">
-              <AdContainer id="homepage-right-sidebar" className="min-h-[600px]" />
-            </div>
-          </aside>
         </div>
       </div>
 
