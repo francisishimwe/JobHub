@@ -3,16 +3,32 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
-  --border: #e2e8f0;
+  /* Your Original Professional Palette */
+  --background: #ffffff;      /* Pure White */
+  --foreground: #1e293b;      /* Dark Slate Text */
+  --primary: #0038a8;         /* Deep Rwanda Blue */
+  --secondary: #2e7d32;       /* Forest Green (for buttons/success) */
+  --border: #e2e8f0;          /* Light Gray border */
 }
 
 @layer base {
   body {
     background-color: white;
-    color: #0f172a;
+    color: #1e293b;
     margin: 0;
-    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
   }
+}
+
+/* This fixes your job listing boxes to look like they did before */
+.job-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  background-color: white;
+  transition: box-shadow 0.2s;
+}
+
+.job-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
