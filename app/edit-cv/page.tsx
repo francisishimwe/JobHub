@@ -7,32 +7,32 @@ export default function EditCV() {
   useEffect(() => { setMounted(true); }, []);
 
   const handleDownload = () => {
-    // Look for the library on the global window object
     const pdfTool = (window as any).html2pdf;
-    
     if (!pdfTool) {
-      alert("Loading PDF tools... wait 2 seconds and try again!");
+      alert("Loading PDF tools... please wait a second.");
       return;
     }
-
-    const element = document.body;
+    const element = document.getElementById('cv-content');
     pdfTool().from(element).save('RwandaJobHub_CV.pdf');
   };
 
   if (!mounted) return null;
 
   return (
-    <div style={{ padding: '20px', textAlign: 'center' }}>
+    <div className="container mx-auto p-8 text-center">
       <Script 
         src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
-        strategy="beforeInteractive" 
+        strategy="lazyOnload"
       />
-      <h1 style={{ color: '#0056b3' }}>CV BUILDER READY</h1>
+      <div id="cv-content" className="bg-white p-6 shadow-md rounded-lg mb-6 border border-gray-200">
+        <h1 className="text-3xl font-bold text-blue-700">CV BUILDER READY</h1>
+        <p className="text-gray-600 mt-2">The build is green and your site is live at RwandaJobHub!</p>
+      </div>
       <button 
         onClick={handleDownload}
-        style={{ background: 'orange', color: 'white', padding: '15px 30px', border: 'none', cursor: 'pointer', fontSize: '18px' }}
+        className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full transition-all"
       >
-        TEST DOWNLOAD
+        TEST DOWNLOAD PDF
       </button>
     </div>
   );
