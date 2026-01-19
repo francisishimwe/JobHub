@@ -3,16 +3,17 @@
 @tailwind utilities;
 
 :root {
-  /* Your Original Professional Palette */
-  --background: #ffffff;      /* Pure White */
-  --foreground: #1e293b;      /* Dark Slate Text */
-  --primary: #0038a8;         /* Deep Rwanda Blue */
-  --secondary: #2e7d32;       /* Forest Green (for buttons/success) */
-  --border: #e2e8f0;          /* Light Gray border */
+  --background: #ffffff;
+  --foreground: #1e293b;
+  --primary: #0038a8;         /* Your Original Deep Blue */
+  --secondary: #2e7d32;       /* Your Original Green */
+  --border: #e2e8f0;
 }
 
 @layer base {
-  body {
+  html, body {
+    /* This line stops the 'Mirror' effect and forces normal layout */
+    direction: ltr !important; 
     background-color: white;
     color: #1e293b;
     margin: 0;
@@ -20,7 +21,6 @@
   }
 }
 
-/* This fixes your job listing boxes to look like they did before */
 .job-card {
   border: 1px solid var(--border);
   border-radius: 8px;
