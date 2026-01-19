@@ -21,22 +21,14 @@ const lato = Lato({
 
 export const metadata: Metadata = {
   title: "RwandaJobHub - The #1 job board for Rwandan jobs",
-  description: "Rwanda Job Hub - Find jobs, internships, scholarships, tenders, and education opportunities. Browse Enterprise Applications Manager, Database Administrator, IT Security Engineer, System Administrator, Network Administrator positions and more from Rwanda's top employers.",
+  description: "Rwanda Job Hub - Find jobs, internships, scholarships, tenders, and education opportunities. Browse positions from Rwanda's top employers.",
   icons: {
     icon: [
       { url: '/favicon.jpg', type: 'image/jpeg' },
-      { url: '/favicon.jpg?v=2', type: 'image/jpeg' },
     ],
     shortcut: [{ url: '/favicon.jpg', type: 'image/jpeg' }],
     apple: [{ url: '/favicon.jpg', type: 'image/jpeg', sizes: '180x180' }],
   },
-  openGraph: {
-    title: "RwandaJobHub - The #1 job board for Rwandan jobs",
-    description: "Find jobs, internships, scholarships, tenders, and education opportunities in Rwanda. Browse positions from top employers.",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.rwandajobhub.rw",
-    images: ['/favicon.jpg'],
-  },
-
 }
 
 export default function RootLayout({
@@ -45,12 +37,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    /* FIXED: Added dir="ltr" to stop the mirror/reversed layout effect */
+    <html lang="en" dir="ltr">
       <head>
         <link rel="icon" href="/favicon.jpg" type="image/jpeg" />
-        <link rel="shortcut icon" href="/favicon.jpg" type="image/jpeg" />
-        <link rel="apple-touch-icon" href="/favicon.jpg" />
-
       </head>
       <body className={`${lato.className} font-sans antialiased`}>
         <ReactQueryProvider>
@@ -68,10 +58,7 @@ export default function RootLayout({
         </ReactQueryProvider>
         <Analytics />
         <SpeedInsights />
-
-
         <GoogleAnalytics />
-
       </body>
     </html>
   )
