@@ -5,12 +5,10 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { HeroSection } from "@/components/hero-section"
 import { JobCard } from "@/components/job-card"
-import { JobFilters } from "@/components/job-filters"
-import { AdContainer } from "@/components/ad-container" // Error fixed: File now exists
+import { AdContainer } from "@/components/ad-container"
 import { useJobs } from "@/lib/job-context"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { ChevronDown, BriefcaseBusiness, GraduationCap, Award, Megaphone } from "lucide-react"
+import { ChevronDown } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,32 +17,17 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export default function HomePage() {
-  // pagination engine variables from useJobs
-  const { filteredJobs, filters, setFilters, isLoading, hasMore, loadMore } = useJobs()
+  const { filteredJobs, isLoading, hasMore, loadMore } = useJobs()
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "deadline">("newest")
 
-  const opportunityTypes = [
-    { value: "Job", label: "Jobs", icon: BriefcaseBusiness },
-    { value: "Internship", label: "Internships", icon: GraduationCap },
-    { value: "Scholarship", label: "Scholarships", icon: Award },
-    { value: "Announcement", label: "Announcements", icon: Megaphone },
-  ]
-
-  const toggleOpportunityType = (type: string) => {
-    const current = filters.opportunityTypes
-    const updated = current.includes(type)
-      ? current.filter((t) => t !== type)
-      : [...current, type]
-    setFilters({ opportunityTypes: updated })
-  }
-
-  // Sort jobs based on selected option
+  // Sort jobs based on columns that actually exist in your Supabase table
   const sortedJobs = [...filteredJobs].sort((a, b) => {
     switch (sortBy) {
       case "newest":
-        return new Date(b.postedDate).getTime() - new Date(a.postedDate).getTime()
+        // Use created_at because it exists in your Supabase 'jobs' table
+        return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
       case "oldest":
-        return new Date(a.postedDate).getTime() - new Date(b.postedDate).getTime()
+        return new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime()
       case "deadline":
         if (!a.deadline && !b.deadline) return 0
         if (!a.deadline) return 1
@@ -70,17 +53,14 @@ export default function HomePage() {
       <HeroSection />
 
       <div className="container mx-auto px-2 py-1">
-        {/* Three column layout with Advertisements added back */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-7xl mx-auto">
           
-          {/* Left Sidebar Ad */}
           <aside className="hidden lg:block lg:col-span-2">
             <div className="sticky top-4">
                <AdContainer />
             </div>
           </aside>
 
-          {/* Main Content */}
           <main className="lg:col-span-8">
             <div className="max-w-4xl mx-auto">
               <div className="mb-1 flex items-center justify-between">
@@ -111,7 +91,6 @@ export default function HomePage() {
                       <JobCard key={job.id} job={job} />
                     ))}
 
-                    {/* Pagination Button */}
                     {hasMore && (
                       <div className="flex justify-center mt-8 pb-10">
                         <Button 
@@ -133,7 +112,6 @@ export default function HomePage() {
             </div>
           </main>
 
-          {/* Right Sidebar Ad */}
           <aside className="hidden lg:block lg:col-span-2">
             <div className="sticky top-4">
                <AdContainer />

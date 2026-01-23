@@ -37,25 +37,24 @@ export function JobProvider({ children }: { children: ReactNode }) {
       
       const { data, count, error } = await supabase
         .from('jobs')
-        .select('id, title, company_id, location, job_type, opportunity_type, created_at, deadline, featured', { count: 'exact' })
+        .select('id, title, company_id, location, job_type, opportunity_type, created_at, deadline, featured, description', { count: 'exact' })
         .order('created_at', { ascending: false })
         .range(pageNumber * JOBS_PER_PAGE, (pageNumber + 1) * JOBS_PER_PAGE - 1)
 
       if (error) throw error
 
       if (data) {
-        // Explicit typing for 'j' fixes the ts(7006) "implicit any" error
         const formattedJobs: Job[] = data.map((j: any) => ({
           id: j.id,
           title: j.title,
-          companyId: j.company_id,
+          company_id: j.company_id,     // Fixed: Match Supabase image_a0c792.png
           location: j.location,
-          jobType: j.job_type,
-          opportunityType: j.opportunity_type,
+          job_type: j.job_type,         // Fixed: Match Supabase image_a06677.png
+          opportunity_type: j.opportunity_type,
           deadline: j.deadline,
           featured: j.featured,
-          postedDate: new Date(j.created_at),
-          description: "", // Satisfies Job interface requirement
+          created_at: j.created_at,     // Fixed: Use created_at instead of postedDate
+          description: j.description || "", 
           applicants: 0
         }))
 
