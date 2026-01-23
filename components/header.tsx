@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image" // Added Next.js Image component
 import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
 import { LogOut, UserCircle2, Menu, X, MessageCircle } from "lucide-react"
@@ -32,7 +33,6 @@ export function Header() {
   }
 
   const handleJoinWhatsApp = () => {
-    // Replace with your actual WhatsApp group/channel link
     window.open('https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI?mode=wwt', '_blank')
   }
 
@@ -54,19 +54,27 @@ export function Header() {
       <header className="bg-white border-b">
         <div className="container mx-auto px-4 py-3">
           <Link href="/" className="flex items-center justify-center gap-3">
-            {/* Mobile: Logo only */}
-            <img
-              src="/full logo.jpg"
-              alt="RwandaJobHub"
-              className="h-12 w-auto object-contain md:hidden"
-            />
-            {/* Desktop: Logo with name */}
-            <img
-              src="/full logo.jpg"
-              alt="RwandaJobHub"
-              className="hidden md:block h-20 w-auto object-contain"
-              style={{ maxWidth: '250px' }}
-            />
+            {/* Mobile Logo Container - Fixed dimensions to stop layout shift */}
+            <div className="relative h-12 w-32 md:hidden">
+              <Image
+                src="/full logo.jpg"
+                alt="RwandaJobHub"
+                fill
+                priority
+                className="object-contain"
+              />
+            </div>
+            
+            {/* Desktop Logo Container - Fixed dimensions to stop layout shift */}
+            <div className="relative hidden md:block h-20 w-64">
+              <Image
+                src="/full logo.jpg"
+                alt="RwandaJobHub"
+                fill
+                priority
+                className="object-contain"
+              />
+            </div>
           </Link>
         </div>
       </header>
@@ -166,7 +174,13 @@ export function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button asChild className="hidden md:inline-flex text-black" style={{ backgroundColor: '#76c893' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#52b69a'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#76c893'}>
+              <Button 
+                asChild 
+                className="hidden md:inline-flex text-black" 
+                style={{ backgroundColor: '#76c893' }} 
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#52b69a'} 
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#76c893'}
+              >
                 <Link href="/dashboard">Login</Link>
               </Button>
             )}

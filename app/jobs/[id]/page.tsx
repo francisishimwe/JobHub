@@ -12,123 +12,83 @@ type Props = {
     params: Promise<{ id: string }>
 }
 
-async function getJob(id: string) {
+// Optimization: Fetch job and company in one request to speed up metadata
+async function getFullJobData(id: string) {
     const supabase = await createClient()
-    const { data: job, error } = await supabase
+    const { data, error } = await supabase
         .from('jobs')
-        .select('*')
+        .select(`*, companies(*)`)
         .eq('id', id)
         .single()
 
-    if (error) {
-        console.error('Error fetching job:', error)
+    if (error || !data) {
+        console.error('Error fetching job details:', error)
         return null
     }
-    return job
-}
-
-async function getCompany(id: string) {
-    if (!id) return null
-    const supabase = await createClient()
-    const { data: company, error } = await supabase
-        .from('companies')
-        .select('*')
-        .eq('id', id)
-        .single()
-
-    if (error) {
-        console.error('Error fetching company:', error)
-        return null
-    }
-    return company
+    return data
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { id } = await params
-    const job = await getJob(id)
-    if (!job) return {}
+    const data = await getFullJobData(id)
+    
+    if (!data) return { title: 'Job Not Found' }
 
-    const company = await getCompany(job.company_id)
+    const job = data
+    const company = data.companies
     const companyName = company?.name || 'Company'
-    const pageTitle = `${companyName} - ${job.title}`
-    const ogTitle = `${companyName} is hiring ${job.title}`
-
-    // Strip HTML tags from description
+    
+    // Clean description for social media preview
     const cleanDescription = job.description
         ?.replace(/<[^>]*>/g, '')
         ?.replace(/&nbsp;/g, ' ')
-        ?.replace(/&amp;/g, '&')
-        ?.replace(/&lt;/g, '<')
-        ?.replace(/&gt;/g, '>')
-        ?.replace(/&quot;/g, '"')
         ?.trim()
-        ?.substring(0, 160) || "Find your next career opportunity in Rwanda. Browse jobs, tenders, internships, scholarships, and more at RwandaJobHub."
+        ?.substring(0, 160) || "Find your next career opportunity on RwandaJobHub."
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://rwandajobhub.com'
-    const jobUrl = `${siteUrl}/jobs/${job.id}`
-
-    // Use company logo as favicon and OG image, fallback to site favicon
-    const companyLogo = company?.logo
-    const defaultFavicon = `${siteUrl}/favicon.jpg`
-    const faviconUrl = companyLogo || defaultFavicon
-    const ogImageUrl = companyLogo || defaultFavicon
+    // WhatsApp needs an ABSOLUTE URL
+    const siteUrl = 'https://rwandajobhub.rw'
+    const jobUrl = `${siteUrl}/jobs/${id}`
+    
+    // Use company logo, if missing use site logo fallback
+    const ogImageUrl = company?.logo || `${siteUrl}/full logo.jpg`
 
     return {
-        title: {
-            absolute: pageTitle
-        },
+        title: `${companyName} - ${job.title}`,
         description: cleanDescription,
         openGraph: {
-            title: {
-                absolute: ogTitle
-            },
+            title: `${companyName} is hiring: ${job.title}`,
             description: cleanDescription,
             url: jobUrl,
             siteName: 'RwandaJobHub',
             images: [
                 {
-                    url: ogImageUrl,
+                    url: ogImageUrl, // This is the company logo shown in WhatsApp
                     width: 1200,
                     height: 630,
-                    alt: company?.name || 'RwandaJobHub',
-                    type: 'image/png',
+                    alt: `${companyName} Logo`,
                 }
             ],
-            locale: 'en_US',
             type: 'website',
         },
         twitter: {
             card: 'summary_large_image',
-            title: ogTitle,
+            title: `${companyName} - ${job.title}`,
             description: cleanDescription,
             images: [ogImageUrl],
-        },
-        icons: {
-            icon: faviconUrl,
-            shortcut: faviconUrl,
-            apple: faviconUrl,
-        },
-        alternates: {
-            canonical: jobUrl,
-        },
-        robots: {
-            index: true,
-            follow: true,
         },
     }
 }
 
 export default async function JobPage({ params }: Props) {
     const { id } = await params
-    const jobData = await getJob(id)
+    const jobData = await getFullJobData(id)
 
     if (!jobData) {
         notFound()
     }
 
-    const companyData = await getCompany(jobData.company_id)
+    const companyData = jobData.companies
 
-    // Map DB job to Component Job
     const job: Job = {
         id: jobData.id,
         title: jobData.title,
@@ -147,7 +107,6 @@ export default async function JobPage({ params }: Props) {
         attachmentUrl: jobData.attachment_url,
     }
 
-    // Map DB company to Component Company
     const company: Company | null = companyData ? {
         id: companyData.id,
         name: companyData.name,

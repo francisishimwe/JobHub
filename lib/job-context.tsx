@@ -1,285 +1,104 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from "react"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { supabase } from "./supabase"
-import type { Job, JobFilters } from "./types"
-import { filterExpiredJobs, cleanupExpiredJobs } from "./cleanup-jobs"
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createClient } from '@/lib/supabase/client' 
+import { Job } from '@/lib/types'
 
 interface JobContextType {
   jobs: Job[]
-  isLoading: boolean
-  addJob: (job: Omit<Job, "id" | "postedDate" | "applicants">) => Promise<void>
-  updateJob: (id: string, job: Partial<Job>) => Promise<void>
-  deleteJob: (id: string) => Promise<void>
-  trackApplyClick: (jobId: string) => Promise<void>
-  filters: JobFilters
-  setFilters: (filters: Partial<JobFilters>) => void
   filteredJobs: Job[]
+  filters: any
+  setFilters: (filters: any) => void
+  isLoading: boolean
+  hasMore: boolean
+  loadMore: () => void
 }
 
 const JobContext = createContext<JobContextType | undefined>(undefined)
 
-// Fetch jobs function
-const fetchJobs = async (): Promise<Job[]> => {
-  try {
-    const { data, error } = await supabase
-      .from("jobs")
-      .select("*")
-
-    if (error) {
-      console.error("Supabase error fetching jobs:", error)
-      console.error("Error details:", JSON.stringify(error, null, 2))
-      throw error
-    }
-
-    if (!data) {
-      console.log("No jobs data returned from Supabase")
-      return []
-    }
-
-    console.log("Fetched jobs count:", data.length)
-
-    const jobs = data.map((job) => ({
-      id: job.id,
-      title: job.title,
-      companyId: job.company_id,
-      description: job.description,
-      location: job.location,
-      locationType: job.location_type,
-      jobType: job.job_type,
-      opportunityType: job.opportunity_type,
-      experienceLevel: job.experience_level,
-      category: job.category,
-      deadline: job.deadline,
-      applicants: job.applicants || 0,
-      postedDate: new Date(job.created_at || job.posted_date),
-      featured: job.featured || false,
-      applicationLink: job.application_link,
-      attachmentUrl: job.attachment_url,
-    }))
-
-    // Filter out expired jobs (Client-side double check matching server logic)
-    // We keep this to ensure consistency with timezone edge cases if any
-    const activeJobs = filterExpiredJobs(jobs)
-
-
-    console.log(`Active jobs: ${activeJobs.length} (filtered ${jobs.length - activeJobs.length} expired)`)
-
-    // Sort by posted date (client-side for now)
-    return activeJobs.sort((a, b) => b.postedDate.getTime() - a.postedDate.getTime())
-  } catch (error) {
-    console.error("Unexpected error fetching jobs:", error)
-    throw error
-  }
-}
-
 export function JobProvider({ children }: { children: ReactNode }) {
-  const queryClient = useQueryClient()
-  const [filters, setFiltersState] = useState<JobFilters>({
-    search: "",
-    location: "",
-    experienceLevels: [],
-    jobTypes: [],
-    opportunityTypes: [],
+  const [jobs, setJobs] = useState<Job[]>([])
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [page, setPage] = useState(0)
+  const [hasMore, setHasMore] = useState(true)
+  const [filters, setFiltersState] = useState({
+    search: '',
+    location: '',
+    opportunityTypes: [] as string[],
   })
 
-  // Use React Query for jobs with caching
-  const { data: jobs = [], isLoading } = useQuery({
-    queryKey: ['jobs'],
-    queryFn: fetchJobs,
-    staleTime: 60 * 1000, // 1 minute fresh
-    gcTime: 10 * 60 * 1000, // 10 minutes cache
-    refetchOnMount: false, // Don't refetch if fresh
-    refetchOnWindowFocus: false, // Reduce background refetches
-  })
+  const JOBS_PER_PAGE = 15
 
-  // Set up real-time subscription
-  useEffect(() => {
-    const subscription = supabase
-      .channel('jobs_changes')
-      .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'jobs' },
-        () => {
-          queryClient.invalidateQueries({ queryKey: ['jobs'] })
+  const fetchJobs = async (pageNumber: number, isNewSearch: boolean = false) => {
+    setIsLoading(true)
+    try {
+      const supabase = createClient()
+      
+      const { data, count, error } = await supabase
+        .from('jobs')
+        .select('id, title, company_id, location, job_type, opportunity_type, created_at, deadline, featured', { count: 'exact' })
+        .order('created_at', { ascending: false })
+        .range(pageNumber * JOBS_PER_PAGE, (pageNumber + 1) * JOBS_PER_PAGE - 1)
+
+      if (error) throw error
+
+      if (data) {
+        // Explicit typing for 'j' fixes the ts(7006) "implicit any" error
+        const formattedJobs: Job[] = data.map((j: any) => ({
+          id: j.id,
+          title: j.title,
+          companyId: j.company_id,
+          location: j.location,
+          jobType: j.job_type,
+          opportunityType: j.opportunity_type,
+          deadline: j.deadline,
+          featured: j.featured,
+          postedDate: new Date(j.created_at),
+          description: "", // Satisfies Job interface requirement
+          applicants: 0
+        }))
+
+        setJobs(prev => isNewSearch ? formattedJobs : [...prev, ...formattedJobs])
+        setFilteredJobs(prev => isNewSearch ? formattedJobs : [...prev, ...formattedJobs])
+        
+        if (count !== null && (pageNumber + 1) * JOBS_PER_PAGE >= count) {
+          setHasMore(false)
+        } else {
+          setHasMore(true)
         }
-      )
-      .subscribe()
-
-    return () => {
-      subscription.unsubscribe()
+      }
+    } catch (err) {
+      console.error("Error fetching jobs:", err)
+    } finally {
+      setIsLoading(false)
     }
-  }, [queryClient])
+  }
 
-  // Automatic cleanup of expired jobs - DISABLED as per user request (manual only)
-  /*
   useEffect(() => {
-    const runCleanup = async () => {
-      try {
-        const result = await cleanupExpiredJobs()
-        if (result.deletedCount > 0) {
-          console.log(`Auto-cleanup: ${result.message}`)
-          // Refresh jobs list after cleanup
-          queryClient.invalidateQueries({ queryKey: ['jobs'] })
-        }
-      } catch (error) {
-        console.error("Auto-cleanup failed:", error)
-      }
-    }
- 
-    // Run cleanup on mount
-    runCleanup()
- 
-    // Set up periodic cleanup (every hour)
-    const cleanupInterval = setInterval(runCleanup, 60 * 60 * 1000)
- 
-    return () => {
-      clearInterval(cleanupInterval)
-    }
-  }, [queryClient])
-  */
+    fetchJobs(0, true)
+  }, [])
 
-  const addJob = async (job: Omit<Job, "id" | "postedDate" | "applicants">) => {
-    const insertData = {
-      title: job.title,
-      company_id: job.companyId,
-      description: job.description || null,
-      location: job.location || null,
-      location_type: job.locationType || null,
-      job_type: job.jobType || null,
-      opportunity_type: job.opportunityType,
-      experience_level: job.experienceLevel || null,
-      category: job.category || null,
-      deadline: job.deadline || null,
-      featured: job.featured || false,
-      application_link: job.applicationLink || null,
-      attachment_url: job.attachmentUrl || null,
-    }
-
-    console.log("Attempting to insert job data:", insertData)
-
-    const { data, error } = await supabase
-      .from("jobs")
-      .insert([insertData])
-      .select()
-
-    if (error) {
-      console.error("Supabase error adding job:", error)
-      console.error("Error details:", JSON.stringify(error, null, 2))
-      throw error
-    }
-
-    console.log("Job inserted successfully:", data)
-
-    // Invalidate and refetch
-    queryClient.invalidateQueries({ queryKey: ['jobs'] })
+  const loadMore = () => {
+    const nextPage = page + 1
+    setPage(nextPage)
+    fetchJobs(nextPage)
   }
 
-  const updateJob = async (id: string, updatedJob: Partial<Job>) => {
-    const updateData: any = {}
-    if (updatedJob.title !== undefined) updateData.title = updatedJob.title
-    if (updatedJob.companyId !== undefined) updateData.company_id = updatedJob.companyId
-    if (updatedJob.description !== undefined) updateData.description = updatedJob.description
-    if (updatedJob.location !== undefined) updateData.location = updatedJob.location
-    if (updatedJob.locationType !== undefined) updateData.location_type = updatedJob.locationType
-    if (updatedJob.jobType !== undefined) updateData.job_type = updatedJob.jobType
-    if (updatedJob.opportunityType !== undefined) updateData.opportunity_type = updatedJob.opportunityType
-    if (updatedJob.experienceLevel !== undefined) updateData.experience_level = updatedJob.experienceLevel
-    if (updatedJob.category !== undefined) updateData.category = updatedJob.category
-    if (updatedJob.deadline !== undefined) updateData.deadline = updatedJob.deadline
-    if (updatedJob.featured !== undefined) updateData.featured = updatedJob.featured
-    if (updatedJob.applicationLink !== undefined) updateData.application_link = updatedJob.applicationLink
-    if (updatedJob.attachmentUrl !== undefined) updateData.attachment_url = updatedJob.attachmentUrl
-
-    const { error } = await supabase.from("jobs").update(updateData).eq("id", id)
-
-    if (error) throw error
-
-    queryClient.invalidateQueries({ queryKey: ['jobs'] })
+  const setFilters = (newFilters: any) => {
+    setFiltersState(prev => ({ ...prev, ...newFilters }))
   }
-
-  const deleteJob = async (id: string) => {
-    const { error } = await supabase.from("jobs").delete().eq("id", id)
-
-    if (error) throw error
-
-    queryClient.invalidateQueries({ queryKey: ['jobs'] })
-  }
-
-  const trackApplyClick = async (jobId: string) => {
-    const job = jobs.find(j => j.id === jobId)
-    if (!job) return
-
-    const newApplicantCount = (job.applicants || 0) + 1
-
-    const { error } = await supabase
-      .from("jobs")
-      .update({ applicants: newApplicantCount })
-      .eq("id", jobId)
-
-    if (error) {
-      console.error("Error tracking apply click:", error)
-      throw error
-    }
-
-    queryClient.invalidateQueries({ queryKey: ['jobs'] })
-  }
-
-  const setFilters = (newFilters: Partial<JobFilters>) => {
-    setFiltersState({ ...filters, ...newFilters })
-  }
-
-  // Filter jobs based on current filters - memoized for performance
-  const filteredJobs = useMemo(() => {
-    return jobs.filter((job) => {
-      // Search filter
-      if (
-        filters.search &&
-        !job.title.toLowerCase().includes(filters.search.toLowerCase()) &&
-        !job.description.toLowerCase().includes(filters.search.toLowerCase())
-      ) {
-        return false
-      }
-
-      // Location filter
-      if (filters.location && !job.location.toLowerCase().includes(filters.location.toLowerCase())) {
-        return false
-      }
-
-      // Experience filter
-      if (filters.experienceLevels.length > 0 && !filters.experienceLevels.includes(job.experienceLevel)) {
-        return false
-      }
-
-      // Job type filter
-      if (filters.jobTypes.length > 0 && !filters.jobTypes.includes(job.jobType)) {
-        return false
-      }
-
-      // Opportunity type filter
-      if (filters.opportunityTypes.length > 0 && !filters.opportunityTypes.includes(job.opportunityType)) {
-        return false
-      }
-
-
-      return true
-    })
-  }, [jobs, filters])
 
   return (
-    <JobContext.Provider
-      value={{
-        jobs,
-        isLoading,
-        addJob,
-        updateJob,
-        deleteJob,
-        trackApplyClick,
-        filters,
-        setFilters,
-        filteredJobs,
-      }}
-    >
+    <JobContext.Provider value={{ 
+      jobs, 
+      filteredJobs, 
+      filters, 
+      setFilters, 
+      isLoading, 
+      hasMore, 
+      loadMore 
+    }}>
       {children}
     </JobContext.Provider>
   )
@@ -288,7 +107,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
 export function useJobs() {
   const context = useContext(JobContext)
   if (context === undefined) {
-    throw new Error("useJobs must be used within a JobProvider")
+    throw new Error('useJobs must be used within a JobProvider')
   }
   return context
 }

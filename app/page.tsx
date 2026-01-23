@@ -6,7 +6,7 @@ import { Footer } from "@/components/footer"
 import { HeroSection } from "@/components/hero-section"
 import { JobCard } from "@/components/job-card"
 import { JobFilters } from "@/components/job-filters"
-import { AdContainer } from "@/components/ad-container"
+import { AdContainer } from "@/components/ad-container" // Error fixed: File now exists
 import { useJobs } from "@/lib/job-context"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -19,7 +19,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export default function HomePage() {
-  const { filteredJobs, filters, setFilters, isLoading } = useJobs()
+  // pagination engine variables from useJobs
+  const { filteredJobs, filters, setFilters, isLoading, hasMore, loadMore } = useJobs()
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "deadline">("newest")
 
   const opportunityTypes = [
@@ -56,14 +57,10 @@ export default function HomePage() {
 
   const getSortLabel = () => {
     switch (sortBy) {
-      case "newest":
-        return "Newest"
-      case "oldest":
-        return "Oldest"
-      case "deadline":
-        return "Deadline"
-      default:
-        return "Newest"
+      case "newest": return "Newest"
+      case "oldest": return "Oldest"
+      case "deadline": return "Deadline"
+      default: return "Newest"
     }
   }
 
@@ -73,11 +70,13 @@ export default function HomePage() {
       <HeroSection />
 
       <div className="container mx-auto px-2 py-1">
-        {/* Three column layout: Left Ad | Content | Right Ad */}
+        {/* Three column layout with Advertisements added back */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-7xl mx-auto">
-          {/* Left Sidebar Ad - Hidden on mobile */}
+          
+          {/* Left Sidebar Ad */}
           <aside className="hidden lg:block lg:col-span-2">
             <div className="sticky top-4">
+               <AdContainer />
             </div>
           </aside>
 
@@ -94,29 +93,37 @@ export default function HomePage() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => setSortBy("newest")}>
-                      Newest First
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setSortBy("oldest")}>
-                      Oldest First
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setSortBy("deadline")}>
-                      Deadline (Soonest)
-                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setSortBy("newest")}>Newest First</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setSortBy("oldest")}>Oldest First</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setSortBy("deadline")}>Deadline (Soonest)</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
 
-
               <div className="space-y-4">
-                {isLoading ? (
+                {isLoading && filteredJobs.length === 0 ? (
                   <div className="rounded-lg border bg-card p-12 text-center">
                     <p className="text-muted-foreground">Loading opportunities...</p>
                   </div>
                 ) : sortedJobs.length > 0 ? (
-                  sortedJobs.map((job) => (
-                    <JobCard key={job.id} job={job} />
-                  ))
+                  <>
+                    {sortedJobs.map((job) => (
+                      <JobCard key={job.id} job={job} />
+                    ))}
+
+                    {/* Pagination Button */}
+                    {hasMore && (
+                      <div className="flex justify-center mt-8 pb-10">
+                        <Button 
+                          onClick={loadMore} 
+                          disabled={isLoading}
+                          className="bg-[#003566] hover:bg-[#002850] text-white px-10 py-3 rounded-lg font-bold shadow-md transition-all"
+                        >
+                          {isLoading ? "Loading..." : "Load More Opportunities"}
+                        </Button>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="rounded-lg border bg-card p-12 text-center">
                     <p className="text-muted-foreground">No jobs found matching your criteria.</p>
@@ -125,6 +132,14 @@ export default function HomePage() {
               </div>
             </div>
           </main>
+
+          {/* Right Sidebar Ad */}
+          <aside className="hidden lg:block lg:col-span-2">
+            <div className="sticky top-4">
+               <AdContainer />
+            </div>
+          </aside>
+
         </div>
       </div>
 
