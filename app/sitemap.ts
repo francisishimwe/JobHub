@@ -1,62 +1,80 @@
 import { MetadataRoute } from 'next'
-import { createClient } from '@/lib/supabase/server'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.rwandajobhub.rw'
-    const supabase = await createClient()
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || baseUrl
+
+    let jobs = []
+    let companies = []
+    let exams = []
 
     try {
-        // Fetch all active jobs
-        const { data: jobs, error: jobsError } = await supabase
-            .from('jobs')
-            .select('id, posted_date')
-            .order('posted_date', { ascending: false })
-
-        if (jobsError) {
+        // Fetch all active jobs via API
+        try {
+            const jobsResponse = await fetch(`${apiBaseUrl}/api/jobs?limit=1000`, {
+                cache: 'no-store'
+            })
+            if (jobsResponse.ok) {
+                const jobsData = await jobsResponse.json()
+                jobs = jobsData.jobs || []
+            } else {
+                console.error('Error fetching jobs for sitemap:', jobsResponse.status)
+            }
+        } catch (jobsError) {
             console.error('Error fetching jobs for sitemap:', jobsError)
         }
 
-        // Fetch all active companies
-        const { data: companies, error: companiesError } = await supabase
-            .from('companies')
-            .select('id, created_date')
-            .order('created_date', { ascending: false })
-
-        if (companiesError) {
+        // Fetch all active companies via API
+        try {
+            const companiesResponse = await fetch(`${apiBaseUrl}/api/companies`, {
+                cache: 'no-store'
+            })
+            if (companiesResponse.ok) {
+                const companiesData = await companiesResponse.json()
+                companies = companiesData.companies || []
+            } else {
+                console.error('Error fetching companies for sitemap:', companiesResponse.status)
+            }
+        } catch (companiesError) {
             console.error('Error fetching companies for sitemap:', companiesError)
         }
 
-        // Fetch all active exams
-        const { data: exams, error: examsError } = await supabase
-            .from('exams')
-            .select('id, created_at')
-            .order('created_at', { ascending: false })
-
-        if (examsError) {
+        // Fetch all active exams via API
+        try {
+            const examsResponse = await fetch(`${apiBaseUrl}/api/exams`, {
+                cache: 'no-store'
+            })
+            if (examsResponse.ok) {
+                const examsData = await examsResponse.json()
+                exams = examsData.exams || []
+            } else {
+                console.error('Error fetching exams for sitemap:', examsResponse.status)
+            }
+        } catch (examsError) {
             console.error('Error fetching exams for sitemap:', examsError)
         }
 
         // Log for debugging
-        console.log(`Sitemap generated: ${jobs?.length || 0} jobs, ${companies?.length || 0} companies, ${exams?.length || 0} exams`)
+        console.log(`Sitemap generated: ${jobs.length} jobs, ${companies.length} companies, ${exams.length} exams`)
 
         // Dynamic job routes
-        const jobRoutes = (jobs || []).map((job) => ({
+        const jobRoutes = jobs.map((job: any) => ({
             url: `${baseUrl}/jobs/${job.id}`,
-            lastModified: new Date(job.posted_date),
+            lastModified: new Date(job.created_at),
             changeFrequency: 'daily' as const,
             priority: 0.9,
         }))
 
         // Dynamic company routes
-        const companyRoutes = (companies || []).map((company) => ({
+        const companyRoutes = companies.map((company: any) => ({
             url: `${baseUrl}/companies/${company.id}`,
-            lastModified: new Date(company.created_date),
+            lastModified: new Date(company.created_at),
             changeFrequency: 'weekly' as const,
             priority: 0.8,
         }))
 
         // Dynamic exam routes
-        const examRoutes = (exams || []).map((exam) => ({
+        const examRoutes = exams.map((exam: any) => ({
             url: `${baseUrl}/exams/${exam.id}`,
             lastModified: new Date(exam.created_at),
             changeFrequency: 'weekly' as const,
