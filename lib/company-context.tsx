@@ -2,7 +2,6 @@
 
 import { createContext, useContext, useEffect, type ReactNode } from "react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { supabase } from "./supabase"
 import type { Company } from "./types"
 
 interface CompanyContextType {
@@ -16,20 +15,21 @@ interface CompanyContextType {
 
 const CompanyContext = createContext<CompanyContextType | undefined>(undefined)
 
-// Fetch companies function
+// Fetch companies function using API
 const fetchCompanies = async (): Promise<Company[]> => {
-  const { data, error } = await supabase
-    .from("companies")
-    .select("*")
-    .order("created_date", { ascending: false })
+  const response = await fetch('/api/companies')
+  
+  if (!response.ok) {
+    throw new Error('Failed to fetch companies')
+  }
 
-  if (error) throw error
+  const data = await response.json()
 
-  return (data || []).map((company) => ({
+  return (data.companies || []).map((company: any) => ({
     id: company.id,
     name: company.name,
     logo: company.logo,
-    createdDate: new Date(company.created_date),
+    createdDate: new Date(company.created_at),
   }))
 }
 
@@ -46,54 +46,56 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     refetchOnWindowFocus: false, // Reduce background refetches
   })
 
-  // Set up real-time subscription
-  useEffect(() => {
-    const subscription = supabase
-      .channel('companies_changes')
-      .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'companies' },
-        () => {
-          queryClient.invalidateQueries({ queryKey: ['companies'] })
-        }
-      )
-      .subscribe()
-
-    return () => {
-      subscription.unsubscribe()
-    }
-  }, [queryClient])
-
   const addCompany = async (company: Omit<Company, "id" | "createdDate">) => {
-    const { error } = await supabase
-      .from("companies")
-      .insert([{
+    const response = await fetch('/api/companies', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         name: company.name,
         logo: company.logo,
-      }])
+      }),
+    })
 
-    if (error) throw error
+    if (!response.ok) {
+      const error = await response.json()
+      throw new Error(error.error || 'Failed to add company')
+    }
 
     queryClient.invalidateQueries({ queryKey: ['companies'] })
   }
 
   const updateCompany = async (id: string, updatedCompany: Partial<Company>) => {
-    const { error } = await supabase
-      .from("companies")
-      .update({
+    const response = await fetch('/api/companies', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
         name: updatedCompany.name,
         logo: updatedCompany.logo,
-      })
-      .eq("id", id)
+      }),
+    })
 
-    if (error) throw error
+    if (!response.ok) {
+      const error = await response.json()
+      throw new Error(error.error || 'Failed to update company')
+    }
 
     queryClient.invalidateQueries({ queryKey: ['companies'] })
   }
 
   const deleteCompany = async (id: string) => {
-    const { error } = await supabase.from("companies").delete().eq("id", id)
+    const response = await fetch(`/api/companies?id=${id}`, {
+      method: 'DELETE',
+    })
 
-    if (error) throw error
+    if (!response.ok) {
+      const error = await response.json()
+      throw new Error(error.error || 'Failed to delete company')
+    }
 
     queryClient.invalidateQueries({ queryKey: ['companies'] })
   }

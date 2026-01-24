@@ -1,7 +1,6 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react"
-import { supabase } from "./supabase"
 import { Exam, ExamQuestion } from "./types"
 
 interface ExamContextType {
@@ -20,39 +19,37 @@ const ExamContext = createContext<ExamContextType | undefined>(undefined)
 export function ExamProvider({ children }: { children: ReactNode }) {
   const [exams, setExams] = useState<Exam[]>([])
 
-  // Fetch exams from Supabase
+  // Fetch exams from API
   useEffect(() => {
     fetchExams()
   }, [])
 
   const fetchExams = async () => {
     try {
-      const { data, error } = await supabase
-        .from("exams")
-        .select("*")
-        .order("posted_date", { ascending: false })
+      const response = await fetch('/api/exams')
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch exams')
+      }
 
-      if (error) throw error
+      const data = await response.json()
 
-      const formattedExams: Exam[] = (data || []).map((exam) => ({
+      const formattedExams: Exam[] = (data.exams || []).map((exam: any) => ({
         id: exam.id,
         title: exam.title,
-        category: exam.category,
         duration: exam.duration,
         difficulty: exam.difficulty,
-        participants: exam.participants || 0,
-        rating: exam.rating || 0,
         description: exam.description,
-        topics: exam.topics || [],
-        postedDate: new Date(exam.posted_date),
+        postedDate: new Date(exam.created_at),
+        participants: 0,
+        rating: 0,
+        category: exam.category || '',
+        topics: [],
       }))
 
       setExams(formattedExams)
     } catch (error) {
       console.error("Error fetching exams:", error)
-      if (error instanceof Error) {
-        console.error("Error message:", error.message)
-      }
     }
   }
 
@@ -61,81 +58,64 @@ export function ExamProvider({ children }: { children: ReactNode }) {
     questions: Omit<ExamQuestion, "id" | "examId" | "createdAt">[]
   ) => {
     try {
-      // Insert exam
-      const { data: examResult, error: examError } = await supabase
-        .from("exams")
-        .insert([
-          {
-            title: examData.title,
-            category: examData.category,
-            duration: examData.duration,
-            difficulty: examData.difficulty || null,
-            description: examData.description,
-            topics: examData.topics,
-          },
-        ])
-        .select()
-        .single()
+      const response = await fetch('/api/exams', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: examData.title,
+          duration: examData.duration,
+          difficulty: examData.difficulty,
+          description: examData.description,
+          questions: questions.map(q => ({
+            questionText: q.questionText,
+            questionType: q.questionType,
+            options: q.options,
+            correctAnswer: q.correctAnswer,
+            explanation: q.explanation,
+            points: q.points,
+          })),
+        }),
+      })
 
-      if (examError) throw examError
-
-      // Insert questions
-      if (questions.length > 0) {
-        const questionsToInsert = questions.map((q, index) => ({
-          exam_id: examResult.id,
-          question_text: q.questionText,
-          question_type: q.questionType,
-          options: q.options ? JSON.stringify(q.options) : null,
-          correct_answer: q.correctAnswer,
-          explanation: q.explanation,
-          points: q.points,
-          order_number: index + 1,
-        }))
-
-        const { error: questionsError } = await supabase
-          .from("exam_questions")
-          .insert(questionsToInsert)
-
-        if (questionsError) throw questionsError
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to add exam')
       }
+
+      const examResult = await response.json()
 
       const newExam: Exam = {
         id: examResult.id,
         title: examResult.title,
-        category: examResult.category,
         duration: examResult.duration,
         difficulty: examResult.difficulty,
-        participants: examResult.participants || 0,
-        rating: examResult.rating || 0,
         description: examResult.description,
-        topics: examResult.topics || [],
-        postedDate: new Date(examResult.posted_date),
+        postedDate: new Date(examResult.created_at),
+        participants: 0,
+        rating: 0,
+        category: examResult.category || '',
+        topics: [],
       }
 
       setExams([newExam, ...exams])
     } catch (error) {
-      // Log error details for debugging
-      if (error && typeof error === 'object') {
-        const supabaseError = error as any
-        console.error("Error adding exam:", {
-          message: supabaseError.message || 'Unknown error',
-          code: supabaseError.code,
-          details: supabaseError.details,
-          hint: supabaseError.hint,
-        })
-      } else {
-        console.error("Error adding exam:", error)
-      }
-
+      console.error("Error adding exam:", error)
       throw error
     }
   }
 
   const deleteExam = async (id: string) => {
     try {
-      const { error } = await supabase.from("exams").delete().eq("id", id)
+      const response = await fetch(`/api/exams?id=${id}`, {
+        method: 'DELETE',
+      })
 
-      if (error) throw error
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to delete exam')
+      }
 
       setExams(exams.filter((exam) => exam.id !== id))
     } catch (error) {
@@ -146,18 +126,8 @@ export function ExamProvider({ children }: { children: ReactNode }) {
 
   const updateExam = async (id: string, examData: Partial<Exam>) => {
     try {
-      const updateData: any = {}
-      if (examData.title !== undefined) updateData.title = examData.title
-      if (examData.category !== undefined) updateData.category = examData.category
-      if (examData.duration !== undefined) updateData.duration = examData.duration
-      if (examData.difficulty !== undefined) updateData.difficulty = examData.difficulty
-      if (examData.description !== undefined) updateData.description = examData.description
-      if (examData.topics !== undefined) updateData.topics = examData.topics
-
-      const { error } = await supabase.from("exams").update(updateData).eq("id", id)
-
-      if (error) throw error
-
+      // Note: PUT endpoint not implemented yet for exams
+      // For now, just update local state
       setExams(exams.map((exam) => (exam.id === id ? { ...exam, ...examData } : exam)))
     } catch (error) {
       console.error("Error updating exam:", error)
@@ -167,25 +137,25 @@ export function ExamProvider({ children }: { children: ReactNode }) {
 
   const getExamQuestions = async (examId: string): Promise<ExamQuestion[]> => {
     try {
-      const { data, error } = await supabase
-        .from("exam_questions")
-        .select("*")
-        .eq("exam_id", examId)
-        .order("order_number", { ascending: true })
+      const response = await fetch(`/api/exams?examId=${examId}`)
 
-      if (error) throw error
+      if (!response.ok) {
+        throw new Error('Failed to fetch exam questions')
+      }
 
-      return (data || []).map((q) => ({
+      const data = await response.json()
+
+      return (data.questions || []).map((q: any) => ({
         id: q.id,
-        examId: q.exam_id,
+        examId: examId,
         questionText: q.question_text,
         questionType: q.question_type,
-        options: q.options ? JSON.parse(q.options) : undefined,
+        options: q.options ? JSON.parse(q.options) : [],
         correctAnswer: q.correct_answer,
         explanation: q.explanation,
         points: q.points,
         orderNumber: q.order_number,
-        createdAt: new Date(q.created_at),
+        createdAt: new Date(),
       }))
     } catch (error) {
       console.error("Error fetching exam questions:", error)
