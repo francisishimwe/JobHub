@@ -19,13 +19,11 @@ export async function GET(request: NextRequest) {
         job_type,
         opportunity_type,
         deadline,
-        category,
+        featured,
         description,
-        application_link,
+        attachment_url,
         status,
         approved,
-        featured,
-        attachment_url,
         created_at
       FROM jobs
       WHERE status = 'published' AND approved = true
@@ -81,13 +79,11 @@ export async function POST(request: NextRequest) {
         job_type,
         opportunity_type,
         deadline,
-        category,
+        featured,
         description,
-        application_link,
+        attachment_url,
         status,
         approved,
-        featured,
-        attachment_url,
         created_at
       ) VALUES (
         ${id},
@@ -97,13 +93,11 @@ export async function POST(request: NextRequest) {
         ${body.job_type || null},
         ${body.opportunity_type},
         ${body.deadline || null},
-        ${body.category || null},
+        ${body.featured || false},
         ${body.description || null},
-        ${body.application_link || null},
+        ${body.attachment_url || null},
         ${'published'},
         ${true},
-        ${body.featured || false},
-        ${body.attachment_url || null},
         ${now}
       )
       RETURNING *
@@ -123,13 +117,11 @@ export async function POST(request: NextRequest) {
       job_type: newJob.job_type,
       opportunity_type: newJob.opportunity_type,
       deadline: newJob.deadline,
-      category: newJob.category,
+      featured: newJob.featured,
       description: newJob.description,
-      application_link: newJob.application_link,
+      attachment_url: newJob.attachment_url,
       status: newJob.status,
       approved: newJob.approved,
-      featured: newJob.featured,
-      attachment_url: newJob.attachment_url,
       created_at: newJob.created_at
     }, { status: 201 })
   } catch (error) {

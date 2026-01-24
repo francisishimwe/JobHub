@@ -10,7 +10,6 @@ export interface Job {
   job_type: string;
   opportunity_type: string;
   deadline?: string;
-  category?: string;
   status: string;
   approved: boolean;
   featured?: boolean;

@@ -116,6 +116,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       console.log("Form data being submitted:", formData)
 
       // Clean up empty strings to null for optional fields
+      // Only send fields that exist in the Neon database
       const cleanedData = {
         title: formData.title.trim(),
         company_id: formData.company_id,
@@ -123,10 +124,9 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         location: formData.location?.trim() || null,
         job_type: formData.job_type || null,
         opportunity_type: formData.opportunity_type,
-        category: formData.category?.trim() || null,
         deadline: formData.deadline || null,
-        application_link: formData.application_link?.trim() || null,
         attachment_url: formData.attachment_url?.trim() || null,
+        featured: false,
       }
 
       console.log("Cleaned data being sent to addJob:", cleanedData)
