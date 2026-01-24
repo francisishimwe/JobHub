@@ -10,6 +10,9 @@ export async function GET(request: NextRequest) {
         id,
         name,
         logo,
+        location,
+        industry,
+        website,
         created_at
       FROM companies
       ORDER BY created_at DESC
@@ -48,14 +51,20 @@ export async function POST(request: NextRequest) {
         id,
         name,
         logo,
+        location,
+        industry,
+        website,
         created_at
       ) VALUES (
         ${id},
         ${body.name},
         ${body.logo || null},
+        ${body.location || null},
+        ${body.industry || null},
+        ${body.website || null},
         ${now}
       )
-      RETURNING id, name, logo, created_at
+      RETURNING id, name, logo, location, industry, website, created_at
     `
 
     if (!result || result.length === 0) {
@@ -68,6 +77,9 @@ export async function POST(request: NextRequest) {
       id: company.id,
       name: company.name,
       logo: company.logo,
+      location: company.location,
+      industry: company.industry,
+      website: company.website,
       created_at: company.created_at
     }, { status: 201 })
   } catch (error) {
@@ -94,9 +106,12 @@ export async function PUT(request: NextRequest) {
       UPDATE companies
       SET 
         name = ${body.name || null},
-        logo = ${body.logo || null}
+        logo = ${body.logo || null},
+        location = ${body.location || null},
+        industry = ${body.industry || null},
+        website = ${body.website || null}
       WHERE id = ${body.id}
-      RETURNING id, name, logo, created_at
+      RETURNING id, name, logo, location, industry, website, created_at
     `
 
     if (!result || result.length === 0) {
@@ -112,6 +127,9 @@ export async function PUT(request: NextRequest) {
       id: company.id,
       name: company.name,
       logo: company.logo,
+      location: company.location,
+      industry: company.industry,
+      website: company.website,
       created_at: company.created_at
     })
   } catch (error) {
