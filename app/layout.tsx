@@ -28,14 +28,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" dir="ltr">
+    /* suppressHydrationWarning added here to handle browser extension mismatches */
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.jpg" type="image/jpeg" />
       </head>
-      {/* Using system fonts removes the Lato import error.
-        'dir="ltr"' ensures your layout is not mirrored.
+      {/* The suppressHydrationWarning on <body> ignores extra tags added by extensions like Grammarly.
       */}
-      <body className="antialiased font-sans">
+      <body className="antialiased font-sans" suppressHydrationWarning>
         <ReactQueryProvider>
           <AuthProvider>
             <CompanyProvider>

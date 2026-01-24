@@ -1,7 +1,6 @@
 "use client"
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { createClient } from '@/lib/supabase/client' 
 import { Job } from '@/lib/types'
 
 interface JobContextType {
@@ -12,6 +11,7 @@ interface JobContextType {
   isLoading: boolean
   hasMore: boolean
   loadMore: () => void
+  addJob: (jobData: any) => Promise<void>
 }
 
 const JobContext = createContext<JobContextType | undefined>(undefined)
@@ -33,35 +33,39 @@ export function JobProvider({ children }: { children: ReactNode }) {
   const fetchJobs = async (pageNumber: number, isNewSearch: boolean = false) => {
     setIsLoading(true)
     try {
-      const supabase = createClient()
-      
-      const { data, count, error } = await supabase
-        .from('jobs')
-        .select('id, title, company_id, location, job_type, opportunity_type, created_at, deadline, featured, description', { count: 'exact' })
-        .order('created_at', { ascending: false })
-        .range(pageNumber * JOBS_PER_PAGE, (pageNumber + 1) * JOBS_PER_PAGE - 1)
+      const response = await fetch(
+        `/api/jobs?page=${pageNumber}&limit=${JOBS_PER_PAGE}`
+      )
 
-      if (error) throw error
+      if (!response.ok) {
+        throw new Error('Failed to fetch jobs')
+      }
 
-      if (data) {
-        const formattedJobs: Job[] = data.map((j: any) => ({
+      const data = await response.json()
+
+      if (data.jobs && Array.isArray(data.jobs)) {
+        const formattedJobs: Job[] = data.jobs.map((j: any) => ({
           id: j.id,
           title: j.title,
-          company_id: j.company_id,     // Fixed: Match Supabase image_a0c792.png
-          location: j.location,
-          job_type: j.job_type,         // Fixed: Match Supabase image_a06677.png
+          company_id: j.company_id,
+          location: j.location || '',
+          job_type: j.job_type || '',
           opportunity_type: j.opportunity_type,
           deadline: j.deadline,
-          featured: j.featured,
-          created_at: j.created_at,     // Fixed: Use created_at instead of postedDate
-          description: j.description || "", 
+          category: j.category,
+          description: j.description || '',
+          created_at: j.created_at,
+          status: j.status,
+          approved: j.approved,
+          featured: j.featured || false,
+          attachment_url: j.attachment_url,
           applicants: 0
         }))
 
         setJobs(prev => isNewSearch ? formattedJobs : [...prev, ...formattedJobs])
         setFilteredJobs(prev => isNewSearch ? formattedJobs : [...prev, ...formattedJobs])
-        
-        if (count !== null && (pageNumber + 1) * JOBS_PER_PAGE >= count) {
+
+        if (!data.hasMore) {
           setHasMore(false)
         } else {
           setHasMore(true)
@@ -88,15 +92,60 @@ export function JobProvider({ children }: { children: ReactNode }) {
     setFiltersState(prev => ({ ...prev, ...newFilters }))
   }
 
+  const addJob = async (jobData: any) => {
+    try {
+      const response = await fetch('/api/jobs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jobData),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to create job')
+      }
+
+      const data = await response.json()
+
+      if (data && data.id) {
+        const newJob: Job = {
+          id: data.id,
+          title: data.title,
+          company_id: data.company_id,
+          location: data.location || '',
+          job_type: data.job_type || '',
+          opportunity_type: data.opportunity_type,
+          deadline: data.deadline,
+          category: data.category,
+          description: data.description || '',
+          created_at: data.created_at,
+          status: data.status,
+          approved: data.approved,
+          featured: data.featured || false,
+          attachment_url: data.attachment_url,
+          applicants: 0
+        }
+        setJobs(prev => [newJob, ...prev])
+        setFilteredJobs(prev => [newJob, ...prev])
+      }
+    } catch (error) {
+      console.error("Error adding job:", error)
+      throw error
+    }
+  }
+
   return (
-    <JobContext.Provider value={{ 
-      jobs, 
-      filteredJobs, 
-      filters, 
-      setFilters, 
-      isLoading, 
-      hasMore, 
-      loadMore 
+    <JobContext.Provider value={{
+      jobs,
+      filteredJobs,
+      filters,
+      setFilters,
+      isLoading,
+      hasMore,
+      loadMore,
+      addJob
     }}>
       {children}
     </JobContext.Provider>
