@@ -129,7 +129,7 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
 
   const handleRemoveOption = (index: number) => {
     if ((currentQuestion.options?.length || 0) > 2) {
-      const newOptions = currentQuestion.options?.filter((_, i) => i !== index) || []
+      const newOptions = currentQuestion.options?.filter((_: string, i: number) => i !== index) || []
       setCurrentQuestion({ ...currentQuestion, options: newOptions })
     }
   }
@@ -363,7 +363,7 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
                 {currentQuestion.questionType === "multiple-choice" && (
                   <div className="space-y-2">
                     <Label>Options *</Label>
-                    {(currentQuestion.options || []).map((option, index) => (
+                    {(currentQuestion.options || []).map((option: string, index: number) => (
                       <div key={index} className="flex gap-2 items-center">
                         <Input
                           value={option}
@@ -502,7 +502,7 @@ export function AddExamForm({ onSuccess }: AddExamFormProps) {
                         </div>
                         {question.questionType !== "short-answer" && (
                           <div className="mt-2 space-y-1">
-                            {(question.options || []).map((option, i) => (
+                            {(question.options || []).map((option: string, i: number) => (
                               <div
                                 key={i}
                                 className={`text-sm px-2 py-1 rounded ${option === question.correctAnswer

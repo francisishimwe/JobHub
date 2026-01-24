@@ -21,6 +21,19 @@ export interface Job {
 export interface Company {
   id: string;
   name: string;
-  logo_url: string;
-  website?: string;
+  logo: string;
+  createdDate?: Date;
+}
+
+export interface ExamQuestion {
+  id: string;
+  examId: string;
+  questionText: string;
+  questionType: "multiple-choice" | "true-false" | "short-answer";
+  options: string[];
+  correctAnswer: string;
+  explanation?: string;
+  points: number;
+  createdAt: string;
+  orderNumber: number;
 }
