@@ -10,14 +10,19 @@ async function createTable() {
       CREATE TABLE IF NOT EXISTS jobs (
         id UUID PRIMARY KEY,
         title TEXT NOT NULL,
+        company_id TEXT,
         location TEXT,
         job_type TEXT,
         opportunity_type TEXT,
         deadline TEXT,
         category TEXT,
+        description TEXT,
+        application_link TEXT,
+        attachment_url TEXT,
         status TEXT DEFAULT 'published',
-        posted_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-        attachment_url TEXT
+        approved BOOLEAN DEFAULT true,
+        featured BOOLEAN DEFAULT false,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
     `;
     console.log("✅ Table 'jobs' created successfully!");

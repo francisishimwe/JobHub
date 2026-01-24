@@ -7,10 +7,9 @@ import { useCompanies } from "@/lib/company-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Plus, Building2, Upload, X } from "lucide-react"
+import { Plus, Building2, Upload, X, FileText } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { RichTextEditor } from "@/components/rich-text-editor"
 
@@ -30,6 +29,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     name: "",
     logo: "",
   })
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
   const [formData, setFormData] = useState({
     title: "",
@@ -40,10 +40,9 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     opportunity_type: "Job",
     category: "",
     deadline: "",
+    application_link: "",
     attachment_url: "",
   })
-
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
   // Filter companies based on search
   const filteredCompanies = companies.filter(company =>
@@ -126,6 +125,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         opportunity_type: formData.opportunity_type,
         category: formData.category?.trim() || null,
         deadline: formData.deadline || null,
+        application_link: formData.application_link?.trim() || null,
         attachment_url: formData.attachment_url?.trim() || null,
       }
 
@@ -142,8 +142,10 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         opportunity_type: "Job",
         category: "",
         deadline: "",
+        application_link: "",
         attachment_url: "",
       })
+      setCompanySearch("")
       setSelectedFile(null)
 
       alert("Job added successfully!")
@@ -189,7 +191,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                   className="h-11 text-base"
                 />
                 {showSuggestions && companySearch && filteredCompanies.length > 0 && (
-                  <div className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
+                  <div className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-sm max-h-60 overflow-auto">
                     {filteredCompanies.map((company) => (
                       <button
                         key={company.id}
@@ -199,7 +201,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                           setFormData({ ...formData, company_id: company.id })
                           setShowSuggestions(false)
                         }}
-                        className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
+                        className="w-full px-4 py-2 text-left hover:bg-blue-50 flex items-center gap-2 border-b last:border-b-0"
                       >
                         {company.logo && (
                           <img src={company.logo} alt="" className="h-6 w-6 rounded object-cover" />
@@ -242,6 +244,76 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
             />
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="application_link">Application Link (Optional)</Label>
+            <Input
+              id="application_link"
+              type="url"
+              value={formData.application_link}
+              onChange={(e) => setFormData({ ...formData, application_link: e.target.value })}
+              placeholder="https://example.com/apply"
+              className="h-11 text-base"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="attachment">Attach Document (Optional)</Label>
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <Input
+                  id="attachment"
+                  type="file"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (!file) return
+                    const allowedTypes = [
+                      'application/pdf',
+                      'application/msword',
+                      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                      'application/vnd.ms-excel',
+                      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    ]
+                    if (!allowedTypes.includes(file.type)) {
+                      alert("Please upload a PDF, DOC, DOCX, XLS, or XLSX file")
+                      return
+                    }
+                    if (file.size > 10 * 1024 * 1024) {
+                      alert("File size must be less than 10MB")
+                      return
+                    }
+                    setSelectedFile(file)
+                    setFormData({ ...formData, attachment_url: file.name })
+                  }}
+                  className="h-11 text-base"
+                />
+              </div>
+              {selectedFile && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedFile(null)
+                    setFormData({ ...formData, attachment_url: "" })
+                  }}
+                  className="gap-2"
+                >
+                  <X className="h-4 w-4" />
+                  Clear
+                </Button>
+              )}
+            </div>
+            {selectedFile && (
+              <div className="flex items-center gap-2 text-sm text-blue-600 bg-blue-50 p-2 rounded">
+                <FileText className="h-4 w-4" />
+                <span>{selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)</span>
+              </div>
+            )}
+            <p className="text-xs text-muted-foreground">
+              Supported formats: PDF, DOC, DOCX, XLS, XLSX (Max 10MB)
+            </p>
+          </div>
+
           <div className="grid gap-4 md:grid-cols-3">
             <div className="space-y-2">
               <Label htmlFor="opportunity_type">Opportunity Type *</Label>
@@ -252,7 +324,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                 <SelectTrigger className="h-11 text-base">
                   <SelectValue placeholder="Select opportunity type" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white">
                   <SelectItem value="Job">Job</SelectItem>
                   <SelectItem value="Internship">Internship</SelectItem>
                   <SelectItem value="Scholarship">Scholarship</SelectItem>
@@ -265,13 +337,20 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
 
             <div className="space-y-2">
               <Label htmlFor="job_type">Job Type (Optional)</Label>
-              <Input
-                id="job_type"
+              <Select
                 value={formData.job_type}
-                onChange={(e) => setFormData({ ...formData, job_type: e.target.value })}
-                placeholder="e.g. Full-time, Part-time"
-                className="h-11 text-base"
-              />
+                onValueChange={(value: string) => setFormData({ ...formData, job_type: value })}
+              >
+                <SelectTrigger className="h-11 text-base">
+                  <SelectValue placeholder="Select job type" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="Full-time">Full-time</SelectItem>
+                  <SelectItem value="Part-time">Part-time</SelectItem>
+                  <SelectItem value="Contract">Contract</SelectItem>
+                  <SelectItem value="Temporary">Temporary</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
@@ -295,7 +374,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
               <SelectTrigger className="h-11 text-base">
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white max-h-60">
                 <SelectItem value="Academic">Academic</SelectItem>
                 <SelectItem value="Accounting">Accounting</SelectItem>
                 <SelectItem value="Agronomy">Agronomy</SelectItem>
