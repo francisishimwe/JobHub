@@ -10,7 +10,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
 import { Clock, AlertCircle, CheckCircle2 } from "lucide-react"
-import { supabase } from "@/lib/supabase"
 import Link from "next/link"
 
 interface ExamQuestion {
@@ -68,38 +67,28 @@ export default function TakeExamPage() {
 
   const fetchExamData = async () => {
     try {
-      // Fetch exam details
-      const { data: examData, error: examError } = await supabase
-        .from("exams")
-        .select("*")
-        .eq("id", params.id)
-        .single()
+      // Fetch exam details and questions via API
+      const response = await fetch(`/api/exams?examId=${params.id}`)
+      const data = await response.json()
 
-      if (examError) throw examError
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch exam')
+      }
 
-      setExam(examData)
+      setExam(data.exam)
 
       // Parse duration (e.g., "90 minutes" -> 90 * 60 seconds)
-      const durationMinutes = parseInt(examData.duration.split(" ")[0])
+      const durationMinutes = parseInt(data.exam.duration.split(" ")[0])
       setTimeLeft(durationMinutes * 60)
 
-      // Fetch questions
-      const { data: questionsData, error: questionsError } = await supabase
-        .from("exam_questions")
-        .select("*")
-        .eq("exam_id", params.id)
-        .order("order_number", { ascending: true })
-
-      if (questionsError) throw questionsError
-
       // Parse options from JSONB to array
-      const parsedQuestions = (questionsData || []).map((q) => ({
+      const parsedQuestions = (data.questions || []).map((q: any) => ({
         ...q,
         options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options
       }))
 
       setQuestions(parsedQuestions)
-      setTotalPoints(parsedQuestions?.reduce((sum, q) => sum + q.points, 0) || 0)
+      setTotalPoints(parsedQuestions?.reduce((sum: number, q: any) => sum + q.points, 0) || 0)
     } catch (error) {
       console.error("Error fetching exam:", error)
     } finally {
@@ -146,20 +135,22 @@ export default function TakeExamPage() {
     setScore(earnedPoints)
     setShowResults(true)
 
-    // Save results to database without email
+    // Save results to database without email via API
     try {
       const percentage = (earnedPoints / totalPoints) * 100
 
-      await supabase.from("exam_submissions").insert([
-        {
+      await fetch('/api/exams/submissions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           exam_id: params.id,
           user_email: "anonymous@user.com",
           score: earnedPoints,
           total_questions: questions.length,
           percentage: percentage,
           answers: answers,
-        },
-      ])
+        }),
+      })
     } catch (error) {
       console.error("Error saving submission:", error)
     }

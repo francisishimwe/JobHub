@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createAdminClient } from "@/lib/supabase/admin"
+import { sql } from "@/lib/db"
 import { verifyCronSecret } from "@/lib/api-middleware"
 
 // Shared logic for cleanup
@@ -11,24 +11,14 @@ async function handleCleanup(request: NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
-        const supabase = createAdminClient()
         const today = new Date().toISOString().split('T')[0] // Get today's date in YYYY-MM-DD format
 
         // Delete jobs where deadline has passed
-        const { data: deletedJobs, error } = await supabase
-            .from("jobs")
-            .delete()
-            .lt("deadline", today) // Less than today
-            .not("deadline", "is", null) // Only jobs with a deadline
-            .select()
-
-        if (error) {
-            console.error("Error deleting expired jobs:", error)
-            return NextResponse.json(
-                { message: "Failed to delete expired jobs", error: error.message },
-                { status: 500 }
-            )
-        }
+        const deletedJobs = await sql`
+            DELETE FROM jobs
+            WHERE deadline < ${today} AND deadline IS NOT NULL
+            RETURNING id, title, deadline
+        `
 
         console.log(`Deleted ${deletedJobs?.length || 0} expired jobs`)
 

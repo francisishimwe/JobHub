@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { createClient } from '@/lib/supabase/server'
+import { sql } from '@/lib/db'
 import { headers } from 'next/headers'
 
 // Helper function to strip HTML tags and decode HTML entities
@@ -29,7 +29,6 @@ function stripHtmlAndDecode(html: string): string {
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params
-  const supabase = await createClient()
 
   // Get the base URL for absolute URLs
   const headersList = await headers()
@@ -38,35 +37,27 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const baseUrl = `${protocol}://${host}`
 
   try {
-    // Fetch job data
-    const { data: jobData, error: jobError } = await supabase
-      .from('jobs')
-      .select('title, description, company_id, location, opportunity_type, deadline')
-      .eq('id', id)
-      .single()
+    // Fetch job and company data in one query
+    const result = await sql`
+      SELECT j.title, j.description, j.location, j.opportunity_type, j.deadline, c.name, c.logo
+      FROM jobs j
+      LEFT JOIN companies c ON j.company_id = c.id
+      WHERE j.id = ${id}
+    `
 
-    if (jobError || !jobData) {
-      console.error('Error fetching job for metadata:', jobError?.message || jobError)
+    if (result.length === 0) {
       return getDefaultMetadata(baseUrl)
     }
 
-    // Fetch company data to get logo
-    const { data: companyData, error: companyError } = await supabase
-      .from('companies')
-      .select('name, logo')
-      .eq('id', jobData.company_id)
-      .single()
-
-    if (companyError || !companyData) {
-      console.error('Error fetching company for metadata:', companyError?.message || companyError)
-      return getDefaultMetadata(baseUrl)
-    }
+    const jobData = result[0]
+    const companyName = jobData.name || 'Company'
+    const companyLogo = jobData.logo
 
     const formattedDeadline = jobData.deadline
       ? new Date(jobData.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
       : 'Open'
 
-    const title = `${companyData.name} is hiring ${jobData.title} location: ${jobData.location} opportunity type: ${jobData.opportunity_type} deadline is ${formattedDeadline}`
+    const title = `${companyName} is hiring ${jobData.title} location: ${jobData.location} opportunity type: ${jobData.opportunity_type} deadline is ${formattedDeadline}`
 
     // Strip HTML tags and decode entities from description
     const cleanDescription = jobData.description
@@ -76,24 +67,24 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     // Ensure logo URL is absolute and publicly accessible
     let logoUrl: string
 
-    if (!companyData.logo) {
+    if (!companyLogo) {
       logoUrl = `${baseUrl}/favicon.jpg`
-    } else if (companyData.logo.startsWith('http://') || companyData.logo.startsWith('https://')) {
-      logoUrl = companyData.logo
-    } else if (companyData.logo.startsWith('/')) {
-      logoUrl = `${baseUrl}${companyData.logo}`
+    } else if (companyLogo.startsWith('http://') || companyLogo.startsWith('https://')) {
+      logoUrl = companyLogo
+    } else if (companyLogo.startsWith('/')) {
+      logoUrl = `${baseUrl}${companyLogo}`
     } else {
-      logoUrl = `${baseUrl}/${companyData.logo}`
+      logoUrl = `${baseUrl}/${companyLogo}`
     }
 
-    console.log('🖼️ OG Image:', { company: companyData.name, original: companyData.logo, generated: logoUrl })
+    console.log('🖼️ OG Image:', { company: companyName, original: companyLogo, generated: logoUrl })
 
     return {
       title,
       description: cleanDescription,
       icons: {
-        icon: companyData.logo || '/favicon.jpg',
-        apple: companyData.logo || '/favicon.jpg',
+        icon: companyLogo || '/favicon.jpg',
+        apple: companyLogo || '/favicon.jpg',
       },
       openGraph: {
         title,

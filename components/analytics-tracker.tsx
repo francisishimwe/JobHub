@@ -2,7 +2,6 @@
 
 import { useEffect } from "react"
 import { usePathname } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
 
 // Helper to detect device type
 function getDeviceType(): string {
@@ -57,47 +56,25 @@ export function AnalyticsTracker() {
     useEffect(() => {
         async function trackPageView() {
             try {
-                const supabase = createClient()
                 const visitorId = getVisitorId()
                 const deviceType = getDeviceType()
                 const browser = getBrowser()
                 const country = await getCountry()
 
-                // Track page view
-                await supabase.from('page_views').insert({
-                    page_url: pathname,
-                    referrer: document.referrer || null,
-                    user_agent: navigator.userAgent,
-                    country,
-                    device_type: deviceType,
-                    browser
-                })
-
-                // Update or create visitor record
-                const { data: existingVisitor } = await supabase
-                    .from('visitors')
-                    .select('*')
-                    .eq('visitor_id', visitorId)
-                    .single()
-
-                if (existingVisitor) {
-                    // Update existing visitor
-                    await supabase
-                        .from('visitors')
-                        .update({
-                            last_visit: new Date().toISOString(),
-                            visit_count: existingVisitor.visit_count + 1
-                        })
-                        .eq('visitor_id', visitorId)
-                } else {
-                    // Create new visitor
-                    await supabase.from('visitors').insert({
+                // Track page view via API
+                await fetch('/api/analytics/track', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        page_url: pathname,
                         visitor_id: visitorId,
+                        referrer: document.referrer || null,
+                        user_agent: navigator.userAgent,
                         country,
                         device_type: deviceType,
                         browser
                     })
-                }
+                })
             } catch (error) {
                 console.error('Analytics tracking error:', error)
             }

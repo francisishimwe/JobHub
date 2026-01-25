@@ -2,7 +2,6 @@
 
 import { createContext, useContext, type ReactNode } from "react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { supabase } from "./supabase"
 
 export interface Inquiry {
   id: string
@@ -29,39 +28,39 @@ const InquiryContext = createContext<InquiryContextType | undefined>(undefined)
 
 // Fetch inquiries function
 const fetchInquiries = async (): Promise<Inquiry[]> => {
-  console.log("Fetching inquiries from Supabase...")
+  console.log("Fetching inquiries from API...")
   
-  const { data, error } = await supabase
-    .from("inquiries")
-    .select("*")
-    .order("created_at", { ascending: false })
+  try {
+    const response = await fetch('/api/inquiries')
+    const data = await response.json()
 
-  if (error) {
-    console.error("Supabase error fetching inquiries:", error)
-    console.error("Error details:", JSON.stringify(error, null, 2))
-    // Don't throw, return empty array to prevent breaking the UI
+    if (!response.ok) {
+      console.error("API error fetching inquiries:", data)
+      return []
+    }
+
+    if (!data.inquiries) {
+      console.log("No inquiries data returned")
+      return []
+    }
+
+    console.log("Fetched inquiries count:", data.inquiries.length)
+
+    return data.inquiries.map((inquiry: any) => ({
+      id: inquiry.id,
+      firstName: inquiry.first_name,
+      lastName: inquiry.last_name,
+      email: inquiry.email,
+      phone: inquiry.phone,
+      subject: inquiry.subject,
+      message: inquiry.message,
+      status: inquiry.status || "new",
+      createdAt: new Date(inquiry.created_at),
+    }))
+  } catch (error) {
+    console.error("Error fetching inquiries:", error)
     return []
   }
-
-  if (!data) {
-    console.log("No inquiries data returned from Supabase")
-    return []
-  }
-
-  console.log("Fetched inquiries count:", data.length)
-  console.log("Raw inquiry data:", data)
-
-  return data.map((inquiry) => ({
-    id: inquiry.id,
-    firstName: inquiry.first_name,
-    lastName: inquiry.last_name,
-    email: inquiry.email,
-    phone: inquiry.phone,
-    subject: inquiry.subject,
-    message: inquiry.message,
-    status: inquiry.status || "new",
-    createdAt: new Date(inquiry.created_at),
-  }))
 }
 
 export function InquiryProvider({ children }: { children: ReactNode }) {
@@ -78,23 +77,23 @@ export function InquiryProvider({ children }: { children: ReactNode }) {
   })
 
   const addInquiry = async (inquiry: Omit<Inquiry, "id" | "createdAt" | "status">) => {
-    const insertData = {
-      first_name: inquiry.firstName,
-      last_name: inquiry.lastName,
-      email: inquiry.email,
-      phone: inquiry.phone || null,
-      subject: inquiry.subject,
-      message: inquiry.message,
-      status: "new",
-    }
-    
-    const { error } = await supabase
-      .from("inquiries")
-      .insert([insertData])
+    const response = await fetch('/api/inquiries', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        firstName: inquiry.firstName,
+        lastName: inquiry.lastName,
+        email: inquiry.email,
+        phone: inquiry.phone || null,
+        subject: inquiry.subject,
+        message: inquiry.message,
+      }),
+    })
 
-    if (error) {
-      console.error("Supabase error adding inquiry:", error)
-      throw error
+    if (!response.ok) {
+      const error = await response.json()
+      console.error("API error adding inquiry:", error)
+      throw new Error(error.error || 'Failed to add inquiry')
     }
 
     // Invalidate and refetch
@@ -102,39 +101,46 @@ export function InquiryProvider({ children }: { children: ReactNode }) {
   }
 
   const deleteInquiry = async (id: string) => {
-    const { error } = await supabase.from("inquiries").delete().eq("id", id)
+    const response = await fetch(`/api/inquiries?id=${id}`, {
+      method: 'DELETE',
+    })
 
-    if (error) {
+    if (!response.ok) {
+      const error = await response.json()
       console.error("Error deleting inquiry:", error)
-      throw error
+      throw new Error(error.error || 'Failed to delete inquiry')
     }
 
     queryClient.invalidateQueries({ queryKey: ['inquiries'] })
   }
 
   const markAsRead = async (id: string) => {
-    const { error } = await supabase
-      .from("inquiries")
-      .update({ status: "read" })
-      .eq("id", id)
+    const response = await fetch(`/api/inquiries?id=${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'read' }),
+    })
 
-    if (error) {
+    if (!response.ok) {
+      const error = await response.json()
       console.error("Error marking inquiry as read:", error)
-      throw error
+      throw new Error(error.error || 'Failed to update inquiry')
     }
 
     queryClient.invalidateQueries({ queryKey: ['inquiries'] })
   }
 
   const markAsResolved = async (id: string) => {
-    const { error } = await supabase
-      .from("inquiries")
-      .update({ status: "resolved" })
-      .eq("id", id)
+    const response = await fetch(`/api/inquiries?id=${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'resolved' }),
+    })
 
-    if (error) {
+    if (!response.ok) {
+      const error = await response.json()
       console.error("Error marking inquiry as resolved:", error)
-      throw error
+      throw new Error(error.error || 'Failed to update inquiry')
     }
 
     queryClient.invalidateQueries({ queryKey: ['inquiries'] })

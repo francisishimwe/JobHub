@@ -1,34 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { sql } from '@/lib/db'
 import { withRateLimit, isValidOrigin } from '@/lib/api-middleware'
 
-// Test endpoint to verify Supabase connection
+// Test endpoint to verify Neon connection
 async function handleGetTest(request: NextRequest) {
   try {
-    const supabase = await createClient()
-    
     // Try to query the table
-    const { data, error } = await supabase
-      .from('email_subscribers')
-      .select('count')
-      .limit(1)
-    
-    if (error) {
-      return NextResponse.json({
-        status: 'error',
-        message: 'Cannot connect to email_subscribers table',
-      }, { status: 500 })
-    }
+    const result = await sql`
+      SELECT COUNT(*) as count FROM email_subscribers LIMIT 1
+    `
     
     return NextResponse.json({
       status: 'success',
-      message: 'Supabase connection working',
+      message: 'Neon connection working',
       tableExists: true
     })
   } catch (error) {
     return NextResponse.json({
       status: 'error',
-      message: 'Server error'
+      message: 'Cannot connect to email_subscribers table',
     }, { status: 500 })
   }
 }
@@ -58,36 +48,35 @@ async function handlePostEmail(request: NextRequest) {
       )
     }
 
-    const supabase = await createClient()
+    const normalizedEmail = email.toLowerCase().trim()
 
     // Insert email into database
-    const { data, error } = await supabase
-      .from('email_subscribers')
-      .insert([
-        {
-          email: email.toLowerCase().trim(),
-          is_active: true,
-        },
-      ])
-      .select()
+    try {
+      const result = await sql`
+        INSERT INTO email_subscribers (email, is_active)
+        VALUES (${normalizedEmail}, true)
+        ON CONFLICT (email) DO NOTHING
+        RETURNING *
+      `
 
-    if (error) {
-      // Check if email already exists
-      if (error.code === '23505') {
+      if (result.length === 0) {
         return NextResponse.json(
           { message: 'Email already subscribed', success: true },
           { status: 200 }
         )
       }
 
-      console.error('Supabase error:', error.code, error.message)
+      return NextResponse.json(
+        { message: 'Successfully subscribed', success: true },
+        { status: 201 }
+      )
+    } catch (dbError: any) {
+      console.error('Database error:', dbError)
       
       let errorMessage = 'Failed to save email'
       
-      if (error.code === '42P01') {
+      if (dbError.message?.includes('email_subscribers')) {
         errorMessage = 'Table does not exist'
-      } else if (error.code === 'PGRST301') {
-        errorMessage = 'Permission denied'
       }
       
       return NextResponse.json(
@@ -95,11 +84,6 @@ async function handlePostEmail(request: NextRequest) {
         { status: 500 }
       )
     }
-
-    return NextResponse.json(
-      { message: 'Successfully subscribed', success: true },
-      { status: 201 }
-    )
   } catch (error) {
     console.error('Server error:', error)
     return NextResponse.json(

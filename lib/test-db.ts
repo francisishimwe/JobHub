@@ -1,24 +1,21 @@
-import { supabase } from './supabase'
+import { sql } from './db'
 
 export async function testDatabaseConnection() {
   try {
-    console.log('🔍 Testing Supabase connection...')
+    console.log('🔍 Testing Neon connection...')
     
-    // Test 1: Check if supabase client is initialized
-    console.log('✅ Supabase client initialized')
-    console.log('URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
+    // Test 1: Check if database client is initialized
+    console.log('✅ Neon client initialized')
     
     // Test 2: Try to fetch companies
-    const { data: companies, error: companiesError } = await supabase
-      .from('companies')
-      .select('*')
-      .limit(5)
+    const companies = await sql`
+      SELECT * FROM companies LIMIT 5
+    `
     
-    if (companiesError) {
-      console.error('❌ Error fetching companies:', companiesError)
+    if (!companies) {
       return {
         success: false,
-        error: companiesError.message,
+        error: 'Failed to fetch companies',
         companies: []
       }
     }
@@ -27,37 +24,33 @@ export async function testDatabaseConnection() {
     console.log('Companies:', companies)
     
     // Test 3: Try to fetch jobs
-    const { data: jobs, error: jobsError } = await supabase
-      .from('jobs')
-      .select('*')
-      .limit(5)
-    
-    if (jobsError) {
-      console.error('❌ Error fetching jobs:', jobsError)
-    } else {
+    try {
+      const jobs = await sql`
+        SELECT * FROM jobs LIMIT 5
+      `
       console.log('✅ Jobs fetched:', jobs?.length || 0)
+    } catch (error) {
+      console.error('❌ Error fetching jobs:', error)
     }
     
     // Test 4: Try to fetch exams
-    const { data: exams, error: examsError } = await supabase
-      .from('exams')
-      .select('*')
-      .limit(5)
-    
-    if (examsError) {
-      console.error('❌ Error fetching exams:', examsError)
-    } else {
+    try {
+      const exams = await sql`
+        SELECT * FROM exams LIMIT 5
+      `
       console.log('✅ Exams fetched:', exams?.length || 0)
+    } catch (error) {
+      console.error('❌ Error fetching exams:', error)
     }
     
     return {
       success: true,
       companies: companies || [],
       companiesCount: companies?.length || 0,
-      jobs: jobs || [],
-      jobsCount: jobs?.length || 0,
-      exams: exams || [],
-      examsCount: exams?.length || 0
+      jobs: [],
+      jobsCount: 0,
+      exams: [],
+      examsCount: 0
     }
     
   } catch (error) {

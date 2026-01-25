@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { sql } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 import { withRateLimit, isValidOrigin } from '@/lib/api-middleware'
 
@@ -18,34 +18,25 @@ async function handleTrackApplication(request: NextRequest) {
             return NextResponse.json({ error: 'Job ID is required' }, { status: 400 })
         }
 
-        const supabase = await createClient()
-
         // Get current applicant count
-        const { data: job, error: fetchError } = await supabase
-            .from('jobs')
-            .select('applicants, title')
-            .eq('id', jobId)
-            .single()
+        const jobResult = await sql`
+            SELECT applicants, title FROM jobs WHERE id = ${jobId}
+        `
 
-        if (fetchError) {
-            console.error('[TRACK-APPLICATION] Error fetching job:', fetchError)
+        if (jobResult.length === 0) {
+            console.error('[TRACK-APPLICATION] Job not found:', jobId)
             return NextResponse.json({ error: 'Job not found' }, { status: 404 })
         }
 
+        const job = jobResult[0]
         console.log('[TRACK-APPLICATION] Current applicants for job:', job.title, '=', job.applicants || 0)
 
         // Increment count
         const newCount = (job.applicants || 0) + 1
 
-        const { error: updateError } = await supabase
-            .from('jobs')
-            .update({ applicants: newCount })
-            .eq('id', jobId)
-
-        if (updateError) {
-            console.error('[TRACK-APPLICATION] Error updating applicants:', updateError)
-            return NextResponse.json({ error: 'Failed to update count' }, { status: 500 })
-        }
+        await sql`
+            UPDATE jobs SET applicants = ${newCount} WHERE id = ${jobId}
+        `
 
         console.log('[TRACK-APPLICATION] Successfully updated applicants to:', newCount)
 

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { sql } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 import { withRateLimit } from '@/lib/api-middleware'
 
@@ -11,20 +11,17 @@ async function handleJobStats(request: NextRequest) {
             return NextResponse.json({ error: 'Job ID is required' }, { status: 400 })
         }
 
-        const supabase = await createClient()
-
         // Get current applicant count
-        const { data: job, error } = await supabase
-            .from('jobs')
-            .select('applicants')
-            .eq('id', jobId)
-            .single()
+        const jobResult = await sql`
+            SELECT applicants FROM jobs WHERE id = ${jobId}
+        `
 
-        if (error) {
-            console.error('[JOB-STATS] Error fetching job:', error)
+        if (jobResult.length === 0) {
+            console.error('[JOB-STATS] Job not found:', jobId)
             return NextResponse.json({ error: 'Job not found' }, { status: 404 })
         }
 
+        const job = jobResult[0]
         return NextResponse.json({ applicants: job.applicants || 0 })
     } catch (error) {
         console.error('[JOB-STATS] Unexpected error:', error)
