@@ -34,11 +34,34 @@ export async function GET(request: NextRequest) {
       WHERE status = 'published' AND approved = true
     `
 
+    const featuredCountResult = await sql`
+      SELECT COUNT(*) as total FROM jobs 
+      WHERE status = 'published' AND approved = true AND featured = true
+    `
+
+    const countsByTypeResult = await sql`
+      SELECT opportunity_type, COUNT(*) as total FROM jobs
+      WHERE status = 'published' AND approved = true
+      GROUP BY opportunity_type
+    `
+
+    // Compute combined count for the Featured group (these opportunity types)
+    const featuredGroupTypes = ['Job', 'Tender', 'Internship', 'Scholarship', 'Education', 'Blog']
+    let featuredGroupCount = 0
+    for (const row of countsByTypeResult) {
+      if (featuredGroupTypes.includes(row.opportunity_type)) {
+        featuredGroupCount += Number(row.total || 0)
+      }
+    }
+
     const total = countResult[0]?.total || 0
+    const featuredCount = featuredCountResult[0]?.total || 0
 
     return NextResponse.json({
       jobs,
       total,
+      featuredCount,
+      featuredGroupCount,
       page,
       limit,
       hasMore: offset + limit < total

@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { useJobs } from "@/lib/job-context"
 
 export function HeroSection() {
-  const { filters, setFilters, jobs } = useJobs()
+  const { filters, setFilters, jobs, featuredCount } = useJobs()
   const [searchValue, setSearchValue] = useState("")
   const [selectedType, setSelectedType] = useState("")
 
@@ -25,8 +25,8 @@ export function HeroSection() {
   // Calculate counts for each opportunity type
   const getCount = (type: string) => {
     if (type === "All") {
-      // Featured count: only show jobs marked as featured
-      return jobs.filter(job => job.featured).length
+      // Featured count: return total count from API
+      return featuredCount
     }
     return jobs.filter(job => job.opportunityType === type).length
   }

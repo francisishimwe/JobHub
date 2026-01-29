@@ -15,6 +15,7 @@ interface JobContextType {
   addJob: (jobData: any) => Promise<void>
   updateJob: (jobId: string, jobData: any) => Promise<void>
   deleteJob: (jobId: string) => Promise<void>
+  featuredCount: number
 }
 
 const JobContext = createContext<JobContextType | undefined>(undefined)
@@ -25,6 +26,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
   const [page, setPage] = useState(0)
   const [hasMore, setHasMore] = useState(true)
+  const [featuredCount, setFeaturedCount] = useState(0)
   const [filters, setFiltersState] = useState({
     search: '',
     location: '',
@@ -49,6 +51,13 @@ export function JobProvider({ children }: { children: ReactNode }) {
         console.log(`✓ Formatted: ${formattedJobs.length} jobs mapped to UI format`)
         setJobs(prev => isNewSearch ? formattedJobs : [...prev, ...formattedJobs])
         setHasMore(data.hasMore)
+              if (isNewSearch) {
+                if (data.featuredGroupCount !== undefined) {
+                  setFeaturedCount(data.featuredGroupCount)
+                } else if (data.featuredCount !== undefined) {
+                  setFeaturedCount(data.featuredCount)
+                }
+              }
       } else {
         console.warn('⚠ No jobs array in API response:', data)
         setJobs(isNewSearch ? [] : jobs)
@@ -126,7 +135,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <JobContext.Provider value={{ jobs, filteredJobs, filters, setFilters, isLoading, hasMore, loadMore, addJob, updateJob, deleteJob }}>
+    <JobContext.Provider value={{ jobs, filteredJobs, filters, setFilters, isLoading, hasMore, loadMore, addJob, updateJob, deleteJob, featuredCount }}>
       {children}
     </JobContext.Provider>
   )
