@@ -103,17 +103,17 @@ export function Header() {
             ) : (
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="sm" className="md:hidden text-white hover:bg-gray-100">
+                  <Button variant="ghost" size="sm" className="md:hidden text-white border-2 border-white rounded-md p-2">
                     <Menu className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-72 pl-8 pr-4" suppressHydrationWarning>
-                  <div className="flex flex-col gap-4 mt-8">
+                <SheetContent side="right" className="w-full max-w-xs pl-6 pr-4 bg-[#25D366] text-white h-full sm:max-w-sm" suppressHydrationWarning>
+                  <div className="flex flex-col gap-4 mt-6">
                     {navigationLinks.map((link) => (
                       <Link
                         key={link.href}
                         href={link.href}
-                        className="text-lg font-medium hover:text-primary transition-colors"
+                        className="text-lg font-medium text-white hover:text-gray-100 transition-colors py-3 px-2 rounded-md"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         {link.label}
@@ -124,7 +124,7 @@ export function Header() {
                         handleJoinWhatsApp()
                         setMobileMenuOpen(false)
                       }}
-                      className="gap-2 bg-[#25D366] hover:bg-[#1DA851] text-white w-full"
+                      className="gap-2 bg-white text-[#25D366] w-full font-semibold"
                     >
                       <MessageCircle className="h-4 w-4" />
                       Join WhatsApp Group
