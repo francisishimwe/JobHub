@@ -19,7 +19,7 @@ export interface Job {
   companyId?: string | null;
   jobType?: string;
   opportunityType?: string;
-  postedDate?: string;
+  postedDate?: Date;
   applicationLink?: string;
   experienceLevel?: string;
   

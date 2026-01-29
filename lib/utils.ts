@@ -32,7 +32,7 @@ export function mapDatabaseJobToUIJob(dbJob: any): Job {
     companyId: dbJob.company_id || null,
     jobType: dbJob.job_type || '',
     opportunityType: dbJob.opportunity_type || '',
-    postedDate: dbJob.created_at || '',
+    postedDate: dbJob.created_at ? new Date(dbJob.created_at) : new Date(Date.now()),
     applicationLink: dbJob.application_link || '',
     experienceLevel: dbJob.experience_level || undefined,
     
