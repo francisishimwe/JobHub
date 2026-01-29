@@ -25,7 +25,8 @@ export function HeroSection() {
   // Calculate counts for each opportunity type
   const getCount = (type: string) => {
     if (type === "All") {
-      return jobs.length
+      // Featured count: only show jobs marked as featured
+      return jobs.filter(job => job.featured).length
     }
     return jobs.filter(job => job.opportunityType === type).length
   }

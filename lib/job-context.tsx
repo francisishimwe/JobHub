@@ -79,6 +79,9 @@ export function JobProvider({ children }: { children: ReactNode }) {
     }
     if (filters.opportunityTypes?.length > 0) {
       filtered = filtered.filter(j => filters.opportunityTypes.includes(j.opportunityType || j.opportunity_type || ''))
+    } else {
+      // When no opportunity types are selected (Featured is clicked), show only featured jobs
+      filtered = filtered.filter(j => j.featured)
     }
     setFilteredJobs(filtered)
   }, [jobs, filters])
