@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { Job } from '@/lib/types'
+import { mapDatabaseJobToUIJob } from '@/lib/utils'
 
 interface JobContextType {
   jobs: Job[]
@@ -38,25 +39,22 @@ export function JobProvider({ children }: { children: ReactNode }) {
       if (!response.ok) throw new Error('Failed to fetch jobs')
 
       const data = await response.json()
+      console.log(`✓ API Response: ${data.jobs?.length} jobs received (page ${pageNumber})`)
 
       if (data.jobs && Array.isArray(data.jobs)) {
-        const formattedJobs: Job[] = data.jobs.map((j: any) => ({
-          ...j,
-          // Bridge the gap between Database (snake_case) and UI (camelCase)
-          companyId: j.company_id,
-          jobType: j.job_type,
-          opportunityType: j.opportunity_type,
-          postedDate: j.created_at,
-          // Safety: If company_id is null (common in your JSON), provide a fallback
-          company: j.company || { name: "RwandaJobHub Partner", logo: "/full logo.jpg" },
-          applicants: j.applicants || 0
-        }))
+        // Use the mapping function to convert snake_case to camelCase
+        const formattedJobs: Job[] = data.jobs.map(mapDatabaseJobToUIJob)
 
+        console.log(`✓ Formatted: ${formattedJobs.length} jobs mapped to UI format`)
         setJobs(prev => isNewSearch ? formattedJobs : [...prev, ...formattedJobs])
         setHasMore(data.hasMore)
+      } else {
+        console.warn('⚠ No jobs array in API response:', data)
+        setJobs(isNewSearch ? [] : jobs)
       }
     } catch (err) {
-      console.error("Critical: Error fetching jobs:", err)
+      console.error("❌ Error fetching jobs:", err)
+      setJobs(isNewSearch ? [] : jobs)
     } finally {
       setIsLoading(false)
     }
@@ -79,7 +77,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
       filtered = filtered.filter(j => j.location.toLowerCase().includes(l))
     }
     if (filters.opportunityTypes?.length > 0) {
-      filtered = filtered.filter(j => filters.opportunityTypes.includes(j.opportunity_type))
+      filtered = filtered.filter(j => filters.opportunityTypes.includes(j.opportunityType || j.opportunity_type || ''))
     }
     setFilteredJobs(filtered)
   }, [jobs, filters])
