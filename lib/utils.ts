@@ -33,6 +33,8 @@ export function mapDatabaseJobToUIJob(dbJob: any): Job {
     jobType: dbJob.job_type || '',
     opportunityType: dbJob.opportunity_type || '',
     postedDate: dbJob.created_at || '',
+    applicationLink: dbJob.application_link || '',
+    experienceLevel: dbJob.experience_level || undefined,
     
     // Relational data with safe fallbacks
     company: dbJob.company || { 

@@ -20,6 +20,8 @@ export interface Job {
   jobType?: string;
   opportunityType?: string;
   postedDate?: string;
+  applicationLink?: string;
+  experienceLevel?: string;
   
   // Relational data
   company?: {

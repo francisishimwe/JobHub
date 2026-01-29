@@ -36,12 +36,12 @@ const JobCardComponent = ({ job }: JobCardProps) => {
     // Track share interaction
     await trackInteraction('share')
 
-    const message = `${job.title} at ${company?.name || 'Unknown Company'}
+    const message = `${job.title} at ${displayCompany.name || 'Unknown Company'}
 
 Location: ${job.location}
 Opportunity type: ${job.opportunityType}
 
-Read more and Apply now: ${job.applicationLink}
+Read more and Apply now: ${job.applicationLink || `/jobs/${job.id}`}
 
 Join our WhatsApp group:
 https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI
@@ -74,8 +74,11 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
   const daysRemaining = getDaysRemaining()
 
-  // Don't show jobs without companies (company is required)
-  if (!company) return null
+  // Use company data if available, otherwise use fallback info
+  const displayCompany = company || {
+    name: "RwandaJobHub Partner",
+    logo: "/full logo.jpg"
+  }
 
   return (
     <Link href={`/jobs/${job.id}`} className="block">
@@ -84,8 +87,8 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
           <div className="flex gap-3 md:gap-4 flex-1 min-w-0">
             <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted">
               <Image
-                src={company.logo || "/placeholder.svg"}
-                alt={`${company.name} logo`}
+                src={displayCompany.logo || "/placeholder.svg"}
+                alt={`${displayCompany.name} logo`}
                 fill
                 className="object-cover"
                 loading="lazy"
@@ -99,8 +102,8 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
               </h3>
 
               <div className="mb-2 flex flex-wrap items-center gap-2 md:gap-3 text-xs md:text-sm text-muted-foreground">
-                {company.name && (
-                  <span className="font-semibold text-gray-600">{company.name}</span>
+                {displayCompany.name && (
+                  <span className="font-semibold text-gray-600">{displayCompany.name}</span>
                 )}
 
                 {job.location && (
