@@ -59,7 +59,21 @@ export function EditJobDialog({ job, open, onOpenChange }: EditJobDialogProps) {
     setLoading(true)
 
     try {
-      await updateJob(job.id, formData)
+      // Convert camelCase to snake_case for API
+      const apiData = {
+        title: formData.title,
+        company_id: formData.companyId,
+        description: formData.description,
+        location: formData.location,
+        location_type: formData.locationType,
+        job_type: formData.jobType,
+        opportunity_type: formData.opportunityType,
+        experience_level: formData.experienceLevel,
+        deadline: formData.deadline || null,
+        application_link: formData.applicationLink,
+      }
+      
+      await updateJob(job.id, apiData)
       alert("Job updated successfully!")
       onOpenChange(false)
     } catch (error) {
