@@ -1,14 +1,9 @@
 import { sql } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
-import { withRateLimit, isValidOrigin } from '@/lib/api-middleware'
+import { withRateLimit } from '@/lib/api-middleware'
 
 async function handleTrackView(request: NextRequest) {
     try {
-        // Validate origin
-        if (!isValidOrigin(request)) {
-            return NextResponse.json({ error: 'Invalid origin' }, { status: 403 })
-        }
-
         const body = await request.json()
         const { content_type, content_id } = body
 
