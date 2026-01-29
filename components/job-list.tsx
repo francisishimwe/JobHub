@@ -64,47 +64,36 @@ export function JobList() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {/* 2. Added a loading state check */}
+              {/* We check both filteredJobs and the main jobs array as a backup */}
               {isLoading ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-10">
-                    Searching database...
-                  </TableCell>
+                  <TableCell colSpan={8} className="text-center py-10">Searching database...</TableCell>
                 </TableRow>
-              ) : filteredJobs.length === 0 ? (
+              ) : (filteredJobs.length > 0 ? filteredJobs : jobs).length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center text-muted-foreground py-10">
-                    No jobs found. Try adjusting your filters or click "Add New Job".
+                  <TableCell colSpan={8} className="text-center py-10">
+                    No jobs found. (Debug: API returned data, but mapping might be failing)
                   </TableCell>
                 </TableRow>
               ) : (
-                // 3. Map over filteredJobs instead of jobs
-                filteredJobs.map((job) => (
+                (filteredJobs.length > 0 ? filteredJobs : jobs).map((job) => (
                   <TableRow key={job.id}>
-                    <TableCell className="font-medium max-w-[180px]">
-                      <div className="truncate" title={job.title}>{job.title}</div>
+                    <TableCell className="font-medium">
+                      {job.title || "Untitled Job"}
                     </TableCell>
                     <TableCell>
-                      {/* Safety: Use optional chaining */}
-                      <div className="truncate">{getCompanyById(job.companyId || "")?.name || "Rwanda Partner"}</div>
+                      {job.company?.name || "Rwanda Partner"}
                     </TableCell>
                     <TableCell>
-                      <Badge variant="secondary" className="text-xs">{job.jobType || job.job_type}</Badge>
+                      <Badge variant="secondary">{job.jobType || job.job_type || "Full-time"}</Badge>
                     </TableCell>
-                    <TableCell className="text-sm">
-                      {formatDate(job.deadline)}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground text-sm">
-                      {formatDate(job.postedDate || job.created_at)}
+                    <TableCell>
+                      {job.deadline ? new Date(job.deadline).toLocaleDateString() : "No deadline"}
                     </TableCell>
                     <TableCell className="text-right">
-                      <div className="flex justify-end gap-1">
-                        <Button variant="ghost" size="icon" onClick={() => setJobToEdit(job)}>
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="text-destructive" onClick={() => setJobToDelete(job.id)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                      <div className="flex justify-end gap-2">
+                        <Button variant="ghost" size="icon" onClick={() => setJobToEdit(job)}><Pencil className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="icon" className="text-destructive" onClick={() => setJobToDelete(job.id)}><Trash2 className="h-4 w-4" /></Button>
                       </div>
                     </TableCell>
                   </TableRow>
