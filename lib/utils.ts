@@ -41,3 +41,4 @@ export function mapDatabaseJobToUIJob(dbJob: any): Job {
     },
     applicants: dbJob.applicants || 0,
   }
+}
