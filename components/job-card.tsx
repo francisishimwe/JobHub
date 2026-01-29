@@ -2,7 +2,6 @@
 
 import { memo } from "react"
 import Image from "next/image"
-import Link from "next/link"
 import { MapPin, UserCheck, BadgeCheck, Share2, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -81,7 +80,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
   }
 
   return (
-    <Link href={`/jobs/${job.id}`} className="block">
+    <div className="block">
       <div className="rounded-lg border bg-card p-4 md:p-6 shadow-sm transition-shadow hover:shadow-md">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 md:gap-4">
           <div className="flex gap-3 md:gap-4 flex-1 min-w-0">
@@ -159,7 +158,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   )
 }
 
