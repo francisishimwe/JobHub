@@ -147,7 +147,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 {/* Description */}
                 {job.description && (
                     <div>
-                        <h3 className="text-lg font-bold mb-4"></h3>
+                        <h3 className="text-lg font-bold mb-4">Job Description</h3>
                         <div
                             className="prose prose-sm max-w-none text-foreground leading-relaxed
                                 [&_p]:mb-4 [&_p]:leading-7

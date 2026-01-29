@@ -18,14 +18,19 @@ CREATE TABLE IF NOT EXISTS jobs (
   title VARCHAR(255) NOT NULL,
   company_id UUID NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
   location VARCHAR(255),
+  location_type VARCHAR(100),
   job_type VARCHAR(100),
   opportunity_type VARCHAR(100) NOT NULL,
+  experience_level VARCHAR(100),
   deadline DATE,
   featured BOOLEAN DEFAULT false,
   description TEXT,
   attachment_url TEXT,
+  application_link TEXT,
   status VARCHAR(50) DEFAULT 'published' CHECK (status IN ('published', 'draft', 'closed')),
   approved BOOLEAN DEFAULT true,
+  applicants INTEGER DEFAULT 0,
+  views INTEGER DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

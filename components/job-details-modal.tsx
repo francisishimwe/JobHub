@@ -29,8 +29,8 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
           <div className="flex items-start gap-4">
             <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
               <Image
-                src={job.companyLogo || "/placeholder.svg"}
-                alt={`${job.company} logo`}
+                src={job.companyLogo || job.company?.logo || "/placeholder.svg"}
+                alt={`${job.company?.name || 'Company'} logo`}
                 fill
                 className="object-cover"
               />
@@ -38,7 +38,7 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
             <div className="flex-1">
               <DialogTitle className="text-2xl">{job.title}</DialogTitle>
               <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                <span className="font-medium text-foreground">{job.company}</span>
+                <span className="font-medium text-foreground">{job.company?.name || 'Unknown Company'}</span>
 
               </div>
             </div>

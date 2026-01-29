@@ -27,6 +27,10 @@ export function mapDatabaseJobToUIJob(dbJob: any): Job {
     approved: dbJob.approved ?? false,
     featured: dbJob.featured ?? false,
     attachment_url: dbJob.attachment_url || undefined,
+    location_type: dbJob.location_type || undefined,
+    experience_level: dbJob.experience_level || undefined,
+    application_link: dbJob.application_link || undefined,
+    applicants: dbJob.applicants || 0,
 
     // Component format fields (camelCase - for component usage)
     companyId: dbJob.company_id || null,
@@ -35,12 +39,15 @@ export function mapDatabaseJobToUIJob(dbJob: any): Job {
     postedDate: dbJob.created_at ? new Date(dbJob.created_at) : new Date(Date.now()),
     applicationLink: dbJob.application_link || '',
     experienceLevel: dbJob.experience_level || undefined,
+    locationType: dbJob.location_type || undefined,
+    attachmentUrl: dbJob.attachment_url || undefined,
     
     // Relational data with safe fallbacks
     company: dbJob.company || { 
       name: "RwandaJobHub Partner", 
       logo: "/full logo.jpg" 
     },
+    companyLogo: dbJob.company?.logo || "/full logo.jpg",
     applicants: dbJob.applicants || 0,
   }
 }
