@@ -107,7 +107,7 @@ export function Header() {
                     <Menu className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-full max-w-xs pl-6 pr-4 bg-[#25D366] text-white h-full sm:max-w-sm" suppressHydrationWarning>
+                <SheetContent side="right" className="w-full max-w-xs pl-6 pr-4 bg-[#2563EB] text-white h-full sm:max-w-sm" suppressHydrationWarning>
                   <div className="flex flex-col gap-4 mt-6">
                     {navigationLinks.map((link) => (
                       <Link
@@ -124,7 +124,7 @@ export function Header() {
                         handleJoinWhatsApp()
                         setMobileMenuOpen(false)
                       }}
-                      className="gap-2 bg-white text-[#25D366] w-full font-semibold"
+                      className="gap-2 bg-white text-[#2563EB] w-full font-semibold"
                     >
                       <MessageCircle className="h-4 w-4" />
                       Join WhatsApp Group
@@ -133,7 +133,7 @@ export function Header() {
                       <Button
                         asChild
                         className="w-full text-black mt-2"
-                        style={{ backgroundColor: '#76c893' }}
+                        style={{ backgroundColor: '#60A5FA' }}
                       >
                         <Link
                           href="/dashboard"
@@ -151,7 +151,7 @@ export function Header() {
             {/* Join WhatsApp Button - Desktop */}
             <Button
               onClick={handleJoinWhatsApp}
-              className="hidden md:inline-flex gap-2 bg-[#25D366] hover:bg-[#1DA851] text-white"
+              className="hidden md:inline-flex gap-2 bg-[#2563EB] hover:bg-[#1D4ED8] text-white"
             >
               <MessageCircle className="h-4 w-4" />
               Join WhatsApp
@@ -177,9 +177,9 @@ export function Header() {
               <Button 
                 asChild 
                 className="hidden md:inline-flex text-black" 
-                style={{ backgroundColor: '#76c893' }} 
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#52b69a'} 
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#76c893'}
+                style={{ backgroundColor: '#60A5FA' }} 
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3B82F6'} 
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#60A5FA'}
               >
                 <Link href="/dashboard">Login</Link>
               </Button>
