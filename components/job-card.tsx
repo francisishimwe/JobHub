@@ -1,6 +1,7 @@
 "use client"
 
 import { memo } from "react"
+import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { MapPin, UserCheck, BadgeCheck, Share2, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -13,6 +14,7 @@ interface JobCardProps {
 }
 
 const JobCardComponent = ({ job }: JobCardProps) => {
+  const router = useRouter()
   const { getCompanyById } = useCompanies()
   const company = getCompanyById(job.companyId)
 
@@ -40,7 +42,7 @@ const JobCardComponent = ({ job }: JobCardProps) => {
 Location: ${job.location}
 Opportunity type: ${job.opportunityType}
 
-Read more and Apply now: ${job.applicationLink || `/jobs/${job.id}`}
+Read more and Apply now: ${job.applicationLink || `https://rwandajobhub.rw/jobs/${job.id}`}
 
 Join our WhatsApp group:
 https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI
@@ -51,13 +53,25 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
     window.open(whatsappUrl, '_blank')
   }
 
-  const handleViewDetails = async (e: React.MouseEvent) => {
+  const handleViewDetails = (e: React.MouseEvent) => {
     e.preventDefault()
 
     // Track view interaction
-    await trackInteraction('view')
+    trackInteraction('view')
 
-    window.open(`/jobs/${job.id}`, '_blank')
+    // Navigate to job details page in the same window
+    router.push(`/jobs/${job.id}`)
+  }
+
+  const handleTitleClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    // Track view interaction
+    trackInteraction('view')
+
+    // Navigate to job details page in the same window
+    router.push(`/jobs/${job.id}`)
   }
 
 
@@ -96,7 +110,11 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
             </div>
 
             <div className="flex-1 min-w-0">
-              <h3 className="mb-2 text-base md:text-lg font-bold leading-tight transition-colors" style={{ color: '#1E40AF' }}>
+              <h3 
+                className="mb-2 text-base md:text-lg font-bold leading-tight transition-colors cursor-pointer hover:underline" 
+                style={{ color: '#1E40AF' }}
+                onClick={handleTitleClick}
+              >
                 {job.title}
               </h3>
 
