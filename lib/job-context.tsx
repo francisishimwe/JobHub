@@ -13,6 +13,7 @@ interface JobContextType {
   hasMore: boolean
   loadMore: () => void
   addJob: (jobData: any) => Promise<void>
+  updateJob: (jobId: string, jobData: any) => Promise<void>
   deleteJob: (jobId: string) => Promise<void>
 }
 
@@ -104,6 +105,17 @@ export function JobProvider({ children }: { children: ReactNode }) {
     fetchJobs(0, true)
   }
 
+  const updateJob = async (jobId: string, jobData: any) => {
+    const response = await fetch(`/api/jobs/${jobId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(jobData),
+    })
+    if (!response.ok) throw new Error('Failed to update job')
+    // Update the job in the local state
+    setJobs(prev => prev.map(j => j.id === jobId ? { ...j, ...jobData } : j))
+  }
+
   const deleteJob = async (jobId: string) => {
     const response = await fetch(`/api/jobs/${jobId}`, { method: 'DELETE' })
     if (!response.ok) throw new Error('Delete failed')
@@ -111,7 +123,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <JobContext.Provider value={{ jobs, filteredJobs, filters, setFilters, isLoading, hasMore, loadMore, addJob, deleteJob }}>
+    <JobContext.Provider value={{ jobs, filteredJobs, filters, setFilters, isLoading, hasMore, loadMore, addJob, updateJob, deleteJob }}>
       {children}
     </JobContext.Provider>
   )
