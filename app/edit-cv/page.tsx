@@ -295,29 +295,31 @@ export default function EditCV() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="w-full">
             <Label htmlFor="firstName">First Name</Label>
             <Input
               id="firstName"
               value={cvData.personalInfo.firstName}
               onChange={(e) => updatePersonalInfo('firstName', e.target.value)}
               placeholder="Enter first name"
+              className="w-full"
             />
           </div>
-          <div>
+          <div className="w-full">
             <Label htmlFor="lastName">Last Name</Label>
             <Input
               id="lastName"
               value={cvData.personalInfo.lastName}
               onChange={(e) => updatePersonalInfo('lastName', e.target.value)}
               placeholder="Enter last name"
+              className="w-full"
             />
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-4">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="w-full">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
@@ -325,42 +327,46 @@ export default function EditCV() {
               value={cvData.personalInfo.email}
               onChange={(e) => updatePersonalInfo('email', e.target.value)}
               placeholder="email@example.com"
+              className="w-full"
             />
           </div>
-          <div>
+          <div className="w-full">
             <Label htmlFor="phone">Phone</Label>
             <Input
               id="phone"
               value={cvData.personalInfo.phone}
               onChange={(e) => updatePersonalInfo('phone', e.target.value)}
               placeholder="+250 788 123 456"
+              className="w-full"
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="w-full">
             <Label htmlFor="birthDate">Birth Date</Label>
             <Input
               id="birthDate"
               type="date"
               value={cvData.personalInfo.birthDate}
               onChange={(e) => updatePersonalInfo('birthDate', e.target.value)}
+              className="w-full"
             />
           </div>
-          <div>
+          <div className="w-full">
             <Label htmlFor="placeOfBirth">Place of Birth</Label>
             <Input
               id="placeOfBirth"
               value={cvData.personalInfo.placeOfBirth}
               onChange={(e) => updatePersonalInfo('placeOfBirth', e.target.value)}
               placeholder="Kigali, Rwanda"
+              className="w-full"
             />
           </div>
-          <div>
+          <div className="w-full">
             <Label htmlFor="nationality">Nationality</Label>
             <Select value={cvData.personalInfo.nationality} onValueChange={(value) => updatePersonalInfo('nationality', value)}>
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="z-50 max-h-48 overflow-y-auto">
@@ -376,17 +382,18 @@ export default function EditCV() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="w-full">
             <Label htmlFor="fathersName">Father's Name</Label>
             <Input
               id="fathersName"
               value={cvData.personalInfo.fathersName}
               onChange={(e) => updatePersonalInfo('fathersName', e.target.value)}
               placeholder="Enter father's name"
+              className="w-full"
             />
           </div>
-          <div>
+          <div className="w-full">
             <Label htmlFor="mothersName">Mother's Name</Label>
             <Input
               id="mothersName"
@@ -466,32 +473,35 @@ export default function EditCV() {
           </div>
 
           {cvData.personalInfo.residence.district && (
-            <div className="grid grid-cols-3 gap-4">
-              <div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="w-full">
                 <Label htmlFor="sector">Sector (Umurenge)</Label>
                 <Input
                   id="sector"
                   value={cvData.personalInfo.residence.sector}
                   onChange={(e) => updateResidence('sector', e.target.value)}
                   placeholder="Enter sector name"
+                  className="w-full"
                 />
               </div>
-              <div>
+              <div className="w-full">
                 <Label htmlFor="cell">Cell (Akagari)</Label>
                 <Input
                   id="cell"
                   value={cvData.personalInfo.residence.cell}
                   onChange={(e) => updateResidence('cell', e.target.value)}
                   placeholder="Enter cell name"
+                  className="w-full"
                 />
               </div>
-              <div>
+              <div className="w-full">
                 <Label htmlFor="village">Village (Umudugudu)</Label>
                 <Input
                   id="village"
                   value={cvData.personalInfo.residence.village}
                   onChange={(e) => updateResidence('village', e.target.value)}
                   placeholder="Enter village name"
+                  className="w-full"
                 />
               </div>
             </div>
@@ -520,51 +530,54 @@ export default function EditCV() {
                 </Button>
               )}
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="w-full">
                 <Label>Degree</Label>
                 <Input
                   value={edu.degree}
                   onChange={(e) => updateEducation(index, 'degree', e.target.value)}
                   placeholder="Bachelor's, Master's, PhD"
+                  className="w-full"
                 />
               </div>
-              <div>
+              <div className="w-full">
                 <Label>Field of Study</Label>
                 <Input
                   value={edu.fieldOfStudy}
                   onChange={(e) => updateEducation(index, 'fieldOfStudy', e.target.value)}
                   placeholder="Computer Science, Business"
+                  className="w-full"
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="w-full">
                 <Label>Institution</Label>
                 <Input
                   value={edu.institution}
                   onChange={(e) => updateEducation(index, 'institution', e.target.value)}
                   placeholder="University of Rwanda"
+                  className="w-full"
                 />
               </div>
-              <div>
+              <div className="w-full">
                 <Label>Year of Graduation</Label>
                 <Input
                   value={edu.yearOfGraduation}
                   onChange={(e) => updateEducation(index, 'yearOfGraduation', e.target.value)}
                   placeholder="2020"
+                  className="w-full"
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label>Country of Study</Label>
-                <Input
-                  value={edu.countryOfStudy}
-                  onChange={(e) => updateEducation(index, 'countryOfStudy', e.target.value)}
-                  placeholder="Rwanda"
-                />
-              </div>
+            <div className="w-full">
+              <Label>Country of Study</Label>
+              <Input
+                value={edu.countryOfStudy}
+                onChange={(e) => updateEducation(index, 'countryOfStudy', e.target.value)}
+                placeholder="Rwanda"
+                className="w-full"
+              />
             </div>
           </div>
         ))}
@@ -584,14 +597,14 @@ export default function EditCV() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="w-full">
             <Label>Experience Level</Label>
             <Select value={cvData.experience.level} onValueChange={(value) => setCVData(prev => ({
               ...prev,
               experience: { ...prev.experience, level: value }
             }))}>
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="z-50 max-h-48 overflow-y-auto">
@@ -606,7 +619,7 @@ export default function EditCV() {
               </SelectContent>
             </Select>
           </div>
-          <div>
+          <div className="w-full">
             <Label>Years of Experience</Label>
             <Input
               value={cvData.experience.years}
@@ -615,12 +628,13 @@ export default function EditCV() {
                 experience: { ...prev.experience, years: e.target.value }
               }))}
               placeholder="3"
+              className="w-full"
             />
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-4">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="w-full">
             <Label>Current Company (Optional)</Label>
             <Input
               value={cvData.experience.currentCompany}
@@ -629,9 +643,10 @@ export default function EditCV() {
                 experience: { ...prev.experience, currentCompany: e.target.value }
               }))}
               placeholder="Acme Corporation"
+              className="w-full"
             />
           </div>
-          <div>
+          <div className="w-full">
             <Label>Current Role (Optional)</Label>
             <Input
               value={cvData.experience.currentRole}
@@ -640,12 +655,13 @@ export default function EditCV() {
                 experience: { ...prev.experience, currentRole: e.target.value }
               }))}
               placeholder="Software Developer"
+              className="w-full"
             />
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-4">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="w-full">
             <Label>Employer Phone (Optional)</Label>
             <Input
               value={cvData.experience.employerPhone}
@@ -654,9 +670,10 @@ export default function EditCV() {
                 experience: { ...prev.experience, employerPhone: e.target.value }
               }))}
               placeholder="+250 788 123 456"
+              className="w-full"
             />
           </div>
-          <div>
+          <div className="w-full">
             <Label>Employer Email (Optional)</Label>
             <Input
               type="email"
@@ -666,6 +683,7 @@ export default function EditCV() {
                 experience: { ...prev.experience, employerEmail: e.target.value }
               }))}
               placeholder="employer@company.com"
+              className="w-full"
             />
           </div>
         </div>
@@ -693,20 +711,21 @@ export default function EditCV() {
               )}
             </div>
             
-            <div>
+            <div className="w-full">
               <Label>Language</Label>
               <Input
                 value={lang.name}
                 onChange={(e) => updateLanguage(index, 'name', e.target.value)}
                 placeholder="English, French, Kinyarwanda"
+                className="w-full"
               />
             </div>
             
-            <div className="grid grid-cols-3 gap-4">
-              <div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="w-full">
                 <Label>Reading</Label>
                 <Select value={lang.proficiency.reading} onValueChange={(value) => updateLanguage(index, 'reading', value)}>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="z-50 max-h-48 overflow-y-auto">
@@ -717,10 +736,10 @@ export default function EditCV() {
                   </SelectContent>
                 </Select>
               </div>
-              <div>
+              <div className="w-full">
                 <Label>Writing</Label>
                 <Select value={lang.proficiency.writing} onValueChange={(value) => updateLanguage(index, 'writing', value)}>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="z-50 max-h-48 overflow-y-auto">
@@ -731,10 +750,10 @@ export default function EditCV() {
                   </SelectContent>
                 </Select>
               </div>
-              <div>
+              <div className="w-full">
                 <Label>Speaking</Label>
                 <Select value={lang.proficiency.speaking} onValueChange={(value) => updateLanguage(index, 'speaking', value)}>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="z-50 max-h-48 overflow-y-auto">
