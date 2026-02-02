@@ -1028,8 +1028,33 @@ export default function EditCV() {
   }
 
   return (
-    <div className="cv-builder-container min-h-screen bg-gray-50">
-      <div className="cv-builder-content">
+    <div 
+      className="cv-builder-container min-h-screen bg-gray-50"
+      style={{
+        width: '100vw',
+        maxWidth: '100vw',
+        overflowX: 'hidden',
+        wordBreak: 'break-word',
+        overflowWrap: 'break-word',
+        whiteSpace: 'pre-wrap',
+        hyphens: 'auto',
+        margin: 0,
+        padding: 0
+      }}
+    >
+      <div 
+        className="cv-builder-content"
+        style={{
+          width: '100%',
+          maxWidth: '100%',
+          padding: '0 1rem',
+          wordBreak: 'break-word',
+          overflowWrap: 'break-word',
+          whiteSpace: 'pre-wrap',
+          hyphens: 'auto',
+          margin: 0
+        }}
+      >
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex justify-between items-center">
