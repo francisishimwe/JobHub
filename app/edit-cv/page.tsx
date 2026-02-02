@@ -1068,7 +1068,7 @@ export default function EditCV() {
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
+        <div className="space-y-6" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
           {/* Form Section */}
           <div className="space-y-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
             {renderStepForm()}
@@ -1095,7 +1095,7 @@ export default function EditCV() {
           </div>
 
           {/* Preview Section */}
-          <div className="lg:sticky lg:top-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
+          <div style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
             <div className="bg-white rounded-lg shadow-sm p-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
               <h2 className="text-lg font-semibold mb-4">A4 Preview</h2>
               <div className="overflow-auto max-h-[800px] border" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
