@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image" // Added Next.js Image component
 import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
-import { LogOut, UserCircle2, Menu, X, MessageCircle } from "lucide-react"
+import { LogOut, UserCircle2, Menu, X, MessageCircle, ChevronDown } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,14 +38,15 @@ export function Header() {
 
   const navigationLinks = [
     { href: "/", label: "Home" },
-    { href: "/exams", label: "View job exams" },
-    { href: "/edit-cv", label: "Edit CV" },
-    { href: "/post-advert", label: "Post advert" },
+    { href: "/jobs", label: "Find Jobs" },
+    { href: "/exams", label: "View Job Exams" },
+  ]
+
+  const companyDropdownItems = [
     { href: "/employers", label: "Employers" },
     { href: "/testimonials", label: "Testimonials" },
-    { href: "/help", label: "Help" },
-    { href: "/about", label: "About us" },
-    { href: "/contact", label: "Contact us" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
   ]
 
   return (
@@ -92,9 +93,42 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
+            
+            {/* Company Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  className="text-lg font-medium text-white hover:text-gray-300 transition-colors gap-1 h-auto p-0"
+                >
+                  Company
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="bg-white">
+                {companyDropdownItems.map((item) => (
+                  <DropdownMenuItem key={item.href} asChild>
+                    <Link 
+                      href={item.href} 
+                      className="text-gray-900 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {item.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
 
           <div className="flex items-center gap-4">
+            {/* Post Advert Button */}
+            <Button 
+              asChild
+              className="bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700 transition-colors"
+            >
+              <Link href="/post-advert">Post Advert</Link>
+            </Button>
+
             {/* Mobile Menu */}
             {!mounted ? (
               <Button variant="ghost" size="sm" className="md:hidden text-white hover:bg-gray-100">
@@ -119,6 +153,30 @@ export function Header() {
                         {link.label}
                       </Link>
                     ))}
+                    
+                    {/* Mobile Company Dropdown Items */}
+                    <div className="border-t border-white/20 pt-4">
+                      <p className="text-sm font-semibold text-white/80 mb-3">Company</p>
+                      {companyDropdownItems.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="block text-lg font-medium text-white hover:text-gray-100 transition-colors py-3 px-2 rounded-md"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                    
+                    {/* Mobile Post Advert */}
+                    <Button
+                      asChild
+                      className="bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700 transition-colors w-full"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Link href="/post-advert">Post Advert</Link>
+                    </Button>
                     <Button
                       onClick={() => {
                         handleJoinWhatsApp()

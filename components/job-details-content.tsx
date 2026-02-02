@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { MapPin, Briefcase, Clock, ExternalLink, ArrowLeft, Share2, AlertTriangle, BadgeCheck } from "lucide-react"
+import { MapPin, Briefcase, Clock, ExternalLink, ArrowLeft, Share2, AlertTriangle, BadgeCheck, FileText } from "lucide-react"
 import Image from "next/image"
 import type { Job, Company } from "@/lib/types"
 import { useCompanies } from "@/lib/company-context"
@@ -247,6 +247,21 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     >
                         <Share2 className="mr-2 h-5 w-5" />
                         Share on WhatsApp
+                    </Button>
+                </div>
+
+                {/* Build CV Button */}
+                <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                    <Button
+                        asChild
+                        variant="outline"
+                        size="lg"
+                        className="flex-1 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-base font-semibold h-14 sm:h-12 px-8 rounded-lg transition-all"
+                    >
+                        <Link href="/edit-cv">
+                            <FileText className="mr-2 h-5 w-5" />
+                            Build your CV for this Job
+                        </Link>
                     </Button>
                 </div>
 
