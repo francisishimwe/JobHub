@@ -882,12 +882,16 @@ export default function EditCV() {
   const renderCVPreview = () => (
     <div 
       ref={cvPreviewRef}
-      className="bg-white p-8 shadow-lg break-words overflow-wrap-break-word"
+      className="bg-white p-8 shadow-lg"
       style={{ 
         width: '210mm', 
         minHeight: '297mm', 
         fontFamily: '"Georgia", serif',
-        lineHeight: '1.6'
+        lineHeight: '1.6',
+        wordBreak: 'break-word',
+        overflowWrap: 'break-word',
+        whiteSpace: 'pre-wrap',
+        display: 'block'
       }}
     >
       {/* Header */}
