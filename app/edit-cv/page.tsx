@@ -1022,20 +1022,6 @@ export default function EditCV() {
         return renderRefereesForm()
       case 6:
         return renderSubmitForm()
-      default:
-        return null
-    }
-  }
-
-  return (
-    <div className="min-h-screen bg-gray-50 p-6" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
-      <div className="w-full" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
-        {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">CV Builder</h1>
-              <p className="text-gray-600">Create your professional CV in minutes</p>
             </div>
             <Button
               onClick={generatePDF}
@@ -1063,23 +1049,6 @@ export default function EditCV() {
                   currentStep > step ? 'bg-blue-600' : 'bg-gray-200'
                 }`} />}
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="space-y-6" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
-          {/* Form Section */}
-          <div className="space-y-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
-            {renderStepForm()}
-            
-            {/* Navigation */}
-            <div className="flex justify-between" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
-              <Button
-                variant="outline"
-                onClick={prevStep}
-                disabled={currentStep === 1}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Previous
