@@ -6,7 +6,6 @@ import Image from "next/image"
 import type { Job, Company } from "@/lib/types"
 import { useCompanies } from "@/lib/company-context"
 import Link from "next/link"
-import { useState, useEffect } from "react"
 
 interface JobDetailsContentProps {
     job: Job
@@ -17,23 +16,6 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     const { getCompanyById } = useCompanies()
     const contextCompany = getCompanyById(job.companyId)
     const company = initialCompany || contextCompany
-    const [applicantCount, setApplicantCount] = useState(job.applicants)
-
-    // Fetch current applicant count on mount
-    useEffect(() => {
-        const fetchApplicantCount = async () => {
-            try {
-                const response = await fetch(`/api/job-stats?jobId=${job.id}`)
-                if (response.ok) {
-                    const data = await response.json()
-                    setApplicantCount(data.applicants)
-                }
-            } catch (error) {
-                console.error('Error fetching applicant count:', error)
-            }
-        }
-        fetchApplicantCount()
-    }, [job.id])
 
     const handleApply = async () => {
         if (job.applicationLink) {
@@ -212,33 +194,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 )}
 
-                {/* Apply CTA or Applicant Count */}
-                {job.applicationLink ? (
-                    <button
-                        type="button"
-                        onClick={handleApply}
-                        className="bg-[#28a745] hover:bg-[#218838] text-white font-bold py-4 px-10 rounded uppercase text-center w-full transition-colors"
-                    >
-                        Apply to this job
-                    </button>
-                ) : (
-                    <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border">
-                        <span className="text-sm font-medium text-muted-foreground">Total Applicants</span>
-                        <span className="text-lg font-bold">{applicantCount}</span>
-                    </div>
-                )}
-
                 {/* Share on WhatsApp and Apply Now Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t">
-                    <Button
-                        onClick={handleShareWhatsApp}
-                        size="lg"
-                        variant="outline"
-                        className="flex-1 text-base font-medium h-14 sm:h-12 border-2 hover:bg-[#25D366] hover:text-white hover:border-[#25D366] transition-colors"
-                    >
-                        <Share2 className="mr-2 h-5 w-5" />
-                        Share on WhatsApp
-                    </Button>
                     {job.applicationLink &&
                         job.opportunityType !== "Tender" &&
                         job.opportunityType !== "Blog" &&
@@ -248,12 +205,20 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             <Button
                                 onClick={handleApply}
                                 size="lg"
-                                className="flex-1 sm:flex-initial sm:min-w-[220px] bg-foreground text-background hover:bg-foreground/90 text-xl font-semibold h-16 sm:h-15 px-12"
+                                className="flex-1 bg-[#28a745] hover:bg-[#218838] text-white text-lg font-bold h-14 sm:h-12 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
                             >
                                 Apply Now
                                 <ExternalLink className="ml-2 h-6 w-6" />
                             </Button>
                         )}
+                    <Button
+                        onClick={handleShareWhatsApp}
+                        size="lg"
+                        className="flex-1 bg-[#28a745] hover:bg-[#218838] text-white text-base font-semibold h-14 sm:h-12 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
+                    >
+                        <Share2 className="mr-2 h-5 w-5" />
+                        Share on WhatsApp
+                    </Button>
                 </div>
 
 
