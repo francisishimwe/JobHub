@@ -42,13 +42,9 @@ export async function GET(request: NextRequest) {
       WHERE ${activeWhere}
     `
 
-    const featuredCountResult = await sql`
-      SELECT COUNT(*) as total FROM jobs 
-      WHERE ${activeWhere} AND featured = true
-    `
-
     const total = countResult[0]?.total || 0
-    const featuredCount = featuredCountResult[0]?.total || 0
+    // Featured tab should count *all* active items (Jobs, Tenders, Internships, Scholarships, Education, Blogs)
+    const featuredCount = total
 
     return NextResponse.json({
       jobs,

@@ -90,15 +90,11 @@ export function JobProvider({ children }: { children: ReactNode }) {
     if (filters.opportunityTypes?.length > 0) {
       filtered = filtered.filter(j => filters.opportunityTypes.includes(j.opportunityType || j.opportunity_type || ''))
     } else {
-      // When no opportunity types are selected (Featured is clicked):
-      // - If there are active featured items, show only featured.
-      // - If there are truly 0 featured items, fall back to showing recent jobs (avoid empty screen).
-      if (featuredCount > 0) {
-        filtered = filtered.filter(j => j.featured)
-      }
+      // When no opportunity types are selected (Featured is clicked), show ALL active items
+      // across Jobs, Tenders, Internships, Scholarships, Education, Blogs (no extra filter).
     }
     setFilteredJobs(filtered)
-  }, [jobs, filters, featuredCount])
+  }, [jobs, filters])
 
   const loadMore = () => {
     if (!isLoading && hasMore) {
