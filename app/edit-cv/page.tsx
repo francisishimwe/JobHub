@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, ArrowRight, Download, User, GraduationCap, Briefcase, DollarSign, Languages } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Download, User, GraduationCap, Briefcase, Languages, CheckCircle } from 'lucide-react'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 
@@ -78,6 +78,7 @@ interface CVData {
 export default function EditCV() {
   const [currentStep, setCurrentStep] = useState(1)
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const cvPreviewRef = useRef<HTMLDivElement>(null)
 
   // Load Google Fonts on component mount
@@ -118,10 +119,6 @@ export default function EditCV() {
       currentRole: '',
       employerPhone: '',
       employerEmail: ''
-    },
-    salary: {
-      expectation: '',
-      currency: 'RWF'
     },
     languages: [{
       name: 'Kinyarwanda',
@@ -236,13 +233,18 @@ export default function EditCV() {
     setIsGeneratingPDF(true)
     try {
       const canvas = await html2canvas(cvPreviewRef.current, {
-        scale: 2,
+        scale: 1.5,
         useCORS: true,
         allowTaint: true
       })
       
-      const imgData = canvas.toDataURL('image/png')
-      const pdf = new jsPDF('p', 'mm', 'a4')
+      const imgData = canvas.toDataURL('image/png', 0.8)
+      const pdf = new jsPDF({
+        orientation: 'p',
+        unit: 'mm',
+        format: 'a4',
+        compress: true
+      })
       
       const imgWidth = 210
       const pageHeight = 295
@@ -268,12 +270,20 @@ export default function EditCV() {
     }
   }
 
+  const jumpToStep = (step: number) => {
+    setCurrentStep(step)
+  }
+
   const nextStep = () => {
     if (currentStep < 6) setCurrentStep(currentStep + 1)
   }
 
   const prevStep = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1)
+  }
+
+  const handleSubmit = () => {
+    setShowSuccessMessage(true)
   }
 
   const renderPersonalInfoForm = () => (
@@ -353,7 +363,7 @@ export default function EditCV() {
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="z-50 max-h-48 overflow-y-auto">
                 <SelectItem value="Rwanda">Rwanda</SelectItem>
                 <SelectItem value="Kenya">Kenya</SelectItem>
                 <SelectItem value="Uganda">Uganda</SelectItem>
@@ -393,7 +403,7 @@ export default function EditCV() {
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="z-50 max-h-48 overflow-y-auto">
               <SelectItem value="Male">Male</SelectItem>
               <SelectItem value="Female">Female</SelectItem>
               <SelectItem value="Other">Other</SelectItem>
@@ -411,7 +421,7 @@ export default function EditCV() {
               <SelectTrigger>
                 <SelectValue placeholder="Select district" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="z-50 max-h-48 overflow-y-auto">
                 {/* Kigali City */}
                 <SelectItem value="Nyarugenge">Nyarugenge</SelectItem>
                 <SelectItem value="Gasabo">Gasabo</SelectItem>
@@ -558,7 +568,7 @@ export default function EditCV() {
             </div>
           </div>
         ))}
-        <Button variant="outline" onClick={addEducation} className="w-full">
+        <Button variant="outline" onClick={addEducation} className="w-full bg-green-600 hover:bg-green-700 text-white">
           Add Education
         </Button>
       </CardContent>
@@ -584,7 +594,7 @@ export default function EditCV() {
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="z-50 max-h-48 overflow-y-auto">
                 <SelectItem value="Entry Level">Entry Level</SelectItem>
                 <SelectItem value="Junior">Junior</SelectItem>
                 <SelectItem value="Mid-Level">Mid-Level</SelectItem>
@@ -663,48 +673,6 @@ export default function EditCV() {
     </Card>
   )
 
-  const renderSalaryForm = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <DollarSign className="h-5 w-5" />
-          Salary Expectations
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label>Currency</Label>
-            <Select value={cvData.salary.currency} onValueChange={(value) => setCVData(prev => ({
-              ...prev,
-              salary: { ...prev.salary, currency: value }
-            }))}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="RWF">RWF</SelectItem>
-                <SelectItem value="USD">USD</SelectItem>
-                <SelectItem value="EUR">EUR</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label>Monthly Expectation</Label>
-            <Input
-              value={cvData.salary.expectation}
-              onChange={(e) => setCVData(prev => ({
-                ...prev,
-                salary: { ...prev.salary, expectation: e.target.value }
-              }))}
-              placeholder="500,000"
-            />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  )
-
   const renderLanguagesForm = () => (
     <Card>
       <CardHeader>
@@ -741,7 +709,7 @@ export default function EditCV() {
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="z-50 max-h-48 overflow-y-auto">
                     <SelectItem value="Excellent">Excellent</SelectItem>
                     <SelectItem value="Very Good">Very Good</SelectItem>
                     <SelectItem value="Good">Good</SelectItem>
@@ -755,7 +723,7 @@ export default function EditCV() {
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="z-50 max-h-48 overflow-y-auto">
                     <SelectItem value="Excellent">Excellent</SelectItem>
                     <SelectItem value="Very Good">Very Good</SelectItem>
                     <SelectItem value="Good">Good</SelectItem>
@@ -769,7 +737,7 @@ export default function EditCV() {
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="z-50 max-h-48 overflow-y-auto">
                     <SelectItem value="Excellent">Excellent</SelectItem>
                     <SelectItem value="Very Good">Very Good</SelectItem>
                     <SelectItem value="Good">Good</SelectItem>
@@ -780,7 +748,7 @@ export default function EditCV() {
             </div>
           </div>
         ))}
-        <Button variant="outline" onClick={addLanguage} className="w-full">
+        <Button variant="outline" onClick={addLanguage} className="w-full bg-green-600 hover:bg-green-700 text-white">
           Add Language
         </Button>
       </CardContent>
@@ -851,9 +819,62 @@ export default function EditCV() {
             </div>
           </div>
         ))}
-        <Button variant="outline" onClick={addReferee} className="w-full">
+        <Button variant="outline" onClick={addReferee} className="w-full bg-green-600 hover:bg-green-700 text-white">
           Add Referee
         </Button>
+      </CardContent>
+    </Card>
+  )
+
+  const renderSubmitForm = () => (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <CheckCircle className="h-5 w-5" />
+          Complete Your CV
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+            <CheckCircle className="w-8 h-8 text-green-600" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">Ready to Submit</h3>
+            <p className="text-gray-600 mt-2">
+              Your professional CV is ready. Click submit to complete the process and download your document.
+            </p>
+          </div>
+        </div>
+        
+        <div className="space-y-3">
+          <Button 
+            onClick={handleSubmit} 
+            className="w-full bg-red-600 hover:bg-red-700 text-white py-3"
+          >
+            Submit CV
+          </Button>
+          
+          {showSuccessMessage && (
+            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="flex items-center gap-2 text-green-800">
+                <CheckCircle className="w-5 h-5" />
+                <span className="font-medium">Success!</span>
+              </div>
+              <p className="text-green-700 mt-2 text-sm">
+                Thank you for using RwandaJobHub! Your professional CV is ready. Please click the button below to download your document.
+              </p>
+              <Button 
+                onClick={generatePDF} 
+                disabled={isGeneratingPDF}
+                className="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                <Download className="mr-2 h-4 w-4" />
+                {isGeneratingPDF ? 'Generating...' : 'Download PDF'}
+              </Button>
+            </div>
+          )}
+        </div>
       </CardContent>
     </Card>
   )
@@ -934,16 +955,6 @@ export default function EditCV() {
         </div>
       </div>
 
-      {/* Salary Expectations */}
-      {cvData.salary.expectation && (
-        <div className="mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-3 border-b border-gray-300 pb-1">Salary Expectations</h2>
-          <div className="text-sm">
-            {cvData.salary.currency} {cvData.salary.expectation} per month
-          </div>
-        </div>
-      )}
-
       {/* Languages */}
       {cvData.languages.length > 0 && (
         <div className="mb-6">
@@ -996,11 +1007,11 @@ export default function EditCV() {
       case 3:
         return renderExperienceForm()
       case 4:
-        return renderSalaryForm()
-      case 5:
         return renderLanguagesForm()
-      case 6:
+      case 5:
         return renderRefereesForm()
+      case 6:
+        return renderSubmitForm()
       default:
         return null
     }
@@ -1030,9 +1041,12 @@ export default function EditCV() {
           <div className="flex items-center justify-between mt-6">
             {[1, 2, 3, 4, 5, 6].map((step) => (
               <div key={step} className="flex items-center">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                  currentStep >= step ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
-                }`}>
+                <div 
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium cursor-pointer transition-colors ${
+                    currentStep >= step ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                  }`}
+                  onClick={() => jumpToStep(step)}
+                >
                   {step}
                 </div>
                 {step < 6 && <div className={`w-16 h-1 mx-2 ${
@@ -1055,6 +1069,7 @@ export default function EditCV() {
                 variant="outline"
                 onClick={prevStep}
                 disabled={currentStep === 1}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Previous
