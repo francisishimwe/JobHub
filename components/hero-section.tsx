@@ -13,8 +13,8 @@ export function HeroSection() {
   const [selectedType, setSelectedType] = useState("")
 
   const opportunityTypes = [
-    // Hide Featured tab if there are truly 0 active featured items (prevents dead-end UX)
-    ...(featuredCount > 0 ? [{ value: "All", label: "Featured", icon: Star }] : []),
+    // Keep Featured tab visible; the list falls back to recent jobs if there are 0 featured items.
+    { value: "All", label: "Featured", icon: Star },
     { value: "Job", label: "Jobs", icon: BriefcaseBusiness },
     { value: "Tender", label: "Tenders", icon: FileText },
     { value: "Internship", label: "Internships", icon: GraduationCap },

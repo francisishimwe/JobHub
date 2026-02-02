@@ -97,6 +97,7 @@ export async function POST(request: NextRequest) {
         featured,
         description,
         attachment_url,
+        application_link,
         status,
         approved,
         created_at
@@ -111,6 +112,7 @@ export async function POST(request: NextRequest) {
         ${body.featured || false},
         ${body.description || null},
         ${body.attachment_url || null},
+        ${body.application_link || null},
         ${'published'},
         ${true},
         ${now}
@@ -135,6 +137,7 @@ export async function POST(request: NextRequest) {
       featured: newJob.featured,
       description: newJob.description,
       attachment_url: newJob.attachment_url,
+      application_link: newJob.application_link,
       status: newJob.status,
       approved: newJob.approved,
       created_at: newJob.created_at

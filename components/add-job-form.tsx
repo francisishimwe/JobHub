@@ -125,6 +125,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         job_type: formData.job_type || null,
         opportunity_type: formData.opportunity_type,
         deadline: formData.deadline || null,
+        application_link: formData.application_link?.trim() || null,
         attachment_url: formData.attachment_url?.trim() || null,
         featured: false,
       }
