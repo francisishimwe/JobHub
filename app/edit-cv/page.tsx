@@ -1028,8 +1028,8 @@ export default function EditCV() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-50 p-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
+      <div className="max-w-7xl mx-auto" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex justify-between items-center">
@@ -1068,13 +1068,13 @@ export default function EditCV() {
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
           {/* Form Section */}
-          <div className="space-y-4">
+          <div className="space-y-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
             {renderStepForm()}
             
             {/* Navigation */}
-            <div className="flex justify-between">
+            <div className="flex justify-between" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
               <Button
                 variant="outline"
                 onClick={prevStep}
@@ -1095,10 +1095,10 @@ export default function EditCV() {
           </div>
 
           {/* Preview Section */}
-          <div className="lg:sticky lg:top-4">
-            <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="lg:sticky lg:top-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
+            <div className="bg-white rounded-lg shadow-sm p-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
               <h2 className="text-lg font-semibold mb-4">A4 Preview</h2>
-              <div className="overflow-auto max-h-[800px] border">
+              <div className="overflow-auto max-h-[800px] border" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
                 {renderCVPreview()}
               </div>
             </div>
