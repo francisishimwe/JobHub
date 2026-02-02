@@ -882,7 +882,7 @@ export default function EditCV() {
   const renderCVPreview = () => (
     <div 
       ref={cvPreviewRef}
-      className="bg-white p-8 shadow-lg"
+      className="bg-white shadow-lg"
       style={{ 
         width: '210mm', 
         minHeight: '297mm', 
@@ -891,7 +891,12 @@ export default function EditCV() {
         wordBreak: 'break-word',
         overflowWrap: 'break-word',
         whiteSpace: 'pre-wrap',
-        display: 'block'
+        hyphens: 'auto',
+        paddingLeft: '1cm',
+        paddingRight: '1cm',
+        paddingTop: '2cm',
+        paddingBottom: '2cm',
+        boxSizing: 'border-box'
       }}
     >
       {/* Header */}

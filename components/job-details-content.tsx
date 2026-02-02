@@ -144,13 +144,13 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Description */}
                 {job.description && (
-                    <div className="bg-white p-10 rounded-lg border shadow-sm" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', display: 'block' }}>
+                    <div className="bg-white p-10 rounded-lg border shadow-sm" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
                         <h3 className="text-xl font-bold italic mb-6 text-foreground">Job Description</h3>
                         <div
                             className="prose prose-lg max-w-none text-foreground leading-relaxed
                                 [&_p]:mb-6 [&_p]:leading-relaxed [&_p]:break-words [&_p]:overflow-wrap-break-word
-                                [&_ul]:list-disc [&_ul]:pl-8 [&_ul]:mb-6 [&_ul]:space-y-3 [&_ul]:ml-5
-                                [&_ol]:list-decimal [&_ol]:pl-8 [&_ol]:mb-6 [&_ol]:space-y-3 [&_ol]:ml-5
+                                [&_ul]:list-disc [&_ul]:pl-8 [&_ul]:mb-6 [&_ul]:space-y-3 [&_ul]:ml-8
+                                [&_ol]:list-decimal [&_ol]:pl-8 [&_ol]:mb-6 [&_ol]:space-y-3 [&_ol]:ml-8
                                 [&_li]:mb-3 [&_li]:pl-2 [&_li]:leading-relaxed [&_li]:break-words [&_li]:overflow-wrap-break-word
                                 [&_strong]:font-bold [&_strong]:italic [&_strong]:text-foreground
                                 [&_b]:font-bold [&_b]:italic [&_b]:text-foreground
