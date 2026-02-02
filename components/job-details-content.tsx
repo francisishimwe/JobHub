@@ -144,27 +144,27 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Description */}
                 {job.description && (
-                    <div>
-                        <h3 className="text-lg font-bold mb-4">Job Description</h3>
+                    <div className="bg-white p-10 rounded-lg border shadow-sm break-words overflow-wrap-break-word">
+                        <h3 className="text-xl font-bold italic mb-6 text-foreground">Job Description</h3>
                         <div
-                            className="prose prose-sm max-w-none text-foreground leading-relaxed
-                                [&_p]:mb-4 [&_p]:leading-7
-                                [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4
-                                [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-4
-                                [&_li]:mb-2 [&_li]:pl-1
-                                [&_strong]:font-bold [&_strong]:text-foreground
-                                [&_b]:font-bold [&_b]:text-foreground
-                                [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:text-foreground
-                                [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_h2]:text-foreground
-                                [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 [&_h3]:text-foreground
-                                [&_h4]:font-bold [&_h4]:mb-2 [&_h4]:text-foreground
-                                [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary/80
-                                [&_blockquote]:border-l-4 [&_blockquote]:border-muted [&_blockquote]:pl-4 [&_blockquote]:italic
-                                [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded [&_code]:font-mono [&_code]:text-sm
-                                [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-md [&_img]:my-4
-                                [&_table]:w-full [&_table]:border-collapse [&_table]:my-4 [&_table]:overflow-hidden
-                                [&_td]:border [&_td]:border-border [&_td]:p-2 [&_td]:align-top
-                                [&_th]:border [&_th]:border-border [&_th]:p-2 [&_th]:bg-muted/50 [&_th]:font-bold [&_th]:text-left
+                            className="prose prose-lg max-w-none text-foreground leading-relaxed
+                                [&_p]:mb-6 [&_p]:leading-relaxed
+                                [&_ul]:list-disc [&_ul]:pl-8 [&_ul]:mb-6 [&_ul]:space-y-3
+                                [&_ol]:list-decimal [&_ol]:pl-8 [&_ol]:mb-6 [&_ol]:space-y-3
+                                [&_li]:mb-3 [&_li]:pl-2 [&_li]:leading-relaxed
+                                [&_strong]:font-bold [&_strong]:italic [&_strong]:text-foreground
+                                [&_b]:font-bold [&_b]:italic [&_b]:text-foreground
+                                [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:italic [&_h1]:mb-6 [&_h1]:text-foreground
+                                [&_h2]:text-xl [&_h2]:font-bold [&_h2]:italic [&_h2]:mb-5 [&_h2]:text-foreground
+                                [&_h3]:text-lg [&_h3]:font-bold [&_h3]:italic [&_h3]:mb-4 [&_h3]:text-foreground
+                                [&_h4]:font-bold [&_h4]:italic [&_h4]:mb-3 [&_h4]:text-foreground
+                                [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary/80 [&_a]:break-all
+                                [&_blockquote]:border-l-4 [&_blockquote]:border-muted [&_blockquote]:pl-6 [&_blockquote]:italic [&_blockquote]:leading-relaxed
+                                [&_code]:bg-muted [&_code]:px-2 [&_code]:py-1 [&_code]:rounded [&_code]:font-mono [&_code]:text-sm break-all
+                                [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-md [&_img]:my-6
+                                [&_table]:w-full [&_table]:border-collapse [&_table]:my-6 [&_table]:overflow-hidden break-words
+                                [&_td]:border [&_td]:border-border [&_td]:p-3 [&_td]:align-top break-words
+                                [&_th]:border [&_th]:border-border [&_th]:p-3 [&_th]:bg-muted/50 [&_th]:font-bold [&_th]:italic [&_th]:text-left
                             "
                             dangerouslySetInnerHTML={{ __html: job.description }}
                         />

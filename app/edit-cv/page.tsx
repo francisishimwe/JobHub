@@ -882,11 +882,12 @@ export default function EditCV() {
   const renderCVPreview = () => (
     <div 
       ref={cvPreviewRef}
-      className="bg-white p-8 shadow-lg"
+      className="bg-white p-8 shadow-lg break-words overflow-wrap-break-word"
       style={{ 
         width: '210mm', 
         minHeight: '297mm', 
-        fontFamily: '"Georgia", serif'
+        fontFamily: '"Georgia", serif',
+        lineHeight: '1.6'
       }}
     >
       {/* Header */}
@@ -894,7 +895,7 @@ export default function EditCV() {
         <h1 className="text-3xl font-bold text-gray-900">
           {cvData.personalInfo.firstName} {cvData.personalInfo.lastName}
         </h1>
-        <div className="text-sm text-gray-600 mt-2">
+        <div className="text-sm text-gray-600 mt-2 break-all">
           {cvData.personalInfo.email && <span>{cvData.personalInfo.email} • </span>}
           {cvData.personalInfo.phone && <span>{cvData.personalInfo.phone} • </span>}
           {cvData.personalInfo.nationality && <span>{cvData.personalInfo.nationality}</span>}
@@ -903,8 +904,8 @@ export default function EditCV() {
 
       {/* Personal Information */}
       <div className="mb-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-3 border-b border-gray-300 pb-1">Personal Information</h2>
-        <div className="grid grid-cols-2 gap-2 text-sm">
+        <h2 className="text-lg font-bold italic text-gray-900 mb-3 border-b border-gray-300 pb-1">Personal Information</h2>
+        <div className="grid grid-cols-2 gap-2 text-sm leading-relaxed">
           <div><strong>Birth Date:</strong> {cvData.personalInfo.birthDate || 'Not specified'}</div>
           <div><strong>Place of Birth:</strong> {cvData.personalInfo.placeOfBirth || 'Not specified'}</div>
           <div><strong>Gender:</strong> {cvData.personalInfo.gender || 'Not specified'}</div>
@@ -916,8 +917,8 @@ export default function EditCV() {
         {/* Residence Information */}
         {(cvData.personalInfo.residence.district || cvData.personalInfo.residence.sector || cvData.personalInfo.residence.cell || cvData.personalInfo.residence.village) && (
           <div className="mt-3">
-            <h3 className="font-semibold text-sm mb-2">Residence:</h3>
-            <div className="text-sm text-gray-600">
+            <h3 className="font-semibold italic text-sm mb-2">Residence:</h3>
+            <div className="text-sm text-gray-600 leading-relaxed">
               {cvData.personalInfo.residence.village && <span>{cvData.personalInfo.residence.village}, </span>}
               {cvData.personalInfo.residence.cell && <span>{cvData.personalInfo.residence.cell}, </span>}
               {cvData.personalInfo.residence.sector && <span>{cvData.personalInfo.residence.sector}, </span>}
@@ -929,9 +930,9 @@ export default function EditCV() {
 
       {/* Education */}
       <div className="mb-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-3 border-b border-gray-300 pb-1">Education</h2>
+        <h2 className="text-lg font-bold italic text-gray-900 mb-3 border-b border-gray-300 pb-1">Education</h2>
         {cvData.education.map((edu, index) => (
-          <div key={index} className="mb-3">
+          <div key={index} className="mb-3 leading-relaxed">
             <div className="font-semibold">{edu.degree} in {edu.fieldOfStudy}</div>
             <div className="text-sm text-gray-600">
               {edu.institution} • Graduated {edu.yearOfGraduation}
@@ -943,8 +944,8 @@ export default function EditCV() {
 
       {/* Experience */}
       <div className="mb-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-3 border-b border-gray-300 pb-1">Experience</h2>
-        <div className="mb-3">
+        <h2 className="text-lg font-bold italic text-gray-900 mb-3 border-b border-gray-300 pb-1">Experience</h2>
+        <div className="mb-3 leading-relaxed">
           <div className="font-semibold">{cvData.experience.level}</div>
           <div className="text-sm text-gray-600">{cvData.experience.years} years of experience</div>
           {cvData.experience.currentCompany && (
@@ -958,10 +959,10 @@ export default function EditCV() {
       {/* Languages */}
       {cvData.languages.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-3 border-b border-gray-300 pb-1">Language Proficiency</h2>
+          <h2 className="text-lg font-bold italic text-gray-900 mb-3 border-b border-gray-300 pb-1">Language Proficiency</h2>
           <div className="space-y-3">
             {cvData.languages.map((lang, index) => (
-              <div key={index} className="text-sm">
+              <div key={index} className="text-sm leading-relaxed">
                 <div className="font-medium mb-1">{lang.name}</div>
                 <div className="grid grid-cols-3 gap-2 text-xs text-gray-600">
                   <div><strong>Reading:</strong> {lang.proficiency.reading}</div>
@@ -977,15 +978,15 @@ export default function EditCV() {
       {/* Referees */}
       {cvData.referees.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-3 border-b border-gray-300 pb-1">Referees</h2>
+          <h2 className="text-lg font-bold italic text-gray-900 mb-3 border-b border-gray-300 pb-1">Referees</h2>
           <div className="space-y-3">
             {cvData.referees.map((referee, index) => (
-              <div key={index} className="text-sm">
+              <div key={index} className="text-sm leading-relaxed">
                 <div className="font-medium">{referee.name}</div>
                 <div className="text-gray-600">
                   {referee.position} at {referee.organization}
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-500 break-all">
                   {referee.phone && <span>📞 {referee.phone}</span>}
                   {referee.phone && referee.email && <span> • </span>}
                   {referee.email && <span>✉️ {referee.email}</span>}
