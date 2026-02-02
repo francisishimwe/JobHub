@@ -1022,6 +1022,20 @@ export default function EditCV() {
         return renderRefereesForm()
       case 6:
         return renderSubmitForm()
+      default:
+        return null
+    }
+  }
+
+  return (
+    <div className="cv-builder-container min-h-screen bg-gray-50">
+      <div className="cv-builder-content">
+        {/* Header */}
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">CV Builder</h1>
+              <p className="text-gray-600">Create your professional CV in minutes</p>
             </div>
             <Button
               onClick={generatePDF}
@@ -1049,6 +1063,23 @@ export default function EditCV() {
                   currentStep > step ? 'bg-blue-600' : 'bg-gray-200'
                 }`} />}
               </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="space-y-6">
+          {/* Form Section */}
+          <div className="space-y-4">
+            {renderStepForm()}
+            
+            {/* Navigation */}
+            <div className="flex justify-between">
+              <Button
+                variant="outline"
+                onClick={prevStep}
+                disabled={currentStep === 1}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Previous
@@ -1064,10 +1095,10 @@ export default function EditCV() {
           </div>
 
           {/* Preview Section */}
-          <div style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
-            <div className="bg-white rounded-lg shadow-sm p-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
+          <div>
+            <div className="bg-white rounded-lg shadow-sm p-4">
               <h2 className="text-lg font-semibold mb-4">A4 Preview</h2>
-              <div className="overflow-auto max-h-[800px] border" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto' }}>
+              <div className="overflow-auto max-h-[800px] border">
                 {renderCVPreview()}
               </div>
             </div>
