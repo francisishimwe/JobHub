@@ -51,13 +51,14 @@ export function JobProvider({ children }: { children: ReactNode }) {
         console.log(`✓ Formatted: ${formattedJobs.length} jobs mapped to UI format`)
         setJobs(prev => isNewSearch ? formattedJobs : [...prev, ...formattedJobs])
         setHasMore(data.hasMore)
-              if (isNewSearch) {
-                if (data.featuredGroupCount !== undefined) {
-                  setFeaturedCount(data.featuredGroupCount)
-                } else if (data.featuredCount !== undefined) {
-                  setFeaturedCount(data.featuredCount)
-                }
-              }
+        if (isNewSearch) {
+          // Prefer the canonical featuredCount (server-synced); featuredGroupCount is legacy.
+          if (data.featuredCount !== undefined) {
+            setFeaturedCount(Number(data.featuredCount) || 0)
+          } else if (data.featuredGroupCount !== undefined) {
+            setFeaturedCount(Number(data.featuredGroupCount) || 0)
+          }
+        }
       } else {
         console.warn('⚠ No jobs array in API response:', data)
         setJobs(isNewSearch ? [] : jobs)
@@ -89,11 +90,15 @@ export function JobProvider({ children }: { children: ReactNode }) {
     if (filters.opportunityTypes?.length > 0) {
       filtered = filtered.filter(j => filters.opportunityTypes.includes(j.opportunityType || j.opportunity_type || ''))
     } else {
-      // When no opportunity types are selected (Featured is clicked), show only featured jobs
-      filtered = filtered.filter(j => j.featured)
+      // When no opportunity types are selected (Featured is clicked):
+      // - If there are active featured items, show only featured.
+      // - If there are truly 0 featured items, fall back to showing recent jobs (avoid empty screen).
+      if (featuredCount > 0) {
+        filtered = filtered.filter(j => j.featured)
+      }
     }
     setFilteredJobs(filtered)
-  }, [jobs, filters])
+  }, [jobs, filters, featuredCount])
 
   const loadMore = () => {
     if (!isLoading && hasMore) {

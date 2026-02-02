@@ -8,6 +8,14 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '15')
     const offset = page * limit
 
+    // "Active" = published + approved + not expired (deadline in future or null)
+    // (Your schema allows status: published|draft|closed; we exclude expired by deadline)
+    const activeWhere = sql`
+      status = 'published'
+      AND approved = true
+      AND (deadline IS NULL OR deadline >= CURRENT_DATE)
+    `
+
     const jobs = await sql`
       SELECT 
         id,
@@ -24,35 +32,20 @@ export async function GET(request: NextRequest) {
         approved,
         created_at
       FROM jobs
-      WHERE status = 'published' AND approved = true
-      ORDER BY created_at DESC
+      WHERE ${activeWhere}
+      ORDER BY featured DESC, created_at DESC
       LIMIT ${limit} OFFSET ${offset}
     `
 
     const countResult = await sql`
       SELECT COUNT(*) as total FROM jobs 
-      WHERE status = 'published' AND approved = true
+      WHERE ${activeWhere}
     `
 
     const featuredCountResult = await sql`
       SELECT COUNT(*) as total FROM jobs 
-      WHERE status = 'published' AND approved = true AND featured = true
+      WHERE ${activeWhere} AND featured = true
     `
-
-    const countsByTypeResult = await sql`
-      SELECT opportunity_type, COUNT(*) as total FROM jobs
-      WHERE status = 'published' AND approved = true
-      GROUP BY opportunity_type
-    `
-
-    // Compute combined count for the Featured group (these opportunity types)
-    const featuredGroupTypes = ['Job', 'Tender', 'Internship', 'Scholarship', 'Education', 'Blog']
-    let featuredGroupCount = 0
-    for (const row of countsByTypeResult) {
-      if (featuredGroupTypes.includes(row.opportunity_type)) {
-        featuredGroupCount += Number(row.total || 0)
-      }
-    }
 
     const total = countResult[0]?.total || 0
     const featuredCount = featuredCountResult[0]?.total || 0
@@ -61,7 +54,8 @@ export async function GET(request: NextRequest) {
       jobs,
       total,
       featuredCount,
-      featuredGroupCount,
+      // Back-compat for older client code paths: keep field but ensure it matches featuredCount
+      featuredGroupCount: featuredCount,
       page,
       limit,
       hasMore: offset + limit < total

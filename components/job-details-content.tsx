@@ -212,11 +212,21 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 )}
 
-                {/* Stats */}
-                <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border">
-                    <span className="text-sm font-medium text-muted-foreground">Total Applicants</span>
-                    <span className="text-lg font-bold">{applicantCount}</span>
-                </div>
+                {/* Apply CTA or Applicant Count */}
+                {job.applicationLink ? (
+                    <button
+                        type="button"
+                        onClick={handleApply}
+                        className="bg-[#28a745] hover:bg-[#218838] text-white font-bold py-4 px-10 rounded uppercase text-center w-full transition-colors"
+                    >
+                        Apply to this job
+                    </button>
+                ) : (
+                    <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border">
+                        <span className="text-sm font-medium text-muted-foreground">Total Applicants</span>
+                        <span className="text-lg font-bold">{applicantCount}</span>
+                    </div>
+                )}
 
                 {/* Share on WhatsApp and Apply Now Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t">
