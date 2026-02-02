@@ -27,20 +27,32 @@ interface CVData {
     email: string
     phone: string
     birthDate: string
+    placeOfBirth: string
+    fathersName: string
+    mothersName: string
     nationality: string
     gender: string
+    residence: {
+      district: string
+      sector: string
+      cell: string
+      village: string
+    }
   }
   education: {
     degree: string
     fieldOfStudy: string
     institution: string
-    year: string
+    yearOfGraduation: string
+    countryOfStudy: string
   }[]
   experience: {
     level: string
     years: string
     currentCompany?: string
     currentRole?: string
+    employerPhone?: string
+    employerEmail?: string
   }
   salary: {
     expectation: string
@@ -48,7 +60,18 @@ interface CVData {
   }
   languages: {
     name: string
-    level: 'Basic' | 'Intermediate' | 'Advanced' | 'Fluent'
+    proficiency: {
+      reading: 'Excellent' | 'Very Good' | 'Good' | 'Basic'
+      writing: 'Excellent' | 'Very Good' | 'Good' | 'Basic'
+      speaking: 'Excellent' | 'Very Good' | 'Good' | 'Basic'
+    }
+  }[]
+  referees: {
+    name: string
+    position: string
+    organization: string
+    phone: string
+    email: string
   }[]
 }
 
@@ -69,26 +92,46 @@ export default function EditCV() {
       email: '',
       phone: '',
       birthDate: '',
+      placeOfBirth: '',
+      fathersName: '',
+      mothersName: '',
       nationality: 'Rwanda',
-      gender: ''
+      gender: '',
+      residence: {
+        district: '',
+        sector: '',
+        cell: '',
+        village: ''
+      }
     },
     education: [{
       degree: '',
       fieldOfStudy: '',
       institution: '',
-      year: ''
+      yearOfGraduation: '',
+      countryOfStudy: ''
     }],
     experience: {
       level: '',
       years: '',
       currentCompany: '',
-      currentRole: ''
+      currentRole: '',
+      employerPhone: '',
+      employerEmail: ''
     },
     salary: {
       expectation: '',
       currency: 'RWF'
     },
-    languages: []
+    languages: [{
+      name: 'Kinyarwanda',
+      proficiency: {
+        reading: 'Excellent',
+        writing: 'Excellent',
+        speaking: 'Excellent'
+      }
+    }],
+    referees: []
   })
 
   const updatePersonalInfo = (field: keyof CVData['personalInfo'], value: string) => {
@@ -98,10 +141,20 @@ export default function EditCV() {
     }))
   }
 
+  const updateResidence = (field: keyof CVData['personalInfo']['residence'], value: string) => {
+    setCVData(prev => ({
+      ...prev,
+      personalInfo: { 
+        ...prev.personalInfo, 
+        residence: { ...prev.personalInfo.residence, [field]: value }
+      }
+    }))
+  }
+
   const addEducation = () => {
     setCVData(prev => ({
       ...prev,
-      education: [...prev.education, { degree: '', fieldOfStudy: '', institution: '', year: '' }]
+      education: [...prev.education, { degree: '', fieldOfStudy: '', institution: '', yearOfGraduation: '', countryOfStudy: '' }]
     }))
   }
 
@@ -124,23 +177,56 @@ export default function EditCV() {
   const addLanguage = () => {
     setCVData(prev => ({
       ...prev,
-      languages: [...prev.languages, { name: '', level: 'Basic' }]
+      languages: [...prev.languages, { 
+        name: '', 
+        proficiency: {
+          reading: 'Basic',
+          writing: 'Basic',
+          speaking: 'Basic'
+        }
+      }]
     }))
   }
 
-  const updateLanguage = (index: number, field: 'name' | 'level', value: string) => {
+  const updateLanguage = (index: number, field: 'name' | 'reading' | 'writing' | 'speaking', value: string) => {
     setCVData(prev => ({
       ...prev,
-      languages: prev.languages.map((lang, i) => 
-        i === index ? { ...lang, [field]: value } : lang
+      languages: prev.languages.map((lang, i) => {
+        if (i === index) {
+          if (field === 'name') {
+            return { ...lang, name: value }
+          } else {
+            return {
+              ...lang,
+              proficiency: { ...lang.proficiency, [field]: value }
+            }
+          }
+        }
+        return lang
+      })
+    }))
+  }
+
+  const addReferee = () => {
+    setCVData(prev => ({
+      ...prev,
+      referees: [...prev.referees, { name: '', position: '', organization: '', phone: '', email: '' }]
+    }))
+  }
+
+  const updateReferee = (index: number, field: keyof CVData['referees'][0], value: string) => {
+    setCVData(prev => ({
+      ...prev,
+      referees: prev.referees.map((ref, i) => 
+        i === index ? { ...ref, [field]: value } : ref
       )
     }))
   }
 
-  const removeLanguage = (index: number) => {
+  const removeReferee = (index: number) => {
     setCVData(prev => ({
       ...prev,
-      languages: prev.languages.filter((_, i) => i !== index)
+      referees: prev.referees.filter((_, i) => i !== index)
     }))
   }
 
@@ -183,7 +269,7 @@ export default function EditCV() {
   }
 
   const nextStep = () => {
-    if (currentStep < 5) setCurrentStep(currentStep + 1)
+    if (currentStep < 6) setCurrentStep(currentStep + 1)
   }
 
   const prevStep = () => {
@@ -253,6 +339,15 @@ export default function EditCV() {
             />
           </div>
           <div>
+            <Label htmlFor="placeOfBirth">Place of Birth</Label>
+            <Input
+              id="placeOfBirth"
+              value={cvData.personalInfo.placeOfBirth}
+              onChange={(e) => updatePersonalInfo('placeOfBirth', e.target.value)}
+              placeholder="Kigali, Rwanda"
+            />
+          </div>
+          <div>
             <Label htmlFor="nationality">Nationality</Label>
             <Select value={cvData.personalInfo.nationality} onValueChange={(value) => updatePersonalInfo('nationality', value)}>
               <SelectTrigger>
@@ -269,19 +364,128 @@ export default function EditCV() {
               </SelectContent>
             </Select>
           </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="gender">Gender</Label>
-            <Select value={cvData.personalInfo.gender} onValueChange={(value) => updatePersonalInfo('gender', value)}>
+            <Label htmlFor="fathersName">Father's Name</Label>
+            <Input
+              id="fathersName"
+              value={cvData.personalInfo.fathersName}
+              onChange={(e) => updatePersonalInfo('fathersName', e.target.value)}
+              placeholder="Enter father's name"
+            />
+          </div>
+          <div>
+            <Label htmlFor="mothersName">Mother's Name</Label>
+            <Input
+              id="mothersName"
+              value={cvData.personalInfo.mothersName}
+              onChange={(e) => updatePersonalInfo('mothersName', e.target.value)}
+              placeholder="Enter mother's name"
+            />
+          </div>
+        </div>
+
+        <div>
+          <Label htmlFor="gender">Gender</Label>
+          <Select value={cvData.personalInfo.gender} onValueChange={(value) => updatePersonalInfo('gender', value)}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Male">Male</SelectItem>
+              <SelectItem value="Female">Female</SelectItem>
+              <SelectItem value="Other">Other</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Residence Section */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium">Residence Information</h3>
+          
+          <div>
+            <Label htmlFor="district">District</Label>
+            <Select value={cvData.personalInfo.residence.district} onValueChange={(value) => updateResidence('district', value)}>
               <SelectTrigger>
-                <SelectValue />
+                <SelectValue placeholder="Select district" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Male">Male</SelectItem>
-                <SelectItem value="Female">Female</SelectItem>
-                <SelectItem value="Other">Other</SelectItem>
+                {/* Kigali City */}
+                <SelectItem value="Nyarugenge">Nyarugenge</SelectItem>
+                <SelectItem value="Gasabo">Gasabo</SelectItem>
+                <SelectItem value="Kicukiro">Kicukiro</SelectItem>
+                
+                {/* Northern Province */}
+                <SelectItem value="Musanze">Musanze</SelectItem>
+                <SelectItem value="Burera">Burera</SelectItem>
+                <SelectItem value="Gicumbi">Gicumbi</SelectItem>
+                <SelectItem value="Rulindo">Rulindo</SelectItem>
+                <SelectItem value="Gakenke">Gakenke</SelectItem>
+                
+                {/* Southern Province */}
+                <SelectItem value="Huye">Huye</SelectItem>
+                <SelectItem value="Nyanza">Nyanza</SelectItem>
+                <SelectItem value="Ruhango">Ruhango</SelectItem>
+                <SelectItem value="Muhanga">Muhanga</SelectItem>
+                <SelectItem value="Kamonyi">Kamonyi</SelectItem>
+                <SelectItem value="Nyamagabe">Nyamagabe</SelectItem>
+                <SelectItem value="Nyagatare">Nyagatare</SelectItem>
+                <SelectItem value="Gisagara">Gisagara</SelectItem>
+                
+                {/* Eastern Province */}
+                <SelectItem value="Rwamagana">Rwamagana</SelectItem>
+                <SelectItem value="Kayonza">Kayonza</SelectItem>
+                <SelectItem value="Gatsibo">Gatsibo</SelectItem>
+                <SelectItem value="Nyagatare">Nyagatare</SelectItem>
+                <SelectItem value="Kirehe">Kirehe</SelectItem>
+                <SelectItem value="Ngoma">Ngoma</SelectItem>
+                <SelectItem value="Bugesera">Bugesera</SelectItem>
+                
+                {/* Western Province */}
+                <SelectItem value="Rubavu">Rubavu</SelectItem>
+                <SelectItem value="Rusizi">Rusizi</SelectItem>
+                <SelectItem value="Karongi">Karongi</SelectItem>
+                <SelectItem value="Nyabihu">Nyabihu</SelectItem>
+                <SelectItem value="Rutsiro">Rutsiro</SelectItem>
+                <SelectItem value="Ngororero">Ngororero</SelectItem>
+                <SelectItem value="Nyamasheke">Nyamasheke</SelectItem>
               </SelectContent>
             </Select>
           </div>
+
+          {cvData.personalInfo.residence.district && (
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <Label htmlFor="sector">Sector (Umurenge)</Label>
+                <Input
+                  id="sector"
+                  value={cvData.personalInfo.residence.sector}
+                  onChange={(e) => updateResidence('sector', e.target.value)}
+                  placeholder="Enter sector name"
+                />
+              </div>
+              <div>
+                <Label htmlFor="cell">Cell (Akagari)</Label>
+                <Input
+                  id="cell"
+                  value={cvData.personalInfo.residence.cell}
+                  onChange={(e) => updateResidence('cell', e.target.value)}
+                  placeholder="Enter cell name"
+                />
+              </div>
+              <div>
+                <Label htmlFor="village">Village (Umudugudu)</Label>
+                <Input
+                  id="village"
+                  value={cvData.personalInfo.residence.village}
+                  onChange={(e) => updateResidence('village', e.target.value)}
+                  placeholder="Enter village name"
+                />
+              </div>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
@@ -334,11 +538,21 @@ export default function EditCV() {
                 />
               </div>
               <div>
-                <Label>Year</Label>
+                <Label>Year of Graduation</Label>
                 <Input
-                  value={edu.year}
-                  onChange={(e) => updateEducation(index, 'year', e.target.value)}
+                  value={edu.yearOfGraduation}
+                  onChange={(e) => updateEducation(index, 'yearOfGraduation', e.target.value)}
                   placeholder="2020"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label>Country of Study</Label>
+                <Input
+                  value={edu.countryOfStudy}
+                  onChange={(e) => updateEducation(index, 'countryOfStudy', e.target.value)}
+                  placeholder="Rwanda"
                 />
               </div>
             </div>
@@ -419,6 +633,32 @@ export default function EditCV() {
             />
           </div>
         </div>
+        
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <Label>Employer Phone (Optional)</Label>
+            <Input
+              value={cvData.experience.employerPhone}
+              onChange={(e) => setCVData(prev => ({
+                ...prev,
+                experience: { ...prev.experience, employerPhone: e.target.value }
+              }))}
+              placeholder="+250 788 123 456"
+            />
+          </div>
+          <div>
+            <Label>Employer Email (Optional)</Label>
+            <Input
+              type="email"
+              value={cvData.experience.employerEmail}
+              onChange={(e) => setCVData(prev => ({
+                ...prev,
+                experience: { ...prev.experience, employerEmail: e.target.value }
+              }))}
+              placeholder="employer@company.com"
+            />
+          </div>
+        </div>
       </CardContent>
     </Card>
   )
@@ -470,13 +710,22 @@ export default function EditCV() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Languages className="h-5 w-5" />
-          Spoken Languages
+          Language Proficiency
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {cvData.languages.map((lang, index) => (
-          <div key={index} className="flex gap-3 items-end">
-            <div className="flex-1">
+          <div key={index} className="p-4 border rounded-lg space-y-4">
+            <div className="flex justify-between items-center">
+              <h4 className="font-medium">Language {index + 1}</h4>
+              {cvData.languages.length > 1 && (
+                <Button variant="outline" size="sm" onClick={() => removeLanguage(index)}>
+                  Remove
+                </Button>
+              )}
+            </div>
+            
+            <div>
               <Label>Language</Label>
               <Input
                 value={lang.name}
@@ -484,29 +733,126 @@ export default function EditCV() {
                 placeholder="English, French, Kinyarwanda"
               />
             </div>
-            <div>
-              <Label>Level</Label>
-              <Select value={lang.level} onValueChange={(value) => updateLanguage(index, 'level', value as any)}>
-                <SelectTrigger className="w-32">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Basic">Basic</SelectItem>
-                  <SelectItem value="Intermediate">Intermediate</SelectItem>
-                  <SelectItem value="Advanced">Advanced</SelectItem>
-                  <SelectItem value="Fluent">Fluent</SelectItem>
-                </SelectContent>
-              </Select>
+            
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <Label>Reading</Label>
+                <Select value={lang.proficiency.reading} onValueChange={(value) => updateLanguage(index, 'reading', value)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Excellent">Excellent</SelectItem>
+                    <SelectItem value="Very Good">Very Good</SelectItem>
+                    <SelectItem value="Good">Good</SelectItem>
+                    <SelectItem value="Basic">Basic</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Writing</Label>
+                <Select value={lang.proficiency.writing} onValueChange={(value) => updateLanguage(index, 'writing', value)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Excellent">Excellent</SelectItem>
+                    <SelectItem value="Very Good">Very Good</SelectItem>
+                    <SelectItem value="Good">Good</SelectItem>
+                    <SelectItem value="Basic">Basic</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Speaking</Label>
+                <Select value={lang.proficiency.speaking} onValueChange={(value) => updateLanguage(index, 'speaking', value)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Excellent">Excellent</SelectItem>
+                    <SelectItem value="Very Good">Very Good</SelectItem>
+                    <SelectItem value="Good">Good</SelectItem>
+                    <SelectItem value="Basic">Basic</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            {cvData.languages.length > 1 && (
-              <Button variant="outline" size="sm" onClick={() => removeLanguage(index)}>
-                Remove
-              </Button>
-            )}
           </div>
         ))}
         <Button variant="outline" onClick={addLanguage} className="w-full">
           Add Language
+        </Button>
+      </CardContent>
+    </Card>
+  )
+
+  const renderRefereesForm = () => (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <User className="h-5 w-5" />
+          Referees
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {cvData.referees.map((referee, index) => (
+          <div key={index} className="p-4 border rounded-lg space-y-3">
+            <div className="flex justify-between items-center">
+              <h4 className="font-medium">Referee {index + 1}</h4>
+              <Button variant="outline" size="sm" onClick={() => removeReferee(index)}>
+                Remove
+              </Button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label>Full Name</Label>
+                <Input
+                  value={referee.name}
+                  onChange={(e) => updateReferee(index, 'name', e.target.value)}
+                  placeholder="Enter referee's full name"
+                />
+              </div>
+              <div>
+                <Label>Position/Title</Label>
+                <Input
+                  value={referee.position}
+                  onChange={(e) => updateReferee(index, 'position', e.target.value)}
+                  placeholder="e.g., Human Resources Manager"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label>Organization</Label>
+                <Input
+                  value={referee.organization}
+                  onChange={(e) => updateReferee(index, 'organization', e.target.value)}
+                  placeholder="e.g., Acme Corporation"
+                />
+              </div>
+              <div>
+                <Label>Phone</Label>
+                <Input
+                  value={referee.phone}
+                  onChange={(e) => updateReferee(index, 'phone', e.target.value)}
+                  placeholder="+250 788 123 456"
+                />
+              </div>
+            </div>
+            <div>
+              <Label>Email</Label>
+              <Input
+                type="email"
+                value={referee.email}
+                onChange={(e) => updateReferee(index, 'email', e.target.value)}
+                placeholder="referee@organization.com"
+              />
+            </div>
+          </div>
+        ))}
+        <Button variant="outline" onClick={addReferee} className="w-full">
+          Add Referee
         </Button>
       </CardContent>
     </Card>
@@ -519,8 +865,7 @@ export default function EditCV() {
       style={{ 
         width: '210mm', 
         minHeight: '297mm', 
-        fontFamily: '"Georgia", serif',
-        fontDisplay: 'swap' // Fix TypeScript error by using correct CSS property syntax for fontDisplay
+        fontFamily: '"Georgia", serif'
       }}
     >
       {/* Header */}
@@ -540,9 +885,25 @@ export default function EditCV() {
         <h2 className="text-lg font-bold text-gray-900 mb-3 border-b border-gray-300 pb-1">Personal Information</h2>
         <div className="grid grid-cols-2 gap-2 text-sm">
           <div><strong>Birth Date:</strong> {cvData.personalInfo.birthDate || 'Not specified'}</div>
+          <div><strong>Place of Birth:</strong> {cvData.personalInfo.placeOfBirth || 'Not specified'}</div>
           <div><strong>Gender:</strong> {cvData.personalInfo.gender || 'Not specified'}</div>
           <div><strong>Nationality:</strong> {cvData.personalInfo.nationality}</div>
+          <div><strong>Father's Name:</strong> {cvData.personalInfo.fathersName || 'Not specified'}</div>
+          <div><strong>Mother's Name:</strong> {cvData.personalInfo.mothersName || 'Not specified'}</div>
         </div>
+        
+        {/* Residence Information */}
+        {(cvData.personalInfo.residence.district || cvData.personalInfo.residence.sector || cvData.personalInfo.residence.cell || cvData.personalInfo.residence.village) && (
+          <div className="mt-3">
+            <h3 className="font-semibold text-sm mb-2">Residence:</h3>
+            <div className="text-sm text-gray-600">
+              {cvData.personalInfo.residence.village && <span>{cvData.personalInfo.residence.village}, </span>}
+              {cvData.personalInfo.residence.cell && <span>{cvData.personalInfo.residence.cell}, </span>}
+              {cvData.personalInfo.residence.sector && <span>{cvData.personalInfo.residence.sector}, </span>}
+              {cvData.personalInfo.residence.district && <span>{cvData.personalInfo.residence.district}</span>}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Education */}
@@ -551,7 +912,10 @@ export default function EditCV() {
         {cvData.education.map((edu, index) => (
           <div key={index} className="mb-3">
             <div className="font-semibold">{edu.degree} in {edu.fieldOfStudy}</div>
-            <div className="text-sm text-gray-600">{edu.institution} • {edu.year}</div>
+            <div className="text-sm text-gray-600">
+              {edu.institution} • Graduated {edu.yearOfGraduation}
+              {edu.countryOfStudy && <span> • {edu.countryOfStudy}</span>}
+            </div>
           </div>
         ))}
       </div>
@@ -583,12 +947,38 @@ export default function EditCV() {
       {/* Languages */}
       {cvData.languages.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-3 border-b border-gray-300 pb-1">Spoken Languages</h2>
-          <div className="grid grid-cols-2 gap-3">
+          <h2 className="text-lg font-bold text-gray-900 mb-3 border-b border-gray-300 pb-1">Language Proficiency</h2>
+          <div className="space-y-3">
             {cvData.languages.map((lang, index) => (
               <div key={index} className="text-sm">
-                <div className="font-medium">{lang.name}</div>
-                <div className="text-gray-600">{lang.level}</div>
+                <div className="font-medium mb-1">{lang.name}</div>
+                <div className="grid grid-cols-3 gap-2 text-xs text-gray-600">
+                  <div><strong>Reading:</strong> {lang.proficiency.reading}</div>
+                  <div><strong>Writing:</strong> {lang.proficiency.writing}</div>
+                  <div><strong>Speaking:</strong> {lang.proficiency.speaking}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Referees */}
+      {cvData.referees.length > 0 && (
+        <div className="mb-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-3 border-b border-gray-300 pb-1">Referees</h2>
+          <div className="space-y-3">
+            {cvData.referees.map((referee, index) => (
+              <div key={index} className="text-sm">
+                <div className="font-medium">{referee.name}</div>
+                <div className="text-gray-600">
+                  {referee.position} at {referee.organization}
+                </div>
+                <div className="text-xs text-gray-500">
+                  {referee.phone && <span>📞 {referee.phone}</span>}
+                  {referee.phone && referee.email && <span> • </span>}
+                  {referee.email && <span>✉️ {referee.email}</span>}
+                </div>
               </div>
             ))}
           </div>
@@ -609,6 +999,8 @@ export default function EditCV() {
         return renderSalaryForm()
       case 5:
         return renderLanguagesForm()
+      case 6:
+        return renderRefereesForm()
       default:
         return null
     }
@@ -636,14 +1028,14 @@ export default function EditCV() {
           
           {/* Progress Steps */}
           <div className="flex items-center justify-between mt-6">
-            {[1, 2, 3, 4, 5].map((step) => (
+            {[1, 2, 3, 4, 5, 6].map((step) => (
               <div key={step} className="flex items-center">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                   currentStep >= step ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
                 }`}>
                   {step}
                 </div>
-                {step < 5 && <div className={`w-16 h-1 mx-2 ${
+                {step < 6 && <div className={`w-16 h-1 mx-2 ${
                   currentStep > step ? 'bg-blue-600' : 'bg-gray-200'
                 }`} />}
               </div>
@@ -669,7 +1061,7 @@ export default function EditCV() {
               </Button>
               <Button
                 onClick={nextStep}
-                disabled={currentStep === 5}
+                disabled={currentStep === 6}
               >
                 Next
                 <ArrowRight className="ml-2 h-4 w-4" />
