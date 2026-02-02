@@ -256,7 +256,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                         asChild
                         variant="outline"
                         size="lg"
-                        className="flex-1 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-base font-semibold h-14 sm:h-12 px-8 rounded-lg transition-all"
+                        className="flex-1 bg-red-600 hover:bg-red-700 text-white border-2 border-red-600 text-base font-semibold h-14 sm:h-12 px-8 rounded-lg transition-all"
                     >
                         <Link href="/edit-cv">
                             <FileText className="mr-2 h-5 w-5" />
