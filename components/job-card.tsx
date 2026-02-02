@@ -120,7 +120,12 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
               <div className="mb-2 flex flex-wrap items-center gap-2 md:gap-3 text-xs md:text-sm text-muted-foreground">
                 {displayCompany.name && (
-                  <span className="font-semibold text-gray-600">{displayCompany.name}</span>
+                  <span className="flex items-center gap-1 font-semibold text-gray-600">
+                    {displayCompany.name}
+                    {(job.isVerified ?? job.is_verified) && (
+                      <BadgeCheck className="h-4 w-4 text-blue-600" aria-label="Verified company" />
+                    )}
+                  </span>
                 )}
 
                 {job.location && (

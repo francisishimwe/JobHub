@@ -31,6 +31,7 @@ export function mapDatabaseJobToUIJob(dbJob: any): Job {
     experience_level: dbJob.experience_level || undefined,
     application_link: dbJob.application_link || undefined,
     applicants: dbJob.applicants || 0,
+    is_verified: dbJob.is_verified ?? false,
 
     // Component format fields (camelCase - for component usage)
     companyId: dbJob.company_id || null,
@@ -41,6 +42,7 @@ export function mapDatabaseJobToUIJob(dbJob: any): Job {
     experienceLevel: dbJob.experience_level || undefined,
     locationType: dbJob.location_type || undefined,
     attachmentUrl: dbJob.attachment_url || undefined,
+    isVerified: dbJob.is_verified ?? false,
     
     // Relational data with safe fallbacks
     company: dbJob.company || { 

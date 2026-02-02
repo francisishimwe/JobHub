@@ -119,6 +119,7 @@ export default async function JobPage({ params }: Props) {
         featured: jobData.featured,
         applicationLink: jobData.application_link,
         attachmentUrl: jobData.attachment_url,
+        isVerified: jobData.is_verified,
     }
 
     const company: Company | null = companyData ? {

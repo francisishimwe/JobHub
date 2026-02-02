@@ -26,6 +26,7 @@ export async function GET(request: NextRequest) {
         opportunity_type,
         deadline,
         featured,
+        is_verified,
         description,
         attachment_url,
         status,

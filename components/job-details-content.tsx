@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { MapPin, Briefcase, Clock, ExternalLink, ArrowLeft, Share2 } from "lucide-react"
+import { MapPin, Briefcase, Clock, ExternalLink, ArrowLeft, Share2, AlertTriangle, BadgeCheck } from "lucide-react"
 import Image from "next/image"
 import type { Job, Company } from "@/lib/types"
 import { useCompanies } from "@/lib/company-context"
@@ -16,6 +16,16 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     const { getCompanyById } = useCompanies()
     const contextCompany = getCompanyById(job.companyId)
     const company = initialCompany || contextCompany
+
+    // Expired = deadline exists and is before today (date-only comparison)
+    const isExpired = (() => {
+        if (!job.deadline) return false
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        const deadlineDate = new Date(job.deadline)
+        deadlineDate.setHours(0, 0, 0, 0)
+        return deadlineDate < today
+    })()
 
     const handleApply = async () => {
         if (job.applicationLink) {
@@ -77,6 +87,12 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                     <div className="flex-1">
                         <h1 className="text-2xl md:text-3xl font-bold text-foreground">{job.title}</h1>
+                        {job.isVerified && (
+                            <div className="mt-1 inline-flex items-center gap-1 rounded-full border border-blue-100 bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">
+                                <BadgeCheck className="h-3 w-3" />
+                                <span>Verified Official Posting</span>
+                            </div>
+                        )}
                         <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                             <span className="font-semibold text-gray-600 text-base">{company?.name || 'Unknown Company'}</span>
                             <span className="hidden md:inline">•</span>
@@ -194,9 +210,22 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 )}
 
+                {/* Expired banner */}
+                {isExpired && (
+                    <div className="mt-4 p-4 rounded-md border border-red-200 bg-red-50 text-red-800 flex items-start gap-3">
+                        <AlertTriangle className="h-5 w-5 mt-0.5 flex-shrink-0" />
+                        <div>
+                            <p className="font-semibold">This position has closed.</p>
+                            <p className="text-sm mt-1">
+                                The application deadline has passed. You can still explore other opportunities on RwandaJobHub.
+                            </p>
+                        </div>
+                    </div>
+                )}
+
                 {/* Share on WhatsApp and Apply Now Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t">
-                    {job.applicationLink &&
+                <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t mt-4">
+                    {job.applicationLink && !isExpired &&
                         job.opportunityType !== "Tender" &&
                         job.opportunityType !== "Blog" &&
                         job.opportunityType !== "Scholarship" &&

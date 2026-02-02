@@ -18,6 +18,7 @@ export interface Job {
   experience_level?: string;
   application_link?: string;
   applicants?: number;
+  is_verified?: boolean;
 
   // Component format (camelCase) - mapped in your Provider
   companyId?: string | null;
@@ -28,6 +29,7 @@ export interface Job {
   experienceLevel?: string;
   locationType?: string;
   attachmentUrl?: string | null;
+  isVerified?: boolean;
   
   // Relational data
   company?: {
