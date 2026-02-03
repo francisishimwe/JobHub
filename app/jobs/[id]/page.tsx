@@ -132,7 +132,7 @@ export default async function JobPage({ params }: Props) {
     return (
         <>
             <JobViewTracker jobId={job.id} />
-            <div className="min-h-screen bg-background flex flex-col">
+            <div className="min-h-screen bg-background flex flex-col job-details-container">
                 <Header />
                 <main className="flex-1 container mx-auto px-4 py-8 md:py-12">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

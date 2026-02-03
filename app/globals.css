@@ -84,3 +84,46 @@
   width: 100% !important;
   max-width: 100% !important;
 }
+
+/* Fix job details page text cutting */
+.job-details-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  white-space: pre-wrap !important;
+  hyphens: auto !important;
+}
+
+.job-details-container * {
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  white-space: pre-wrap !important;
+  hyphens: auto !important;
+}
+
+/* Override any max-width constraints on job details */
+.job-details-container .max-w-7xl,
+.job-details-container .max-w-6xl,
+.job-details-container .max-w-5xl,
+.job-details-container .max-w-4xl,
+.job-details-container .max-w-3xl {
+  max-width: 100% !important;
+}
+
+/* Ensure all text elements wrap properly */
+.job-details-container p,
+.job-details-container div,
+.job-details-container span,
+.job-details-container h1,
+.job-details-container h2,
+.job-details-container h3,
+.job-details-container h4,
+.job-details-container h5,
+.job-details-container h6 {
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  white-space: pre-wrap !important;
+  hyphens: auto !important;
+}
