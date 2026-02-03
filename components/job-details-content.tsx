@@ -60,18 +60,19 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     }
 
     return (
-        <div className="bg-card rounded-lg border shadow-sm p-6 md:p-8" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto', overflowX: 'hidden' }}>
-            <div className="mb-6">
+        <div className="bg-white rounded-lg border shadow-sm" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto', overflowX: 'hidden' }}>
+            {/* Header Section */}
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 md:p-8 rounded-t-lg">
                 <Link
                     href="/"
-                    className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
+                    className="inline-flex items-center text-sm text-blue-100 hover:text-white transition-colors mb-6"
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Back to Jobs
                 </Link>
 
-                <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6">
-                    <div className="relative h-16 w-16 md:h-20 md:w-20 flex-shrink-0 overflow-hidden rounded-lg bg-muted border">
+                <div className="flex flex-col md:flex-row items-start gap-6">
+                    <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-white/10 border border-white/20">
                         {company?.logo ? (
                             <Image
                                 src={company.logo}
@@ -80,91 +81,131 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                 className="object-cover"
                             />
                         ) : (
-                            <div className="h-full w-full flex items-center justify-center bg-muted text-muted-foreground">
-                                <Briefcase className="h-8 w-8" />
+                            <div className="h-full w-full flex items-center justify-center bg-white/20">
+                                <Briefcase className="h-10 w-10 text-white" />
                             </div>
                         )}
                     </div>
                     <div className="flex-1 min-w-0">
-                        <h1 className="text-xl md:text-3xl font-bold text-foreground break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{job.title}</h1>
+                        <h1 className="text-2xl md:text-4xl font-bold text-white mb-3 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                            {job.title}
+                        </h1>
+                        <div className="flex flex-wrap items-center gap-4 text-blue-100">
+                            <span className="text-lg font-medium text-white break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                {company?.name || 'Unknown Company'}
+                            </span>
+                            <span className="hidden md:inline">•</span>
+                            <span>Posted {new Date(job.postedDate).toLocaleDateString()}</span>
+                        </div>
                         {job.isVerified && (
-                            <div className="mt-1 inline-flex items-center gap-1 rounded-full border border-blue-100 bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">
-                                <BadgeCheck className="h-3 w-3" />
+                            <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-sm font-medium text-white">
+                                <BadgeCheck className="h-4 w-4" />
                                 <span>Verified Official Posting</span>
                             </div>
                         )}
-                        <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                            <span className="font-semibold text-gray-600 text-base break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{company?.name || 'Unknown Company'}</span>
-                            <span className="hidden md:inline">•</span>
-                            <span className="text-muted-foreground">Posted {new Date(job.postedDate).toLocaleDateString()}</span>
-                        </div>
                     </div>
                 </div>
             </div>
 
-            <div className="space-y-8">
+            {/* Content Section */}
+            <div className="p-6 md:p-8 space-y-8">
                 {/* Job Overview - Hidden for Tender and Blog */}
                 {job.opportunityType !== "Scholarship" && job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && (
-                    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 p-4 bg-muted/30 rounded-lg border" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>
-                        {job.location && (
-                            <div className="flex items-center gap-3 text-sm min-w-0">
-                                <div className="p-2 bg-background rounded-full border flex-shrink-0">
-                                    <MapPin className="h-4 w-4 text-muted-foreground" />
+                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Job Overview</h3>
+                        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                            {job.location && (
+                                <div className="flex items-start gap-3">
+                                    <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
+                                        <MapPin className="h-5 w-5 text-blue-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-medium text-gray-900">Location</p>
+                                        <p className="text-sm text-gray-600 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                            {job.location}{job.locationType && ` (${job.locationType})`}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="min-w-0 flex-1">
-                                    <p className="text-xs text-muted-foreground font-semibold">Location</p>
-                                    <p className="font-semibold break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{job.location}{job.locationType && ` (${job.locationType})`}</p>
+                            )}
+                            {job.jobType && (
+                                <div className="flex items-start gap-3">
+                                    <div className="p-2 bg-green-100 rounded-lg flex-shrink-0">
+                                        <Briefcase className="h-5 w-5 text-green-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-medium text-gray-900">Job Type</p>
+                                        <p className="text-sm text-gray-600 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                            {job.jobType}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                        {job.jobType && (
-                            <div className="flex items-center gap-3 text-sm min-w-0">
-                                <div className="p-2 bg-background rounded-full border flex-shrink-0">
-                                    <Briefcase className="h-4 w-4 text-muted-foreground" />
+                            )}
+                            {job.experienceLevel && (
+                                <div className="flex items-start gap-3">
+                                    <div className="p-2 bg-purple-100 rounded-lg flex-shrink-0">
+                                        <Clock className="h-5 w-5 text-purple-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-medium text-gray-900">Experience Level</p>
+                                        <p className="text-sm text-gray-600 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                            {job.experienceLevel}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="min-w-0 flex-1">
-                                    <p className="text-xs text-muted-foreground font-semibold">Job Type</p>
-                                    <p className="font-semibold break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{job.jobType}</p>
+                            )}
+                            {job.deadline && (
+                                <div className="flex items-start gap-3">
+                                    <div className="p-2 bg-red-100 rounded-lg flex-shrink-0">
+                                        <AlertTriangle className="h-5 w-5 text-red-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-medium text-gray-900">Deadline</p>
+                                        <p className="text-sm text-gray-600">
+                                            {new Date(job.deadline).toLocaleDateString()}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                        {job.experienceLevel && (
-                            <div className="flex items-center gap-3 text-sm min-w-0">
-                                <div className="p-2 bg-background rounded-full border flex-shrink-0">
-                                    <Clock className="h-4 w-4 text-muted-foreground" />
+                            )}
+                            {job.opportunityType && (
+                                <div className="flex items-start gap-3">
+                                    <div className="p-2 bg-orange-100 rounded-lg flex-shrink-0">
+                                        <BadgeCheck className="h-5 w-5 text-orange-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-medium text-gray-900">Opportunity Type</p>
+                                        <p className="text-sm text-gray-600 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                            {job.opportunityType}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="min-w-0 flex-1">
-                                    <p className="text-xs text-muted-foreground font-semibold">Experience</p>
-                                    <p className="font-semibold break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{job.experienceLevel}</p>
-                                </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
                 )}
 
                 {/* Description */}
                 {job.description && (
-                    <div className="bg-white p-4 md:p-10 rounded-lg border shadow-sm" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto', overflowX: 'hidden' }}>
-                        <h3 className="text-xl font-bold italic mb-6 text-foreground">Job Description</h3>
+                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                        <h3 className="text-xl font-bold text-gray-900 mb-6">Job Description</h3>
                         <div
-                            className="prose prose-lg max-w-none text-foreground leading-relaxed
+                            className="prose prose-lg max-w-none text-gray-700 leading-relaxed
                                 [&_p]:mb-6 [&_p]:leading-relaxed [&_p]:break-words [&_p]:overflow-wrap-break-word [&_p]:whitespace-pre-wrap
                                 [&_ul]:list-disc [&_ul]:pl-8 [&_ul]:mb-6 [&_ul]:space-y-3 [&_ul]:ml-8 [&_ul]:break-words
                                 [&_ol]:list-decimal [&_ol]:pl-8 [&_ol]:mb-6 [&_ol]:space-y-3 [&_ol]:ml-8 [&_ol]:break-words
                                 [&_li]:mb-3 [&_li]:pl-2 [&_li]:leading-relaxed [&_li]:break-words [&_li]:overflow-wrap-break-word [&_li]:whitespace-pre-wrap
-                                [&_strong]:font-bold [&_strong]:italic [&_strong]:text-foreground [&_strong]:break-words
-                                [&_b]:font-bold [&_b]:italic [&_b]:text-foreground [&_b]:break-words
-                                [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:italic [&_h1]:mb-6 [&_h1]:text-foreground [&_h1]:break-words
-                                [&_h2]:text-xl [&_h2]:font-bold [&_h2]:italic [&_h2]:mb-5 [&_h2]:text-foreground [&_h2]:break-words
-                                [&_h3]:text-lg [&_h3]:font-bold [&_h3]:italic [&_h3]:mb-4 [&_h3]:text-foreground [&_h3]:break-words
-                                [&_h4]:font-bold [&_h4]:italic [&_h4]:mb-3 [&_h4]:text-foreground [&_h4]:break-words
-                                [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary/80 [&_a]:break-all [&_a]:whitespace-pre-wrap
-                                [&_blockquote]:border-l-4 [&_blockquote]:border-muted [&_blockquote]:pl-6 [&_blockquote]:italic [&_blockquote]:leading-relaxed [&_blockquote]:break-words
-                                [&_code]:bg-muted [&_code]:px-2 [&_code]:py-1 [&_code]:rounded [&_code]:font-mono [&_code]:text-sm break-all [&_code]:whitespace-pre-wrap
+                                [&_strong]:font-bold [&_strong]:text-gray-900 [&_strong]:break-words
+                                [&_b]:font-bold [&_b]:text-gray-900 [&_b]:break-words
+                                [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-6 [&_h1]:text-gray-900 [&_h1]:break-words
+                                [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-5 [&_h2]:text-gray-900 [&_h2]:break-words
+                                [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-4 [&_h3]:text-gray-900 [&_h3]:break-words
+                                [&_h4]:font-bold [&_h4]:mb-3 [&_h4]:text-gray-900 [&_h4]:break-words
+                                [&_a]:text-blue-600 [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-blue-800 [&_a]:break-all [&_a]:whitespace-pre-wrap
+                                [&_blockquote]:border-l-4 [&_blockquote]:border-gray-300 [&_blockquote]:pl-6 [&_blockquote]:italic [&_blockquote]:leading-relaxed [&_blockquote]:break-words
+                                [&_code]:bg-gray-100 [&_code]:px-2 [&_code]:py-1 [&_code]:rounded [&_code]:font-mono [&_code]:text-sm break-all [&_code]:whitespace-pre-wrap
                                 [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-md [&_img]:my-6
                                 [&_table]:w-full [&_table]:border-collapse [&_table]:my-6 [&_table]:overflow-hidden break-words
-                                [&_td]:border [&_td]:border-border [&_td]:p-3 [&_td]:align-top break-words [&_td]:whitespace-pre-wrap
-                                [&_th]:border [&_th]:border-border [&_th]:p-3 [&_th]:bg-muted/50 [&_th]:font-bold [&_th]:italic [&_th]:text-left [&_th]:break-words
+                                [&_td]:border [&_td]:border-gray-200 [&_td]:p-3 [&_td]:align-top break-words [&_td]:whitespace-pre-wrap
+                                [&_th]:border [&_th]:border-gray-200 [&_th]:p-3 [&_th]:bg-gray-50 [&_th]:font-bold [&_th]:text-left [&_th]:break-words
                             "
                             dangerouslySetInnerHTML={{ __html: job.description }}
                         />
@@ -174,9 +215,9 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Attachment Section */}
                 {job.attachmentUrl && (
-                    <div className="p-6 bg-muted/30 rounded-lg border">
-                        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                            <svg className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                            <svg className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                             </svg>
                             Attached Document
@@ -185,7 +226,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             href={job.attachmentUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center justify-between p-4 bg-background rounded-lg border hover:border-blue-500 hover:bg-blue-50/50 transition-all cursor-pointer group"
+                            className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group"
                         >
                             <div className="flex items-center gap-3">
                                 <div className="p-3 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
@@ -194,10 +235,10 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                     </svg>
                                 </div>
                                 <div>
-                                    <p className="font-medium text-foreground group-hover:text-blue-600 transition-colors">
+                                    <p className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
                                         {decodeURIComponent(job.attachmentUrl.split('/').pop()?.split('?')[0] || 'Document').split('-').slice(1).join('-') || 'Download Document'}
                                     </p>
-                                    <p className="text-xs text-muted-foreground mt-1">
+                                    <p className="text-xs text-gray-600 mt-1">
                                         {job.attachmentUrl.endsWith('.pdf') && 'PDF Document'}
                                         {job.attachmentUrl.match(/\.(doc|docx)$/i) && 'Word Document'}
                                         {job.attachmentUrl.match(/\.(xls|xlsx)$/i) && 'Excel Spreadsheet'}
@@ -205,7 +246,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                     </p>
                                 </div>
                             </div>
-                            <ExternalLink className="h-5 w-5 text-muted-foreground group-hover:text-blue-600 transition-colors" />
+                            <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
                         </a>
                     </div>
                 )}
@@ -223,46 +264,51 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 )}
 
-                {/* Share on WhatsApp and Apply Now Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t mt-4">
-                    {job.applicationLink && !isExpired &&
-                        job.opportunityType !== "Tender" &&
-                        job.opportunityType !== "Blog" &&
-                        job.opportunityType !== "Scholarship" &&
-                        job.opportunityType !== "Education" &&
-                        job.opportunityType !== "Announcement" && (
-                            <Button
-                                onClick={handleApply}
-                                size="lg"
-                                className="flex-1 bg-[#28a745] hover:bg-[#218838] text-white text-lg font-bold h-14 sm:h-12 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
-                            >
-                                Apply Now
-                                <ExternalLink className="ml-2 h-6 w-6" />
-                            </Button>
-                        )}
-                    <Button
-                        onClick={handleShareWhatsApp}
-                        size="lg"
-                        className="flex-1 bg-[#28a745] hover:bg-[#218838] text-white text-base font-semibold h-14 sm:h-12 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
-                    >
-                        <Share2 className="mr-2 h-5 w-5" />
-                        Share on WhatsApp
-                    </Button>
-                </div>
+                {/* Action Buttons */}
+                <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Take Action</h3>
+                    
+                    {/* Share on WhatsApp and Apply Now Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-4 mb-4">
+                        {job.applicationLink && !isExpired &&
+                            job.opportunityType !== "Tender" &&
+                            job.opportunityType !== "Blog" &&
+                            job.opportunityType !== "Scholarship" &&
+                            job.opportunityType !== "Education" &&
+                            job.opportunityType !== "Announcement" && (
+                                <Button
+                                    onClick={handleApply}
+                                    size="lg"
+                                    className="flex-1 bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
+                                >
+                                    Apply Now
+                                    <ExternalLink className="ml-2 h-5 w-5" />
+                                </Button>
+                            )}
+                        <Button
+                            onClick={handleShareWhatsApp}
+                            size="lg"
+                            className="flex-1 bg-green-600 hover:bg-green-700 text-white text-base font-semibold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
+                        >
+                            <Share2 className="mr-2 h-5 w-5" />
+                            Share on WhatsApp
+                        </Button>
+                    </div>
 
-                {/* Build CV Button */}
-                <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                    <Button
-                        asChild
-                        variant="outline"
-                        size="lg"
-                        className="flex-1 bg-red-600 hover:bg-red-700 text-white border-2 border-red-600 text-base font-semibold h-14 sm:h-12 px-8 rounded-lg transition-all"
-                    >
-                        <Link href="/edit-cv">
-                            <FileText className="mr-2 h-5 w-5" />
-                            Build your CV for this Job
-                        </Link>
-                    </Button>
+                    {/* Build CV Button */}
+                    <div className="flex flex-col sm:flex-row gap-4">
+                        <Button
+                            asChild
+                            variant="outline"
+                            size="lg"
+                            className="flex-1 bg-red-600 hover:bg-red-700 text-white border-2 border-red-600 text-base font-semibold h-14 px-8 rounded-lg transition-all"
+                        >
+                            <Link href="/edit-cv">
+                                <FileText className="mr-2 h-5 w-5" />
+                                Build your CV for this Job
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
 
 
