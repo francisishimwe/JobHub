@@ -62,7 +62,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     return (
         <div className="bg-white rounded-lg border shadow-sm" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto', overflowX: 'hidden' }}>
             {/* Header Section */}
-            <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 md:p-8 rounded-t-lg">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 md:p-8 rounded-t-lg" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                 <Link
                     href="/"
                     className="inline-flex items-center text-sm text-blue-100 hover:text-white transition-colors mb-6"
@@ -72,7 +72,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 </Link>
 
                 <div className="flex flex-col md:flex-row items-start gap-6">
-                    <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-white/10 border border-white/20">
+                    <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-white/10 backdrop-blur-md border border-white/20" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                         {company?.logo ? (
                             <Image
                                 src={company.logo}
@@ -81,7 +81,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                 className="object-cover"
                             />
                         ) : (
-                            <div className="h-full w-full flex items-center justify-center bg-white/20">
+                            <div className="h-full w-full flex items-center justify-center bg-white/20 backdrop-blur-md">
                                 <Briefcase className="h-10 w-10 text-white" />
                             </div>
                         )}
@@ -90,7 +90,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                         <h1 className="text-2xl md:text-4xl font-bold text-white mb-3 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                             {job.title}
                         </h1>
-                        <div className="flex flex-wrap items-center gap-4 text-blue-100">
+                        <div className="flex flex-wrap items-center gap-4 text-blue-100" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                             <span className="text-lg font-medium text-white break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                                 {company?.name || 'Unknown Company'}
                             </span>
@@ -98,7 +98,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             <span>Posted {new Date(job.postedDate).toLocaleDateString()}</span>
                         </div>
                         {job.isVerified && (
-                            <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-sm font-medium text-white">
+                            <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/20 backdrop-blur-md px-3 py-1 text-sm font-medium text-white">
                                 <BadgeCheck className="h-4 w-4" />
                                 <span>Verified Official Posting</span>
                             </div>
@@ -108,18 +108,18 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
             </div>
 
             {/* Content Section */}
-            <div className="p-6 md:p-8 space-y-8">
+            <div className="p-6 md:p-8 space-y-8" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                 {/* Job Overview - Hidden for Tender and Blog */}
                 {job.opportunityType !== "Scholarship" && job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && (
-                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Job Overview</h3>
-                        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                        <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b-2 border-gray-300" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Job Overview</h3>
+                        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                             {job.location && (
-                                <div className="flex items-start gap-3">
+                                <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                                     <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
                                         <MapPin className="h-5 w-5 text-blue-600" />
                                     </div>
-                                    <div>
+                                    <div className="min-w-0 flex-1">
                                         <p className="text-sm font-medium text-gray-900">Location</p>
                                         <p className="text-sm text-gray-600 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                                             {job.location}{job.locationType && ` (${job.locationType})`}
@@ -128,11 +128,11 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                 </div>
                             )}
                             {job.jobType && (
-                                <div className="flex items-start gap-3">
+                                <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                                     <div className="p-2 bg-green-100 rounded-lg flex-shrink-0">
                                         <Briefcase className="h-5 w-5 text-green-600" />
                                     </div>
-                                    <div>
+                                    <div className="min-w-0 flex-1">
                                         <p className="text-sm font-medium text-gray-900">Job Type</p>
                                         <p className="text-sm text-gray-600 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                                             {job.jobType}
@@ -141,11 +141,11 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                 </div>
                             )}
                             {job.experienceLevel && (
-                                <div className="flex items-start gap-3">
+                                <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                                     <div className="p-2 bg-purple-100 rounded-lg flex-shrink-0">
                                         <Clock className="h-5 w-5 text-purple-600" />
                                     </div>
-                                    <div>
+                                    <div className="min-w-0 flex-1">
                                         <p className="text-sm font-medium text-gray-900">Experience Level</p>
                                         <p className="text-sm text-gray-600 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                                             {job.experienceLevel}
@@ -154,11 +154,11 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                 </div>
                             )}
                             {job.deadline && (
-                                <div className="flex items-start gap-3">
+                                <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                                     <div className="p-2 bg-red-100 rounded-lg flex-shrink-0">
                                         <AlertTriangle className="h-5 w-5 text-red-600" />
                                     </div>
-                                    <div>
+                                    <div className="min-w-0 flex-1">
                                         <p className="text-sm font-medium text-gray-900">Deadline</p>
                                         <p className="text-sm text-gray-600">
                                             {new Date(job.deadline).toLocaleDateString()}
@@ -167,11 +167,11 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                 </div>
                             )}
                             {job.opportunityType && (
-                                <div className="flex items-start gap-3">
+                                <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                                     <div className="p-2 bg-orange-100 rounded-lg flex-shrink-0">
                                         <BadgeCheck className="h-5 w-5 text-orange-600" />
                                     </div>
-                                    <div>
+                                    <div className="min-w-0 flex-1">
                                         <p className="text-sm font-medium text-gray-900">Opportunity Type</p>
                                         <p className="text-sm text-gray-600 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                                             {job.opportunityType}
@@ -185,8 +185,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Description */}
                 {job.description && (
-                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                        <h3 className="text-xl font-bold text-gray-900 mb-6">Job Description</h3>
+                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                        <h3 className="text-xl font-bold italic text-gray-900 mb-6 pb-3 border-b-2 border-gray-300" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Job Description</h3>
                         <div
                             className="prose prose-lg max-w-none text-gray-700 leading-relaxed
                                 [&_p]:mb-6 [&_p]:leading-relaxed [&_p]:break-words [&_p]:overflow-wrap-break-word [&_p]:whitespace-pre-wrap
@@ -215,27 +215,23 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Attachment Section */}
                 {job.attachmentUrl && (
-                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                            <svg className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                            </svg>
-                            Attached Document
-                        </h3>
+                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                        <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b-2 border-gray-300" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Attached Document</h3>
                         <a
                             href={job.attachmentUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group"
+                            style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
                         >
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                                 <div className="p-3 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
                                     <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
                                 </div>
-                                <div>
-                                    <p className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
+                                <div className="min-w-0 flex-1">
+                                    <p className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                                         {decodeURIComponent(job.attachmentUrl.split('/').pop()?.split('?')[0] || 'Document').split('-').slice(1).join('-') || 'Download Document'}
                                     </p>
                                     <p className="text-xs text-gray-600 mt-1">
@@ -265,11 +261,11 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 )}
 
                 {/* Action Buttons */}
-                <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Take Action</h3>
+                <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                    <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b-2 border-gray-300" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Take Action</h3>
                     
                     {/* Share on WhatsApp and Apply Now Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-4 mb-4">
+                    <div className="flex flex-col sm:flex-row gap-4 mb-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                         {job.applicationLink && !isExpired &&
                             job.opportunityType !== "Tender" &&
                             job.opportunityType !== "Blog" &&
@@ -296,7 +292,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
 
                     {/* Build CV Button */}
-                    <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex flex-col sm:flex-row gap-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                         <Button
                             asChild
                             variant="outline"
