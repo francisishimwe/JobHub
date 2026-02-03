@@ -60,7 +60,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     }
 
     return (
-        <div className="bg-white rounded-lg border shadow-sm" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto', overflowX: 'hidden' }}>
+        <div className="bg-white rounded-lg border shadow-sm w-full max-w-4xl mx-auto" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto', overflowX: 'hidden' }}>
             {/* Header Section */}
             <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 md:p-8 rounded-t-lg" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                 <Link
@@ -108,11 +108,11 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
             </div>
 
             {/* Content Section */}
-            <div className="p-6 md:p-8 space-y-8" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+            <div className="px-4 md:px-8 py-6 md:py-8 space-y-8" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                 {/* Job Overview - Hidden for Tender and Blog */}
                 {job.opportunityType !== "Scholarship" && job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && (
                     <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
-                        <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b-2 border-gray-300" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Job Overview</h3>
+                        <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Job Overview</h3>
                         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                             {job.location && (
                                 <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
@@ -186,7 +186,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 {/* Description */}
                 {job.description && (
                     <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
-                        <h3 className="text-xl font-bold italic text-gray-900 mb-6 pb-3 border-b-2 border-gray-300" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Job Description</h3>
+                        <h3 className="text-xl font-bold italic text-gray-900 mb-6 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Job Description</h3>
                         <div
                             className="prose prose-lg max-w-none text-gray-700 leading-relaxed
                                 [&_p]:mb-6 [&_p]:leading-relaxed [&_p]:break-words [&_p]:overflow-wrap-break-word [&_p]:whitespace-pre-wrap
@@ -216,7 +216,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 {/* Attachment Section */}
                 {job.attachmentUrl && (
                     <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
-                        <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b-2 border-gray-300" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Attached Document</h3>
+                        <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Attached Document</h3>
                         <a
                             href={job.attachmentUrl}
                             target="_blank"
@@ -262,7 +262,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Action Buttons */}
                 <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
-                    <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b-2 border-gray-300" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Take Action</h3>
+                    <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Take Action</h3>
                     
                     {/* Share on WhatsApp and Apply Now Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 mb-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
