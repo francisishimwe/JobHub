@@ -66,12 +66,12 @@ export function HeroSection() {
       <div className="container mx-auto px-3 py-3">
         {/* Search Hero - Desktop Horizontal, Mobile Rounded Box */}
         <div className="mx-auto max-w-4xl">
-          {/* Desktop: Single horizontal row */}
-          <div className="hidden sm:flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-xl shadow-xl p-1">
+          {/* Desktop: Single horizontal row with glassmorphism */}
+          <div className="hidden sm:flex items-center gap-3 bg-white/80 backdrop-blur-md border border-slate-200/50 rounded-full shadow-xl p-1">
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="h-10 text-sm rounded-md border-0 px-3 bg-transparent focus:outline-none focus:ring-0 min-w-[140px]"
+              className="h-10 text-sm rounded-full border-0 px-4 bg-transparent focus:outline-none focus:ring-0 min-w-[140px]"
             >
               <option value="">All Categories</option>
               <option value="Academic">Academic</option>
@@ -130,19 +130,19 @@ export function HeroSection() {
               <option value="Other">Other</option>
             </select>
             
-            <div className="h-6 w-px bg-gray-300"></div>
+            <div className="h-6 w-px bg-slate-300"></div>
             
             <div className="relative flex-1">
-              <SearchIcon className="absolute left-3 h-4 w-4 text-gray-400" />
+              <SearchIcon className="absolute left-4 h-4 w-4 text-slate-400" />
               <Input
                 placeholder="Job title or company name..."
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                className="h-10 text-sm border-0 bg-transparent pl-10 pr-8 focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="h-10 text-sm border-0 bg-transparent pl-11 pr-8 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-full"
               />
               {searchValue && (
-                <button onClick={clearSearch} className="absolute right-3 text-gray-400 hover:text-gray-600">
+                <button onClick={clearSearch} className="absolute right-3 text-slate-400 hover:text-slate-600">
                   <X className="h-4 w-4" />
                 </button>
               )}
@@ -150,7 +150,7 @@ export function HeroSection() {
 
             <Button
               onClick={handleSearch}
-              className="h-10 px-6 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-all"
+              className="h-10 px-6 text-sm font-semibold text-white bg-[#1e40af] hover:bg-[#1e3a8a] rounded-full transition-all"
             >
               Search
             </Button>

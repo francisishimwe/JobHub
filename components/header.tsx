@@ -51,7 +51,7 @@ export function Header() {
 
   return (
     <>
-      {/* Premium Glass Header - Single Line Layout */}
+      {/* Elite Single-Line Header */}
       <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
@@ -134,10 +134,10 @@ export function Header() {
                 </Button>
               )}
 
-              {/* Star Post Advert Button */}
+              {/* Primary Action - Post Advert Button */}
               <Button 
                 asChild
-                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-5 py-2 text-sm font-semibold rounded-full shadow-md transition-all hover:shadow-lg flex items-center gap-2"
+                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-6 py-2 text-sm font-semibold rounded-full shadow-md transition-all hover:shadow-lg flex items-center gap-2"
               >
                 <Link href="/post-advert">
                   <span className="text-lg">+</span>
