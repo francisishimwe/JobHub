@@ -51,11 +51,11 @@ export function Header() {
 
   return (
     <>
-      {/* Elite Single-Line Header */}
+      {/* Elite Single-Line Header - MIFOTRA Style */}
       <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            {/* Logo */}
+            {/* Logo - Left */}
             <Link href="/" className="flex items-center gap-3">
               <div className="relative h-10 w-32 md:h-12 md:w-40">
                 <Image
@@ -68,7 +68,7 @@ export function Header() {
               </div>
             </Link>
 
-            {/* Navigation Links */}
+            {/* Navigation - Center */}
             <nav className="hidden md:flex items-center gap-8">
               {navigationLinks.map((link) => (
                 <Link
@@ -106,9 +106,9 @@ export function Header() {
               </DropdownMenu>
             </nav>
 
-            {/* Right Side Actions */}
-            <div className="flex items-center gap-3">
-              {/* Login Button */}
+            {/* Action Buttons - Right */}
+            <div className="flex items-center gap-4">
+              {/* Simple Text Login Link */}
               {isAuthenticated && user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -125,19 +125,18 @@ export function Header() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <Button 
-                  asChild 
-                  variant="ghost"
+                <Link 
+                  href="/dashboard" 
                   className="text-slate-600 hover:text-slate-800 font-medium transition-colors"
                 >
-                  <Link href="/dashboard">Login</Link>
-                </Button>
+                  Login
+                </Link>
               )}
 
-              {/* Magnetic Star Button - Post Advert */}
+              {/* Elite Post Advert Button */}
               <Button 
                 asChild
-                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-6 py-2 text-sm font-semibold rounded-full shadow-lg transition-all hover:shadow-xl hover:scale-105 flex items-center gap-2 relative"
+                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-6 py-2 text-sm font-semibold rounded-full shadow-md transition-all hover:shadow-lg flex items-center gap-2"
               >
                 <Link href="/post-advert">
                   <span className="text-lg">+</span>
