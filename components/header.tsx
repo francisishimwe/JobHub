@@ -51,8 +51,8 @@ export function Header() {
 
   return (
     <>
-      {/* Perfect Single-Line Header */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/50 shadow-sm sticky top-0 z-50">
+      {/* 2026 Global Elite Header */}
+      <header className="bg-white/70 backdrop-blur-xl border-b border-slate-200/50 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             {/* Logo - Left */}
@@ -70,22 +70,25 @@ export function Header() {
 
             {/* Navigation - Center */}
             <nav className="hidden md:flex items-center gap-8">
-              {navigationLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-lg font-medium text-slate-700 hover:text-blue-600 transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              <Link
+                href="/"
+                className="text-lg font-medium text-slate-600 hover:text-blue-600 transition-colors"
+              >
+                Home
+              </Link>
+              <Link
+                href="/jobs"
+                className="text-lg font-semibold text-slate-600 hover:text-blue-600 transition-colors"
+              >
+                Find Jobs
+              </Link>
               
               {/* Company Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button 
                     variant="ghost" 
-                    className="text-lg font-medium text-slate-700 hover:text-blue-600 transition-colors gap-1 h-auto p-0"
+                    className="text-lg font-medium text-slate-600 hover:text-blue-600 transition-colors gap-1 h-auto p-0"
                   >
                     Company
                     <ChevronDown className="h-4 w-4" />
@@ -106,7 +109,7 @@ export function Header() {
               </DropdownMenu>
             </nav>
 
-            {/* Action Buttons - Right */}
+            {/* Actions - Right */}
             <div className="flex items-center gap-4">
               {/* Clean Text Login Link */}
               {isAuthenticated && user ? (
@@ -133,14 +136,14 @@ export function Header() {
                 </Link>
               )}
 
-              {/* Royal Blue Post Advert Pill */}
+              {/* Royal Blue CTA Pill with Hover Effects */}
               <Button 
                 asChild
-                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-6 py-2 text-sm font-semibold rounded-full transition-all flex items-center gap-2"
+                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-6 py-2 text-sm font-semibold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center gap-2"
               >
                 <Link href="/post-advert">
                   <span className="text-lg">+</span>
-                  Post Advert
+                  Post a Job
                 </Link>
               </Button>
 
@@ -158,16 +161,20 @@ export function Header() {
                   </SheetTrigger>
                   <SheetContent side="right" className="w-full max-w-xs pl-6 pr-4 bg-white text-slate-900 h-full sm:max-w-sm" suppressHydrationWarning>
                     <div className="flex flex-col gap-4 mt-6">
-                      {navigationLinks.map((link) => (
-                        <Link
-                          key={link.href}
-                          href={link.href}
-                          className="text-lg font-medium text-slate-900 hover:text-blue-600 transition-colors py-3 px-2 rounded-md"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          {link.label}
-                        </Link>
-                      ))}
+                      <Link
+                        href="/"
+                        className="text-lg font-medium text-slate-900 hover:text-blue-600 transition-colors py-3 px-2 rounded-md"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Home
+                      </Link>
+                      <Link
+                        href="/jobs"
+                        className="text-lg font-semibold text-slate-900 hover:text-blue-600 transition-colors py-3 px-2 rounded-md"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Find Jobs
+                      </Link>
                       
                       {/* Mobile Company Dropdown Items */}
                       <div className="border-t border-slate-200 pt-4">
