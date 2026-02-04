@@ -95,7 +95,7 @@ export function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors"
+                  className="text-lg font-semibold text-slate-900 hover:text-blue-600 transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -106,7 +106,7 @@ export function Header() {
                 <DropdownMenuTrigger asChild>
                   <Button 
                     variant="ghost" 
-                    className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors gap-1 h-auto p-0"
+                    className="text-lg font-semibold text-slate-900 hover:text-blue-600 transition-colors gap-1 h-auto p-0"
                   >
                     Company
                     <ChevronDown className="h-4 w-4" />
@@ -117,7 +117,7 @@ export function Header() {
                     <DropdownMenuItem key={item.href} asChild>
                       <Link 
                         href={item.href} 
-                        className="text-gray-900 hover:bg-gray-100 cursor-pointer"
+                        className="text-slate-900 hover:bg-gray-100 cursor-pointer"
                       >
                         {item.label}
                       </Link>

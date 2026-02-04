@@ -95,7 +95,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
   return (
     <div className="block">
-      <div className="rounded-lg border bg-card p-4 md:p-6 shadow-sm transition-shadow hover:shadow-lg">
+      <div className="rounded-lg border bg-card p-4 md:p-6 shadow-sm transition-all hover:shadow-md">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 md:gap-4">
           <div className="flex gap-3 md:gap-4 flex-1 min-w-0">
             <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted">
@@ -120,7 +120,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
               <div className="mb-2 flex flex-wrap items-center gap-2 md:gap-3 text-xs md:text-sm text-muted-foreground">
                 {displayCompany.name && (
-                  <span className="flex items-center gap-1 font-semibold text-gray-600">
+                  <span className="flex items-center gap-1 font-semibold text-slate-800">
                     {displayCompany.name}
                     {(job.isVerified ?? job.is_verified) && (
                       <BadgeCheck className="h-4 w-4 text-blue-600" aria-label="Verified company" />
