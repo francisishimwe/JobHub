@@ -150,7 +150,7 @@ export function HeroSection() {
 
             <Button
               onClick={handleSearch}
-              className="h-10 px-6 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-md"
+              className="h-10 px-6 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
             >
               Search
             </Button>
