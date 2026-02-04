@@ -57,7 +57,7 @@ export function Header() {
           <div className="flex items-center justify-end gap-3">
             <Button
               onClick={handleJoinWhatsApp}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 text-sm font-medium rounded-md transition-colors"
+              className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-1.5 text-sm font-medium rounded-md transition-all animate-pulse"
             >
               <MessageCircle className="h-4 w-4 mr-2" />
               Join WhatsApp

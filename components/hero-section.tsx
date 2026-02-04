@@ -67,7 +67,7 @@ export function HeroSection() {
         {/* Search Hero - Desktop Horizontal, Mobile Rounded Box */}
         <div className="mx-auto max-w-4xl">
           {/* Desktop: Single horizontal row */}
-          <div className="hidden sm:flex items-center gap-3 bg-white border border-gray-200 rounded-lg shadow-sm p-1">
+          <div className="hidden sm:flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-xl shadow-xl p-1">
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}

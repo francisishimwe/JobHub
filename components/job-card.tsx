@@ -93,9 +93,19 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
     logo: "/full logo.jpg"
   }
 
+  // Get border color based on job type
+  const getJobTypeBorderColor = () => {
+    const jobType = job.jobType?.toLowerCase() || job.opportunityType?.toLowerCase() || ''
+    if (jobType.includes('full') || jobType.includes('permanent')) return 'border-l-blue-500'
+    if (jobType.includes('intern') || jobType.includes('trainee')) return 'border-l-orange-500'
+    if (jobType.includes('part') || jobType.includes('contract')) return 'border-l-green-500'
+    if (jobType.includes('volunteer') || jobType.includes('unpaid')) return 'border-l-purple-500'
+    return 'border-l-blue-500' // default
+  }
+
   return (
     <div className="block">
-      <div className="rounded-lg border bg-card p-4 md:p-6 shadow-sm transition-all hover:shadow-md">
+      <div className={`rounded-2xl border bg-card p-4 md:p-6 shadow-sm transition-all hover:shadow-md border-l-4 ${getJobTypeBorderColor()}`}>
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 md:gap-4">
           <div className="flex gap-3 md:gap-4 flex-1 min-w-0">
             <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted">
@@ -111,7 +121,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
             <div className="flex-1 min-w-0">
               <h3 
-                className="mb-2 text-base md:text-lg font-bold leading-tight transition-colors cursor-pointer hover:underline" 
+                className="mb-2 text-lg md:text-xl font-bold leading-tight transition-colors cursor-pointer hover:underline" 
                 style={{ color: '#1E40AF' }}
                 onClick={handleTitleClick}
               >
