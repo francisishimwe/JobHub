@@ -92,11 +92,11 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             {job.title}
                         </h1>
                         <div className="flex flex-wrap items-center gap-4" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                            <span className="text-lg font-medium text-red-600" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                            <span className="text-lg font-medium text-amber-400" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                                 {company?.name || 'Unknown Company'}
                             </span>
-                            <span className="hidden md:inline text-red-600">•</span>
-                            <span className="text-red-600">Posted {new Date(job.postedDate).toLocaleDateString()}</span>
+                            <span className="hidden md:inline text-amber-400">•</span>
+                            <span className="text-amber-400">Posted {new Date(job.postedDate).toLocaleDateString()}</span>
                         </div>
                         {job.isVerified && (
                             <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/20 backdrop-blur-md px-3 py-1 text-sm font-medium text-white" style={{ wordBreak: 'normal', overflowWrap: 'break-word' }}>
