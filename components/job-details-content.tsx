@@ -189,8 +189,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
                         <h3 className="text-xl font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Description</h3>
                         <div
-                            className="prose prose-lg max-w-none text-gray-700 leading-relaxed
-                                [&_p]:mb-4 [&_p]:leading-relaxed [&_p]:break-words [&_p]:overflow-wrap-break-word [&_p]:whitespace-pre-wrap
+                            className="prose prose-lg max-w-none text-gray-900 font-medium leading-relaxed
+                                [&_p]:mb-4 [&_p]:leading-relaxed [&_p]:break-words [&_p]:overflow-wrap-break-word [&_p]:whitespace-pre-wrap [&_p]:text-justify [&_p]:text-align-justify
                                 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ul]:space-y-4 [&_ul]:break-words
                                 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_ol]:space-y-4 [&_ol]:break-words
                                 [&_li]:mb-4 [&_li]:leading-relaxed [&_li]:break-words [&_li]:overflow-wrap-break-word [&_li]:whitespace-pre-wrap
@@ -203,14 +203,14 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                 [&_h5]:text-lg [&_h5]:font-bold [&_h5]:italic [&_h5]:uppercase [&_h5]:tracking-wide [&_h5]:text-gray-900 [&_h5]:mt-4 [&_h5]:mb-3 [&_h5]:block [&_h5]:border-b [&_h5]:border-gray-100 [&_h5]:pb-2 [&_h5]:break-words
                                 [&_h6]:text-lg [&_h6]:font-bold [&_h6]:italic [&_h6]:uppercase [&_h6]:tracking-wide [&_h6]:text-gray-900 [&_h6]:mt-4 [&_h6]:mb-3 [&_h6]:block [&_h6]:border-b [&_h6]:border-gray-100 [&_h6]:pb-2 [&_h6]:break-words
                                 [&_a]:text-blue-600 [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-blue-800 [&_a]:break-all [&_a]:whitespace-pre-wrap
-                                [&_blockquote]:border-l-4 [&_blockquote]:border-gray-300 [&_blockquote]:pl-6 [&_blockquote]:italic [&_blockquote]:leading-relaxed [&_blockquote]:break-words
+                                [&_blockquote]:border-l-4 [&_blockquote]:border-gray-300 [&_blockquote]:pl-6 [&_blockquote]:italic [&_blockquote]:leading-relaxed [&_blockquote]:break-words [&_blockquote]:text-justify [&_blockquote]:text-align-justify
                                 [&_code]:bg-gray-100 [&_code]:px-2 [&_code]:py-1 [&_code]:rounded [&_code]:font-mono [&_code]:text-sm break-all [&_code]:whitespace-pre-wrap
                                 [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-md [&_img]:my-4
                                 [&_table]:w-full [&_table]:border-collapse [&_table]:my-4 [&_table]:overflow-hidden break-words
-                                [&_td]:border [&_td]:border-gray-200 [&_td]:p-3 [&_td]:align-top break-words [&_td]:whitespace-pre-wrap
+                                [&_td]:border [&_td]:border-gray-200 [&_td]:p-3 [&_td]:align-top break-words [&_td]:whitespace-pre-wrap [&_td]:text-justify [&_td]:text-align-justify
                                 [&_th]:border [&_th]:border-gray-200 [&_th]:p-3 [&_th]:bg-gray-50 [&_th]:font-bold [&_th]:text-left [&_th]:break-words
                             "
-                            style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%', hyphens: 'none' }}
+                            style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%', hyphens: 'none', textAlign: 'justify' }}
                             dangerouslySetInnerHTML={{ __html: job.description }}
                         />
                     </div>
