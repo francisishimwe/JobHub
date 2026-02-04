@@ -127,3 +127,21 @@
   white-space: pre-wrap !important;
   hyphens: auto !important;
 }
+
+/* Aggressive text cutting prevention for all elements */
+* {
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  white-space: pre-wrap !important;
+  hyphens: auto !important;
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+}
+
+/* Force all containers to prevent text cutting */
+* {
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  white-space: pre-wrap !important;
+  hyphens: auto !important;
+}

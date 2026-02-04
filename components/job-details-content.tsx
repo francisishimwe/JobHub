@@ -60,18 +60,19 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     }
 
     return (
-        <div className="bg-white rounded-lg border shadow-sm w-full max-w-4xl mx-auto" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto', overflowX: 'hidden' }}>
+        <div className="bg-white rounded-lg border shadow-sm w-full max-w-none" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
             {/* Header Section */}
-            <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 md:p-8 rounded-t-lg" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 md:p-8 rounded-t-lg" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
                 <Link
                     href="/"
                     className="inline-flex items-center text-sm text-blue-100 hover:text-white transition-colors mb-6"
+                    style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Back to Jobs
                 </Link>
 
-                <div className="flex flex-col md:flex-row items-start gap-6">
+                <div className="flex flex-col md:flex-row items-start gap-6" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                     <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-white/10 backdrop-blur-md border border-white/20" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                         {company?.logo ? (
                             <Image
@@ -86,19 +87,19 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             </div>
                         )}
                     </div>
-                    <div className="flex-1 min-w-0">
-                        <h1 className="text-2xl md:text-4xl font-bold text-white mb-3 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                    <div className="flex-1 min-w-0" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                        <h1 className="text-2xl md:text-4xl font-bold text-white mb-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'auto' }}>
                             {job.title}
                         </h1>
-                        <div className="flex flex-wrap items-center gap-4 text-blue-100" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
-                            <span className="text-lg font-medium text-white break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                        <div className="flex flex-wrap items-center gap-4 text-blue-100" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                            <span className="text-lg font-medium text-white" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                                 {company?.name || 'Unknown Company'}
                             </span>
                             <span className="hidden md:inline">•</span>
                             <span>Posted {new Date(job.postedDate).toLocaleDateString()}</span>
                         </div>
                         {job.isVerified && (
-                            <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/20 backdrop-blur-md px-3 py-1 text-sm font-medium text-white">
+                            <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/20 backdrop-blur-md px-3 py-1 text-sm font-medium text-white" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                                 <BadgeCheck className="h-4 w-4" />
                                 <span>Verified Official Posting</span>
                             </div>
@@ -108,72 +109,72 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
             </div>
 
             {/* Content Section */}
-            <div className="px-4 md:px-8 py-6 md:py-8 space-y-8" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+            <div className="px-4 md:px-8 py-6 md:py-8 space-y-8" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
                 {/* Job Overview - Hidden for Tender and Blog */}
                 {job.opportunityType !== "Scholarship" && job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && (
-                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
-                        <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Job Overview</h3>
-                        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
+                        <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Overview</h3>
+                        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                             {job.location && (
-                                <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
                                     <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
                                         <MapPin className="h-5 w-5 text-blue-600" />
                                     </div>
-                                    <div className="min-w-0 flex-1">
+                                    <div className="min-w-0 flex-1" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                                         <p className="text-sm font-medium text-gray-900">Location</p>
-                                        <p className="text-sm text-gray-600 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                        <p className="text-sm text-gray-600" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'auto' }}>
                                             {job.location}{job.locationType && ` (${job.locationType})`}
                                         </p>
                                     </div>
                                 </div>
                             )}
                             {job.jobType && (
-                                <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
                                     <div className="p-2 bg-green-100 rounded-lg flex-shrink-0">
                                         <Briefcase className="h-5 w-5 text-green-600" />
                                     </div>
-                                    <div className="min-w-0 flex-1">
+                                    <div className="min-w-0 flex-1" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                                         <p className="text-sm font-medium text-gray-900">Job Type</p>
-                                        <p className="text-sm text-gray-600 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                        <p className="text-sm text-gray-600" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'auto' }}>
                                             {job.jobType}
                                         </p>
                                     </div>
                                 </div>
                             )}
                             {job.experienceLevel && (
-                                <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
                                     <div className="p-2 bg-purple-100 rounded-lg flex-shrink-0">
                                         <Clock className="h-5 w-5 text-purple-600" />
                                     </div>
-                                    <div className="min-w-0 flex-1">
+                                    <div className="min-w-0 flex-1" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                                         <p className="text-sm font-medium text-gray-900">Experience Level</p>
-                                        <p className="text-sm text-gray-600 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                        <p className="text-sm text-gray-600" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'auto' }}>
                                             {job.experienceLevel}
                                         </p>
                                     </div>
                                 </div>
                             )}
                             {job.deadline && (
-                                <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
                                     <div className="p-2 bg-red-100 rounded-lg flex-shrink-0">
                                         <AlertTriangle className="h-5 w-5 text-red-600" />
                                     </div>
-                                    <div className="min-w-0 flex-1">
+                                    <div className="min-w-0 flex-1" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                                         <p className="text-sm font-medium text-gray-900">Deadline</p>
-                                        <p className="text-sm text-gray-600">
+                                        <p className="text-sm text-gray-600" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                                             {new Date(job.deadline).toLocaleDateString()}
                                         </p>
                                     </div>
                                 </div>
                             )}
                             {job.opportunityType && (
-                                <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
                                     <div className="p-2 bg-orange-100 rounded-lg flex-shrink-0">
                                         <BadgeCheck className="h-5 w-5 text-orange-600" />
                                     </div>
-                                    <div className="min-w-0 flex-1">
+                                    <div className="min-w-0 flex-1" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                                         <p className="text-sm font-medium text-gray-900">Opportunity Type</p>
-                                        <p className="text-sm text-gray-600 break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                        <p className="text-sm text-gray-600" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'auto' }}>
                                             {job.opportunityType}
                                         </p>
                                     </div>
@@ -185,8 +186,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Description */}
                 {job.description && (
-                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
-                        <h3 className="text-xl font-bold italic text-gray-900 mb-6 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Job Description</h3>
+                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
+                        <h3 className="text-xl font-bold italic text-gray-900 mb-6 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Description</h3>
                         <div
                             className="prose prose-lg max-w-none text-gray-700 leading-relaxed
                                 [&_p]:mb-6 [&_p]:leading-relaxed [&_p]:break-words [&_p]:overflow-wrap-break-word [&_p]:whitespace-pre-wrap
@@ -207,6 +208,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                 [&_td]:border [&_td]:border-gray-200 [&_td]:p-3 [&_td]:align-top break-words [&_td]:whitespace-pre-wrap
                                 [&_th]:border [&_th]:border-gray-200 [&_th]:p-3 [&_th]:bg-gray-50 [&_th]:font-bold [&_th]:text-left [&_th]:break-words
                             "
+                            style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}
                             dangerouslySetInnerHTML={{ __html: job.description }}
                         />
                     </div>
@@ -215,26 +217,26 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Attachment Section */}
                 {job.attachmentUrl && (
-                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
-                        <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Attached Document</h3>
+                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
+                        <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>Attached Document</h3>
                         <a
                             href={job.attachmentUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group"
-                            style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
+                            style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}
                         >
-                            <div className="flex items-center gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                            <div className="flex items-center gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
                                 <div className="p-3 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
                                     <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
                                 </div>
-                                <div className="min-w-0 flex-1">
-                                    <p className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                <div className="min-w-0 flex-1" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                                    <p className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'auto' }}>
                                         {decodeURIComponent(job.attachmentUrl.split('/').pop()?.split('?')[0] || 'Document').split('-').slice(1).join('-') || 'Download Document'}
                                     </p>
-                                    <p className="text-xs text-gray-600 mt-1">
+                                    <p className="text-xs text-gray-600 mt-1" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                                         {job.attachmentUrl.endsWith('.pdf') && 'PDF Document'}
                                         {job.attachmentUrl.match(/\.(doc|docx)$/i) && 'Word Document'}
                                         {job.attachmentUrl.match(/\.(xls|xlsx)$/i) && 'Excel Spreadsheet'}
@@ -261,11 +263,11 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 )}
 
                 {/* Action Buttons */}
-                <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
-                    <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>Take Action</h3>
+                <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
+                    <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>Take Action</h3>
                     
                     {/* Share on WhatsApp and Apply Now Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-4 mb-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                    <div className="flex flex-col sm:flex-row gap-4 mb-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                         {job.applicationLink && !isExpired &&
                             job.opportunityType !== "Tender" &&
                             job.opportunityType !== "Blog" &&
@@ -292,7 +294,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
 
                     {/* Build CV Button */}
-                    <div className="flex flex-col sm:flex-row gap-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                    <div className="flex flex-col sm:flex-row gap-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                         <Button
                             asChild
                             variant="outline"
