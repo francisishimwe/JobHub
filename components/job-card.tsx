@@ -121,8 +121,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
             <div className="flex-1 min-w-0">
               <h3 
-                className="mb-2 text-lg md:text-xl font-bold leading-tight transition-colors cursor-pointer hover:underline" 
-                style={{ color: '#1E40AF' }}
+                className="mb-2 text-lg md:text-xl font-bold leading-tight transition-colors cursor-pointer hover:underline text-slate-900"
                 onClick={handleTitleClick}
               >
                 {job.title}

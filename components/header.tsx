@@ -134,10 +134,10 @@ export function Header() {
                 </Button>
               )}
 
-              {/* Primary Action - Post Advert Button */}
+              {/* Magnetic Star Button - Post Advert */}
               <Button 
                 asChild
-                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-6 py-2 text-sm font-semibold rounded-full shadow-md transition-all hover:shadow-lg flex items-center gap-2"
+                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-6 py-2 text-sm font-semibold rounded-full shadow-lg transition-all hover:shadow-xl hover:scale-105 flex items-center gap-2 relative"
               >
                 <Link href="/post-advert">
                   <span className="text-lg">+</span>

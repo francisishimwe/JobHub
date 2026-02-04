@@ -66,8 +66,8 @@ export function HeroSection() {
       <div className="container mx-auto px-3 py-3">
         {/* Search Hero - Desktop Horizontal, Mobile Rounded Box */}
         <div className="mx-auto max-w-4xl">
-          {/* Desktop: Single horizontal row with glassmorphism */}
-          <div className="hidden sm:flex items-center gap-3 bg-white/80 backdrop-blur-md border border-slate-200/50 rounded-full shadow-xl p-1">
+          {/* Desktop: Magnetic Glass Search Bar */}
+          <div className="hidden sm:flex items-center gap-3 bg-white/70 backdrop-blur-md border border-slate-200/50 rounded-full shadow-2xl p-1">
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
