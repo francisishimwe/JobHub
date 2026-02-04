@@ -189,7 +189,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
                         <h3 className="text-xl font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Description</h3>
                         <div
-                            className="prose prose-lg max-w-none text-gray-900 font-medium leading-relaxed
+                            className="prose prose-lg max-w-none text-slate-800 font-normal leading-relaxed
                                 [&_p]:mb-4 [&_p]:leading-relaxed [&_p]:break-words [&_p]:overflow-wrap-break-word [&_p]:whitespace-pre-wrap [&_p]:text-justify [&_p]:text-align-justify
                                 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ul]:space-y-4 [&_ul]:break-words
                                 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_ol]:space-y-4 [&_ol]:break-words
