@@ -72,8 +72,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     Back to Jobs
                 </Link>
 
-                <div className="flex flex-col md:flex-row items-start gap-6" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                    <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-white/10 backdrop-blur-md border border-white/20" style={{ wordBreak: 'normal', overflowWrap: 'break-word' }}>
+                <div className="flex flex-row items-center gap-4" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                    <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-white/10 backdrop-blur-md border border-white/20" style={{ wordBreak: 'normal', overflowWrap: 'break-word' }}>
                         {company?.logo ? (
                             <Image
                                 src={company.logo}
@@ -83,23 +83,23 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             />
                         ) : (
                             <div className="h-full w-full flex items-center justify-center bg-white/20 backdrop-blur-md">
-                                <Briefcase className="h-10 w-10 text-white" />
+                                <Briefcase className="h-8 w-8 text-white" />
                             </div>
                         )}
                     </div>
                     <div className="flex-1 min-w-0" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                        <h1 className="text-2xl md:text-4xl font-bold text-white mb-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}>
+                        <h1 className="text-xl md:text-3xl font-bold text-white mb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}>
                             {job.title}
                         </h1>
-                        <div className="flex flex-wrap items-center gap-4" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                            <span className="text-lg font-medium text-amber-400" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                        <div className="flex flex-wrap items-center gap-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                            <span className="text-base font-medium text-amber-400" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                                 {company?.name || 'Unknown Company'}
                             </span>
                             <span className="hidden md:inline text-amber-400">•</span>
-                            <span className="text-amber-400">Posted {new Date(job.postedDate).toLocaleDateString()}</span>
+                            <span className="text-sm text-amber-400">Posted {new Date(job.postedDate).toLocaleDateString()}</span>
                         </div>
                         {job.isVerified && (
-                            <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/20 backdrop-blur-md px-3 py-1 text-sm font-medium text-white" style={{ wordBreak: 'normal', overflowWrap: 'break-word' }}>
+                            <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-white/20 backdrop-blur-md px-3 py-1 text-sm font-medium text-white" style={{ wordBreak: 'normal', overflowWrap: 'break-word' }}>
                                 <BadgeCheck className="h-4 w-4" />
                                 <span>Verified Official Posting</span>
                             </div>
@@ -114,67 +114,67 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 {job.opportunityType !== "Scholarship" && job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && (
                     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
                         <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Overview</h3>
-                        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                        <div className="grid gap-2 grid-cols-2 md:grid-cols-2 lg:grid-cols-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                             {job.location && (
-                                <div className="flex items-start gap-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
-                                    <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
-                                        <MapPin className="h-5 w-5 text-blue-600" />
+                                <div className="flex items-start gap-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
+                                    <div className="p-1 bg-blue-100 rounded-lg flex-shrink-0">
+                                        <MapPin className="h-4 w-4 text-blue-600" />
                                     </div>
                                     <div className="min-w-0 flex-1" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                                        <p className="text-sm font-medium text-gray-900">Location</p>
-                                        <p className="text-sm text-gray-600" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}>
+                                        <p className="text-xs font-medium text-gray-900">Location</p>
+                                        <p className="text-xs text-gray-600" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}>
                                             {job.location}{job.locationType && ` (${job.locationType})`}
                                         </p>
                                     </div>
                                 </div>
                             )}
                             {job.jobType && (
-                                <div className="flex items-start gap-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
-                                    <div className="p-2 bg-green-100 rounded-lg flex-shrink-0">
-                                        <Briefcase className="h-5 w-5 text-green-600" />
+                                <div className="flex items-start gap-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
+                                    <div className="p-1 bg-green-100 rounded-lg flex-shrink-0">
+                                        <Briefcase className="h-4 w-4 text-green-600" />
                                     </div>
                                     <div className="min-w-0 flex-1" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                                        <p className="text-sm font-medium text-gray-900">Job Type</p>
-                                        <p className="text-sm text-gray-600" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}>
+                                        <p className="text-xs font-medium text-gray-900">Job Type</p>
+                                        <p className="text-xs text-gray-600" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}>
                                             {job.jobType}
                                         </p>
                                     </div>
                                 </div>
                             )}
                             {job.experienceLevel && (
-                                <div className="flex items-start gap-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
-                                    <div className="p-2 bg-purple-100 rounded-lg flex-shrink-0">
-                                        <Clock className="h-5 w-5 text-purple-600" />
+                                <div className="flex items-start gap-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
+                                    <div className="p-1 bg-purple-100 rounded-lg flex-shrink-0">
+                                        <Clock className="h-4 w-4 text-purple-600" />
                                     </div>
                                     <div className="min-w-0 flex-1" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                                        <p className="text-sm font-medium text-gray-900">Experience Level</p>
-                                        <p className="text-sm text-gray-600" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}>
+                                        <p className="text-xs font-medium text-gray-900">Experience</p>
+                                        <p className="text-xs text-gray-600" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}>
                                             {job.experienceLevel}
                                         </p>
                                     </div>
                                 </div>
                             )}
                             {job.deadline && (
-                                <div className="flex items-start gap-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
-                                    <div className="p-2 bg-red-100 rounded-lg flex-shrink-0">
-                                        <AlertTriangle className="h-5 w-5 text-red-600" />
+                                <div className="flex items-start gap-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
+                                    <div className="p-1 bg-red-100 rounded-lg flex-shrink-0">
+                                        <AlertTriangle className="h-4 w-4 text-red-600" />
                                     </div>
                                     <div className="min-w-0 flex-1" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                                        <p className="text-sm font-medium text-gray-900">Deadline</p>
-                                        <p className="text-sm text-gray-600" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                                        <p className="text-xs font-medium text-gray-900">Deadline</p>
+                                        <p className="text-xs text-gray-600" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                                             {new Date(job.deadline).toLocaleDateString()}
                                         </p>
                                     </div>
                                 </div>
                             )}
                             {job.opportunityType && (
-                                <div className="flex items-start gap-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
-                                    <div className="p-2 bg-orange-100 rounded-lg flex-shrink-0">
-                                        <BadgeCheck className="h-5 w-5 text-orange-600" />
+                                <div className="flex items-start gap-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
+                                    <div className="p-1 bg-orange-100 rounded-lg flex-shrink-0">
+                                        <BadgeCheck className="h-4 w-4 text-orange-600" />
                                     </div>
                                     <div className="min-w-0 flex-1" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                                        <p className="text-sm font-medium text-gray-900">Opportunity Type</p>
-                                        <p className="text-sm text-gray-600" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}>
+                                        <p className="text-xs font-medium text-gray-900">Type</p>
+                                        <p className="text-xs text-gray-600" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}>
                                             {job.opportunityType}
                                         </p>
                                     </div>
