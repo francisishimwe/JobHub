@@ -62,10 +62,10 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     return (
         <div className="bg-white rounded-lg border shadow-sm w-full max-w-4xl mx-auto" style={{ wordBreak: 'normal', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'none', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
             {/* Header Section */}
-            <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 md:p-8 rounded-t-lg" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', hyphens: 'none' }}>
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 md:p-6 rounded-t-lg overflow-hidden" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', hyphens: 'none' }}>
                 <Link
                     href="/"
-                    className="inline-flex items-center text-sm text-blue-100 hover:text-white transition-colors mb-6"
+                    className="inline-flex items-center text-sm text-white bg-white/20 hover:bg-white/30 border border-white/30 rounded-lg px-4 py-2 mb-4 transition-all"
                     style={{ wordBreak: 'normal', overflowWrap: 'break-word' }}
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" />
@@ -91,12 +91,12 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                         <h1 className="text-2xl md:text-4xl font-bold text-white mb-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}>
                             {job.title}
                         </h1>
-                        <div className="flex flex-wrap items-center gap-4 text-blue-100" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                            <span className="text-lg font-medium text-white" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                        <div className="flex flex-wrap items-center gap-4" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                            <span className="text-lg font-medium text-red-600" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                                 {company?.name || 'Unknown Company'}
                             </span>
-                            <span className="hidden md:inline">•</span>
-                            <span>Posted {new Date(job.postedDate).toLocaleDateString()}</span>
+                            <span className="hidden md:inline text-red-600">•</span>
+                            <span className="text-red-600">Posted {new Date(job.postedDate).toLocaleDateString()}</span>
                         </div>
                         {job.isVerified && (
                             <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/20 backdrop-blur-md px-3 py-1 text-sm font-medium text-white" style={{ wordBreak: 'normal', overflowWrap: 'break-word' }}>
@@ -109,12 +109,12 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
             </div>
 
             {/* Content Section */}
-            <div className="px-4 md:px-8 py-6 md:py-8 space-y-8" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
+            <div className="px-4 md:px-6 py-3 md:py-4 space-y-6" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
                 {/* Job Overview - Hidden for Tender and Blog */}
                 {job.opportunityType !== "Scholarship" && job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && (
-                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                        <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-8 mb-4 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Overview</h3>
-                        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
+                        <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Overview</h3>
+                        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                             {job.location && (
                                 <div className="flex items-start gap-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
                                     <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
@@ -186,27 +186,27 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Description */}
                 {job.description && (
-                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                        <h3 className="text-xl font-bold italic uppercase tracking-wide text-gray-900 mt-8 mb-4 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Description</h3>
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
+                        <h3 className="text-xl font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Description</h3>
                         <div
                             className="prose prose-lg max-w-none text-gray-700 leading-relaxed
-                                [&_p]:mb-6 [&_p]:leading-relaxed [&_p]:break-words [&_p]:overflow-wrap-break-word [&_p]:whitespace-pre-wrap
-                                [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-6 [&_ul]:space-y-4 [&_ul]:break-words
-                                [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-6 [&_ol]:space-y-4 [&_ol]:break-words
+                                [&_p]:mb-4 [&_p]:leading-relaxed [&_p]:break-words [&_p]:overflow-wrap-break-word [&_p]:whitespace-pre-wrap
+                                [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ul]:space-y-4 [&_ul]:break-words
+                                [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_ol]:space-y-4 [&_ol]:break-words
                                 [&_li]:mb-4 [&_li]:leading-relaxed [&_li]:break-words [&_li]:overflow-wrap-break-word [&_li]:whitespace-pre-wrap
                                 [&_strong]:font-bold [&_strong]:text-gray-900 [&_strong]:break-words
                                 [&_b]:font-bold [&_b]:text-gray-900 [&_b]:break-words
-                                [&_h1]:text-lg [&_h1]:font-bold [&_h1]:italic [&_h1]:uppercase [&_h1]:tracking-wide [&_h1]:text-gray-900 [&_h1]:mt-8 [&_h1]:mb-4 [&_h1]:block [&_h1]:border-b [&_h1]:border-gray-100 [&_h1]:pb-2 [&_h1]:break-words
-                                [&_h2]:text-lg [&_h2]:font-bold [&_h2]:italic [&_h2]:uppercase [&_h2]:tracking-wide [&_h2]:text-gray-900 [&_h2]:mt-8 [&_h2]:mb-4 [&_h2]:block [&_h2]:border-b [&_h2]:border-gray-100 [&_h2]:pb-2 [&_h2]:break-words
-                                [&_h3]:text-lg [&_h3]:font-bold [&_h3]:italic [&_h3]:uppercase [&_h3]:tracking-wide [&_h3]:text-gray-900 [&_h3]:mt-8 [&_h3]:mb-4 [&_h3]:block [&_h3]:border-b [&_h3]:border-gray-100 [&_h3]:pb-2 [&_h3]:break-words
-                                [&_h4]:text-lg [&_h4]:font-bold [&_h4]:italic [&_h4]:uppercase [&_h4]:tracking-wide [&_h4]:text-gray-900 [&_h4]:mt-8 [&_h4]:mb-4 [&_h4]:block [&_h4]:border-b [&_h4]:border-gray-100 [&_h4]:pb-2 [&_h4]:break-words
-                                [&_h5]:text-lg [&_h5]:font-bold [&_h5]:italic [&_h5]:uppercase [&_h5]:tracking-wide [&_h5]:text-gray-900 [&_h5]:mt-8 [&_h5]:mb-4 [&_h5]:block [&_h5]:border-b [&_h5]:border-gray-100 [&_h5]:pb-2 [&_h5]:break-words
-                                [&_h6]:text-lg [&_h6]:font-bold [&_h6]:italic [&_h6]:uppercase [&_h6]:tracking-wide [&_h6]:text-gray-900 [&_h6]:mt-8 [&_h6]:mb-4 [&_h6]:block [&_h6]:border-b [&_h6]:border-gray-100 [&_h6]:pb-2 [&_h6]:break-words
+                                [&_h1]:text-lg [&_h1]:font-bold [&_h1]:italic [&_h1]:uppercase [&_h1]:tracking-wide [&_h1]:text-gray-900 [&_h1]:mt-4 [&_h1]:mb-3 [&_h1]:block [&_h1]:border-b [&_h1]:border-gray-100 [&_h1]:pb-2 [&_h1]:break-words
+                                [&_h2]:text-lg [&_h2]:font-bold [&_h2]:italic [&_h2]:uppercase [&_h2]:tracking-wide [&_h2]:text-gray-900 [&_h2]:mt-4 [&_h2]:mb-3 [&_h2]:block [&_h2]:border-b [&_h2]:border-gray-100 [&_h2]:pb-2 [&_h2]:break-words
+                                [&_h3]:text-lg [&_h3]:font-bold [&_h3]:italic [&_h3]:uppercase [&_h3]:tracking-wide [&_h3]:text-gray-900 [&_h3]:mt-4 [&_h3]:mb-3 [&_h3]:block [&_h3]:border-b [&_h3]:border-gray-100 [&_h3]:pb-2 [&_h3]:break-words
+                                [&_h4]:text-lg [&_h4]:font-bold [&_h4]:italic [&_h4]:uppercase [&_h4]:tracking-wide [&_h4]:text-gray-900 [&_h4]:mt-4 [&_h4]:mb-3 [&_h4]:block [&_h4]:border-b [&_h4]:border-gray-100 [&_h4]:pb-2 [&_h4]:break-words
+                                [&_h5]:text-lg [&_h5]:font-bold [&_h5]:italic [&_h5]:uppercase [&_h5]:tracking-wide [&_h5]:text-gray-900 [&_h5]:mt-4 [&_h5]:mb-3 [&_h5]:block [&_h5]:border-b [&_h5]:border-gray-100 [&_h5]:pb-2 [&_h5]:break-words
+                                [&_h6]:text-lg [&_h6]:font-bold [&_h6]:italic [&_h6]:uppercase [&_h6]:tracking-wide [&_h6]:text-gray-900 [&_h6]:mt-4 [&_h6]:mb-3 [&_h6]:block [&_h6]:border-b [&_h6]:border-gray-100 [&_h6]:pb-2 [&_h6]:break-words
                                 [&_a]:text-blue-600 [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-blue-800 [&_a]:break-all [&_a]:whitespace-pre-wrap
                                 [&_blockquote]:border-l-4 [&_blockquote]:border-gray-300 [&_blockquote]:pl-6 [&_blockquote]:italic [&_blockquote]:leading-relaxed [&_blockquote]:break-words
                                 [&_code]:bg-gray-100 [&_code]:px-2 [&_code]:py-1 [&_code]:rounded [&_code]:font-mono [&_code]:text-sm break-all [&_code]:whitespace-pre-wrap
-                                [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-md [&_img]:my-6
-                                [&_table]:w-full [&_table]:border-collapse [&_table]:my-6 [&_table]:overflow-hidden break-words
+                                [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-md [&_img]:my-4
+                                [&_table]:w-full [&_table]:border-collapse [&_table]:my-4 [&_table]:overflow-hidden break-words
                                 [&_td]:border [&_td]:border-gray-200 [&_td]:p-3 [&_td]:align-top break-words [&_td]:whitespace-pre-wrap
                                 [&_th]:border [&_th]:border-gray-200 [&_th]:p-3 [&_th]:bg-gray-50 [&_th]:font-bold [&_th]:text-left [&_th]:break-words
                             "
@@ -219,8 +219,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Attachment Section */}
                 {job.attachmentUrl && (
-                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                        <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-8 mb-4 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Attached Document</h3>
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
+                        <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Attached Document</h3>
                         <a
                             href={job.attachmentUrl}
                             target="_blank"
@@ -265,11 +265,9 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 )}
 
                 {/* Action Buttons */}
-                <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                    <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-8 mb-4 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Take Action</h3>
-                    
+                <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
                     {/* Share on WhatsApp and Apply Now Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-4 mb-4" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                    <div className="flex flex-col sm:flex-row gap-4 mb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                         {job.applicationLink && !isExpired &&
                             job.opportunityType !== "Tender" &&
                             job.opportunityType !== "Blog" &&
