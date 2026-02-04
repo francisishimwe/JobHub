@@ -89,17 +89,17 @@
   width: 100% !important;
   max-width: 100% !important;
   overflow-x: hidden !important;
-  word-break: break-word !important;
+  word-break: normal !important;
   overflow-wrap: break-word !important;
   white-space: pre-wrap !important;
-  hyphens: auto !important;
+  hyphens: none !important;
 }
 
 .job-details-container * {
-  word-break: break-word !important;
+  word-break: normal !important;
   overflow-wrap: break-word !important;
   white-space: pre-wrap !important;
-  hyphens: auto !important;
+  hyphens: none !important;
 }
 
 /* Override any max-width constraints on job details */
@@ -121,8 +121,8 @@
 .job-details-container h4,
 .job-details-container h5,
 .job-details-container h6 {
-  word-break: break-word !important;
+  word-break: normal !important;
   overflow-wrap: break-word !important;
   white-space: pre-wrap !important;
-  hyphens: auto !important;
+  hyphens: none !important;
 }
