@@ -95,7 +95,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
   return (
     <div className="block">
-      <div className="rounded-lg border bg-card p-4 md:p-6 shadow-sm transition-shadow hover:shadow-md">
+      <div className="rounded-lg border bg-card p-4 md:p-6 shadow-sm transition-shadow hover:shadow-lg">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 md:gap-4">
           <div className="flex gap-3 md:gap-4 flex-1 min-w-0">
             <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted">
@@ -163,8 +163,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
           <div className="flex flex-row md:flex-col gap-2 shrink-0 self-end md:self-start">
             <Button
               size="sm"
-              className="text-black hover:opacity-90 flex-1 md:flex-initial text-xs md:text-sm"
-              style={{ backgroundColor: '#76c893' }}
+              className="bg-blue-600 hover:bg-blue-700 text-white flex-1 md:flex-initial text-xs md:text-sm font-medium transition-colors"
               onClick={handleViewDetails}
             >
               View Details

@@ -64,100 +64,193 @@ export function HeroSection() {
   return (
     <div className="relative overflow-hidden bg-white border-b">
       <div className="container mx-auto px-3 py-3">
-        {/* Search Bar */}
-        <div className="mx-auto flex max-w-4xl flex-col sm:flex-row items-stretch sm:items-center gap-2">
-          <div className="relative flex flex-1 items-center">
-            <SearchIcon className="absolute left-3 h-5 w-5 text-muted-foreground" />
-            <Input
-              placeholder="Job title or company name..."
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              className="h-8 text-base border-gray-300 pl-10 pr-8 focus-visible:ring-2 focus-visible:ring-green-500"
-            />
-            {searchValue && (
-              <button onClick={clearSearch} className="absolute right-3 text-muted-foreground hover:text-foreground">
-                <X className="h-5 w-5" />
-              </button>
-            )}
+        {/* Search Hero - Desktop Horizontal, Mobile Rounded Box */}
+        <div className="mx-auto max-w-4xl">
+          {/* Desktop: Single horizontal row */}
+          <div className="hidden sm:flex items-center gap-3 bg-white border border-gray-200 rounded-lg shadow-sm p-1">
+            <select
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              className="h-10 text-sm rounded-md border-0 px-3 bg-transparent focus:outline-none focus:ring-0 min-w-[140px]"
+            >
+              <option value="">All Categories</option>
+              <option value="Academic">Academic</option>
+              <option value="Accounting">Accounting</option>
+              <option value="Agronomy">Agronomy</option>
+              <option value="Administration">Administration</option>
+              <option value="Agriculture">Agriculture</option>
+              <option value="Procurement">Procurement</option>
+              <option value="Animal science">Animal science</option>
+              <option value="Auditing">Auditing</option>
+              <option value="Banking">Banking</option>
+              <option value="Business">Business</option>
+              <option value="Catering">Catering</option>
+              <option value="Civil engineering">Civil engineering</option>
+              <option value="Communications">Communications</option>
+              <option value="Computer and IT">Computer and IT</option>
+              <option value="Consultancy">Consultancy</option>
+              <option value="Demography and data analysis">Demography and data analysis</option>
+              <option value="Law">Law</option>
+              <option value="Education">Education</option>
+              <option value="Electrical engineering">Electrical engineering</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Environmental">Environmental</option>
+              <option value="Finance">Finance</option>
+              <option value="Food Sciences">Food Sciences</option>
+              <option value="Geology">Geology</option>
+              <option value="Management">Management</option>
+              <option value="Healthy">Healthy</option>
+              <option value="Hospitality">Hospitality</option>
+              <option value="Hotel">Hotel</option>
+              <option value="Human resource">Human resource</option>
+              <option value="International relations">International relations</option>
+              <option value="Journalism">Journalism</option>
+              <option value="Land management">Land management</option>
+              <option value="Leisure">Leisure</option>
+              <option value="Logistics">Logistics</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Marketing and sales">Marketing and sales</option>
+              <option value="Mechanical engineering">Mechanical engineering</option>
+              <option value="Medicine">Medicine</option>
+              <option value="Mining">Mining</option>
+              <option value="Office management">Office management</option>
+              <option value="Pharmacy">Pharmacy</option>
+              <option value="Political science">Political science</option>
+              <option value="Project management">Project management</option>
+              <option value="Property management">Property management</option>
+              <option value="Psychology">Psychology</option>
+              <option value="Public Health">Public Health</option>
+              <option value="Research">Research</option>
+              <option value="Secretariat">Secretariat</option>
+              <option value="Social science">Social science</option>
+              <option value="Statistics">Statistics</option>
+              <option value="Telecommunications">Telecommunications</option>
+              <option value="Water engineering">Water engineering</option>
+              <option value="Vehicle Mechanical">Vehicle Mechanical</option>
+              <option value="Other">Other</option>
+            </select>
+            
+            <div className="h-6 w-px bg-gray-300"></div>
+            
+            <div className="relative flex-1">
+              <SearchIcon className="absolute left-3 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder="Job title or company name..."
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                className="h-10 text-sm border-0 bg-transparent pl-10 pr-8 focus-visible:ring-0 focus-visible:ring-offset-0"
+              />
+              {searchValue && (
+                <button onClick={clearSearch} className="absolute right-3 text-gray-400 hover:text-gray-600">
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+
+            <Button
+              onClick={handleSearch}
+              className="h-10 px-6 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-md"
+            >
+              Search
+            </Button>
           </div>
 
-          <select
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
-            className="h-8 text-base rounded-md border-2 border-gray-300 px-3 sm:px-4 bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-          >
-            <option value="">All Categories</option>
-            <option value="Academic">Academic</option>
-            <option value="Accounting">Accounting</option>
-            <option value="Agronomy">Agronomy</option>
-            <option value="Administration">Administration</option>
-            <option value="Agriculture">Agriculture</option>
-            <option value="Procurement">Procurement</option>
-            <option value="Animal science">Animal science</option>
-            <option value="Auditing">Auditing</option>
-            <option value="Banking">Banking</option>
-            <option value="Business">Business</option>
-            <option value="Catering">Catering</option>
-            <option value="Civil engineering">Civil engineering</option>
-            <option value="Communications">Communications</option>
-            <option value="Computer and IT">Computer and IT</option>
-            <option value="Consultancy">Consultancy</option>
-            <option value="Demography and data analysis">Demography and data analysis</option>
-            <option value="Law">Law</option>
-            <option value="Education">Education</option>
-            <option value="Electrical engineering">Electrical engineering</option>
-            <option value="Engineering">Engineering</option>
-            <option value="Environmental">Environmental</option>
-            <option value="Finance">Finance</option>
-            <option value="Food Sciences">Food Sciences</option>
-            <option value="Geology">Geology</option>
-            <option value="Management">Management</option>
-            <option value="Healthy">Healthy</option>
-            <option value="Hospitality">Hospitality</option>
-            <option value="Hotel">Hotel</option>
-            <option value="Human resource">Human resource</option>
-            <option value="International relations">International relations</option>
-            <option value="Journalism">Journalism</option>
-            <option value="Land management">Land management</option>
-            <option value="Leisure">Leisure</option>
-            <option value="Logistics">Logistics</option>
-            <option value="Marketing">Marketing</option>
-            <option value="Marketing and sales">Marketing and sales</option>
-            <option value="Mechanical engineering">Mechanical engineering</option>
-            <option value="Medicine">Medicine</option>
-            <option value="Mining">Mining</option>
-            <option value="Office management">Office management</option>
-            <option value="Pharmacy">Pharmacy</option>
-            <option value="Political science">Political science</option>
-            <option value="Project management">Project management</option>
-            <option value="Property management">Property management</option>
-            <option value="Psychology">Psychology</option>
-            <option value="Public Health">Public Health</option>
-            <option value="Research">Research</option>
-            <option value="Secretariat">Secretariat</option>
-            <option value="Social science">Social science</option>
-            <option value="Statistics">Statistics</option>
-            <option value="Telecommunications">Telecommunications</option>
-            <option value="Water engineering">Water engineering</option>
-            <option value="Vehicle Mechanical">Vehicle Mechanical</option>
-            <option value="Other">Other</option>
-          </select>
+          {/* Mobile: Rounded box with soft shadow */}
+          <div className="sm:hidden bg-white border border-gray-200 rounded-xl shadow-md p-3">
+            <div className="space-y-3">
+              <select
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value)}
+                className="w-full h-10 text-sm rounded-lg border border-gray-200 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">All Categories</option>
+                <option value="Academic">Academic</option>
+                <option value="Accounting">Accounting</option>
+                <option value="Agronomy">Agronomy</option>
+                <option value="Administration">Administration</option>
+                <option value="Agriculture">Agriculture</option>
+                <option value="Procurement">Procurement</option>
+                <option value="Animal science">Animal science</option>
+                <option value="Auditing">Auditing</option>
+                <option value="Banking">Banking</option>
+                <option value="Business">Business</option>
+                <option value="Catering">Catering</option>
+                <option value="Civil engineering">Civil engineering</option>
+                <option value="Communications">Communications</option>
+                <option value="Computer and IT">Computer and IT</option>
+                <option value="Consultancy">Consultancy</option>
+                <option value="Demography and data analysis">Demography and data analysis</option>
+                <option value="Law">Law</option>
+                <option value="Education">Education</option>
+                <option value="Electrical engineering">Electrical engineering</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Environmental">Environmental</option>
+                <option value="Finance">Finance</option>
+                <option value="Food Sciences">Food Sciences</option>
+                <option value="Geology">Geology</option>
+                <option value="Management">Management</option>
+                <option value="Healthy">Healthy</option>
+                <option value="Hospitality">Hospitality</option>
+                <option value="Hotel">Hotel</option>
+                <option value="Human resource">Human resource</option>
+                <option value="International relations">International relations</option>
+                <option value="Journalism">Journalism</option>
+                <option value="Land management">Land management</option>
+                <option value="Leisure">Leisure</option>
+                <option value="Logistics">Logistics</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Marketing and sales">Marketing and sales</option>
+                <option value="Mechanical engineering">Mechanical engineering</option>
+                <option value="Medicine">Medicine</option>
+                <option value="Mining">Mining</option>
+                <option value="Office management">Office management</option>
+                <option value="Pharmacy">Pharmacy</option>
+                <option value="Political science">Political science</option>
+                <option value="Project management">Project management</option>
+                <option value="Property management">Property management</option>
+                <option value="Psychology">Psychology</option>
+                <option value="Public Health">Public Health</option>
+                <option value="Research">Research</option>
+                <option value="Secretariat">Secretariat</option>
+                <option value="Social science">Social science</option>
+                <option value="Statistics">Statistics</option>
+                <option value="Telecommunications">Telecommunications</option>
+                <option value="Water engineering">Water engineering</option>
+                <option value="Vehicle Mechanical">Vehicle Mechanical</option>
+                <option value="Other">Other</option>
+              </select>
 
-          <Button
-            onClick={handleSearch}
-            className="h-8 px-6 sm:px-8 text-base font-semibold text-white hover:opacity-90"
-            style={{ backgroundColor: '#16A34A' }}
-          >
-            Search
-          </Button>
+              <div className="relative">
+                <SearchIcon className="absolute left-3 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Job title or company name..."
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                  className="h-10 text-sm border border-gray-200 rounded-lg pl-10 pr-8 focus-visible:ring-2 focus-visible:ring-blue-500"
+                />
+                {searchValue && (
+                  <button onClick={clearSearch} className="absolute right-3 text-gray-400 hover:text-gray-600">
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+
+              <Button
+                onClick={handleSearch}
+                className="w-full h-10 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg"
+              >
+                Search
+              </Button>
+            </div>
+          </div>
         </div>
 
-        {/* Opportunity Type Filters - Tab Style */}
-        <div className="mt-2 mx-auto max-w-4xl">
-          {/* Mobile: Flex with forced 2 rows, Desktop: Standard flex */}
-          <div className="flex flex-wrap items-center justify-center gap-0.5 sm:gap-2 border-b">
-            {opportunityTypes.map(({ value, label, icon: Icon }, index) => {
+        {/* Modern Category Tabs - Pill Style */}
+        <div className="mt-4 mx-auto max-w-4xl">
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {opportunityTypes.slice(0, 3).map(({ value, label, icon: Icon }) => {
               const count = getCount(value)
               const isActive = value === "All"
                 ? filters.opportunityTypes.length === 0
@@ -167,13 +260,16 @@ export function HeroSection() {
                 <button
                   key={value}
                   onClick={() => toggleOpportunityType(value)}
-                  className={`flex items-center justify-center gap-1 sm:gap-2 border-b-2 border-b-transparent px-1.5 py-2 sm:px-4 sm:py-3 text-[12px] sm:text-sm font-medium transition-colors text-blue-600 hover:text-blue-700 ${isActive ? 'underline decoration-2 underline-offset-4' : ''} ${index < 4 ? 'basis-[24%]' : 'basis-[32%]'} sm:basis-auto flex-shrink-0`}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    isActive 
+                      ? 'bg-blue-600 text-white shadow-sm' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
                 >
-                  <span className="whitespace-nowrap">{label}</span>
-                  <span
-                    className="rounded-full px-2 py-0.5 sm:px-2 text-[11px] sm:text-xs font-semibold"
-                    style={{ backgroundColor: '#000000ff', color: '#ffffffff' }}
-                  >
+                  <span>{label}</span>
+                  <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
+                    isActive ? 'bg-white/20 text-white' : 'bg-gray-200 text-gray-700'
+                  }`}>
                     {count}
                   </span>
                 </button>
