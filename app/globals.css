@@ -79,7 +79,6 @@
 }
 
 /* Force all containers to be full width */
-.cv-builder-content .container,
 .cv-builder-content .w-full {
   width: 100% !important;
   max-width: 100% !important;
@@ -122,24 +121,6 @@
 .job-details-container h4,
 .job-details-container h5,
 .job-details-container h6 {
-  word-break: break-word !important;
-  overflow-wrap: break-word !important;
-  white-space: pre-wrap !important;
-  hyphens: auto !important;
-}
-
-/* Aggressive text cutting prevention for all elements */
-* {
-  word-break: break-word !important;
-  overflow-wrap: break-word !important;
-  white-space: pre-wrap !important;
-  hyphens: auto !important;
-  overflow-x: hidden !important;
-  max-width: 100% !important;
-}
-
-/* Force all containers to prevent text cutting */
-* {
   word-break: break-word !important;
   overflow-wrap: break-word !important;
   white-space: pre-wrap !important;

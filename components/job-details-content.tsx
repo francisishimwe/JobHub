@@ -60,7 +60,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     }
 
     return (
-        <div className="bg-white rounded-lg border shadow-sm w-full max-w-none" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
+        <div className="bg-white rounded-lg border shadow-sm w-full max-w-4xl mx-auto" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', hyphens: 'auto', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
             {/* Header Section */}
             <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 md:p-8 rounded-t-lg" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
                 <Link
