@@ -51,33 +51,12 @@ export function Header() {
 
   return (
     <>
-      {/* Secondary Top Bar - WhatsApp & Post Advert */}
-      <header className="bg-gray-50 border-b">
-        <div className="container mx-auto px-4 py-2">
-          <div className="flex items-center justify-end gap-3">
-            <Button
-              onClick={handleJoinWhatsApp}
-              className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-1.5 text-sm font-medium rounded-md transition-all animate-pulse"
-            >
-              <MessageCircle className="h-4 w-4 mr-2" />
-              Join WhatsApp
-            </Button>
-            <Button 
-              asChild
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 text-sm font-medium rounded-md transition-colors"
-            >
-              <Link href="/post-advert">Post Advert</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Header - Clean Logo */}
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4">
+      {/* Premium Glass Header - Single Line Layout */}
+      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
+            {/* Logo */}
             <Link href="/" className="flex items-center gap-3">
-              {/* Single Logo - Responsive sizing */}
               <div className="relative h-10 w-32 md:h-12 md:w-40">
                 <Image
                   src="/full logo.jpg"
@@ -89,13 +68,13 @@ export function Header() {
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-7">
+            {/* Navigation Links */}
+            <nav className="hidden md:flex items-center gap-8">
               {navigationLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-lg font-semibold text-slate-900 hover:text-blue-600 transition-colors"
+                  className="text-lg font-medium text-slate-700 hover:text-blue-600 transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -106,7 +85,7 @@ export function Header() {
                 <DropdownMenuTrigger asChild>
                   <Button 
                     variant="ghost" 
-                    className="text-lg font-semibold text-slate-900 hover:text-blue-600 transition-colors gap-1 h-auto p-0"
+                    className="text-lg font-medium text-slate-700 hover:text-blue-600 transition-colors gap-1 h-auto p-0"
                   >
                     Company
                     <ChevronDown className="h-4 w-4" />
@@ -127,12 +106,13 @@ export function Header() {
               </DropdownMenu>
             </nav>
 
-            {/* Desktop Auth */}
-            <div className="hidden md:flex items-center gap-3">
+            {/* Right Side Actions */}
+            <div className="flex items-center gap-3">
+              {/* Login Button */}
               {isAuthenticated && user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="gap-2 text-gray-900 hover:bg-gray-100">
+                    <Button variant="ghost" size="sm" className="gap-2 text-slate-700 hover:bg-gray-100">
                       <UserCircle2 className="h-4 w-4" />
                       <span className="hidden lg:inline">{user.email}</span>
                     </Button>
@@ -147,72 +127,84 @@ export function Header() {
               ) : (
                 <Button 
                   asChild 
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors"
+                  variant="ghost"
+                  className="text-slate-600 hover:text-slate-800 font-medium transition-colors"
                 >
                   <Link href="/dashboard">Login</Link>
                 </Button>
               )}
-            </div>
 
-            {/* Mobile Menu */}
-            {!mounted ? (
-              <Button variant="ghost" size="sm" className="md:hidden text-gray-900 hover:bg-gray-100">
-                <Menu className="h-5 w-5" />
+              {/* Star Post Advert Button */}
+              <Button 
+                asChild
+                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-5 py-2 text-sm font-semibold rounded-full shadow-md transition-all hover:shadow-lg flex items-center gap-2"
+              >
+                <Link href="/post-advert">
+                  <span className="text-lg">+</span>
+                  Post Advert
+                </Link>
               </Button>
-            ) : (
-              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="sm" className="md:hidden text-gray-900 hover:bg-gray-100 border border-gray-300 rounded-md p-2">
-                    <Menu className="h-5 w-5" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-full max-w-xs pl-6 pr-4 bg-white text-gray-900 h-full sm:max-w-sm" suppressHydrationWarning>
-                  <div className="flex flex-col gap-4 mt-6">
-                    {navigationLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors py-3 px-2 rounded-md"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
-                    
-                    {/* Mobile Company Dropdown Items */}
-                    <div className="border-t border-gray-200 pt-4">
-                      <p className="text-sm font-semibold text-gray-600 mb-3">Company</p>
-                      {companyDropdownItems.map((item) => (
+
+              {/* Mobile Menu */}
+              {!mounted ? (
+                <Button variant="ghost" size="sm" className="md:hidden text-slate-700 hover:bg-gray-100">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              ) : (
+                <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" size="sm" className="md:hidden text-slate-700 hover:bg-gray-100 border border-slate-300 rounded-md p-2">
+                      <Menu className="h-5 w-5" />
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="w-full max-w-xs pl-6 pr-4 bg-white text-slate-900 h-full sm:max-w-sm" suppressHydrationWarning>
+                    <div className="flex flex-col gap-4 mt-6">
+                      {navigationLinks.map((link) => (
                         <Link
-                          key={item.href}
-                          href={item.href}
-                          className="block text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors py-3 px-2 rounded-md"
+                          key={link.href}
+                          href={link.href}
+                          className="text-lg font-medium text-slate-900 hover:text-blue-600 transition-colors py-3 px-2 rounded-md"
                           onClick={() => setMobileMenuOpen(false)}
                         >
-                          {item.label}
+                          {link.label}
                         </Link>
                       ))}
-                    </div>
-                    
-                    {/* Mobile Auth */}
-                    {!isAuthenticated && (
-                      <Button
-                        asChild
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium rounded-md transition-colors w-full"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <Link
-                          href="/dashboard"
+                      
+                      {/* Mobile Company Dropdown Items */}
+                      <div className="border-t border-slate-200 pt-4">
+                        <p className="text-sm font-semibold text-slate-600 mb-3">Company</p>
+                        {companyDropdownItems.map((item) => (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className="block text-lg font-medium text-slate-900 hover:text-blue-600 transition-colors py-3 px-2 rounded-md"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
+                      
+                      {/* Mobile Auth */}
+                      {!isAuthenticated && (
+                        <Button
+                          asChild
+                          className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-4 py-2 text-sm font-medium rounded-full transition-colors w-full"
                           onClick={() => setMobileMenuOpen(false)}
                         >
-                          Login
-                        </Link>
-                      </Button>
-                    )}
-                  </div>
-                </SheetContent>
-              </Sheet>
-            )}
+                          <Link
+                            href="/dashboard"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            Login
+                          </Link>
+                        </Button>
+                      )}
+                    </div>
+                  </SheetContent>
+                </Sheet>
+              )}
+            </div>
           </div>
         </div>
       </header>
