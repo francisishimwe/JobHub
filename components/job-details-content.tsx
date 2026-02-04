@@ -113,7 +113,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 {/* Job Overview - Hidden for Tender and Blog */}
                 {job.opportunityType !== "Scholarship" && job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && (
                     <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                        <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Overview</h3>
+                        <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-8 mb-4 block border-b border-gray-100 pb-2" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Overview</h3>
                         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                             {job.location && (
                                 <div className="flex items-start gap-3" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
@@ -187,19 +187,21 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 {/* Description */}
                 {job.description && (
                     <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                        <h3 className="text-xl font-bold italic text-gray-900 mb-6 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Description</h3>
+                        <h3 className="text-xl font-bold italic uppercase tracking-wide text-gray-900 mt-8 mb-4 block border-b border-gray-100 pb-2" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Description</h3>
                         <div
                             className="prose prose-lg max-w-none text-gray-700 leading-relaxed
                                 [&_p]:mb-6 [&_p]:leading-relaxed [&_p]:break-words [&_p]:overflow-wrap-break-word [&_p]:whitespace-pre-wrap
-                                [&_ul]:list-disc [&_ul]:pl-8 [&_ul]:mb-6 [&_ul]:space-y-3 [&_ul]:ml-8 [&_ul]:break-words
-                                [&_ol]:list-decimal [&_ol]:pl-8 [&_ol]:mb-6 [&_ol]:space-y-3 [&_ol]:ml-8 [&_ol]:break-words
-                                [&_li]:mb-3 [&_li]:pl-2 [&_li]:leading-relaxed [&_li]:break-words [&_li]:overflow-wrap-break-word [&_li]:whitespace-pre-wrap
+                                [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-6 [&_ul]:space-y-4 [&_ul]:break-words
+                                [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-6 [&_ol]:space-y-4 [&_ol]:break-words
+                                [&_li]:mb-4 [&_li]:leading-relaxed [&_li]:break-words [&_li]:overflow-wrap-break-word [&_li]:whitespace-pre-wrap
                                 [&_strong]:font-bold [&_strong]:text-gray-900 [&_strong]:break-words
                                 [&_b]:font-bold [&_b]:text-gray-900 [&_b]:break-words
-                                [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-6 [&_h1]:text-gray-900 [&_h1]:break-words
-                                [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-5 [&_h2]:text-gray-900 [&_h2]:break-words
-                                [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-4 [&_h3]:text-gray-900 [&_h3]:break-words
-                                [&_h4]:font-bold [&_h4]:mb-3 [&_h4]:text-gray-900 [&_h4]:break-words
+                                [&_h1]:text-lg [&_h1]:font-bold [&_h1]:italic [&_h1]:uppercase [&_h1]:tracking-wide [&_h1]:text-gray-900 [&_h1]:mt-8 [&_h1]:mb-4 [&_h1]:block [&_h1]:border-b [&_h1]:border-gray-100 [&_h1]:pb-2 [&_h1]:break-words
+                                [&_h2]:text-lg [&_h2]:font-bold [&_h2]:italic [&_h2]:uppercase [&_h2]:tracking-wide [&_h2]:text-gray-900 [&_h2]:mt-8 [&_h2]:mb-4 [&_h2]:block [&_h2]:border-b [&_h2]:border-gray-100 [&_h2]:pb-2 [&_h2]:break-words
+                                [&_h3]:text-lg [&_h3]:font-bold [&_h3]:italic [&_h3]:uppercase [&_h3]:tracking-wide [&_h3]:text-gray-900 [&_h3]:mt-8 [&_h3]:mb-4 [&_h3]:block [&_h3]:border-b [&_h3]:border-gray-100 [&_h3]:pb-2 [&_h3]:break-words
+                                [&_h4]:text-lg [&_h4]:font-bold [&_h4]:italic [&_h4]:uppercase [&_h4]:tracking-wide [&_h4]:text-gray-900 [&_h4]:mt-8 [&_h4]:mb-4 [&_h4]:block [&_h4]:border-b [&_h4]:border-gray-100 [&_h4]:pb-2 [&_h4]:break-words
+                                [&_h5]:text-lg [&_h5]:font-bold [&_h5]:italic [&_h5]:uppercase [&_h5]:tracking-wide [&_h5]:text-gray-900 [&_h5]:mt-8 [&_h5]:mb-4 [&_h5]:block [&_h5]:border-b [&_h5]:border-gray-100 [&_h5]:pb-2 [&_h5]:break-words
+                                [&_h6]:text-lg [&_h6]:font-bold [&_h6]:italic [&_h6]:uppercase [&_h6]:tracking-wide [&_h6]:text-gray-900 [&_h6]:mt-8 [&_h6]:mb-4 [&_h6]:block [&_h6]:border-b [&_h6]:border-gray-100 [&_h6]:pb-2 [&_h6]:break-words
                                 [&_a]:text-blue-600 [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-blue-800 [&_a]:break-all [&_a]:whitespace-pre-wrap
                                 [&_blockquote]:border-l-4 [&_blockquote]:border-gray-300 [&_blockquote]:pl-6 [&_blockquote]:italic [&_blockquote]:leading-relaxed [&_blockquote]:break-words
                                 [&_code]:bg-gray-100 [&_code]:px-2 [&_code]:py-1 [&_code]:rounded [&_code]:font-mono [&_code]:text-sm break-all [&_code]:whitespace-pre-wrap
@@ -218,7 +220,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 {/* Attachment Section */}
                 {job.attachmentUrl && (
                     <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                        <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>Attached Document</h3>
+                        <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-8 mb-4 block border-b border-gray-100 pb-2" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>Attached Document</h3>
                         <a
                             href={job.attachmentUrl}
                             target="_blank"
@@ -264,7 +266,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Action Buttons */}
                 <div className="bg-gray-50 rounded-lg p-6 border border-gray-200" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                    <h3 className="text-lg font-bold italic text-gray-900 mb-4 pb-2 border-b border-gray-100 uppercase" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>Take Action</h3>
+                    <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-8 mb-4 block border-b border-gray-100 pb-2" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>Take Action</h3>
                     
                     {/* Share on WhatsApp and Apply Now Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 mb-4" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflowX: 'hidden' }}>
@@ -277,7 +279,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                 <Button
                                     onClick={handleApply}
                                     size="lg"
-                                    className="flex-1 bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
+                                    className="w-full sm:w-auto flex-1 bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
                                 >
                                     Apply Now
                                     <ExternalLink className="ml-2 h-5 w-5" />
@@ -286,7 +288,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                         <Button
                             onClick={handleShareWhatsApp}
                             size="lg"
-                            className="flex-1 bg-green-600 hover:bg-green-700 text-white text-base font-semibold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
+                            className="w-full sm:w-auto flex-1 bg-green-600 hover:bg-green-700 text-white text-base font-semibold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
                         >
                             <Share2 className="mr-2 h-5 w-5" />
                             Share on WhatsApp
@@ -299,7 +301,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             asChild
                             variant="outline"
                             size="lg"
-                            className="flex-1 bg-red-600 hover:bg-red-700 text-white border-2 border-red-600 text-base font-semibold h-14 px-8 rounded-lg transition-all"
+                            className="w-full sm:w-auto flex-1 bg-red-600 hover:bg-red-700 text-white border-2 border-red-600 text-base font-semibold h-14 px-8 rounded-lg transition-all"
                         >
                             <Link href="/edit-cv">
                                 <FileText className="mr-2 h-5 w-5" />
