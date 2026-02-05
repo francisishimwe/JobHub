@@ -295,5 +295,6 @@ export default function HomePage() {
       </div>
 
     <Footer />
+    </div>
   )
 }
