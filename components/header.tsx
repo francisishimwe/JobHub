@@ -49,13 +49,14 @@ export function Header() {
   return (
     <>
       {/* Gorgeous Single-Line Header */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
+      <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
+          {/* Mobile Wrapper */}
+          <div className="flex flex-row sm:flex-row md:flex-row lg:flex-row items-center justify-between">
             {/* Boxed Logo - Far Left */}
-            <div className="bg-white rounded-xl shadow-lg p-3">
-              <Link href="/" className="flex items-center gap-3">
-                <div className="relative h-12 w-36 md:h-14 md:w-44">
+            <div className="bg-white rounded-xl shadow-lg p-3 pointer-events-none z-50 w-24 sm:w-40 md:w-40">
+              <Link href="/" className="flex items-center gap-3 pointer-events-auto">
+                <div className="relative h-8 w-20 sm:h-12 md:h-12 sm:w-36 md:w-36">
                   <Image
                     src="/full logo.jpg"
                     alt="RwandaJobHub"
@@ -82,41 +83,45 @@ export function Header() {
 
             {/* Action Group - Far Right */}
             <div className="flex items-center gap-4">
-              {/* Login Text Link */}
-              {isAuthenticated && user ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="gap-2 text-slate-700 hover:bg-gray-100">
-                      <UserCircle2 className="h-4 w-4" />
-                      <span className="hidden lg:inline">{user.email}</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={handleLogout} className="gap-2">
-                      <LogOut className="h-4 w-4" />
-                      Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <Link 
-                  href="/dashboard" 
-                  className="text-slate-600 hover:text-slate-800 font-medium transition-colors"
-                >
-                  Login
-                </Link>
-              )}
+              {/* Login Text Link and Post Job Button Grouped */}
+              <div className="flex items-center gap-4">
+                {/* Login Text Link */}
+                {isAuthenticated && user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="gap-2 text-slate-700 hover:bg-gray-100">
+                        <UserCircle2 className="h-4 w-4" />
+                        <span className="hidden lg:inline">{user.email}</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={handleLogout} className="gap-2">
+                        <LogOut className="h-4 w-4" />
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Link 
+                    href="/dashboard" 
+                    className="text-slate-600 hover:text-slate-800 font-medium transition-colors"
+                  >
+                    Login
+                  </Link>
+                )}
 
-              {/* Royal Blue Post a Job Pill */}
-              <Button 
-                asChild
-                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-6 py-2 text-sm font-semibold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center gap-2"
-              >
-                <Link href="/post-advert">
-                  <span className="text-lg">+</span>
-                  Post a Job
-                </Link>
-              </Button>
+                {/* Royal Blue Post a Job Pill - Mobile Optimized */}
+                <Button 
+                  asChild
+                  className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-3 sm:px-6 py-2 text-sm font-semibold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center gap-2"
+                >
+                  <Link href="/post-advert">
+                    <span className="text-lg">+</span>
+                    <span className="hidden sm:inline">Post a Job</span>
+                    <span className="sm:hidden">Post</span>
+                  </Link>
+                </Button>
+              </div>
 
               {/* Mobile Menu */}
               {!mounted ? (
