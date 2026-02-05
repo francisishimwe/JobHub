@@ -212,7 +212,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
       <div className={`rounded-2xl border bg-card p-4 md:p-6 shadow-sm transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 border-l-4 ${getJobTypeBorderColor()} lg:hover:shadow-2xl`}>
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 lg:gap-4">
 
           <div className="flex gap-3 md:gap-4 flex-1 min-w-0">
 
@@ -340,7 +340,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
 
 
-          <div className="flex flex-row gap-2 shrink-0">
+          <div className="flex flex-row gap-2 shrink-0 lg:flex-row lg:shrink-0">
 
             <Button
 
