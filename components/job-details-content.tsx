@@ -7,24 +7,14 @@ import type { Job, Company } from "@/lib/types"
 import { useCompanies } from "@/lib/company-context"
 import Link from "next/link"
 
-interface JobDetailsContentProps {"Finalize the 'Elite Portal' UI:
-
-Delete Redundant Pills: Remove the secondary row of blue and gray pills (Featured 18, Jobs 14, etc.).
-
-Unify Filters: The Master Row with the Gold circular counters is now the primary filter. Ensure that clicking 'Tenders' or 'Internships' in this row correctly filters the results below.
-
-Search Command Center: Center the single search bar and make it wider (max-w-4xl). Ensure the 'Search' button uses the Emerald brand color.
-
-Smart Cards: Apply a 4px left-border to all job cards that matches the category color (Navy for Jobs, Gold for Tenders, Emerald for Internships).
-
-Logo Pedestal: Confirm the white box has rounded-b-3xl and sits at z-[100] to float elegantly over the entire header."
-    job: Job
-    initialCompany?: Company | null
+interface JobDetailsContentProps {
+  job: Job
+  initialCompany?: Company | null
 }
 
 export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProps) {
     const { getCompanyById } = useCompanies()
-    const contextCompany = getCompanyById(job.companyId)
+    const contextCompany = job.companyId ? getCompanyById(job.companyId) : null
     const company = initialCompany || contextCompany
 
     // Expired = deadline exists and is before today (date-only comparison)
@@ -106,7 +96,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                 {company?.name || 'Unknown Company'}
                             </span>
                             <span className="hidden md:inline text-amber-400">•</span>
-                            <span className="text-sm text-amber-400">Posted {new Date(job.postedDate).toLocaleDateString()}</span>
+                            <span className="text-sm text-amber-400">Posted {job.postedDate ? new Date(job.postedDate).toLocaleDateString() : 'Recently'}</span>
                         </div>
                         {job.isVerified && (
                             <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-white/20 backdrop-blur-md px-3 py-1 text-sm font-medium text-white" style={{ wordBreak: 'normal', overflowWrap: 'break-word' }}>
