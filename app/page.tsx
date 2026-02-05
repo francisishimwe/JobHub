@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ChevronDown } from "lucide-react"
 import { Header } from "@/components/header"
+import { CategoryDiscovery } from "@/components/category-discovery"
 
 export default function HomePage() {
   const { jobs, filteredJobs, isLoading, hasMore, loadMore, filters, setFilters } = useJobs()
@@ -282,6 +283,9 @@ export default function HomePage() {
         </div>
       </div>
     </div>
+
+    {/* Category Discovery Row */}
+    <CategoryDiscovery />
 
     <div className="container mx-auto px-2 py-1">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-7xl mx-auto">
