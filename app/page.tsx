@@ -101,7 +101,7 @@ export default function HomePage() {
             {/* Navigation Row - Right of Logo Box */}
             <div className="flex items-center justify-between flex-1 ml-44">
               {/* Navigation Links */}
-              <nav className="hidden lg:flex items-center gap-8">
+              <nav className="hidden lg:flex items-center gap-8 ml-16">
                 {navigationLinks.map((link) => (
                   <Link
                     key={link.href}
@@ -201,77 +201,58 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Opportunity Tabs - Command Center */}
+      {/* Opportunity Row */}
       <div className="bg-[#0F172A] border-b border-slate-200/30">
         <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            {/* Opportunity Filters */}
-            <div className="flex items-center gap-4">
-              <Button 
-                variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
-              >
-                Jobs
-                <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">13</span>
-              </Button>
-              
-              <Button 
-                variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
-              >
-                Tenders
-                <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">8</span>
-              </Button>
-              
-              <Button 
-                variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
-              >
-                Internships
-                <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">5</span>
-              </Button>
-              
-              <Button 
-                variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
-              >
-                Scholarships
-                <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">7</span>
-              </Button>
-              
-              <Button 
-                variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
-              >
-                Education
-                <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">4</span>
-              </Button>
-              
-              <Button 
-                variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
-              >
-                Blogs
-                <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">12</span>
-              </Button>
-            </div>
+          <div className="flex items-center justify-center gap-6">
+            <Button 
+              variant="ghost" 
+              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+            >
+              Internships
+              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">5</span>
+            </Button>
+            
+            <Button 
+              variant="ghost" 
+              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+            >
+              Scholarships
+              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">7</span>
+            </Button>
+            
+            <Button 
+              variant="ghost" 
+              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+            >
+              Education
+              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">4</span>
+            </Button>
+            
+            <Button 
+              variant="ghost" 
+              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+            >
+              Blogs
+              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">12</span>
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* Search Bar - Command Center */}
-      <div className="bg-[#0F172A] border-b border-slate-200/30">
-        <div className="container mx-auto px-6 py-4">
-          <div className="max-w-2xl mx-auto">
-            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-1">
+      {/* Clean Action Zone - Main Search Bar */}
+      <div className="bg-slate-50 py-8">
+        <div className="container mx-auto px-6">
+          <div className="max-w-3xl mx-auto">
+            <div className="flex items-center gap-4 bg-white/80 backdrop-blur-md border border-white/30 rounded-2xl p-2 shadow-xl">
               <div className="relative flex-1">
                 <input
                   type="text"
                   placeholder="Search opportunities..."
-                  className="w-full bg-transparent text-white placeholder-white/60 border-0 px-4 py-3 text-base focus:outline-none focus:ring-0"
+                  className="w-full bg-transparent text-slate-900 placeholder-slate-500 border-0 px-6 py-4 text-lg focus:outline-none focus:ring-0"
                 />
               </div>
-              <Button className="bg-[#10B981] hover:bg-[#059669] text-white px-6 py-3 rounded-lg font-medium transition-all">
+              <Button className="bg-[#10B981] hover:bg-[#059669] text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25">
                 Search
               </Button>
             </div>
