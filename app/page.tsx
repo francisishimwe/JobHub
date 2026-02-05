@@ -152,13 +152,13 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Custom Header with Break-Out Logo Box */}
+      {/* Custom Header with Break-Out Logo Box - Adaptive Design */}
       <header className="bg-[#0F172A] backdrop-blur-md border-b border-slate-200/30 sticky top-0 z-40">
         <div className="container mx-auto px-6">
           <div className="flex items-center relative py-4">
-            {/* Logo Pedestal - Far Left */}
-            <div className="absolute left-0 top-0 bg-white rounded-b-3xl shadow-2xl w-44 h-44 z-[100] border border-slate-100">
-              <Link href="/" className="w-full h-full flex items-center justify-center p-6">
+            {/* Logo Pedestal - Adaptive Size */}
+            <div className="absolute left-0 top-0 bg-white shadow-2xl border border-slate-100 lg:rounded-b-3xl lg:w-44 lg:h-44 lg:z-[100] sm:rounded-b-2xl sm:w-24 sm:h-24 sm:z-[100] w-20 h-20 z-[100]">
+              <Link href="/" className="w-full h-full flex items-center justify-center lg:p-6 p-4">
                 <Image
                   src="/full logo.jpg"
                   alt="RwandaJobHub"
@@ -169,10 +169,10 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Main Navigation - Right of Logo Box */}
-            <div className="flex items-center justify-between flex-1 ml-48">
-              {/* Navigation Links */}
-              <nav className="hidden lg:flex items-center gap-8 ml-80">
+            {/* Main Navigation - Adaptive Layout */}
+            <div className="flex items-center justify-between flex-1 lg:ml-48 ml-24">
+              {/* Desktop Navigation - Full Authority View */}
+              <nav className="hidden lg:flex items-center gap-8 lg:ml-80">
                 {navigationLinks.map((link) => (
                   <Link
                     key={link.href}
@@ -184,7 +184,7 @@ export default function HomePage() {
                 ))}
               </nav>
 
-              {/* Action Buttons */}
+              {/* Action Buttons - Adaptive */}
               <div className="flex items-center gap-6">
                 {/* Login Text Link */}
                 {isAuthenticated && user ? (
@@ -222,7 +222,7 @@ export default function HomePage() {
                   </Link>
                 </Button>
 
-                {/* Mobile Menu */}
+                {/* Mobile Menu - Clean Menu Button */}
                 {!mounted ? (
                   <Button variant="ghost" size="sm" className="lg:hidden text-white hover:bg-gray-100">
                     <Menu className="h-5 w-5" />
@@ -272,7 +272,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* The Master Row - Consolidated Opportunity Row */}
+      {/* The Master Row - Adaptive Opportunity Row */}
       <div className="bg-[#0F172A] border-b border-slate-200/30">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-center gap-6">
@@ -341,13 +341,53 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+    </div>
 
-      {/* The Search Zone - Single Command Center - Main Focus */}
-      <div className="bg-slate-50 py-12">
-        <div className="container mx-auto px-6">
+    {/* The Search Zone - Single Command Center - Main Focus */}
+    <div className="bg-slate-50 py-12">
+      <div className="container mx-auto px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center gap-4 bg-white/90 backdrop-blur-md border border-white/40 rounded-2xl p-3 shadow-2xl">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                placeholder="Search opportunities..."
+                className="w-full bg-transparent text-slate-900 placeholder-slate-500 border-0 px-6 py-4 text-lg focus:outline-none focus:ring-0"
+              />
+            </div>
+            <Button className="bg-[#10B981] hover:bg-[#059669] text-white px-10 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25">
+              Search
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div className="container mx-auto px-2 py-1">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-7xl mx-auto">
+        <aside className="hidden lg:block lg:col-span-2">
+          <div className="sticky top-4">
+             <AdContainer />
+          </div>
+        </aside>
+
+        <main className="lg:col-span-8">
           <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-4 bg-white/90 backdrop-blur-md border border-white/40 rounded-2xl p-3 shadow-2xl">
-              <div className="relative flex-1">
+            <div className="mb-1 flex items-center justify-between">
+              <p className="text-sm text-muted-foreground">Showing results ({filteredJobs.length})</p>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-2 bg-transparent">
+                    Sort: {getSortLabel()}
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => setSortBy("newest")}>Newest First</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setSortBy("oldest")}>Oldest First</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setSortBy("deadline")}>Deadline (Soonest)</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
                 <input
                   type="text"
                   placeholder="Search opportunities..."
@@ -357,21 +397,19 @@ export default function HomePage() {
               <Button className="bg-[#10B981] hover:bg-[#059669] text-white px-10 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25">
                 Search
               </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className="container mx-auto px-2 py-1">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-7xl mx-auto">
-          <aside className="hidden lg:block lg:col-span-2">
+          {/* Left Sidebar - Adaptive */}
+          <aside className="lg:col-span-2">
             <div className="sticky top-4">
                <AdContainer />
             </div>
           </aside>
 
+          {/* Main Content - Adaptive */}
           <main className="lg:col-span-8">
-            <div className="max-w-4xl mx-auto">
+            <div className="lg:max-w-4xl mx-auto">
+              {/* Sort Controls - Adaptive */}
               <div className="mb-1 flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">Showing results ({filteredJobs.length})</p>
                 <DropdownMenu>
@@ -389,6 +427,7 @@ export default function HomePage() {
                 </DropdownMenu>
               </div>
 
+              {/* Job Cards - Adaptive Grid */}
               <div className="space-y-4">
                 {isLoading && filteredJobs.length === 0 ? (
                   <div className="rounded-lg border bg-card p-12 text-center">
@@ -396,21 +435,19 @@ export default function HomePage() {
                   </div>
                 ) : sortedJobs.length > 0 ? (
                   <>
-                    {sortedJobs.map((job) => (
-                      <JobCard key={job.id} job={job} />
-                    ))}
+                    {/* Desktop: 3-Column Grid */}
+                    <div className="hidden lg:grid lg:grid-cols-3 gap-4">
+                      {sortedJobs.map((job) => (
+                        <JobCard key={job.id} job={job} />
+                      ))}
+                    </div>
 
-                    {hasMore && (
-                      <div className="flex justify-center mt-8 pb-10">
-                        <Button 
-                          onClick={loadMore} 
-                          disabled={isLoading}
-                          className="bg-[#003566] hover:bg-[#002850] text-white px-10 py-3 rounded-lg font-bold shadow-md transition-all"
-                        >
-                          {isLoading ? "Loading..." : "Load More Opportunities"}
-                        </Button>
-                      </div>
-                    )}
+                    {/* Mobile: Single Column Full Width */}
+                    <div className="lg:hidden space-y-4">
+                      {sortedJobs.map((job) => (
+                        <JobCard key={job.id} job={job} />
+                      ))}
+                    </div>
                   </>
                 ) : (
                   <div className="rounded-lg border bg-card p-12 text-center">
@@ -418,9 +455,24 @@ export default function HomePage() {
                   </div>
                 )}
               </div>
+
+              {/* Load More - Adaptive */}
+              {hasMore && (
+                <div className="flex justify-center mt-8 pb-10">
+                  <Button 
+                    onClick={loadMore} 
+                    disabled={isLoading}
+                    className="bg-[#003566] hover:bg-[#002850] text-white px-10 py-3 rounded-lg font-bold shadow-md transition-all"
+                  >
+                    {isLoading ? "Loading..." : "Load More Opportunities"}
+                  </Button>
+                </div>
+              )}
             </div>
           </main>
 
+          {/* Right Sidebar - Adaptive */}
+          <aside className="lg:col-span-2">
           <aside className="hidden lg:block lg:col-span-2">
             <div className="sticky top-4">
                <AdContainer />
