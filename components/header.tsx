@@ -54,9 +54,9 @@ export function Header() {
           {/* Mobile Wrapper */}
           <div className="flex flex-row sm:flex-row md:flex-row lg:flex-row items-center justify-between">
             {/* Boxed Logo - Far Left */}
-            <div className="bg-white rounded-xl shadow-lg p-3 pointer-events-none z-50 w-24 sm:w-40 md:w-40">
+            <div className="bg-white rounded-xl shadow-lg p-3 pointer-events-none z-50 w-24">
               <Link href="/" className="flex items-center gap-3 pointer-events-auto">
-                <div className="relative h-8 w-20 sm:h-12 md:h-12 sm:w-36 md:w-36">
+                <div className="relative h-8 w-20">
                   <Image
                     src="/full logo.jpg"
                     alt="RwandaJobHub"
@@ -85,7 +85,7 @@ export function Header() {
             <div className="flex items-center gap-4">
               {/* Login Text Link and Post Job Button Grouped */}
               <div className="flex items-center gap-2 sm:gap-4">
-                {/* Royal Blue Post a Job Pill - Mobile Optimized */}
+                {/* Royal Blue Post a Job Pill - Mobile Optimized - NOW ON LEFT */}
                 <Button 
                   asChild
                   className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-2 sm:px-6 py-2 text-sm font-semibold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center gap-2"
@@ -97,7 +97,7 @@ export function Header() {
                   </Link>
                 </Button>
 
-                {/* Login Text Link */}
+                {/* Login Text Link - NOW ON RIGHT */}
                 {isAuthenticated && user ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

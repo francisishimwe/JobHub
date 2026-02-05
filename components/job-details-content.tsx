@@ -65,7 +65,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
             <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 md:p-6 rounded-t-lg overflow-hidden" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', hyphens: 'none' }}>
                 <Link
                     href="/"
-                    className="inline-flex items-center text-sm text-white bg-white/20 hover:bg-white/30 border border-white/30 rounded-lg px-4 py-2 mb-4 mt-20 transition-all"
+                    className="inline-flex items-center text-sm text-white bg-white/20 hover:bg-white/30 border border-white/30 rounded-lg px-4 py-2 mb-2 transition-all"
                     style={{ wordBreak: 'normal', overflowWrap: 'break-word' }}
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" />
