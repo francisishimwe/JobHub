@@ -45,7 +45,7 @@ const categories: Category[] = [
   },
   {
     id: "engineering",
-    label: "Engineering",
+    label: "Engineering & Construction",
     icon: "🏗️",
     keywords: ["engineering", "construction", "architect", "civil", "mechanical", "electrical"]
   },
@@ -56,28 +56,28 @@ const categories: Category[] = [
     keywords: ["sales", "marketing", "business", "commerce", "retail", "customer", "revenue"]
   },
   {
-    id: "operations",
-    label: "Operations & Admin",
-    icon: "⚙️",
-    keywords: ["operations", "admin", "management", "office", "support", "logistics"]
-  },
-  {
-    id: "legal",
-    label: "Legal",
-    icon: "⚖️",
-    keywords: ["legal", "law", "lawyer", "attorney", "court", "justice", "compliance"]
-  },
-  {
     id: "hospitality",
-    label: "Hospitality",
+    label: "Hospitality & Tourism",
     icon: "🏨",
     keywords: ["hospitality", "hotel", "restaurant", "tourism", "service", "food", "travel"]
   },
   {
     id: "agriculture",
-    label: "Agriculture",
+    label: "Agriculture & Agribusiness",
     icon: "🌱",
     keywords: ["agriculture", "farming", "agri", "crops", "livestock", "agricultural", "rural"]
+  },
+  {
+    id: "legal",
+    label: "Legal & Administration",
+    icon: "⚖️",
+    keywords: ["legal", "law", "lawyer", "attorney", "court", "justice", "compliance", "administration"]
+  },
+  {
+    id: "logistics",
+    label: "Logistics & Transport",
+    icon: "🚚",
+    keywords: ["logistics", "transport", "shipping", "delivery", "supply", "chain", "warehouse"]
   }
 ]
 
@@ -200,7 +200,7 @@ export function CategoryDropdownSearch() {
           {/* Dropdown Menu */}
           {isDropdownOpen && (
             <ul 
-              className="absolute top-14 left-0 w-72 bg-white border border-slate-100 rounded-2xl shadow-xl z-50 py-2 max-h-80 overflow-y-auto"
+              className="absolute top-14 left-0 w-72 bg-white border border-slate-100 rounded-2xl shadow-xl z-50 py-2 max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-100"
               role="listbox"
             >
               {categories.map((category, index) => {
@@ -209,10 +209,10 @@ export function CategoryDropdownSearch() {
                   <li
                     key={category.id}
                     onClick={() => handleCategorySelect(category)}
-                    className={`px-4 py-2 cursor-pointer transition-colors flex items-center justify-between ${
+                    className={`flex items-center justify-between gap-3 px-5 py-3 text-slate-700 hover:bg-[#10B981] hover:text-white transition-all cursor-pointer ${
                       index === highlightedIndex 
                         ? 'bg-[#10B981] text-white' 
-                        : 'hover:bg-[#10B981] hover:text-white'
+                        : ''
                     } ${selectedCategory.id === category.id ? 'bg-slate-100 text-slate-700' : ''}`}
                     role="option"
                     aria-selected={selectedCategory.id === category.id}
