@@ -79,6 +79,50 @@ export default function HomePage() {
     }
   }
 
+  // Calculate real counts for each opportunity type
+  const getOpportunityCounts = () => {
+    const counts = {
+      featured: 0,
+      jobs: 0,
+      tenders: 0,
+      internships: 0,
+      scholarships: 0,
+      education: 0,
+      blogs: 0
+    }
+
+    filteredJobs.forEach(job => {
+      const opportunityType = job.opportunityType?.toLowerCase() || job.jobType?.toLowerCase() || ''
+      
+      // Count by opportunity type
+      if (opportunityType.includes('featured') || job.featured) {
+        counts.featured++
+      }
+      if (opportunityType.includes('job') || opportunityType.includes('full') || opportunityType.includes('permanent')) {
+        counts.jobs++
+      }
+      if (opportunityType.includes('tender') || opportunityType.includes('bid')) {
+        counts.tenders++
+      }
+      if (opportunityType.includes('intern') || opportunityType.includes('trainee')) {
+        counts.internships++
+      }
+      if (opportunityType.includes('scholarship') || opportunityType.includes('education')) {
+        counts.scholarships++
+      }
+      if (opportunityType.includes('education') || opportunityType.includes('course')) {
+        counts.education++
+      }
+      if (opportunityType.includes('blog') || opportunityType.includes('article')) {
+        counts.blogs++
+      }
+    })
+
+    return counts
+  }
+
+  const opportunityCounts = getOpportunityCounts()
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Custom Header with Break-Out Logo Box */}
@@ -210,7 +254,7 @@ export default function HomePage() {
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
             >
               Featured
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">3</span>
+              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.featured}</span>
             </Button>
             
             <Button 
@@ -218,7 +262,7 @@ export default function HomePage() {
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
             >
               Jobs
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">13</span>
+              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.jobs}</span>
             </Button>
             
             <Button 
@@ -226,7 +270,7 @@ export default function HomePage() {
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
             >
               Tenders
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">8</span>
+              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.tenders}</span>
             </Button>
             
             <Button 
@@ -234,7 +278,7 @@ export default function HomePage() {
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
             >
               Internships
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">5</span>
+              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.internships}</span>
             </Button>
             
             <Button 
@@ -242,7 +286,7 @@ export default function HomePage() {
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
             >
               Scholarships
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">7</span>
+              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.scholarships}</span>
             </Button>
             
             <Button 
@@ -250,7 +294,7 @@ export default function HomePage() {
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
             >
               Education
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">4</span>
+              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.education}</span>
             </Button>
             
             <Button 
@@ -258,7 +302,7 @@ export default function HomePage() {
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
             >
               Blogs
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">12</span>
+              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.blogs}</span>
             </Button>
           </div>
         </div>
