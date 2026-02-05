@@ -81,14 +81,27 @@ export function JobProvider({ children }: { children: ReactNode }) {
     let filtered = [...jobs]
     if (filters.search) {
       const s = filters.search.toLowerCase()
-      filtered = filtered.filter(j => j.title.toLowerCase().includes(s) || j.description?.toLowerCase().includes(s))
+      filtered = filtered.filter(job => job.title.toLowerCase().includes(s) || job.description?.toLowerCase().includes(s))
     }
     if (filters.location) {
       const l = filters.location.toLowerCase()
-      filtered = filtered.filter(j => j.location.toLowerCase().includes(l))
+      filtered = filtered.filter(job => job.location.toLowerCase().includes(l))
     }
     if (filters.opportunityTypes?.length > 0) {
-      filtered = filtered.filter(j => filters.opportunityTypes.includes(j.opportunityType || j.opportunity_type || ''))
+      filtered = filtered.filter(job => {
+        const opportunityType = (job.opportunityType || job.opportunity_type || '').toLowerCase()
+        return filters.opportunityTypes.some(filterType => {
+          const filter = filterType.toLowerCase()
+          // More flexible matching for different naming conventions
+          if (filter === 'job') return opportunityType.includes('job') || opportunityType.includes('full') || opportunityType.includes('permanent')
+          if (filter === 'tender') return opportunityType.includes('tender') || opportunityType.includes('bid')
+          if (filter === 'internship') return opportunityType.includes('intern') || opportunityType.includes('trainee')
+          if (filter === 'scholarship') return opportunityType.includes('scholarship')
+          if (filter === 'education') return opportunityType.includes('education') || opportunityType.includes('course')
+          if (filter === 'blog') return opportunityType.includes('blog') || opportunityType.includes('article')
+          return opportunityType.includes(filter)
+        })
+      })
     } else {
       // When no opportunity types are selected (Featured is clicked), show ALL active items
       // across Jobs, Tenders, Internships, Scholarships, Education, Blogs (no extra filter).
@@ -125,14 +138,14 @@ export function JobProvider({ children }: { children: ReactNode }) {
       body: JSON.stringify(jobData),
     })
     if (!response.ok) throw new Error('Failed to update job')
-    // Update the job in the local state
-    setJobs(prev => prev.map(j => j.id === jobId ? { ...j, ...jobData } : j))
+    // Update the job in local state
+    setJobs(prev => prev.map(job => job.id === jobId ? { ...job, ...jobData } : job))
   }
 
   const deleteJob = async (jobId: string) => {
     const response = await fetch(`/api/jobs/${jobId}`, { method: 'DELETE' })
     if (!response.ok) throw new Error('Delete failed')
-    setJobs(prev => prev.filter(j => j.id !== jobId))
+    setJobs(prev => prev.filter(job => job.id !== jobId))
   }
 
   return (
