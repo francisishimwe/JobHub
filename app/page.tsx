@@ -85,8 +85,8 @@ export default function HomePage() {
       <header className="bg-[#0F172A] backdrop-blur-md border-b border-slate-200/30 sticky top-0 z-40">
         <div className="container mx-auto px-6">
           <div className="flex items-center relative py-4">
-            {/* Break-Out Logo Box - Far Left */}
-            <div className="absolute left-0 top-0 bg-white rounded-2xl shadow-xl w-44 h-44 z-50 border border-slate-100">
+            {/* Logo Pedestal - Far Left */}
+            <div className="absolute left-0 top-0 bg-white rounded-2xl shadow-2xl w-44 h-44 z-50 border border-slate-100">
               <Link href="/" className="w-full h-full flex items-center justify-center p-6">
                 <Image
                   src="/full logo.jpg"
@@ -98,7 +98,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Navigation Row - Right of Logo Box */}
+            {/* Main Navigation - Right of Logo Box */}
             <div className="flex items-center justify-between flex-1 ml-48">
               {/* Navigation Links */}
               <nav className="hidden lg:flex items-center gap-8 ml-80">
@@ -201,7 +201,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Integrated Filter Row */}
+      {/* The Master Row - Consolidated Opportunity Row */}
       <div className="bg-[#0F172A] border-b border-slate-200/30">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-center gap-6">
@@ -264,7 +264,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Single Search Bar */}
+      {/* The Search Zone - Single Command Center */}
       <div className="bg-slate-50 py-8">
         <div className="container mx-auto px-6">
           <div className="max-w-2xl mx-auto">
