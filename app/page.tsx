@@ -195,7 +195,7 @@ export default function HomePage() {
           </div>
 
           {/* Mobile: Grid Layout */}
-          <div className="lg:hidden grid grid-cols-4 gap-y-3 gap-x-2 text-[10px] -mt-6 px-2">
+          <div className="lg:hidden grid grid-cols-4 gap-y-4 gap-x-2 text-[10px] -mt-6 px-2">
             <Button 
               variant="ghost" 
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
@@ -217,19 +217,10 @@ export default function HomePage() {
             <Button 
               variant="ghost" 
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-              onClick={() => handleOpportunityClick('tender')}
+              onClick={() => handleOpportunityClick('blog')}
             >
-              Tenders
-              <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.tenders}</span>
-            </Button>
-            
-            <Button 
-              variant="ghost" 
-              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-              onClick={() => handleOpportunityClick('internship')}
-            >
-              Internships
-              <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.internships}</span>
+              Blogs
+              <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.blogs}</span>
             </Button>
             
             <Button 
@@ -253,10 +244,19 @@ export default function HomePage() {
             <Button 
               variant="ghost" 
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-              onClick={() => handleOpportunityClick('blog')}
+              onClick={() => handleOpportunityClick('tender')}
             >
-              Blogs
-              <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.blogs}</span>
+              Tenders
+              <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.tenders}</span>
+            </Button>
+            
+            <Button 
+              variant="ghost" 
+              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+              onClick={() => handleOpportunityClick('internship')}
+            >
+              Internships
+              <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.internships}</span>
             </Button>
           </div>
         </div>
