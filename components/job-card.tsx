@@ -213,7 +213,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
       <div className={`rounded-2xl border bg-card p-4 md:p-6 shadow-sm transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 border-l-4 ${getJobTypeBorderColor()} lg:hover:shadow-2xl`}>
 
         {/* Mobile Layout Only */}
-        <div className="flex flex-col gap-4 lg:hidden">
+        <div className="flex flex-col gap-4 xl:hidden">
           <div className="flex gap-4">
             <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted transition-transform duration-300 hover:scale-110">
               <Image
@@ -295,7 +295,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
         </div>
 
         {/* Desktop Layout Only - Always Horizontal */}
-        <div className="hidden lg:flex lg:flex-row lg:items-center lg:justify-between lg:gap-4 w-full">
+        <div className="hidden xl:flex xl:flex-row xl:items-center xl:justify-between xl:gap-4 w-full">
           <div className="flex items-center gap-4 flex-1 min-w-0">
             <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted transition-transform duration-300 hover:scale-110">
               <Image
@@ -369,7 +369,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
               className="gap-1 px-3 py-2 text-sm transition-all duration-200 hover:scale-105 hover:bg-green-50 hover:border-green-300 hover:text-green-700 hover:shadow-md whitespace-nowrap"
             >
               <Share2 className="h-3 w-3" />
-              <span className="hidden lg:inline">Share</span>
+              <span className="hidden xl:inline">Share</span>
             </Button>
           </div>
         </div>
