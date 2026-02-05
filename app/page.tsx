@@ -358,9 +358,8 @@ export default function HomePage() {
                   <DropdownMenuItem onClick={() => setSortBy("deadline")}>Deadline (Soonest)</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-                <input
-                  type="text"
             </div>
+
             <div className="space-y-4">
               {isLoading && filteredJobs.length === 0 ? (
                 <div className="rounded-lg border bg-card p-12 text-center">
