@@ -6,7 +6,6 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Footer } from "@/components/footer"
-import { HeroSection } from "@/components/hero-section"
 import { JobCard } from "@/components/job-card"
 import { AdContainer } from "@/components/ad-container"
 import { useJobs } from "@/lib/job-context"
@@ -308,11 +307,11 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* The Search Zone - Single Command Center */}
-      <div className="bg-slate-50 py-8">
+      {/* The Search Zone - Single Command Center - Main Focus */}
+      <div className="bg-slate-50 py-12">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-4 bg-white/80 backdrop-blur-md border border-white/30 rounded-2xl p-2 shadow-xl">
+            <div className="flex items-center gap-4 bg-white/90 backdrop-blur-md border border-white/40 rounded-2xl p-3 shadow-2xl">
               <div className="relative flex-1">
                 <input
                   type="text"
@@ -320,15 +319,13 @@ export default function HomePage() {
                   className="w-full bg-transparent text-slate-900 placeholder-slate-500 border-0 px-6 py-4 text-lg focus:outline-none focus:ring-0"
                 />
               </div>
-              <Button className="bg-[#10B981] hover:bg-[#059669] text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25">
+              <Button className="bg-[#10B981] hover:bg-[#059669] text-white px-10 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25">
                 Search
               </Button>
             </div>
           </div>
         </div>
       </div>
-
-      <HeroSection />
 
       <div className="container mx-auto px-2 py-1">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-7xl mx-auto">
