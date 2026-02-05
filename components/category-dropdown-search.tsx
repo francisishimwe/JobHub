@@ -82,13 +82,28 @@ const categories: Category[] = [
 ]
 
 export function CategoryDropdownSearch() {
-  const { setFilters } = useJobs()
+  const { jobs, setFilters } = useJobs()
   const [selectedCategory, setSelectedCategory] = useState<Category>(categories[0])
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [highlightedIndex, setHighlightedIndex] = useState(0)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // Get job count for each category
+  const getCategoryCount = (category: Category) => {
+    if (!jobs || jobs.length === 0) return 0
+    
+    return jobs.filter(job => {
+      const title = (job.title || '').toLowerCase()
+      const description = (job.description || '').toLowerCase()
+      const combinedText = `${title} ${description}`
+      
+      return category.keywords.some(keyword => 
+        combinedText.includes(keyword.toLowerCase())
+      )
+    }).length
+  }
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -185,25 +200,39 @@ export function CategoryDropdownSearch() {
           {/* Dropdown Menu */}
           {isDropdownOpen && (
             <ul 
-              className="absolute top-14 left-0 w-64 bg-white border border-slate-100 rounded-2xl shadow-xl z-50 py-2 max-h-80 overflow-y-auto"
+              className="absolute top-14 left-0 w-72 bg-white border border-slate-100 rounded-2xl shadow-xl z-50 py-2 max-h-80 overflow-y-auto"
               role="listbox"
             >
-              {categories.map((category, index) => (
-                <li
-                  key={category.id}
-                  onClick={() => handleCategorySelect(category)}
-                  className={`px-4 py-2 cursor-pointer transition-colors flex items-center gap-3 ${
-                    index === highlightedIndex 
-                      ? 'bg-[#10B981] text-white' 
-                      : 'hover:bg-[#10B981] hover:text-white'
-                  } ${selectedCategory.id === category.id ? 'bg-slate-100 text-slate-700' : ''}`}
-                  role="option"
-                  aria-selected={selectedCategory.id === category.id}
-                >
-                  <span className="text-lg">{category.icon}</span>
-                  <span className="text-sm font-medium">{category.label}</span>
-                </li>
-              ))}
+              {categories.map((category, index) => {
+                const count = getCategoryCount(category)
+                return (
+                  <li
+                    key={category.id}
+                    onClick={() => handleCategorySelect(category)}
+                    className={`px-4 py-2 cursor-pointer transition-colors flex items-center justify-between ${
+                      index === highlightedIndex 
+                        ? 'bg-[#10B981] text-white' 
+                        : 'hover:bg-[#10B981] hover:text-white'
+                    } ${selectedCategory.id === category.id ? 'bg-slate-100 text-slate-700' : ''}`}
+                    role="option"
+                    aria-selected={selectedCategory.id === category.id}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-lg">{category.icon}</span>
+                      <span className="text-sm font-medium">{category.label}</span>
+                    </div>
+                    {count > 0 && (
+                      <span className={`text-xs font-semibold rounded-full px-2 py-0.5 ${
+                        index === highlightedIndex 
+                          ? 'bg-white/20 text-white' 
+                          : 'bg-slate-100 text-slate-600'
+                      }`}>
+                        {count}
+                      </span>
+                    )}
+                  </li>
+                )
+              })}
             </ul>
           )}
         </div>
@@ -234,6 +263,9 @@ export function CategoryDropdownSearch() {
         <div className="mt-3 flex items-center justify-center">
           <span className="text-sm text-slate-500">
             Filtering by: <span className="font-medium text-slate-700">{selectedCategory.icon} {selectedCategory.label}</span>
+            <span className="ml-2 text-xs bg-slate-100 text-slate-600 rounded-full px-2 py-0.5">
+              {getCategoryCount(selectedCategory)} jobs
+            </span>
           </span>
           <button
             onClick={() => handleCategorySelect(categories[0])}

@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ChevronDown } from "lucide-react"
 import { Header } from "@/components/header"
-import { CategoryDiscovery } from "@/components/category-discovery"
 import { CategoryDropdownSearch } from "@/components/category-dropdown-search"
 
 export default function HomePage() {
@@ -271,9 +270,6 @@ export default function HomePage() {
         <CategoryDropdownSearch />
       </div>
     </div>
-
-    {/* Category Discovery Row */}
-    <CategoryDiscovery />
 
     <div className="container mx-auto px-2 py-1">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-7xl mx-auto">
