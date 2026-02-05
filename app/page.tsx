@@ -17,6 +17,7 @@ import {
 import { ChevronDown } from "lucide-react"
 import { Header } from "@/components/header"
 import { CategoryDiscovery } from "@/components/category-discovery"
+import { CategoryDropdownSearch } from "@/components/category-dropdown-search"
 
 export default function HomePage() {
   const { jobs, filteredJobs, isLoading, hasMore, loadMore, filters, setFilters } = useJobs()
@@ -264,23 +265,10 @@ export default function HomePage() {
         </div>
       </div>
 
-    {/* The Search Zone - Single Command Center - Main Focus */}
+    {/* The Search Zone - Category Dropdown Search */}
     <div className="bg-slate-50 py-12">
       <div className="container mx-auto px-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-4 bg-white/90 backdrop-blur-md border border-white/40 rounded-2xl p-3 shadow-2xl">
-            <div className="relative flex-1">
-              <input
-                type="text"
-                placeholder="Search opportunities..."
-                className="w-full bg-transparent text-slate-900 placeholder-slate-500 border-0 px-6 py-4 text-lg focus:outline-none focus:ring-0"
-              />
-            </div>
-            <Button className="bg-[#10B981] hover:bg-[#059669] text-white px-10 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25">
-              Search
-            </Button>
-          </div>
-        </div>
+        <CategoryDropdownSearch />
       </div>
     </div>
 
