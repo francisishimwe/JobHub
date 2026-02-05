@@ -84,12 +84,24 @@ export function Header() {
             {/* Action Group - Far Right */}
             <div className="flex items-center gap-4">
               {/* Login Text Link and Post Job Button Grouped */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-4">
+                {/* Royal Blue Post a Job Pill - Mobile Optimized */}
+                <Button 
+                  asChild
+                  className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-2 sm:px-6 py-2 text-sm font-semibold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center gap-2"
+                >
+                  <Link href="/post-advert">
+                    <span className="text-lg">+</span>
+                    <span className="hidden sm:inline">Post a Job</span>
+                    <span className="sm:hidden">Post</span>
+                  </Link>
+                </Button>
+
                 {/* Login Text Link */}
                 {isAuthenticated && user ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="gap-2 text-slate-700 hover:bg-gray-100">
+                      <Button variant="ghost" size="sm" className="gap-2 text-slate-700 hover:bg-gray-100 px-2">
                         <UserCircle2 className="h-4 w-4" />
                         <span className="hidden lg:inline">{user.email}</span>
                       </Button>
@@ -104,23 +116,11 @@ export function Header() {
                 ) : (
                   <Link 
                     href="/dashboard" 
-                    className="text-slate-600 hover:text-slate-800 font-medium transition-colors"
+                    className="text-slate-600 hover:text-slate-800 font-medium transition-colors px-2"
                   >
                     Login
                   </Link>
                 )}
-
-                {/* Royal Blue Post a Job Pill - Mobile Optimized */}
-                <Button 
-                  asChild
-                  className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-3 sm:px-6 py-2 text-sm font-semibold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center gap-2"
-                >
-                  <Link href="/post-advert">
-                    <span className="text-lg">+</span>
-                    <span className="hidden sm:inline">Post a Job</span>
-                    <span className="sm:hidden">Post</span>
-                  </Link>
-                </Button>
               </div>
 
               {/* Mobile Menu */}
