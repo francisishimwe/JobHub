@@ -81,12 +81,12 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Custom Header with Boxed Hero Logo */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center relative">
-            {/* Boxed Hero Logo - Far Left */}
-            <div className="absolute left-0 bg-white rounded-b-3xl shadow-2xl w-32 h-32 z-10">
+      {/* Custom Header with Break-Out Logo Box */}
+      <header className="bg-white/90 backdrop-blur-md border-b border-slate-200/30 sticky top-0 z-50">
+        <div className="container mx-auto px-6">
+          <div className="flex items-center relative py-4">
+            {/* Break-Out Logo Box - Far Left */}
+            <div className="absolute left-0 top-0 bg-white rounded-2xl shadow-2xl w-40 h-40 z-10 border border-slate-100">
               <Link href="/" className="w-full h-full flex items-center justify-center p-4">
                 <Image
                   src="/full logo.jpg"
@@ -98,15 +98,15 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Horizontal Line - Right of Logo Box */}
-            <div className="flex items-center justify-between flex-1 py-4 ml-36">
+            {/* Navigation Row - Right of Logo Box */}
+            <div className="flex items-center justify-between flex-1 ml-44">
               {/* Navigation Links */}
-              <nav className="hidden md:flex items-center gap-6">
+              <nav className="hidden lg:flex items-center gap-8">
                 {navigationLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="text-lg font-semibold tracking-tight text-slate-700 hover:text-blue-600 transition-colors"
+                    className="text-base font-medium text-slate-700 hover:text-blue-600 transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -114,7 +114,7 @@ export default function HomePage() {
               </nav>
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-6">
                 {/* Login Text Link */}
                 {isAuthenticated && user ? (
                   <DropdownMenu>
@@ -143,7 +143,7 @@ export default function HomePage() {
                 {/* Royal Blue Post a Job Pill */}
                 <Button 
                   asChild
-                  className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-6 py-2 text-sm font-semibold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center gap-2"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 text-sm font-medium rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center gap-2"
                 >
                   <Link href="/post-advert">
                     <span className="text-lg">+</span>
@@ -153,13 +153,13 @@ export default function HomePage() {
 
                 {/* Mobile Menu */}
                 {!mounted ? (
-                  <Button variant="ghost" size="sm" className="md:hidden text-slate-700 hover:bg-gray-100">
+                  <Button variant="ghost" size="sm" className="lg:hidden text-slate-700 hover:bg-gray-100">
                     <Menu className="h-5 w-5" />
                   </Button>
                 ) : (
                   <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                     <SheetTrigger asChild>
-                      <Button variant="ghost" size="sm" className="md:hidden text-slate-700 hover:bg-gray-100 border border-slate-300 rounded-md p-2">
+                      <Button variant="ghost" size="sm" className="lg:hidden text-slate-700 hover:bg-gray-100 border border-slate-300 rounded-md p-2">
                         <Menu className="h-5 w-5" />
                       </Button>
                     </SheetTrigger>
@@ -169,7 +169,7 @@ export default function HomePage() {
                           <Link
                             key={link.href}
                             href={link.href}
-                            className="text-lg font-semibold text-slate-900 hover:text-blue-600 transition-colors py-3 px-2 rounded-md"
+                            className="text-base font-medium text-slate-900 hover:text-blue-600 transition-colors py-3 px-2 rounded-md"
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             {link.label}
@@ -180,7 +180,7 @@ export default function HomePage() {
                         {!isAuthenticated && (
                           <Button
                             asChild
-                            className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-4 py-2 text-sm font-medium rounded-full transition-colors w-full"
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium rounded-full transition-colors w-full"
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             <Link
