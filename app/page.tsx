@@ -26,7 +26,7 @@ import {
 import { ChevronDown } from "lucide-react"
 
 export default function HomePage() {
-  const { filteredJobs, isLoading, hasMore, loadMore } = useJobs()
+  const { filteredJobs, isLoading, hasMore, loadMore, filters, setFilters } = useJobs()
   const { isAuthenticated, user, logout } = useAuth()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -121,6 +121,17 @@ export default function HomePage() {
   }
 
   const opportunityCounts = getOpportunityCounts()
+
+  // Handle opportunity type clicks
+  const handleOpportunityClick = (type: string) => {
+    if (type === 'featured') {
+      // Show all items when Featured is clicked (clear opportunityTypes filter)
+      setFilters({ opportunityTypes: [] })
+    } else {
+      // Filter by specific type
+      setFilters({ opportunityTypes: [type] })
+    }
+  }
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -251,6 +262,7 @@ export default function HomePage() {
             <Button 
               variant="ghost" 
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+              onClick={() => handleOpportunityClick('featured')}
             >
               Featured
               <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.featured}</span>
@@ -259,6 +271,7 @@ export default function HomePage() {
             <Button 
               variant="ghost" 
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+              onClick={() => handleOpportunityClick('job')}
             >
               Jobs
               <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.jobs}</span>
@@ -267,6 +280,7 @@ export default function HomePage() {
             <Button 
               variant="ghost" 
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+              onClick={() => handleOpportunityClick('tender')}
             >
               Tenders
               <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.tenders}</span>
@@ -275,6 +289,7 @@ export default function HomePage() {
             <Button 
               variant="ghost" 
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+              onClick={() => handleOpportunityClick('internship')}
             >
               Internships
               <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.internships}</span>
@@ -283,6 +298,7 @@ export default function HomePage() {
             <Button 
               variant="ghost" 
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+              onClick={() => handleOpportunityClick('scholarship')}
             >
               Scholarships
               <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.scholarships}</span>
@@ -291,6 +307,7 @@ export default function HomePage() {
             <Button 
               variant="ghost" 
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+              onClick={() => handleOpportunityClick('education')}
             >
               Education
               <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.education}</span>
@@ -299,6 +316,7 @@ export default function HomePage() {
             <Button 
               variant="ghost" 
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+              onClick={() => handleOpportunityClick('blog')}
             >
               Blogs
               <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.blogs}</span>
