@@ -82,12 +82,12 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Custom Header with Break-Out Logo Box */}
-      <header className="bg-white/80 backdrop-blur-lg border-b border-slate-200/50 sticky top-0 z-50">
+      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center">
             {/* Break-Out Logo Box - Far Left */}
-            <div className="bg-white rounded-b-3xl shadow-2xl h-40 w-48 mr-8 flex-shrink-0">
-              <Link href="/" className="w-full h-full flex items-center justify-center p-4">
+            <div className="bg-white rounded-b-3xl shadow-2xl h-40 w-52 mr-8 flex-shrink-0">
+              <Link href="/" className="w-full h-full flex items-center justify-center p-6">
                 <Image
                   src="/full logo.jpg"
                   alt="RwandaJobHub"
@@ -98,7 +98,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Single-Row Navigation - Right of Logo Box */}
+            {/* Horizontal Navigation - Right of Logo Box */}
             <div className="flex items-center justify-between flex-1 py-4">
               {/* Navigation Links */}
               <nav className="hidden md:flex items-center gap-6">
