@@ -292,7 +292,7 @@ export default function HomePage() {
         </aside>
 
         <main className="lg:col-span-8">
-          <div className="max-w-4xl mx-auto">
+          <div className="w-full lg:max-w-6xl mx-auto">
             <div className="mb-1 flex items-center justify-between">
               <p className="text-sm text-muted-foreground">Showing results ({filteredJobs.length})</p>
               <DropdownMenu>
