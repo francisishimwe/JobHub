@@ -82,12 +82,12 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Custom Header with Break-Out Logo Box */}
-      <header className="bg-[#0F172A] backdrop-blur-md border-b border-slate-200/30 sticky top-0 z-50">
+      <header className="bg-[#0F172A] backdrop-blur-md border-b border-slate-200/30 sticky top-0 z-40">
         <div className="container mx-auto px-6">
           <div className="flex items-center relative py-4">
             {/* Break-Out Logo Box - Far Left */}
-            <div className="absolute left-0 top-0 bg-white rounded-2xl shadow-2xl w-40 h-40 z-10 border border-slate-100">
-              <Link href="/" className="w-full h-full flex items-center justify-center p-4">
+            <div className="absolute left-0 top-0 bg-white rounded-2xl shadow-xl w-44 h-44 z-50 border border-slate-100">
+              <Link href="/" className="w-full h-full flex items-center justify-center p-6">
                 <Image
                   src="/full logo.jpg"
                   alt="RwandaJobHub"
@@ -99,9 +99,9 @@ export default function HomePage() {
             </div>
 
             {/* Navigation Row - Right of Logo Box */}
-            <div className="flex items-center justify-between flex-1 ml-44">
+            <div className="flex items-center justify-between flex-1 ml-48">
               {/* Navigation Links */}
-              <nav className="hidden lg:flex items-center gap-8 ml-16">
+              <nav className="hidden lg:flex items-center gap-8 ml-80">
                 {navigationLinks.map((link) => (
                   <Link
                     key={link.href}
@@ -201,10 +201,34 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Opportunity Row */}
+      {/* Integrated Filter Row */}
       <div className="bg-[#0F172A] border-b border-slate-200/30">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-center gap-6">
+            <Button 
+              variant="ghost" 
+              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+            >
+              Featured
+              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">3</span>
+            </Button>
+            
+            <Button 
+              variant="ghost" 
+              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+            >
+              Jobs
+              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">13</span>
+            </Button>
+            
+            <Button 
+              variant="ghost" 
+              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+            >
+              Tenders
+              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">8</span>
+            </Button>
+            
             <Button 
               variant="ghost" 
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
@@ -240,10 +264,10 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Clean Action Zone - Main Search Bar */}
+      {/* Single Search Bar */}
       <div className="bg-slate-50 py-8">
         <div className="container mx-auto px-6">
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-2xl mx-auto">
             <div className="flex items-center gap-4 bg-white/80 backdrop-blur-md border border-white/30 rounded-2xl p-2 shadow-xl">
               <div className="relative flex-1">
                 <input
