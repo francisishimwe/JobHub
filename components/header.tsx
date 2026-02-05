@@ -54,7 +54,7 @@ export function Header() {
           {/* Mobile Wrapper */}
           <div className="flex flex-row sm:flex-row md:flex-row lg:flex-row items-center justify-between">
             {/* Boxed Logo - Far Left */}
-            <div className="bg-white rounded-xl shadow-lg p-3 pointer-events-none z-50 w-24">
+            <div className="bg-white rounded-xl shadow-lg p-3 pointer-events-none z-50 w-24 mr-4">
               <Link href="/" className="flex items-center gap-3 pointer-events-auto">
                 <div className="relative h-8 w-20">
                   <Image

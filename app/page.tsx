@@ -126,8 +126,8 @@ export default function HomePage() {
       <Header />
 
       {/* The Master Row - Adaptive Opportunity Row */}
-      <div className="bg-[#0F172A] border-b border-slate-200/30">
-        <div className="container mx-auto px-6 py-4">
+      <div className="bg-[#0F172A] border-b border-slate-200/30 mb-6">
+        <div className="container mx-auto py-6 px-2">
           {/* Desktop: Horizontal Layout */}
           <div className="hidden lg:flex items-center justify-center gap-6 flex-wrap">
             <Button 
@@ -195,7 +195,7 @@ export default function HomePage() {
           </div>
 
           {/* Mobile: Grid Layout */}
-          <div className="lg:hidden grid grid-cols-4 gap-y-4 gap-x-2 text-[10px] -mt-6 px-2">
+          <div className="lg:hidden grid grid-cols-4 items-center justify-items-center gap-y-4 gap-x-2 text-[10px]">
             <Button 
               variant="ghost" 
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
