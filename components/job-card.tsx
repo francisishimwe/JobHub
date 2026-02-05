@@ -295,7 +295,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
         </div>
 
         {/* Desktop: Horizontal Layout */}
-        <div className="hidden lg:flex lg:flex-row lg:items-center lg:justify-between lg:gap-4">
+        <div className="hidden lg:flex lg:flex-row lg:items-center lg:justify-between lg:gap-6">
           <div className="flex items-center gap-4 flex-1 min-w-0">
             <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted transition-transform duration-300 hover:scale-110">
               <Image
@@ -309,13 +309,13 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
             </div>
             <div className="flex-1 min-w-0 text-left">
               <h3 
-                className="mb-1 text-xl font-bold leading-tight transition-all duration-200 cursor-pointer hover:text-blue-700 hover:underline whitespace-normal" 
+                className="mb-1 text-lg font-bold leading-tight transition-all duration-200 cursor-pointer hover:text-blue-700 hover:underline whitespace-normal" 
                 style={{ color: '#1E40AF' }}
                 onClick={handleTitleClick}
               >
                 {job.title}
               </h3>
-              <div className="mb-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+              <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                 {displayCompany.name && (
                   <span className="flex items-center gap-1 font-semibold text-slate-800">
                     {displayCompany.name}
@@ -347,17 +347,17 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
                   </div>
                 )}
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 mt-2">
                 {job.jobType && <Badge variant="secondary" className="text-xs transition-colors hover:bg-slate-200">{job.jobType}</Badge>}
                 {job.experienceLevel && <Badge variant="secondary" className="text-xs transition-colors hover:bg-slate-200">{job.experienceLevel}</Badge>}
                 {job.opportunityType && <Badge variant="secondary" className="text-xs transition-colors hover:bg-slate-200">{job.opportunityType}</Badge>}
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-2 shrink-0">
+          <div className="flex flex-row gap-2 shrink-0">
             <Button
               size="sm"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 text-sm font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-xl whitespace-nowrap"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-xl whitespace-nowrap"
               onClick={handleViewDetails}
             >
               View Details
@@ -366,10 +366,10 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
               variant="outline"
               size="sm"
               onClick={shareToWhatsApp}
-              className="gap-1 px-6 py-2 text-sm transition-all duration-200 hover:scale-105 hover:bg-green-50 hover:border-green-300 hover:text-green-700 hover:shadow-md whitespace-nowrap"
+              className="gap-1 px-3 py-2 text-sm transition-all duration-200 hover:scale-105 hover:bg-green-50 hover:border-green-300 hover:text-green-700 hover:shadow-md whitespace-nowrap"
             >
               <Share2 className="h-3 w-3" />
-              <span>Share</span>
+              <span className="hidden lg:inline">Share</span>
             </Button>
           </div>
         </div>
