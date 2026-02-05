@@ -127,8 +127,8 @@ export default function HomePage() {
       {/* The Master Row - Adaptive Opportunity Row */}
       <div className="bg-[#0F172A] border-b border-slate-200/30">
         <div className="container mx-auto px-6 py-4">
-          {/* Desktop: Centered Layout */}
-          <div className="hidden lg:flex items-center justify-center gap-6">
+          {/* Desktop: Horizontal Layout */}
+          <div className="hidden lg:flex items-center justify-center gap-6 flex-wrap">
             <Button 
               variant="ghost" 
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105 hover:shadow-lg"
@@ -191,6 +191,74 @@ export default function HomePage() {
               Blogs
               <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.blogs}</span>
             </Button>
+          </div>
+
+          {/* Mobile: Horizontal Scrolling */}
+          <div className="lg:hidden overflow-x-auto scrollbar-hide">
+            <div className="flex gap-3 pb-2 min-w-max px-2">
+              <Button 
+                variant="ghost" 
+                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-3 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                onClick={() => handleOpportunityClick('featured')}
+              >
+                Featured
+                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.featured}</span>
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-3 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                onClick={() => handleOpportunityClick('job')}
+              >
+                Jobs
+                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.jobs}</span>
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-3 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                onClick={() => handleOpportunityClick('tender')}
+              >
+                Tenders
+                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.tenders}</span>
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-3 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                onClick={() => handleOpportunityClick('internship')}
+              >
+                Internships
+                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.internships}</span>
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-3 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                onClick={() => handleOpportunityClick('scholarship')}
+              >
+                Scholarships
+                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.scholarships}</span>
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-3 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                onClick={() => handleOpportunityClick('education')}
+              >
+                Education
+                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.education}</span>
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-3 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                onClick={() => handleOpportunityClick('blog')}
+              >
+                Blogs
+                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.blogs}</span>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
