@@ -195,7 +195,7 @@ export default function HomePage() {
           </div>
 
           {/* Mobile: Grid Layout */}
-          <div className="lg:hidden grid grid-cols-4 gap-2 text-[10px] -mt-6 px-2">
+          <div className="lg:hidden grid grid-cols-4 gap-y-3 gap-x-2 text-[10px] -mt-6 px-2">
             <Button 
               variant="ghost" 
               className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"

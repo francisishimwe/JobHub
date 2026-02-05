@@ -93,7 +93,7 @@ export function Header() {
                   <Link href="/post-advert">
                     <span className="text-lg">+</span>
                     <span className="hidden sm:inline">Post a Job</span>
-                    <span className="sm:hidden">Post</span>
+                    <span className="sm:hidden">Post a Job</span>
                   </Link>
                 </Button>
 
