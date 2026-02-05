@@ -2,25 +2,55 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState } from "react"
-import { Header } from "@/components/header"
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import Image from "next/image"
 import { Footer } from "@/components/footer"
 import { HeroSection } from "@/components/hero-section"
 import { JobCard } from "@/components/job-card"
 import { AdContainer } from "@/components/ad-container"
 import { useJobs } from "@/lib/job-context"
+import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
-import { ChevronDown } from "lucide-react"
+import { UserCircle2, LogOut, Menu } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import { ChevronDown } from "lucide-react"
 
 export default function HomePage() {
   const { filteredJobs, isLoading, hasMore, loadMore } = useJobs()
+  const { isAuthenticated, user, logout } = useAuth()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "deadline">("newest")
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const handleLogout = () => {
+    logout()
+    window.location.href = "/"
+  }
+
+  const navigationLinks = [
+    { href: "/", label: "Home" },
+    { href: "/exams", label: "View Exams" },
+    { href: "/employers", label: "Employers" },
+    { href: "/testimonials", label: "Testimonials" },
+    { href: "/help", label: "Help" },
+    { href: "/about", label: "About Us" },
+    { href: "/contact", label: "Contact Us" },
+  ]
 
   // Sort jobs based on columns that actually exist in your Supabase table
   const sortedJobs = [...filteredJobs].sort((a, b) => {
@@ -51,7 +81,126 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Header />
+      {/* Custom Header with Break-Out Logo Box */}
+      <header className="bg-white/80 backdrop-blur-lg border-b border-slate-200/50 sticky top-0 z-50">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center">
+            {/* Break-Out Logo Box - Far Left */}
+            <div className="bg-white rounded-b-3xl shadow-2xl h-40 w-48 mr-8 flex-shrink-0">
+              <Link href="/" className="w-full h-full flex items-center justify-center p-4">
+                <Image
+                  src="/full logo.jpg"
+                  alt="RwandaJobHub"
+                  fill
+                  priority
+                  className="object-contain"
+                />
+              </Link>
+            </div>
+
+            {/* Single-Row Navigation - Right of Logo Box */}
+            <div className="flex items-center justify-between flex-1 py-4">
+              {/* Navigation Links */}
+              <nav className="hidden md:flex items-center gap-6">
+                {navigationLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-lg font-semibold tracking-tight text-slate-700 hover:text-blue-600 transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-4">
+                {/* Login Text Link */}
+                {isAuthenticated && user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="gap-2 text-slate-700 hover:bg-gray-100">
+                        <UserCircle2 className="h-4 w-4" />
+                        <span className="hidden lg:inline">{user.email}</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={handleLogout} className="gap-2">
+                        <LogOut className="h-4 w-4" />
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Link 
+                    href="/dashboard" 
+                    className="text-slate-600 hover:text-slate-800 font-medium transition-colors"
+                  >
+                    Login
+                  </Link>
+                )}
+
+                {/* Royal Blue Post a Job Pill */}
+                <Button 
+                  asChild
+                  className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-6 py-2 text-sm font-semibold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center gap-2"
+                >
+                  <Link href="/post-advert">
+                    <span className="text-lg">+</span>
+                    Post a Job
+                  </Link>
+                </Button>
+
+                {/* Mobile Menu */}
+                {!mounted ? (
+                  <Button variant="ghost" size="sm" className="md:hidden text-slate-700 hover:bg-gray-100">
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                ) : (
+                  <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                    <SheetTrigger asChild>
+                      <Button variant="ghost" size="sm" className="md:hidden text-slate-700 hover:bg-gray-100 border border-slate-300 rounded-md p-2">
+                        <Menu className="h-5 w-5" />
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent side="right" className="w-full max-w-xs pl-6 pr-4 bg-white text-slate-900 h-full sm:max-w-sm" suppressHydrationWarning>
+                      <div className="flex flex-col gap-4 mt-6">
+                        {navigationLinks.map((link) => (
+                          <Link
+                            key={link.href}
+                            href={link.href}
+                            className="text-lg font-semibold text-slate-900 hover:text-blue-600 transition-colors py-3 px-2 rounded-md"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                        
+                        {/* Mobile Auth */}
+                        {!isAuthenticated && (
+                          <Button
+                            asChild
+                            className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-4 py-2 text-sm font-medium rounded-full transition-colors w-full"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            <Link
+                              href="/dashboard"
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              Login
+                            </Link>
+                          </Button>
+                        )}
+                      </div>
+                    </SheetContent>
+                  </Sheet>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
       <HeroSection />
 
       <div className="container mx-auto px-2 py-1">
