@@ -34,7 +34,7 @@ const JobCardComponent = ({ job }: JobCardProps) => {
 
   const { getCompanyById } = useCompanies()
 
-  const company = getCompanyById(job.companyId)
+  const company = job.companyId ? getCompanyById(job.companyId) : null
 
 
 
@@ -210,19 +210,19 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
     <div className="block">
 
-      <div className={`rounded-2xl border bg-card p-4 md:p-6 shadow-sm transition-all hover:shadow-md border-l-4 ${getJobTypeBorderColor()}`}>
+      <div className={`rounded-2xl border bg-card p-4 md:p-6 shadow-sm transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 border-l-4 ${getJobTypeBorderColor()} lg:hover:shadow-2xl`}>
 
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 md:gap-4">
 
           <div className="flex gap-3 md:gap-4 flex-1 min-w-0">
 
-            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted">
+            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted transition-transform duration-300 hover:scale-110">
 
               <Image
 
                 src={displayCompany.logo || "/placeholder.svg"}
 
-                alt={`${displayCompany.name} logo`}
+                alt={`${displayCompany.name || 'Company'} logo`}
 
                 fill
 
@@ -242,7 +242,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
               <h3 
 
-                className="mb-2 text-lg md:text-xl font-bold leading-tight transition-colors cursor-pointer hover:underline" 
+                className="mb-2 text-lg md:text-xl font-bold leading-tight transition-all duration-200 cursor-pointer hover:text-blue-700 hover:underline lg:hover:text-blue-800" 
 
                 style={{ color: '#1E40AF' }}
 
@@ -266,13 +266,14 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
                     {(job.isVerified ?? job.is_verified) && (
 
-                      <BadgeCheck className="h-4 w-4 text-blue-600" aria-label="Verified company" />
+                      <BadgeCheck className="h-4 w-4 text-blue-600 transition-colors hover:text-blue-700" aria-label="Verified company" />
 
                     )}
 
                   </span>
 
                 )}
+
 
 
 
@@ -326,11 +327,11 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
               <div className="flex flex-wrap gap-1.5 md:gap-2">
 
-                {job.jobType && <Badge variant="secondary" className="text-xs">{job.jobType}</Badge>}
+                {job.jobType && <Badge variant="secondary" className="text-xs transition-colors hover:bg-slate-200">{job.jobType}</Badge>}
 
-                {job.experienceLevel && <Badge variant="secondary" className="text-xs">{job.experienceLevel}</Badge>}
+                {job.experienceLevel && <Badge variant="secondary" className="text-xs transition-colors hover:bg-slate-200">{job.experienceLevel}</Badge>}
 
-                {job.opportunityType && <Badge variant="secondary" className="text-xs">{job.opportunityType}</Badge>}
+                {job.opportunityType && <Badge variant="secondary" className="text-xs transition-colors hover:bg-slate-200">{job.opportunityType}</Badge>}
 
               </div>
 
@@ -346,7 +347,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
               size="sm"
 
-              className="bg-blue-600 hover:bg-blue-700 text-white flex-1 md:flex-initial text-xs md:text-sm font-medium transition-colors"
+              className="bg-blue-600 hover:bg-blue-700 text-white flex-1 md:flex-initial text-xs md:text-sm font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg lg:hover:shadow-xl"
 
               onClick={handleViewDetails}
 
@@ -364,7 +365,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
               onClick={shareToWhatsApp}
 
-              className="gap-1 flex-1 md:flex-initial text-xs md:text-sm"
+              className="gap-1 flex-1 md:flex-initial text-xs md:text-sm transition-all duration-200 hover:scale-105 hover:bg-green-50 hover:border-green-300 hover:text-green-700 lg:hover:shadow-md"
 
             >
 
