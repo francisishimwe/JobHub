@@ -7,7 +7,17 @@ import type { Job, Company } from "@/lib/types"
 import { useCompanies } from "@/lib/company-context"
 import Link from "next/link"
 
-interface JobDetailsContentProps {
+interface JobDetailsContentProps {"Finalize the 'Elite Portal' UI:
+
+Delete Redundant Pills: Remove the secondary row of blue and gray pills (Featured 18, Jobs 14, etc.).
+
+Unify Filters: The Master Row with the Gold circular counters is now the primary filter. Ensure that clicking 'Tenders' or 'Internships' in this row correctly filters the results below.
+
+Search Command Center: Center the single search bar and make it wider (max-w-4xl). Ensure the 'Search' button uses the Emerald brand color.
+
+Smart Cards: Apply a 4px left-border to all job cards that matches the category color (Navy for Jobs, Gold for Tenders, Emerald for Internships).
+
+Logo Pedestal: Confirm the white box has rounded-b-3xl and sits at z-[100] to float elegantly over the entire header."
     job: Job
     initialCompany?: Company | null
 }

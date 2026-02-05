@@ -194,16 +194,14 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
     const jobType = job.jobType?.toLowerCase() || job.opportunityType?.toLowerCase() || ''
 
-    if (jobType.includes('full') || jobType.includes('permanent')) return 'border-l-blue-500'
-
-    if (jobType.includes('intern') || jobType.includes('trainee')) return 'border-l-orange-500'
-
+    
+    if (jobType.includes('job') || jobType.includes('full') || jobType.includes('permanent')) return 'border-l-[#0F172A]' // Navy for Jobs
+    if (jobType.includes('tender') || jobType.includes('bid')) return 'border-l-[#F59E0B]' // Gold for Tenders
+    if (jobType.includes('intern') || jobType.includes('trainee')) return 'border-l-[#10B981]' // Emerald for Internships
     if (jobType.includes('part') || jobType.includes('contract')) return 'border-l-green-500'
-
     if (jobType.includes('volunteer') || jobType.includes('unpaid')) return 'border-l-purple-500'
-
-    return 'border-l-blue-500' // default
-
+    
+    return 'border-l-[#0F172A]' // Default Navy
   }
 
 

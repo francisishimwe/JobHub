@@ -86,7 +86,7 @@ export default function HomePage() {
         <div className="container mx-auto px-6">
           <div className="flex items-center relative py-4">
             {/* Logo Pedestal - Far Left */}
-            <div className="absolute left-0 top-0 bg-white rounded-2xl shadow-2xl w-44 h-44 z-50 border border-slate-100">
+            <div className="absolute left-0 top-0 bg-white rounded-b-3xl shadow-2xl w-44 h-44 z-[100] border border-slate-100">
               <Link href="/" className="w-full h-full flex items-center justify-center p-6">
                 <Image
                   src="/full logo.jpg"
@@ -267,7 +267,7 @@ export default function HomePage() {
       {/* The Search Zone - Single Command Center */}
       <div className="bg-slate-50 py-8">
         <div className="container mx-auto px-6">
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <div className="flex items-center gap-4 bg-white/80 backdrop-blur-md border border-white/30 rounded-2xl p-2 shadow-xl">
               <div className="relative flex-1">
                 <input
