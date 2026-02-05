@@ -52,10 +52,10 @@ export function Header() {
       <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            {/* Logo Box - Far Left */}
-            <div className="bg-white rounded-lg shadow-sm p-2">
+            {/* Boxed Logo - Far Left */}
+            <div className="bg-white rounded-xl shadow-lg p-3">
               <Link href="/" className="flex items-center gap-3">
-                <div className="relative h-10 w-32 md:h-12 md:w-40">
+                <div className="relative h-12 w-36 md:h-14 md:w-44">
                   <Image
                     src="/full logo.jpg"
                     alt="RwandaJobHub"
@@ -73,7 +73,7 @@ export function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-lg font-semibold text-slate-700 hover:text-blue-600 transition-colors"
+                  className="text-lg font-semibold tracking-tight text-slate-700 hover:text-blue-600 transition-colors"
                 >
                   {link.label}
                 </Link>
