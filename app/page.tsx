@@ -82,7 +82,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Custom Header with Break-Out Logo Box */}
-      <header className="bg-white/90 backdrop-blur-md border-b border-slate-200/30 sticky top-0 z-50">
+      <header className="bg-[#0F172A] backdrop-blur-md border-b border-slate-200/30 sticky top-0 z-50">
         <div className="container mx-auto px-6">
           <div className="flex items-center relative py-4">
             {/* Break-Out Logo Box - Far Left */}
@@ -106,7 +106,7 @@ export default function HomePage() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="text-base font-medium text-slate-700 hover:text-blue-600 transition-colors"
+                    className="text-base font-medium text-white hover:text-blue-300 transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -119,7 +119,7 @@ export default function HomePage() {
                 {isAuthenticated && user ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="gap-2 text-slate-700 hover:bg-gray-100">
+                      <Button variant="ghost" size="sm" className="gap-2 text-white hover:bg-gray-100">
                         <UserCircle2 className="h-4 w-4" />
                         <span className="hidden lg:inline">{user.email}</span>
                       </Button>
@@ -134,16 +134,16 @@ export default function HomePage() {
                 ) : (
                   <Link 
                     href="/dashboard" 
-                    className="text-slate-600 hover:text-slate-800 font-medium transition-colors"
+                    className="text-white hover:text-blue-300 font-medium transition-colors"
                   >
                     Login
                   </Link>
                 )}
 
-                {/* Royal Blue Post a Job Pill */}
+                {/* Electric Emerald Post a Job Pill */}
                 <Button 
                   asChild
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 text-sm font-medium rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center gap-2"
+                  className="bg-[#10B981] hover:bg-[#059669] text-white px-6 py-2 text-sm font-medium rounded-full transition-all hover:brightness-110 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25 flex items-center gap-2"
                 >
                   <Link href="/post-advert">
                     <span className="text-lg">+</span>
@@ -153,13 +153,13 @@ export default function HomePage() {
 
                 {/* Mobile Menu */}
                 {!mounted ? (
-                  <Button variant="ghost" size="sm" className="lg:hidden text-slate-700 hover:bg-gray-100">
+                  <Button variant="ghost" size="sm" className="lg:hidden text-white hover:bg-gray-100">
                     <Menu className="h-5 w-5" />
                   </Button>
                 ) : (
                   <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                     <SheetTrigger asChild>
-                      <Button variant="ghost" size="sm" className="lg:hidden text-slate-700 hover:bg-gray-100 border border-slate-300 rounded-md p-2">
+                      <Button variant="ghost" size="sm" className="lg:hidden text-white hover:bg-gray-100 border border-slate-300 rounded-md p-2">
                         <Menu className="h-5 w-5" />
                       </Button>
                     </SheetTrigger>
@@ -180,7 +180,7 @@ export default function HomePage() {
                         {!isAuthenticated && (
                           <Button
                             asChild
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium rounded-full transition-colors w-full"
+                            className="bg-[#10B981] hover:bg-[#059669] text-white px-4 py-2 text-sm font-medium rounded-full transition-colors w-full"
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             <Link
@@ -201,11 +201,88 @@ export default function HomePage() {
         </div>
       </header>
 
+      {/* Opportunity Tabs - Command Center */}
+      <div className="bg-[#0F172A] border-b border-slate-200/30">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            {/* Opportunity Filters */}
+            <div className="flex items-center gap-4">
+              <Button 
+                variant="ghost" 
+                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+              >
+                Jobs
+                <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">13</span>
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+              >
+                Tenders
+                <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">8</span>
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+              >
+                Internships
+                <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">5</span>
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+              >
+                Scholarships
+                <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">7</span>
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+              >
+                Education
+                <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">4</span>
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium"
+              >
+                Blogs
+                <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">12</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Search Bar - Command Center */}
+      <div className="bg-[#0F172A] border-b border-slate-200/30">
+        <div className="container mx-auto px-6 py-4">
+          <div className="max-w-2xl mx-auto">
+            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-1">
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  placeholder="Search opportunities..."
+                  className="w-full bg-transparent text-white placeholder-white/60 border-0 px-4 py-3 text-base focus:outline-none focus:ring-0"
+                />
+              </div>
+              <Button className="bg-[#10B981] hover:bg-[#059669] text-white px-6 py-3 rounded-lg font-medium transition-all">
+                Search
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <HeroSection />
 
       <div className="container mx-auto px-2 py-1">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-7xl mx-auto">
-          
           <aside className="hidden lg:block lg:col-span-2">
             <div className="sticky top-4">
                <AdContainer />
