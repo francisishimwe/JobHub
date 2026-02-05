@@ -317,8 +317,8 @@ export default function HomePage() {
                 </div>
               ) : sortedJobs.length > 0 ? (
                 <>
-                  {/* Desktop: 3-Column Grid */}
-                  <div className="hidden lg:grid lg:grid-cols-3 gap-4">
+                  {/* Desktop: Single Wide Column */}
+                  <div className="hidden lg:grid lg:grid-cols-1 gap-4">
                     {sortedJobs.map((job) => (
                       <JobCard key={job.id} job={job} />
                     ))}

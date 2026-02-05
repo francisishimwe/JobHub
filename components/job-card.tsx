@@ -212,7 +212,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
       <div className={`rounded-2xl border bg-card p-4 md:p-6 shadow-sm transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 border-l-4 ${getJobTypeBorderColor()} lg:hover:shadow-2xl`}>
 
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 md:gap-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 lg:gap-4">
 
           <div className="flex gap-3 md:gap-4 flex-1 min-w-0">
 
@@ -240,7 +240,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
               <h3 
 
-                className="mb-2 text-lg md:text-xl font-bold leading-tight transition-all duration-200 cursor-pointer hover:text-blue-700 hover:underline lg:hover:text-blue-800" 
+                className="mb-2 text-lg md:text-xl font-bold leading-tight transition-all duration-200 cursor-pointer hover:text-blue-700 hover:underline lg:hover:text-blue-800 lg:flex-grow lg:whitespace-nowrap" 
 
                 style={{ color: '#1E40AF' }}
 
@@ -340,7 +340,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
               size="sm"
 
-              className="bg-blue-600 hover:bg-blue-700 text-white flex-1 md:flex-initial text-xs md:text-sm font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg lg:hover:shadow-xl"
+              className="bg-blue-600 hover:bg-blue-700 text-white flex-1 md:flex-initial text-xs md:text-sm font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg lg:hover:shadow-xl whitespace-nowrap"
 
               onClick={handleViewDetails}
 
