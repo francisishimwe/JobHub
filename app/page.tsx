@@ -26,7 +26,7 @@ import {
 import { ChevronDown } from "lucide-react"
 
 export default function HomePage() {
-  const { filteredJobs, isLoading, hasMore, loadMore, filters, setFilters } = useJobs()
+  const { jobs, filteredJobs, isLoading, hasMore, loadMore, filters, setFilters } = useJobs()
   const { isAuthenticated, user, logout } = useAuth()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -90,33 +90,52 @@ export default function HomePage() {
       blogs: 0
     }
 
-    filteredJobs.forEach(job => {
-      const opportunityType = job.opportunityType?.toLowerCase() || job.jobType?.toLowerCase() || ''
-      
-      // Count by opportunity type
-      if (opportunityType.includes('featured') || job.featured) {
-        counts.featured++
-      }
-      if (opportunityType.includes('job') || opportunityType.includes('full') || opportunityType.includes('permanent')) {
-        counts.jobs++
-      }
-      if (opportunityType.includes('tender') || opportunityType.includes('bid')) {
-        counts.tenders++
-      }
-      if (opportunityType.includes('intern') || opportunityType.includes('trainee')) {
-        counts.internships++
-      }
-      if (opportunityType.includes('scholarship') || opportunityType.includes('education')) {
-        counts.scholarships++
-      }
-      if (opportunityType.includes('education') || opportunityType.includes('course')) {
-        counts.education++
-      }
-      if (opportunityType.includes('blog') || opportunityType.includes('article')) {
-        counts.blogs++
-      }
-    })
+    // Debug: log the jobs data
+    console.log('🔍 Jobs data for counting:', jobs?.length || 0, 'jobs found')
+    
+    // Use the full jobs array for counting, not filteredJobs
+    if (jobs && jobs.length > 0) {
+      jobs.forEach((job, index) => {
+        const opportunityType = job.opportunityType?.toLowerCase() || job.opportunity_type?.toLowerCase() || job.jobType?.toLowerCase() || ''
+        const title = job.title?.toLowerCase() || ''
+        const description = job.description?.toLowerCase() || ''
+        
+        // Debug: log first few jobs
+        if (index < 3) {
+          console.log(`📋 Job ${index}:`, {
+            title: job.title,
+            opportunityType: job.opportunityType || job.opportunity_type || 'N/A',
+            jobType: job.jobType || 'N/A',
+            featured: job.featured
+          })
+        }
+        
+        // Count by opportunity type - more inclusive matching
+        if (opportunityType.includes('featured') || job.featured || title.includes('featured')) {
+          counts.featured++
+        }
+        if (opportunityType.includes('job') || opportunityType.includes('full') || opportunityType.includes('permanent') || title.includes('job')) {
+          counts.jobs++
+        }
+        if (opportunityType.includes('tender') || opportunityType.includes('bid') || title.includes('tender')) {
+          counts.tenders++
+        }
+        if (opportunityType.includes('intern') || opportunityType.includes('trainee') || title.includes('intern')) {
+          counts.internships++
+        }
+        if (opportunityType.includes('scholarship') || title.includes('scholarship')) {
+          counts.scholarships++
+        }
+        if (opportunityType.includes('education') || opportunityType.includes('course') || title.includes('education')) {
+          counts.education++
+        }
+        if (opportunityType.includes('blog') || opportunityType.includes('article') || title.includes('blog')) {
+          counts.blogs++
+        }
+      })
+    }
 
+    console.log('📊 Final counts:', counts)
     return counts
   }
 
