@@ -390,99 +390,59 @@ export default function HomePage() {
               </DropdownMenu>
                 <input
                   type="text"
-                  placeholder="Search opportunities..."
-                  className="w-full bg-transparent text-slate-900 placeholder-slate-500 border-0 px-6 py-4 text-lg focus:outline-none focus:ring-0"
-                />
-              </div>
-              <Button className="bg-[#10B981] hover:bg-[#059669] text-white px-10 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25">
-                Search
-              </Button>
-      <div className="container mx-auto px-2 py-1">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-7xl mx-auto">
-          {/* Left Sidebar - Adaptive */}
-          <aside className="lg:col-span-2">
-            <div className="sticky top-4">
-               <AdContainer />
             </div>
-          </aside>
-
-          {/* Main Content - Adaptive */}
-          <main className="lg:col-span-8">
-            <div className="lg:max-w-4xl mx-auto">
-              {/* Sort Controls - Adaptive */}
-              <div className="mb-1 flex items-center justify-between">
-                <p className="text-sm text-muted-foreground">Showing results ({filteredJobs.length})</p>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="gap-2 bg-transparent">
-                      Sort: {getSortLabel()}
-                      <ChevronDown className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => setSortBy("newest")}>Newest First</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setSortBy("oldest")}>Oldest First</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setSortBy("deadline")}>Deadline (Soonest)</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-
-              {/* Job Cards - Adaptive Grid */}
-              <div className="space-y-4">
-                {isLoading && filteredJobs.length === 0 ? (
-                  <div className="rounded-lg border bg-card p-12 text-center">
-                    <p className="text-muted-foreground">Loading opportunities...</p>
+            <div className="space-y-4">
+              {isLoading && filteredJobs.length === 0 ? (
+                <div className="rounded-lg border bg-card p-12 text-center">
+                  <p className="text-muted-foreground">Loading opportunities...</p>
+                </div>
+              ) : sortedJobs.length > 0 ? (
+                <>
+                  {/* Desktop: 3-Column Grid */}
+                  <div className="hidden lg:grid lg:grid-cols-3 gap-4">
+                    {sortedJobs.map((job) => (
+                      <JobCard key={job.id} job={job} />
+                    ))}
                   </div>
-                ) : sortedJobs.length > 0 ? (
-                  <>
-                    {/* Desktop: 3-Column Grid */}
-                    <div className="hidden lg:grid lg:grid-cols-3 gap-4">
-                      {sortedJobs.map((job) => (
-                        <JobCard key={job.id} job={job} />
-                      ))}
-                    </div>
 
-                    {/* Mobile: Single Column Full Width */}
-                    <div className="lg:hidden space-y-4">
-                      {sortedJobs.map((job) => (
-                        <JobCard key={job.id} job={job} />
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <div className="rounded-lg border bg-card p-12 text-center">
-                    <p className="text-muted-foreground">No jobs found matching your criteria.</p>
+                  {/* Mobile: Single Column Full Width */}
+                  <div className="lg:hidden space-y-4">
+                    {sortedJobs.map((job) => (
+                      <JobCard key={job.id} job={job} />
+                    ))}
                   </div>
-                )}
-              </div>
-
-              {/* Load More - Adaptive */}
-              {hasMore && (
-                <div className="flex justify-center mt-8 pb-10">
-                  <Button 
-                    onClick={loadMore} 
-                    disabled={isLoading}
-                    className="bg-[#003566] hover:bg-[#002850] text-white px-10 py-3 rounded-lg font-bold shadow-md transition-all"
-                  >
-                    {isLoading ? "Loading..." : "Load More Opportunities"}
-                  </Button>
+                </>
+              ) : (
+                <div className="rounded-lg border bg-card p-12 text-center">
+                  <p className="text-muted-foreground">No jobs found matching your criteria.</p>
                 </div>
               )}
             </div>
-          </main>
 
-          {/* Right Sidebar - Adaptive */}
-          <aside className="lg:col-span-2">
-          <aside className="hidden lg:block lg:col-span-2">
-            <div className="sticky top-4">
-               <AdContainer />
-            </div>
-          </aside>
+            {/* Load More - Adaptive */}
+            {hasMore && (
+              <div className="flex justify-center mt-8 pb-10">
+                <Button 
+                  onClick={loadMore} 
+                  disabled={isLoading}
+                  className="bg-[#003566] hover:bg-[#002850] text-white px-10 py-3 rounded-lg font-bold shadow-md transition-all"
+                >
+                  {isLoading ? "Loading..." : "Load More Opportunities"}
+                </Button>
+              </div>
+            )}
+          </div>
+        </main>
 
-        </div>
+        {/* Right Sidebar - Adaptive */}
+        <aside className="lg:col-span-2">
+          <div className="sticky top-4">
+             <AdContainer />
+          </div>
+        </aside>
       </div>
-
-      <Footer />
     </div>
-  )
-}
+
+    <Footer />
+  </div>
+)
