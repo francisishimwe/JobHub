@@ -9,82 +9,89 @@ import { Check, Star, Crown, Zap } from "lucide-react"
 
 const plans = [
   {
-    id: 1,
+    id: "featured",
     name: "Featured",
-    price: "Free",
+    price: "50,000 RWF",
     description: "Perfect for getting started",
     features: [
       "Basic job listing",
       "30-day visibility",
-      "Standard placement",
-      "Up to 100 applicants"
+      "Company logo display",
+      "Email applications",
+      "Basic analytics"
     ],
     icon: Star,
     color: "from-blue-500 to-blue-600",
     popular: false
   },
   {
-    id: 2,
+    id: "featured-plus",
     name: "Featured+",
-    price: "$29",
+    price: "75,000 RWF",
     description: "Enhanced visibility for your job",
     features: [
       "Enhanced job listing",
-      "60-day visibility",
+      "30-day visibility",
       "Priority placement",
-      "Up to 500 applicants",
-      "Company branding"
+      "Company logo & banner",
+      "Email & link applications",
+      "Advanced analytics",
+      "Social media promotion"
     ],
     icon: Crown,
     color: "from-purple-500 to-purple-600",
-    popular: false
-  },
-  {
-    id: 3,
-    name: "Super Featured",
-    price: "$59",
-    description: "Maximum exposure for top talent",
-    features: [
-      "Premium job listing",
-      "90-day visibility",
-      "Top placement",
-      "Unlimited applicants",
-      "Company branding",
-      "Social media promotion"
-    ],
-    icon: Zap,
-    color: "from-amber-500 to-amber-600",
     popular: true
   },
   {
-    id: 4,
-    name: "Short-listing",
-    price: "$99",
-    description: "Exclusive agency verification",
+    id: "super-featured",
+    name: "Super Featured",
+    price: "100,000 RWF",
+    description: "Maximum exposure for top talent",
     features: [
-      "Exclusive listing",
-      "Unlimited visibility",
-      "Top priority placement",
-      "Unlimited applicants",
-      "Premium branding",
-      "Social media promotion",
-      "Agency verified badge",
-      "Priority: Top tagging"
+      "Premium job listing",
+      "45-day visibility",
+      "Top placement guarantee",
+      "Featured on homepage",
+      "Company branding",
+      "Multiple application methods",
+      "Premium analytics",
+      "WhatsApp promotion",
+      "Dedicated support"
+    ],
+    icon: Zap,
+    color: "from-orange-500 to-orange-600",
+    popular: false
+  },
+  {
+    id: "short-listing",
+    name: "Short-listing",
+    price: "150,000 RWF",
+    description: "Full-service recruitment",
+    features: [
+      "All Super Featured benefits",
+      "60-day visibility",
+      "Candidate pre-screening",
+      "Short-listing service",
+      "Interview coordination",
+      "Priority candidate matching",
+      "Dedicated account manager",
+      "Unlimited edits",
+      "Money-back guarantee"
     ],
     icon: Crown,
-    color: "from-orange-500 to-orange-600",
+    color: "from-green-500 to-green-600",
     popular: false
   }
 ]
 
 export default function SelectPlanPage() {
   const router = useRouter()
-  const [selectedPlan, setSelectedPlan] = useState<number | null>(null)
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
 
-  const handleSelectPlan = (planId: number) => {
+  const handleSelectPlan = (planId: string) => {
     setSelectedPlan(planId)
     // Store the selected plan in localStorage
-    localStorage.setItem('selectedPlan', planId.toString())
+    localStorage.setItem('selectedPlan', planId)
     // Redirect to post job form
     router.push('/post-job-form')
   }
@@ -135,9 +142,6 @@ export default function SelectPlanPage() {
                     <span className="text-3xl font-bold text-slate-900">
                       {plan.price}
                     </span>
-                    {plan.price !== "Free" && (
-                      <span className="text-slate-600">/month</span>
-                    )}
                   </div>
                 </CardHeader>
 
