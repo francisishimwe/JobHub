@@ -52,9 +52,9 @@ export function Header() {
       <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex justify-between items-center px-8 py-4">
           {/* Logo - Far Left */}
-          <div className="bg-white rounded-xl shadow-lg p-4 pointer-events-none z-50 w-32">
+          <div className="bg-white rounded-xl shadow-lg p-5 pointer-events-none z-50 w-36">
             <Link href="/" className="flex items-center gap-3 pointer-events-auto">
-              <div className="relative h-14 w-28">
+              <div className="relative h-20 w-32">
                 <Image
                   src="/full logo.jpg"
                   alt="RwandaJobHub"
@@ -67,7 +67,7 @@ export function Header() {
           </div>
 
           {/* Navigation Links - Center (Large Desktop Only) */}
-          <nav className="hidden lg:flex items-center gap-x-10">
+          <nav className="hidden lg:flex items-center gap-x-12">
             {navigationLinks.map((link) => (
               <Link
                 key={link.href}

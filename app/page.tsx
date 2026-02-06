@@ -126,7 +126,7 @@ export default function HomePage() {
       <Header />
 
       {/* Modern Category Bar - Desktop Only */}
-      <div className="bg-black/20 backdrop-blur-md border-b border-slate-200/20 mb-4">
+      <div className="bg-slate-800 border-b border-slate-700/30 mb-4">
         <div className="max-w-7xl mx-auto py-3 px-8">
           {/* Desktop: Single Horizontal Line - All 7 Categories */}
           <div className="hidden lg:flex items-center justify-center gap-x-12">
