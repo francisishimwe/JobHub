@@ -1,6 +1,6 @@
 "use client"
 
-import { MapPinned, Mail, Phone } from "lucide-react"
+import { MapPinned, Mail, Phone, Globe } from "lucide-react"
 import { useEffect } from "react"
 import { FaWhatsapp, FaFacebook, FaXTwitter, FaTelegram } from "react-icons/fa6"
 
@@ -13,7 +13,7 @@ export function Footer() {
         d.href = atob('aHR0cHM6Ly9waWxsYXJxLm1lLw==');
         d.target = '_blank';
         d.rel = 'noopener noreferrer';
-        d.className = 'text-gray-300 hover:text-white text-xs transition-colors';
+        d.className = 'text-gray-400 hover:text-white text-xs transition-colors';
         d.style.cssText = 'user-select:none';
         d.textContent = atob('TWFkZSBieSBQaWxsYXJx');
         d.setAttribute('data-c', '1');
@@ -31,7 +31,7 @@ export function Footer() {
   }, []);
 
   return (
-    <footer className="text-white py-8" style={{ backgroundColor: '#003566' }}>
+    <footer className="bg-slate-900 border-t border-slate-800/50 text-white">
       {/* 
         Space for Google AdSense Ad Unit (Footer)
         To place a manual ad here:
@@ -39,98 +39,133 @@ export function Footer() {
         2. Get the <ins>...</ins> code
         3. Paste it here inside a <div>
       */}
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          <h3 className="text-xl font-bold mb-6 text-center">Get in Touch</h3>
-
-          <div className="grid md:grid-cols-3 gap-6 text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start gap-3">
-              <MapPinned className="h-5 w-5 text-gray-400" />
-              <div>
-                <p className="font-semibold">Location</p>
-                <p className="text-gray-300 text-sm">Kigali, Rwanda</p>
+      
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          
+          {/* Column 1: Logo & About */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                <span className="text-blue-600 font-bold text-sm">RJ</span>
               </div>
+              <span className="text-gray-400 text-sm">RwandaJobHub</span>
             </div>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              Your trusted platform for finding jobs, tenders, scholarships, and opportunities in Rwanda.
+            </p>
+          </div>
 
-            <div className="flex items-center justify-center md:justify-start gap-3">
-              <Mail className="h-5 w-5 text-gray-400" />
-              <div>
-                <p className="font-semibold">Email</p>
-                <p className="text-gray-300 text-sm">rwandaiobhub2050@gmail.com</p>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center md:justify-start gap-3">
-              <Phone className="h-5 w-5 text-gray-400" />
-              <div>
-                <p className="font-semibold">Phone</p>
-                <p className="text-gray-300 text-sm">+250 783 074 056</p>
-              </div>
+          {/* Column 2: Quick Links */}
+          <div className="space-y-4">
+            <h3 className="text-white font-semibold mb-4">Quick Links</h3>
+            <div className="space-y-2">
+              <a href="/" className="text-gray-400 hover:text-white transition-colors text-sm">Home</a>
+              <a href="/exams" className="text-gray-400 hover:text-white transition-colors text-sm">View Exams</a>
+              <a href="/jobs" className="text-gray-400 hover:text-white transition-colors text-sm">Jobs</a>
+              <a href="/tenders" className="text-gray-400 hover:text-white transition-colors text-sm">Tenders</a>
             </div>
           </div>
 
-          {/* Follow Us Section */}
-          <div className="mt-8 pt-6 border-t border-gray-800">
-            <h4 className="text-center font-bold mb-4">Follow Us</h4>
-            <div className="flex items-center justify-center gap-3">
-              <a
-                href="https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#25D366] hover:opacity-80 transition-opacity"
-                aria-label="WhatsApp"
-              >
-                <FaWhatsapp className="h-5 w-5 md:h-6 md:w-6 text-white" />
-              </a>
-              <a
-                href="https://www.facebook.com/profile.php?id=61584589785023"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#1877F2] hover:opacity-80 transition-opacity"
-                aria-label="Facebook"
-              >
-                <FaFacebook className="h-5 w-5 md:h-6 md:w-6 text-white" />
-              </a>
-              <a
-                href="https://x.com/Rwanda_Job_Hub"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-black hover:opacity-80 transition-opacity"
-                aria-label="X (Twitter)"
-              >
-                <FaXTwitter className="h-5 w-5 md:h-6 md:w-6 text-white" />
-              </a>
-              <a
-                href="https://t.me/RwandaJobHub"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#0088cc] hover:opacity-80 transition-opacity"
-                aria-label="Telegram"
-              >
-                <FaTelegram className="h-5 w-5 md:h-6 md:w-6 text-white" />
-              </a>
+          {/* Column 3: Support */}
+          <div className="space-y-4">
+            <h3 className="text-white font-semibold mb-4">Support</h3>
+            <div className="space-y-2">
+              <a href="/help" className="text-gray-400 hover:text-white transition-colors text-sm">Help</a>
+              <a href="/contact" className="text-gray-400 hover:text-white transition-colors text-sm">Contact Us</a>
+              <a href="/employers" className="text-gray-400 hover:text-white transition-colors text-sm">Employers</a>
             </div>
           </div>
 
-          <div className="text-center mt-6 pt-6 border-t border-gray-800">
-            <div className="flex flex-wrap items-center justify-center gap-4 mb-4">
-              <a href="/privacy" className="text-gray-300 hover:text-white text-sm transition-colors">
-                Privacy Policy
-              </a>
-              <span className="text-gray-600">|</span>
-              <a href="/terms" className="text-gray-300 hover:text-white text-sm transition-colors">
-                Terms & Conditions
-              </a>
-              <span className="text-gray-600">|</span>
-              <a href="/disclaimer" className="text-gray-300 hover:text-white text-sm transition-colors">
-                Disclaimer
-              </a>
+          {/* Column 4: Connect */}
+          <div className="space-y-4">
+            <h3 className="text-white font-semibold mb-4">Connect</h3>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <MapPinned className="h-4 w-4 text-gray-400" />
+                <span className="text-gray-400 text-sm">Kigali, Rwanda</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Mail className="h-4 w-4 text-gray-400" />
+                <span className="text-gray-400 text-sm">rwandaiobhub2050@gmail.com</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Phone className="h-4 w-4 text-gray-400" />
+                <span className="text-gray-400 text-sm">+250 783 074 056</span>
+              </div>
             </div>
-            <div className="flex flex-wrap items-center justify-center gap-2" data-copyright>
-              <p className="text-gray-400 text-sm">
-                © 2025 RwandaJobHub. All rights reserved.
-              </p>
-            </div>
+          </div>
+        </div>
+
+        {/* Social Icons Section */}
+        <div className="border-t border-slate-800/50 pt-8 mt-8">
+          <div className="flex items-center justify-center gap-4">
+            {/* Glassmorphism Social Icons */}
+            <a
+              href="https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+              aria-label="WhatsApp"
+            >
+              <FaWhatsapp className="h-5 w-5 text-green-400" />
+            </a>
+            
+            <a
+              href="https://www.facebook.com/profile.php?id=61584589785023"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+              aria-label="Facebook"
+            >
+              <FaFacebook className="h-5 w-5 text-blue-400" />
+            </a>
+            
+            <a
+              href="https://x.com/Rwanda_Job_Hub"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+              aria-label="X (Twitter)"
+            >
+              <FaXTwitter className="h-5 w-5 text-gray-300" />
+            </a>
+            
+            <a
+              href="https://t.me/RwandaJobHub"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+              aria-label="Telegram"
+            >
+              <FaTelegram className="h-5 w-5 text-blue-400" />
+            </a>
+          </div>
+        </div>
+
+        {/* Legal Links Section */}
+        <div className="border-t border-slate-800/50 pt-6 mt-8">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 text-xs">
+            <a href="/privacy" className="text-gray-400 hover:text-white transition-colors py-2 px-4">Privacy Policy</a>
+            <a href="/terms" className="text-gray-400 hover:text-white transition-colors py-2 px-4">Terms & Conditions</a>
+            <a href="/disclaimer" className="text-gray-400 hover:text-white transition-colors py-2 px-4">Disclaimer</a>
+          </div>
+        </div>
+
+        {/* Copyright Section */}
+        <div className="border-t border-slate-800/50 pt-6 mt-4">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 text-xs">
+            <p className="text-gray-500" data-copyright>
+              2026 RwandaJobHub. All rights reserved.
+            </p>
+            <a 
+              href="https://pillarq.com" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              Made by Pillarq
+            </a>
           </div>
         </div>
       </div>
