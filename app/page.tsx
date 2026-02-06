@@ -237,32 +237,34 @@ export default function HomePage() {
             
             {/* Second Row - 3 items, centered */}
             <div className="flex justify-center gap-2 text-[10px]">
-              <Button 
-                variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                onClick={() => handleOpportunityClick('scholarship')}
-              >
-                Scholarships
-                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.scholarships}</span>
-              </Button>
-              
-              <Button 
-                variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                onClick={() => handleOpportunityClick('education')}
-              >
-                Education
-                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.education}</span>
-              </Button>
-              
-              <Button 
-                variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                onClick={() => handleOpportunityClick('internship')}
-              >
-                Internships
-                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.internships}</span>
-              </Button>
+              <div className="flex justify-center gap-2 w-full max-w-md mx-auto">
+                <Button 
+                  variant="ghost" 
+                  className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                  onClick={() => handleOpportunityClick('scholarship')}
+                >
+                  Scholarships
+                  <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.scholarships}</span>
+                </Button>
+                
+                <Button 
+                  variant="ghost" 
+                  className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                  onClick={() => handleOpportunityClick('education')}
+                >
+                  Education
+                  <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.education}</span>
+                </Button>
+                
+                <Button 
+                  variant="ghost" 
+                  className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                  onClick={() => handleOpportunityClick('internship')}
+                >
+                  Internships
+                  <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.internships}</span>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

@@ -69,7 +69,7 @@ export function Header() {
             </div>
 
             {/* Navigation Row - Center */}
-            <nav className="hidden md:flex items-center gap-6">
+            <nav className="hidden md:flex items-center gap-6 max-md:hidden landscape:hidden">
               {navigationLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -84,7 +84,7 @@ export function Header() {
             {/* Action Group - Far Right */}
             <div className="flex items-center gap-4">
               {/* Login Text Link and Post Job Button Grouped */}
-              <div className="flex items-center gap-2 sm:gap-4">
+              <div className="flex flex-row items-center gap-4">
                 {/* Royal Blue Post a Job Pill - Mobile Optimized - NOW ON LEFT */}
                 <Button 
                   asChild
@@ -116,7 +116,7 @@ export function Header() {
                 ) : (
                   <Link 
                     href="/dashboard" 
-                    className="text-slate-600 hover:text-slate-800 font-medium transition-colors px-2"
+                    className="text-slate-600 hover:text-slate-800 font-medium transition-colors px-2 whitespace-nowrap"
                   >
                     Login
                   </Link>
@@ -125,13 +125,13 @@ export function Header() {
 
               {/* Mobile Menu */}
               {!mounted ? (
-                <Button variant="ghost" size="sm" className="md:hidden text-slate-700 hover:bg-gray-100">
+                <Button variant="ghost" size="sm" className="md:hidden landscape:flex text-slate-700 hover:bg-gray-100">
                   <Menu className="h-5 w-5" />
                 </Button>
               ) : (
                 <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                   <SheetTrigger asChild>
-                    <Button variant="ghost" size="sm" className="md:hidden text-slate-700 hover:bg-gray-100 border border-slate-300 rounded-md p-2">
+                    <Button variant="ghost" size="sm" className="md:hidden landscape:flex text-slate-700 hover:bg-gray-100 border border-slate-300 rounded-md p-2">
                       <Menu className="h-5 w-5" />
                     </Button>
                   </SheetTrigger>

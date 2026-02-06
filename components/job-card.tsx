@@ -210,7 +210,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
     <div className="block">
 
-      <div className={`rounded-2xl border bg-card p-4 md:p-6 shadow-sm transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 border-l-4 ${getJobTypeBorderColor()} lg:hover:shadow-2xl`}>
+      <div className={`rounded-2xl border bg-card pt-6 p-4 md:p-6 shadow-sm transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 border-l-4 ${getJobTypeBorderColor()} lg:hover:shadow-2xl`}>
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 lg:gap-4">
 
@@ -236,27 +236,29 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
             </div>
 
+            {/* Job Title and Company on same row as Logo */}
+
             <div className="flex-1 min-w-0">
 
-              <h3 
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-2">
 
-                className="mb-2 text-lg md:text-xl font-bold leading-tight transition-all duration-200 cursor-pointer hover:text-blue-700 hover:underline lg:hover:text-blue-800 lg:flex-grow lg:whitespace-nowrap" 
+                <h3 
 
-                style={{ color: '#1E40AF' }}
+                  className="text-lg md:text-xl font-bold leading-tight transition-all duration-200 cursor-pointer hover:text-blue-700 hover:underline lg:hover:text-blue-800" 
 
-                onClick={handleTitleClick}
+                  style={{ color: '#1E40AF' }}
 
-              >
+                  onClick={handleTitleClick}
 
-                {job.title}
+                >
 
-              </h3>
+                  {job.title}
 
-              <div className="mb-2 flex flex-wrap items-center gap-2 md:gap-3 text-xs md:text-sm text-muted-foreground">
+                </h3>
 
                 {displayCompany.name && (
 
-                  <span className="flex items-center gap-1 font-semibold text-slate-800">
+                  <span className="flex items-center gap-1 font-semibold text-slate-800 text-sm md:text-base">
 
                     {displayCompany.name}
 
@@ -269,6 +271,10 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
                   </span>
 
                 )}
+
+              </div>
+
+              <div className="mb-2 flex flex-wrap items-center gap-2 md:gap-3 text-xs md:text-sm text-muted-foreground">
 
                 {job.location && (
 
@@ -315,8 +321,6 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
                 )}
 
               </div>
-
-
 
               <div className="flex flex-wrap gap-1.5 md:gap-2">
 
