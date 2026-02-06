@@ -240,44 +240,28 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
             <div className="flex-1 min-w-0">
 
-              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-2">
-
+              <div className="flex flex-row items-center gap-3 mb-2">
                 <h3 
-
                   className="text-lg md:text-xl font-bold leading-tight transition-all duration-200 cursor-pointer hover:text-blue-700 hover:underline lg:hover:text-blue-800" 
-
                   style={{ color: '#1E40AF' }}
-
                   onClick={handleTitleClick}
-
                 >
-
                   {job.title}
-
                 </h3>
 
                 {displayCompany.name && (
-
                   <span className="flex items-center gap-1 font-semibold text-slate-800 text-sm md:text-base">
-
                     {displayCompany.name}
-
                     {(job.isVerified ?? job.is_verified) && (
-
                       <BadgeCheck className="h-4 w-4 text-blue-600 transition-colors hover:text-blue-700" aria-label="Verified company" />
-
                     )}
-
                   </span>
-
                 )}
-
               </div>
 
               <div className="mb-2 flex flex-wrap items-center gap-2 md:gap-3 text-xs md:text-sm text-muted-foreground">
 
                 {job.location && (
-
                   <div className="flex items-center gap-1">
 
                     <MapPin className="h-3 w-3 md:h-4 md:w-4" />
