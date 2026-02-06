@@ -52,9 +52,9 @@ export function Header() {
       <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
         <div className="flex items-center justify-between px-4 py-3">
           {/* Logo - Far Left */}
-          <div className="bg-white rounded-lg shadow-lg px-3 py-2 pointer-events-none z-50 w-32">
+          <div className="bg-white rounded-lg shadow-lg px-3 py-2 pointer-events-none z-50 w-fit lg:px-4 lg:py-2 lg:w-32">
             <Link href="/" className="flex items-center gap-3 pointer-events-auto">
-              <div className="relative h-12 w-28">
+              <div className="relative h-8 w-24 lg:h-12 lg:w-28">
                 <Image
                   src="/full logo.jpg"
                   alt="RwandaJobHub"
@@ -80,16 +80,16 @@ export function Header() {
           </nav>
 
           {/* Action Buttons - Far Right */}
-          <div className="flex items-center gap-x-8">
+          <div className="flex items-center gap-x-2">
             {/* Login Text Link and Post Job Button Grouped */}
-            <div className="flex flex-row items-center gap-x-8">
+            <div className="flex flex-row items-center gap-x-2">
               {/* Royal Blue Post a Job Pill - Mobile Optimized - NOW ON LEFT */}
               <Button 
                 asChild
-                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-2 sm:px-6 py-2 text-sm font-semibold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center gap-2"
+                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white px-2 sm:px-6 py-2 text-xs sm:text-sm font-semibold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center gap-2"
               >
                 <Link href="/post-advert">
-                  <span className="text-lg">+</span>
+                  <span className="text-sm sm:text-lg">+</span>
                   <span className="hidden sm:inline">Post a Job</span>
                   <span className="sm:hidden">Post a Job</span>
                 </Link>
@@ -101,7 +101,7 @@ export function Header() {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="sm" className="gap-2 text-slate-700 hover:bg-gray-100 px-2">
                       <UserCircle2 className="h-4 w-4" />
-                      <span className="hidden lg:inline">{user.email}</span>
+                      <span className="hidden lg:inline text-xs">{user.email}</span>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
@@ -114,7 +114,7 @@ export function Header() {
               ) : (
                 <Link 
                   href="/dashboard" 
-                  className="text-slate-600 hover:text-slate-800 font-medium transition-colors px-2 whitespace-nowrap"
+                  className="text-slate-600 hover:text-slate-800 font-medium transition-colors px-2 whitespace-nowrap text-xs"
                 >
                   Login
                 </Link>
