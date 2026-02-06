@@ -240,7 +240,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
             <div className="flex-1 min-w-0">
 
-              <div className="flex flex-row items-center gap-3 mb-2">
+              <div className="flex flex-col gap-y-1 mb-2">
                 <h3 
                   className="text-lg md:text-xl font-bold leading-tight transition-all duration-200 cursor-pointer hover:text-blue-700 hover:underline lg:hover:text-blue-800" 
                   style={{ color: '#1E40AF' }}
