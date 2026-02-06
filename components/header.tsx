@@ -50,9 +50,9 @@ export function Header() {
     <>
       {/* Gorgeous Single-Line Header */}
       <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
-        <div className="w-full max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+        <div className="max-w-7xl mx-auto flex justify-between items-center w-full px-4 py-4">
           {/* Logo - Far Left */}
-          <div className="bg-white rounded-xl shadow-lg p-4 pointer-events-none z-50 max-w-[180px]">
+          <div className="bg-white rounded-xl shadow-lg p-4 pointer-events-none z-50 w-fit">
             <Link href="/" className="flex items-center gap-3 pointer-events-auto">
               <div className="relative h-20 w-32">
                 <Image
@@ -72,7 +72,7 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-slate-700 font-semibold hover:text-blue-600 transition-colors"
+                className="text-slate-700 font-medium hover:text-blue-600 transition-all"
               >
                 {link.label}
               </Link>
