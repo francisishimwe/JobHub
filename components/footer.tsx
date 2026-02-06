@@ -23,10 +23,10 @@ export function Footer() {
       */}
       
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 gap-2 lg:grid-cols-5 gap-4">
           
           {/* Box 1: Get in Touch */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:-translate-y-1 transition-transform duration-200">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:-translate-y-2 hover:shadow-xl active:scale-110 transition-all duration-300">
             <div className="bg-blue-600 px-3 py-1 flex items-center gap-2">
               <MapPinned className="h-3 w-3 text-white" />
               <span className="text-white font-semibold text-[9px]">Get in Touch</span>
@@ -34,21 +34,21 @@ export function Footer() {
             <div className="p-1.5 space-y-2">
               <div className="flex items-start gap-2">
                 <MapPinned className="h-3 w-3 text-gray-600 mt-0.5 flex-shrink-0" style={{ fontSize: '12px' }} />
-                <span className="text-black text-[9px]">Kigali, Rwanda</span>
+                <span className="text-slate-900 text-[9px]">Kigali, Rwanda</span>
               </div>
               <div className="flex items-start gap-2">
                 <Phone className="h-3 w-3 text-gray-600 mt-0.5 flex-shrink-0" style={{ fontSize: '12px' }} />
-                <span className="text-black text-[9px]">+250 783 074 056</span>
+                <span className="text-slate-900 text-[9px]">+250 783 074 056</span>
               </div>
               <div className="flex items-start gap-2">
                 <Mail className="h-3 w-3 text-gray-600 mt-0.5 flex-shrink-0" style={{ fontSize: '12px' }} />
-                <a href="mailto:info@rwandajobhub.rw" className="text-black hover:text-blue-600 text-[9px] transition-colors">info@rwandajobhub.rw</a>
+                <a href="mailto:info@rwandajobhub.rw" className="text-slate-900 hover:text-blue-600 text-[9px] transition-colors">info@rwandajobhub.rw</a>
               </div>
             </div>
           </div>
 
           {/* Box 2: Quick Links */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:-translate-y-1 transition-transform duration-200">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:-translate-y-2 hover:shadow-xl active:scale-110 transition-all duration-300">
             <div className="bg-blue-600 px-3 py-1 flex items-center gap-2">
               <Home className="h-3 w-3 text-white" />
               <span className="text-white font-semibold text-[9px]">Quick Links</span>
@@ -56,25 +56,25 @@ export function Footer() {
             <div className="p-1.5 space-y-1.5">
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
-                <a href="/" className="text-black hover:text-blue-600 text-[9px] transition-colors">Home</a>
+                <a href="/" className="text-slate-900 hover:text-blue-600 text-[9px] transition-colors">Home</a>
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
-                <a href="/exams" className="text-black hover:text-blue-600 text-[9px] transition-colors">View Exams</a>
+                <a href="/exams" className="text-slate-900 hover:text-blue-600 text-[9px] transition-colors">View Exams</a>
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
-                <a href="/jobs" className="text-black hover:text-blue-600 text-[9px] transition-colors">Jobs</a>
+                <a href="/jobs" className="text-slate-900 hover:text-blue-600 text-[9px] transition-colors">Jobs</a>
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
-                <a href="/tenders" className="text-black hover:text-blue-600 text-[9px] transition-colors">Tenders</a>
+                <a href="/tenders" className="text-slate-900 hover:text-blue-600 text-[9px] transition-colors">Tenders</a>
               </div>
             </div>
           </div>
 
           {/* Box 3: Support */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:-translate-y-1 transition-transform duration-200">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:-translate-y-2 hover:shadow-xl active:scale-110 transition-all duration-300">
             <div className="bg-blue-600 px-3 py-1 flex items-center gap-2">
               <HelpCircle className="h-3 w-3 text-white" />
               <span className="text-white font-semibold text-[9px]">Support</span>
@@ -82,21 +82,21 @@ export function Footer() {
             <div className="p-1.5 space-y-1.5">
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
-                <a href="/help" className="text-black hover:text-blue-600 text-[9px] transition-colors">Help</a>
+                <a href="/help" className="text-slate-900 hover:text-blue-600 text-[9px] transition-colors">Help</a>
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
-                <a href="/contact" className="text-black hover:text-blue-600 text-[9px] transition-colors">Contact Us</a>
+                <a href="/contact" className="text-slate-900 hover:text-blue-600 text-[9px] transition-colors">Contact Us</a>
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
-                <a href="/employers" className="text-black hover:text-blue-600 text-[9px] transition-colors">Employers</a>
+                <a href="/employers" className="text-slate-900 hover:text-blue-600 text-[9px] transition-colors">Employers</a>
               </div>
             </div>
           </div>
 
           {/* Box 4: Stats */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:-translate-y-1 transition-transform duration-200">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:-translate-y-2 hover:shadow-xl active:scale-110 transition-all duration-300">
             <div className="bg-blue-600 px-3 py-1 flex items-center gap-2">
               <Users className="h-3 w-3 text-white" />
               <span className="text-white font-semibold text-[9px]">Real-time Stats</span>
@@ -104,61 +104,68 @@ export function Footer() {
             <div className="p-1.5 space-y-1.5">
               <div className="flex items-center gap-2">
                 <FileText className="h-3 w-3 text-blue-500 flex-shrink-0" />
-                <span className="text-black text-[9px]">500+ Published Jobs</span>
+                <span className="text-slate-900 text-[9px]">500+ Published Jobs</span>
               </div>
               <div className="flex items-center gap-2">
                 <Users className="h-3 w-3 text-blue-500 flex-shrink-0" />
-                <span className="text-black text-[9px]">10K+ Registered Users</span>
+                <span className="text-slate-900 text-[9px]">10K+ Registered Users</span>
               </div>
               <div className="flex items-center gap-2">
                 <Briefcase className="h-3 w-3 text-blue-500 flex-shrink-0" />
-                <span className="text-black text-[9px]">50+ Active Employers</span>
+                <span className="text-slate-900 text-[9px]">50+ Active Employers</span>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Social Icons Section */}
-        <div className="flex items-center justify-center gap-3 py-2">
-          <a
-            href="https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-8 h-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
-            aria-label="WhatsApp"
-          >
-            <FaWhatsapp className="h-3 w-3 text-green-400" />
-          </a>
-          
-          <a
-            href="https://www.facebook.com/profile.php?id=61584589785023"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-8 h-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
-            aria-label="Facebook"
-          >
-            <FaFacebook className="h-3 w-3 text-blue-400" />
-          </a>
-          
-          <a
-            href="https://x.com/Rwanda_Job_Hub"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-8 h-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
-            aria-label="X (Twitter)"
-          >
-            <FaXTwitter className="h-3 w-3 text-gray-300" />
-          </a>
-          
-          <a
-            href="https://t.me/RwandaJobHub"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-8 h-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
-            aria-label="Telegram"
-          >
-            <FaTelegram className="h-3 w-3 text-blue-400" />
-          </a>
+          {/* Box 5: Follow Us - Social Media */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:-translate-y-2 hover:shadow-xl active:scale-110 transition-all duration-300 lg:col-span-1">
+            <div className="bg-blue-600 px-3 py-1 flex items-center gap-2">
+              <span className="text-white font-semibold text-[9px]">Follow Us</span>
+            </div>
+            <div className="p-1.5">
+              <div className="flex items-center justify-center gap-3">
+                <a
+                  href="https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+                  aria-label="WhatsApp"
+                >
+                  <FaWhatsapp className="h-3 w-3 text-green-400" />
+                </a>
+                
+                <a
+                  href="https://www.facebook.com/profile.php?id=61584589785023"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+                  aria-label="Facebook"
+                >
+                  <FaFacebook className="h-3 w-3 text-blue-400" />
+                </a>
+                
+                <a
+                  href="https://x.com/Rwanda_Job_Hub"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+                  aria-label="X (Twitter)"
+                >
+                  <FaXTwitter className="h-3 w-3 text-gray-300" />
+                </a>
+                
+                <a
+                  href="https://t.me/RwandaJobHub"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+                  aria-label="Telegram"
+                >
+                  <FaTelegram className="h-3 w-3 text-blue-400" />
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Minimalist Bottom Bar */}
