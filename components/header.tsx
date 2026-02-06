@@ -50,11 +50,11 @@ export function Header() {
     <>
       {/* Gorgeous Single-Line Header */}
       <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto flex justify-between items-center w-full px-6 py-4">
+        <div className="flex items-center justify-between px-4 py-3">
           {/* Logo - Far Left */}
-          <div className="bg-white rounded-xl shadow-lg px-4 py-2 pointer-events-none z-50 w-fit">
+          <div className="bg-white rounded-lg shadow-lg px-3 py-2 pointer-events-none z-50 w-32">
             <Link href="/" className="flex items-center gap-3 pointer-events-auto">
-              <div className="relative h-16 w-28">
+              <div className="relative h-12 w-28">
                 <Image
                   src="/full logo.jpg"
                   alt="RwandaJobHub"
