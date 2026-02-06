@@ -40,10 +40,10 @@ export function Footer() {
         3. Paste it here inside a <div>
       */}
       
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           
-          {/* Column 1: Logo & About */}
+          {/* Column 1: Logo Only */}
           <div className="space-y-4">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
@@ -51,15 +51,12 @@ export function Footer() {
               </div>
               <span className="text-gray-400 text-sm">RwandaJobHub</span>
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              Your trusted platform for finding jobs, tenders, scholarships, and opportunities in Rwanda.
-            </p>
           </div>
 
           {/* Column 2: Quick Links */}
           <div className="space-y-4">
             <h3 className="text-white font-semibold mb-4">Quick Links</h3>
-            <div className="space-y-2">
+            <div className="flex flex-row flex-wrap gap-x-6 justify-center">
               <a href="/" className="text-gray-400 hover:text-white transition-colors text-sm">Home</a>
               <a href="/exams" className="text-gray-400 hover:text-white transition-colors text-sm">View Exams</a>
               <a href="/jobs" className="text-gray-400 hover:text-white transition-colors text-sm">Jobs</a>
@@ -70,7 +67,7 @@ export function Footer() {
           {/* Column 3: Support */}
           <div className="space-y-4">
             <h3 className="text-white font-semibold mb-4">Support</h3>
-            <div className="space-y-2">
+            <div className="flex flex-row flex-wrap gap-x-6 justify-center">
               <a href="/help" className="text-gray-400 hover:text-white transition-colors text-sm">Help</a>
               <a href="/contact" className="text-gray-400 hover:text-white transition-colors text-sm">Contact Us</a>
               <a href="/employers" className="text-gray-400 hover:text-white transition-colors text-sm">Employers</a>
@@ -85,87 +82,79 @@ export function Footer() {
                 <MapPinned className="h-4 w-4 text-gray-400" />
                 <span className="text-gray-400 text-sm">Kigali, Rwanda</span>
               </div>
-              <div className="flex items-center gap-3">
-                <Mail className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-400 text-sm">rwandaiobhub2050@gmail.com</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Phone className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-400 text-sm">+250 783 074 056</span>
+              <div className="flex flex-row items-center gap-6">
+                <div className="flex items-center gap-3">
+                  <Mail className="h-4 w-4 text-gray-400" />
+                  <span className="text-gray-400 text-sm">info@rwandajobhub.rw</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Phone className="h-4 w-4 text-gray-400" />
+                  <span className="text-gray-400 text-sm">+250 783 074 056</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Social Icons Section */}
-        <div className="border-t border-slate-800/50 pt-8 mt-8">
+        <div className="border-t border-slate-800/50 pt-4 mt-6">
           <div className="flex items-center justify-center gap-4">
             {/* Glassmorphism Social Icons */}
             <a
               href="https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+              className="w-10 h-10 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
               aria-label="WhatsApp"
             >
-              <FaWhatsapp className="h-5 w-5 text-green-400" />
+              <FaWhatsapp className="h-4 w-4 text-green-400" />
             </a>
             
             <a
               href="https://www.facebook.com/profile.php?id=61584589785023"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+              className="w-10 h-10 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
               aria-label="Facebook"
             >
-              <FaFacebook className="h-5 w-5 text-blue-400" />
+              <FaFacebook className="h-4 w-4 text-blue-400" />
             </a>
             
             <a
               href="https://x.com/Rwanda_Job_Hub"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+              className="w-10 h-10 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
               aria-label="X (Twitter)"
             >
-              <FaXTwitter className="h-5 w-5 text-gray-300" />
+              <FaXTwitter className="h-4 w-4 text-gray-300" />
             </a>
             
             <a
               href="https://t.me/RwandaJobHub"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+              className="w-10 h-10 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
               aria-label="Telegram"
             >
-              <FaTelegram className="h-5 w-5 text-blue-400" />
+              <FaTelegram className="h-4 w-4 text-blue-400" />
             </a>
           </div>
         </div>
 
-        {/* Legal Links Section */}
-        <div className="border-t border-slate-800/50 pt-6 mt-8">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 text-xs">
-            <a href="/privacy" className="text-gray-400 hover:text-white transition-colors py-2 px-4">Privacy Policy</a>
-            <a href="/terms" className="text-gray-400 hover:text-white transition-colors py-2 px-4">Terms & Conditions</a>
-            <a href="/disclaimer" className="text-gray-400 hover:text-white transition-colors py-2 px-4">Disclaimer</a>
-          </div>
-        </div>
-
-        {/* Copyright Section */}
-        <div className="border-t border-slate-800/50 pt-6 mt-4">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 text-xs">
+        {/* Legal Links & Copyright Section */}
+        <div className="border-t border-slate-800/50 pt-4 mt-4">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 text-[10px]">
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <a href="/privacy" className="text-gray-400 hover:text-white transition-colors py-1 px-2">Privacy Policy</a>
+              <span className="text-gray-600">|</span>
+              <a href="/terms" className="text-gray-400 hover:text-white transition-colors py-1 px-2">Terms & Conditions</a>
+              <span className="text-gray-600">|</span>
+              <a href="/disclaimer" className="text-gray-400 hover:text-white transition-colors py-1 px-2">Disclaimer</a>
+            </div>
             <p className="text-gray-500" data-copyright>
               2026 RwandaJobHub. All rights reserved.
             </p>
-            <a 
-              href="https://pillarq.com" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition-colors"
-            >
-              Made by Pillarq
-            </a>
           </div>
         </div>
       </div>
