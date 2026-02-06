@@ -69,7 +69,7 @@ export function Header() {
             </div>
 
             {/* Navigation Row - Center */}
-            <nav className="hidden md:flex items-center gap-6 max-md:hidden landscape:hidden">
+            <nav className="hidden md:flex items-center gap-6">
               {navigationLinks.map((link) => (
                 <Link
                   key={link.href}
