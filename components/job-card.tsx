@@ -188,18 +188,30 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
 
 
-  // Get border color based on job type
+  // Get border color based on job type and priority
 
   const getJobTypeBorderColor = () => {
 
+    // Check if this is a Tier 4 (Short-listing) job with priority 'Top'
+
+    if (job.priority === 'Top' || job.agency_verified) {
+
+      return 'border-l-[#ff7b00] border-l-4' // Thick orange border for Tier 4
+
+    }
+
     const jobType = job.jobType?.toLowerCase() || job.opportunityType?.toLowerCase() || ''
 
-    
     if (jobType.includes('job') || jobType.includes('full') || jobType.includes('permanent')) return 'border-l-[#0F172A]' // Navy for Jobs
+
     if (jobType.includes('tender') || jobType.includes('bid')) return 'border-l-[#F59E0B]' // Gold for Tenders
+
     if (jobType.includes('intern') || jobType.includes('trainee')) return 'border-l-[#10B981]' // Emerald for Internships
+
     if (jobType.includes('part') || jobType.includes('contract')) return 'border-l-green-500'
+
     if (jobType.includes('volunteer') || jobType.includes('unpaid')) return 'border-l-purple-500'
+
     
     return 'border-l-[#0F172A]' // Default Navy
   }
@@ -210,7 +222,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
     <div className="block">
 
-      <div className={`rounded-2xl border bg-card pt-6 p-4 md:p-6 shadow-sm transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 border-l-4 ${getJobTypeBorderColor()} lg:hover:shadow-2xl`}>
+      <div className={`rounded-2xl border bg-card pt-6 p-4 md:p-6 shadow-sm transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-2 active:scale-105 border-l-4 ${getJobTypeBorderColor()} lg:hover:shadow-2xl`}>
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 lg:gap-4">
 
@@ -254,6 +266,9 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
                     {displayCompany.name}
                     {(job.isVerified ?? job.is_verified) && (
                       <BadgeCheck className="h-4 w-4 text-blue-600 transition-colors hover:text-blue-700" aria-label="Verified company" />
+                    )}
+                    {(job.agencyVerified ?? job.agency_verified) && (
+                      <BadgeCheck className="h-4 w-4 text-blue-500 transition-colors hover:text-blue-600" aria-label="Agency verified" />
                     )}
                   </span>
                 )}

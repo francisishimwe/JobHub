@@ -19,6 +19,9 @@ export interface Job {
   application_link?: string;
   applicants?: number;
   is_verified?: boolean;
+  plan_id?: number;
+  priority?: string;
+  agency_verified?: boolean;
 
   // Component format (camelCase) - mapped in your Provider
   companyId?: string | null;
@@ -30,6 +33,8 @@ export interface Job {
   locationType?: string;
   attachmentUrl?: string | null;
   isVerified?: boolean;
+  planId?: number;
+  agencyVerified?: boolean;
   
   // Relational data
   company?: {
