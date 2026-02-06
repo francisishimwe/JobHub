@@ -31,7 +31,7 @@ export function Footer() {
   }, []);
 
   return (
-    <footer className="bg-slate-900 border-t border-slate-800/50 text-white py-6">
+    <footer className="bg-slate-900 border-t border-slate-800/50 text-white py-4">
       {/* 
         Space for Google AdSense Ad Unit (Footer)
         To place a manual ad here:
@@ -52,15 +52,15 @@ export function Footer() {
             <div className="p-3 space-y-2">
               <div className="flex items-start gap-2">
                 <MapPinned className="h-3 w-3 text-gray-600 mt-0.5 flex-shrink-0" />
-                <span className="text-gray-700 text-[11px]">Kigali, Rwanda</span>
+                <span className="text-slate-900 text-[11px]">Kigali, Rwanda</span>
               </div>
               <div className="flex items-start gap-2">
                 <Phone className="h-3 w-3 text-gray-600 mt-0.5 flex-shrink-0" />
-                <span className="text-gray-700 text-[11px]">+250 783 074 056</span>
+                <span className="text-slate-900 text-[11px]">+250 783 074 056</span>
               </div>
               <div className="flex items-start gap-2">
                 <Mail className="h-3 w-3 text-gray-600 mt-0.5 flex-shrink-0" />
-                <span className="text-gray-700 text-[11px]">info@rwandajobhub.rw</span>
+                <a href="mailto:info@rwandajobhub.rw" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">info@rwandajobhub.rw</a>
               </div>
             </div>
           </div>
@@ -74,19 +74,19 @@ export function Footer() {
             <div className="p-3 space-y-1.5">
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-green-500 flex-shrink-0" />
-                <a href="/" className="text-gray-700 hover:text-blue-600 text-[11px] transition-colors">Home</a>
+                <a href="/" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Home</a>
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-green-500 flex-shrink-0" />
-                <a href="/exams" className="text-gray-700 hover:text-blue-600 text-[11px] transition-colors">View Exams</a>
+                <a href="/exams" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">View Exams</a>
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-green-500 flex-shrink-0" />
-                <a href="/jobs" className="text-gray-700 hover:text-blue-600 text-[11px] transition-colors">Jobs</a>
+                <a href="/jobs" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Jobs</a>
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-green-500 flex-shrink-0" />
-                <a href="/tenders" className="text-gray-700 hover:text-blue-600 text-[11px] transition-colors">Tenders</a>
+                <a href="/tenders" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Tenders</a>
               </div>
             </div>
           </div>
@@ -100,15 +100,15 @@ export function Footer() {
             <div className="p-3 space-y-1.5">
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-green-500 flex-shrink-0" />
-                <a href="/help" className="text-gray-700 hover:text-blue-600 text-[11px] transition-colors">Help</a>
+                <a href="/help" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Help</a>
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-green-500 flex-shrink-0" />
-                <a href="/contact" className="text-gray-700 hover:text-blue-600 text-[11px] transition-colors">Contact Us</a>
+                <a href="/contact" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Contact Us</a>
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-green-500 flex-shrink-0" />
-                <a href="/employers" className="text-gray-700 hover:text-blue-600 text-[11px] transition-colors">Employers</a>
+                <a href="/employers" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Employers</a>
               </div>
             </div>
           </div>
@@ -122,22 +122,22 @@ export function Footer() {
             <div className="p-3 space-y-1.5">
               <div className="flex items-center gap-2">
                 <FileText className="h-3 w-3 text-blue-500 flex-shrink-0" />
-                <span className="text-gray-700 text-[11px]">500+ Published Jobs</span>
+                <span className="text-slate-900 text-[11px]">500+ Published Jobs</span>
               </div>
               <div className="flex items-center gap-2">
                 <Users className="h-3 w-3 text-blue-500 flex-shrink-0" />
-                <span className="text-gray-700 text-[11px]">10K+ Registered Users</span>
+                <span className="text-slate-900 text-[11px]">10K+ Registered Users</span>
               </div>
               <div className="flex items-center gap-2">
                 <Briefcase className="h-3 w-3 text-blue-500 flex-shrink-0" />
-                <span className="text-gray-700 text-[11px]">50+ Active Employers</span>
+                <span className="text-slate-900 text-[11px]">50+ Active Employers</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Social Icons Section */}
-        <div className="flex items-center justify-center gap-3 py-4">
+        <div className="flex items-center justify-center gap-3 py-2">
           <a
             href="https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r"
             target="_blank"
@@ -180,7 +180,7 @@ export function Footer() {
         </div>
 
         {/* Minimalist Bottom Bar */}
-        <div className="border-t border-slate-800/50 pt-3 text-center">
+        <div className="border-t border-slate-800/50 pt-2 text-center">
           <div className="flex flex-wrap items-center justify-center gap-2 text-[10px]">
             <a href="/privacy" className="text-gray-400 hover:text-white transition-colors py-1 px-2">Privacy Policy</a>
             <span className="text-gray-600">|</span>
