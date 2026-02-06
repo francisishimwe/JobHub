@@ -7,25 +7,7 @@ import { FaWhatsapp, FaFacebook, FaXTwitter, FaTelegram } from "react-icons/fa6"
 export function Footer() {
   useEffect(() => {
     const t = setTimeout(() => {
-      const e = document.querySelector('footer [data-c]');
-      if (!e) {
-        const d = document.createElement('a');
-        d.href = atob('aHR0cHM6Ly9waWxsYXJxLm1lLw==');
-        d.target = '_blank';
-        d.rel = 'noopener noreferrer';
-        d.className = 'text-gray-400 hover:text-white text-xs transition-colors';
-        d.style.cssText = 'user-select:none';
-        d.textContent = atob('TWFkZSBieSBQaWxsYXJx');
-        d.setAttribute('data-c', '1');
-        const container = document.querySelector('footer [data-copyright]');
-        if (container) {
-          const s = document.createElement('span');
-          s.className = 'text-gray-600 mx-2';
-          s.textContent = '|';
-          container.appendChild(s);
-          container.appendChild(d);
-        }
-      }
+      // Removed developer credits as requested
     }, 100);
     return () => clearTimeout(t);
   }, []);
@@ -44,8 +26,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           
           {/* Box 1: Get in Touch */}
-          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-            <div className="bg-blue-500 px-3 py-2 flex items-center gap-2">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="bg-blue-600 px-3 py-2 flex items-center gap-2">
               <MapPinned className="h-3 w-3 text-white" />
               <span className="text-white font-semibold text-[11px]">Get in Touch</span>
             </div>
@@ -66,56 +48,56 @@ export function Footer() {
           </div>
 
           {/* Box 2: Quick Links */}
-          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-            <div className="bg-blue-500 px-3 py-2 flex items-center gap-2">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="bg-blue-600 px-3 py-2 flex items-center gap-2">
               <Home className="h-3 w-3 text-white" />
               <span className="text-white font-semibold text-[11px]">Quick Links</span>
             </div>
             <div className="p-3 space-y-1.5">
               <div className="flex items-center gap-2">
-                <Check className="h-3 w-3 text-green-500 flex-shrink-0" />
+                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" />
                 <a href="/" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Home</a>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="h-3 w-3 text-green-500 flex-shrink-0" />
+                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" />
                 <a href="/exams" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">View Exams</a>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="h-3 w-3 text-green-500 flex-shrink-0" />
+                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" />
                 <a href="/jobs" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Jobs</a>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="h-3 w-3 text-green-500 flex-shrink-0" />
+                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" />
                 <a href="/tenders" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Tenders</a>
               </div>
             </div>
           </div>
 
           {/* Box 3: Support */}
-          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-            <div className="bg-blue-500 px-3 py-2 flex items-center gap-2">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="bg-blue-600 px-3 py-2 flex items-center gap-2">
               <HelpCircle className="h-3 w-3 text-white" />
               <span className="text-white font-semibold text-[11px]">Support</span>
             </div>
             <div className="p-3 space-y-1.5">
               <div className="flex items-center gap-2">
-                <Check className="h-3 w-3 text-green-500 flex-shrink-0" />
+                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" />
                 <a href="/help" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Help</a>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="h-3 w-3 text-green-500 flex-shrink-0" />
+                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" />
                 <a href="/contact" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Contact Us</a>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="h-3 w-3 text-green-500 flex-shrink-0" />
+                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" />
                 <a href="/employers" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Employers</a>
               </div>
             </div>
           </div>
 
           {/* Box 4: Stats */}
-          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-            <div className="bg-blue-500 px-3 py-2 flex items-center gap-2">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="bg-blue-600 px-3 py-2 flex items-center gap-2">
               <Users className="h-3 w-3 text-white" />
               <span className="text-white font-semibold text-[11px]">Real-time Stats</span>
             </div>
