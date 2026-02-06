@@ -125,14 +125,14 @@ export default function HomePage() {
     <div className="min-h-screen bg-slate-50">
       <Header />
 
-      {/* The Master Row - Adaptive Opportunity Row */}
-      <div className="bg-[#0F172A] border-b border-slate-200/30 mb-4">
-        <div className="container mx-auto py-3 px-2">
-          {/* Desktop: Horizontal Layout */}
-          <div className="hidden lg:flex items-center justify-center gap-6 flex-wrap">
+      {/* Modern Category Bar - Desktop Only */}
+      <div className="bg-black/20 backdrop-blur-md border-b border-slate-200/20 mb-4">
+        <div className="max-w-7xl mx-auto py-3 px-8">
+          {/* Desktop: Single Horizontal Line - All 7 Categories */}
+          <div className="hidden lg:flex items-center justify-center gap-x-12">
             <Button 
               variant="ghost" 
-              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105 hover:shadow-lg"
+              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
               onClick={() => handleOpportunityClick('featured')}
             >
               Featured
@@ -141,7 +141,7 @@ export default function HomePage() {
             
             <Button 
               variant="ghost" 
-              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105 hover:shadow-lg"
+              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
               onClick={() => handleOpportunityClick('job')}
             >
               Jobs
@@ -150,7 +150,7 @@ export default function HomePage() {
             
             <Button 
               variant="ghost" 
-              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105 hover:shadow-lg"
+              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
               onClick={() => handleOpportunityClick('tender')}
             >
               Tenders
@@ -159,7 +159,7 @@ export default function HomePage() {
             
             <Button 
               variant="ghost" 
-              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105 hover:shadow-lg"
+              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
               onClick={() => handleOpportunityClick('blog')}
             >
               Blogs
@@ -168,7 +168,7 @@ export default function HomePage() {
             
             <Button 
               variant="ghost" 
-              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105 hover:shadow-lg"
+              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
               onClick={() => handleOpportunityClick('internship')}
             >
               Internships
@@ -177,7 +177,7 @@ export default function HomePage() {
             
             <Button 
               variant="ghost" 
-              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105 hover:shadow-lg"
+              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
               onClick={() => handleOpportunityClick('scholarship')}
             >
               Scholarships
@@ -186,7 +186,7 @@ export default function HomePage() {
             
             <Button 
               variant="ghost" 
-              className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105 hover:shadow-lg"
+              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
               onClick={() => handleOpportunityClick('education')}
             >
               Education
