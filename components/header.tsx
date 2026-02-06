@@ -51,10 +51,10 @@ export function Header() {
       {/* Gorgeous Single-Line Header */}
       <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3">
-          {/* Mobile Wrapper */}
-          <div className="flex flex-row sm:flex-row md:flex-row lg:flex-row items-center justify-between">
-            {/* Boxed Logo - Far Left */}
-            <div className="bg-white rounded-xl shadow-lg p-3 pointer-events-none z-50 w-24 mr-4">
+          {/* Main Header Container */}
+          <div className="flex justify-between items-center">
+            {/* Logo - Far Left */}
+            <div className="bg-white rounded-xl shadow-lg p-3 pointer-events-none z-50 w-24">
               <Link href="/" className="flex items-center gap-3 pointer-events-auto">
                 <div className="relative h-8 w-20">
                   <Image
@@ -68,7 +68,7 @@ export function Header() {
               </Link>
             </div>
 
-            {/* Navigation Row - Center */}
+            {/* Navigation Links - Center (Desktop Only) */}
             <nav className="hidden md:flex items-center gap-6">
               {navigationLinks.map((link) => (
                 <Link
@@ -81,7 +81,7 @@ export function Header() {
               ))}
             </nav>
 
-            {/* Action Group - Far Right */}
+            {/* Action Buttons - Far Right */}
             <div className="flex items-center gap-4">
               {/* Login Text Link and Post Job Button Grouped */}
               <div className="flex flex-row items-center gap-4">
@@ -123,15 +123,15 @@ export function Header() {
                 )}
               </div>
 
-              {/* Mobile Menu */}
+              {/* Mobile Menu - Hidden on Desktop, Visible on Mobile (Portrait & Landscape) */}
               {!mounted ? (
-                <Button variant="ghost" size="sm" className="md:hidden landscape:flex text-slate-700 hover:bg-gray-100">
+                <Button variant="ghost" size="sm" className="md:hidden text-slate-700 hover:bg-gray-100">
                   <Menu className="h-5 w-5" />
                 </Button>
               ) : (
                 <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                   <SheetTrigger asChild>
-                    <Button variant="ghost" size="sm" className="md:hidden landscape:flex text-slate-700 hover:bg-gray-100 border border-slate-300 rounded-md p-2">
+                    <Button variant="ghost" size="sm" className="md:hidden text-slate-700 hover:bg-gray-100 border border-slate-300 rounded-md p-2">
                       <Menu className="h-5 w-5" />
                     </Button>
                   </SheetTrigger>
