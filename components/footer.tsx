@@ -23,96 +23,96 @@ export function Footer() {
       */}
       
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 gap-4">
           
           {/* Box 1: Get in Touch */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-blue-600 px-3 py-2 flex items-center gap-2">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:-translate-y-1 transition-transform duration-200">
+            <div className="bg-blue-600 px-3 py-1 flex items-center gap-2">
               <MapPinned className="h-3 w-3 text-white" />
-              <span className="text-white font-semibold text-[11px]">Get in Touch</span>
+              <span className="text-white font-semibold text-[9px]">Get in Touch</span>
             </div>
-            <div className="p-3 space-y-2">
+            <div className="p-1.5 space-y-2">
               <div className="flex items-start gap-2">
-                <MapPinned className="h-3 w-3 text-gray-600 mt-0.5 flex-shrink-0" />
-                <span className="text-slate-900 text-[11px]">Kigali, Rwanda</span>
+                <MapPinned className="h-3 w-3 text-gray-600 mt-0.5 flex-shrink-0" style={{ fontSize: '12px' }} />
+                <span className="text-black text-[9px]">Kigali, Rwanda</span>
               </div>
               <div className="flex items-start gap-2">
-                <Phone className="h-3 w-3 text-gray-600 mt-0.5 flex-shrink-0" />
-                <span className="text-slate-900 text-[11px]">+250 783 074 056</span>
+                <Phone className="h-3 w-3 text-gray-600 mt-0.5 flex-shrink-0" style={{ fontSize: '12px' }} />
+                <span className="text-black text-[9px]">+250 783 074 056</span>
               </div>
               <div className="flex items-start gap-2">
-                <Mail className="h-3 w-3 text-gray-600 mt-0.5 flex-shrink-0" />
-                <a href="mailto:info@rwandajobhub.rw" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">info@rwandajobhub.rw</a>
+                <Mail className="h-3 w-3 text-gray-600 mt-0.5 flex-shrink-0" style={{ fontSize: '12px' }} />
+                <a href="mailto:info@rwandajobhub.rw" className="text-black hover:text-blue-600 text-[9px] transition-colors">info@rwandajobhub.rw</a>
               </div>
             </div>
           </div>
 
           {/* Box 2: Quick Links */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-blue-600 px-3 py-2 flex items-center gap-2">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:-translate-y-1 transition-transform duration-200">
+            <div className="bg-blue-600 px-3 py-1 flex items-center gap-2">
               <Home className="h-3 w-3 text-white" />
-              <span className="text-white font-semibold text-[11px]">Quick Links</span>
+              <span className="text-white font-semibold text-[9px]">Quick Links</span>
             </div>
-            <div className="p-3 space-y-1.5">
+            <div className="p-1.5 space-y-1.5">
               <div className="flex items-center gap-2">
-                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" />
-                <a href="/" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Home</a>
+                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
+                <a href="/" className="text-black hover:text-blue-600 text-[9px] transition-colors">Home</a>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" />
-                <a href="/exams" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">View Exams</a>
+                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
+                <a href="/exams" className="text-black hover:text-blue-600 text-[9px] transition-colors">View Exams</a>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" />
-                <a href="/jobs" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Jobs</a>
+                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
+                <a href="/jobs" className="text-black hover:text-blue-600 text-[9px] transition-colors">Jobs</a>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" />
-                <a href="/tenders" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Tenders</a>
+                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
+                <a href="/tenders" className="text-black hover:text-blue-600 text-[9px] transition-colors">Tenders</a>
               </div>
             </div>
           </div>
 
           {/* Box 3: Support */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-blue-600 px-3 py-2 flex items-center gap-2">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:-translate-y-1 transition-transform duration-200">
+            <div className="bg-blue-600 px-3 py-1 flex items-center gap-2">
               <HelpCircle className="h-3 w-3 text-white" />
-              <span className="text-white font-semibold text-[11px]">Support</span>
+              <span className="text-white font-semibold text-[9px]">Support</span>
             </div>
-            <div className="p-3 space-y-1.5">
+            <div className="p-1.5 space-y-1.5">
               <div className="flex items-center gap-2">
-                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" />
-                <a href="/help" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Help</a>
+                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
+                <a href="/help" className="text-black hover:text-blue-600 text-[9px] transition-colors">Help</a>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" />
-                <a href="/contact" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Contact Us</a>
+                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
+                <a href="/contact" className="text-black hover:text-blue-600 text-[9px] transition-colors">Contact Us</a>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" />
-                <a href="/employers" className="text-slate-900 hover:text-blue-600 text-[11px] transition-colors">Employers</a>
+                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
+                <a href="/employers" className="text-black hover:text-blue-600 text-[9px] transition-colors">Employers</a>
               </div>
             </div>
           </div>
 
           {/* Box 4: Stats */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-blue-600 px-3 py-2 flex items-center gap-2">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:-translate-y-1 transition-transform duration-200">
+            <div className="bg-blue-600 px-3 py-1 flex items-center gap-2">
               <Users className="h-3 w-3 text-white" />
-              <span className="text-white font-semibold text-[11px]">Real-time Stats</span>
+              <span className="text-white font-semibold text-[9px]">Real-time Stats</span>
             </div>
-            <div className="p-3 space-y-1.5">
+            <div className="p-1.5 space-y-1.5">
               <div className="flex items-center gap-2">
                 <FileText className="h-3 w-3 text-blue-500 flex-shrink-0" />
-                <span className="text-slate-900 text-[11px]">500+ Published Jobs</span>
+                <span className="text-black text-[9px]">500+ Published Jobs</span>
               </div>
               <div className="flex items-center gap-2">
                 <Users className="h-3 w-3 text-blue-500 flex-shrink-0" />
-                <span className="text-slate-900 text-[11px]">10K+ Registered Users</span>
+                <span className="text-black text-[9px]">10K+ Registered Users</span>
               </div>
               <div className="flex items-center gap-2">
                 <Briefcase className="h-3 w-3 text-blue-500 flex-shrink-0" />
-                <span className="text-slate-900 text-[11px]">50+ Active Employers</span>
+                <span className="text-black text-[9px]">50+ Active Employers</span>
               </div>
             </div>
           </div>
@@ -163,14 +163,14 @@ export function Footer() {
 
         {/* Minimalist Bottom Bar */}
         <div className="border-t border-slate-800/50 pt-2 text-center">
-          <div className="flex flex-wrap items-center justify-center gap-2 text-[10px]">
+          <div className="flex flex-wrap items-center justify-center gap-2 text-[8px]">
             <a href="/privacy" className="text-gray-400 hover:text-white transition-colors py-1 px-2">Privacy Policy</a>
             <span className="text-gray-600">|</span>
             <a href="/terms" className="text-gray-400 hover:text-white transition-colors py-1 px-2">Terms & Conditions</a>
             <span className="text-gray-600">|</span>
             <a href="/disclaimer" className="text-gray-400 hover:text-white transition-colors py-1 px-2">Disclaimer</a>
           </div>
-          <p className="text-gray-500 text-[10px] mt-2" data-copyright>
+          <p className="text-gray-500 text-[8px] mt-2">
             2026 RwandaJobHub. All rights reserved.
           </p>
         </div>
