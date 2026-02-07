@@ -16,6 +16,10 @@ export async function GET(request: NextRequest) {
       AND (deadline IS NULL OR deadline >= CURRENT_DATE)
     `
 
+    // Sorting hierarchy logic:
+    // Rank 1: Employer Jobs with Tier 4 (Short-listing) - plan_id = 4 AND agency_verified = true
+    // Rank 2: Employer Jobs with Tier 3/2 - plan_id IN (2,3) AND agency_verified = true  
+    // Rank 3: Admin "Trending" jobs and Basic (Tier 1) Employer jobs - newest first
     const jobs = await sql`
       SELECT 
         id,
@@ -39,13 +43,14 @@ export async function GET(request: NextRequest) {
       WHERE ${activeWhere}
       ORDER BY 
         CASE 
-          WHEN priority = 'Top' THEN 1
-          WHEN priority = 'High' THEN 2
-          WHEN priority = 'Normal' THEN 3
-          WHEN priority = 'Low' THEN 4
-          ELSE 5
+          -- Rank 1: Employer Tier 4 (Short-listing)
+          WHEN agency_verified = true AND plan_id = 4 THEN 1
+          -- Rank 2: Employer Tier 3/2 (Super Featured, Featured+)
+          WHEN agency_verified = true AND plan_id IN (2,3) THEN 2
+          -- Rank 3: Admin jobs and Basic Employer Tier 1
+          ELSE 3
         END ASC,
-        featured DESC, 
+        -- Within each rank, sort by newest first
         created_at DESC
       LIMIT ${limit} OFFSET ${offset}
     `
@@ -82,18 +87,53 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
 
-    // Validate required fields
-    if (!body.title || !body.company || !body.opportunity_type) {
-      return NextResponse.json(
-        { error: 'Missing required fields: title, company, opportunity_type' },
-        { status: 400 }
-      )
+    // Determine if this is an employer job (has plan info) or admin job
+    const isEmployerJob = body.planId || body.plan_id
+    const planId = isEmployerJob ? (body.planId || body.plan_id || 1) : 1
+    
+    // Validate required fields for employer jobs
+    if (isEmployerJob) {
+      if (!body.title || !body.employerName || !body.opportunity_type) {
+        return NextResponse.json(
+          { error: 'Missing required fields: title, employerName, opportunity_type' },
+          { status: 400 }
+        )
+      }
+    } else {
+      // Admin job validation
+      if (!body.title || !body.company || !body.opportunity_type) {
+        return NextResponse.json(
+          { error: 'Missing required fields: title, company, opportunity_type' },
+          { status: 400 }
+        )
+      }
     }
 
-    // Create or get company
+    // Set agency verification for employer jobs based on plan
+    const agencyVerified = isEmployerJob ? true : false
+    const priority = planId === 4 ? 'Top' : (planId >= 2 ? 'High' : 'Normal')
+    
+    // For employer jobs, use the employer company info from form
     let companyId = body.company_id
-    if (!companyId && body.company) {
+    if (!companyId && isEmployerJob && body.employerName) {
       // Check if company already exists
+      const existingCompany = await sql`
+        SELECT id FROM companies WHERE name = ${body.employerName} LIMIT 1
+      `
+      
+      if (existingCompany && existingCompany.length > 0) {
+        companyId = existingCompany[0].id
+      } else {
+        // Create new company from employer info
+        const newCompany = await sql`
+          INSERT INTO companies (name, created_at) 
+          VALUES (${body.employerName}, ${new Date().toISOString()})
+          RETURNING id
+        `
+        companyId = newCompany[0].id
+      }
+    } else if (!companyId && !isEmployerJob && body.company) {
+      // Admin job - use company field
       const existingCompany = await sql`
         SELECT id FROM companies WHERE name = ${body.company} LIMIT 1
       `
@@ -151,10 +191,10 @@ export async function POST(request: NextRequest) {
         ${body.applicationLink || body.application_link || null},
         ${'published'},
         ${true},
-        ${body.planId || body.plan_id || 1},
-        ${body.planId === 4 || body.plan_id === 4 ? 'Top' : 'Normal'},
-        ${body.planId === 4 || body.plan_id === 4 ? true : false},
-        ${body.planId === 4 || body.plan_id === 4 ? true : false},
+        ${planId},
+        ${priority},
+        ${agencyVerified},
+        ${agencyVerified},
         ${now}
       )
       RETURNING *

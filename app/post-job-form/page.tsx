@@ -132,15 +132,57 @@ export default function PostJobFormPage() {
     setSubmitStatus("idle")
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      setSubmitStatus("success")
-      localStorage.removeItem('selectedPlan')
-      
-      setTimeout(() => {
-        router.push('/')
-      }, 2000)
+      // Prepare form data with employer-specific fields
+      const submissionData = {
+        // Job details
+        title: formData.jobTitle,
+        opportunity_type: formData.offerType,
+        jobType: formData.contractType,
+        description: formData.description,
+        location: "Kigali, Rwanda", // Default or could be added to form
+        
+        // Employer specific fields
+        employerName: formData.employerName,
+        contactName: formData.contactName,
+        contactEmail: formData.contactEmail,
+        contactPhone: `${formData.countryCode} ${formData.contactPhone}`,
+        
+        // Application & logistics
+        applicationMethod: formData.applicationMethod,
+        applicationEmail: formData.applicationEmail,
+        applicationLink: formData.applicationLink,
+        deadline: formData.deadline,
+        deadlineTime: formData.deadlineTime,
+        positions: formData.positions,
+        experienceLevel: formData.experienceLevel,
+        educationLevel: formData.educationLevel,
+        attachmentUrl: formData.attachmentUrl,
+        
+        // Plan information
+        planId: selectedPlan === "featured" ? 1 : 
+                selectedPlan === "featured-plus" ? 2 :
+                selectedPlan === "super-featured" ? 3 : 4,
+      }
+
+      const response = await fetch('/api/jobs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData)
+      })
+
+      if (response.ok) {
+        setSubmitStatus("success")
+        localStorage.removeItem('selectedPlan')
+        
+        setTimeout(() => {
+          router.push('/')
+        }, 2000)
+      } else {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to post job')
+      }
     } catch (error) {
       console.error('Error submitting job:', error)
       setSubmitStatus("error")

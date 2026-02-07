@@ -184,50 +184,82 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
     logo: "/full logo.jpg"
 
-  }
-
-
 
   // Get border color based on job type and priority
-
   const getJobTypeBorderColor = () => {
-
     // Check if this is a Tier 4 (Short-listing) job with priority 'Top'
-
-    if (job.priority === 'Top' || job.agency_verified) {
-
+    if (job.priority === 'Top' || job.agencyVerified) {
       return 'border-l-[#ff7b00] border-l-4' // Thick orange border for Tier 4
-
     }
 
     const jobType = job.jobType?.toLowerCase() || job.opportunityType?.toLowerCase() || ''
-
-    if (jobType.includes('job') || jobType.includes('full') || jobType.includes('permanent')) return 'border-l-[#0F172A]' // Navy for Jobs
-
-    if (jobType.includes('tender') || jobType.includes('bid')) return 'border-l-[#F59E0B]' // Gold for Tenders
-
-    if (jobType.includes('intern') || jobType.includes('trainee')) return 'border-l-[#10B981]' // Emerald for Internships
-
-    if (jobType.includes('part') || jobType.includes('contract')) return 'border-l-green-500'
-
-    if (jobType.includes('volunteer') || jobType.includes('unpaid')) return 'border-l-purple-500'
-
     
-    return 'border-l-[#0F172A]' // Default Navy
+    // Admin jobs (non-agency) get clean, standard look
+    if (!job.agencyVerified) {
+      if (jobType.includes('job') || jobType.includes('full') || jobType.includes('permanent')) return 'border-l-[#1E40AF]' // Clean Navy for Jobs
+      if (jobType.includes('tender') || jobType.includes('bid')) return 'border-l-[#F59E0B]' // Clean Gold for Tenders
+      if (jobType.includes('intern') || jobType.includes('trainee')) return 'border-l-[#10B981]' // Clean Emerald for Internships
+      if (jobType.includes('part') || jobType.includes('contract')) return 'border-l-green-500'
+      if (jobType.includes('volunteer') || jobType.includes('unpaid')) return 'border-l-purple-500'
+      return 'border-l-[#1E40AF]' // Default Navy
+    }
+
+    // Employer jobs (agency verified) - enhanced look
+    if (jobType.includes('job') || jobType.includes('full') || jobType.includes('permanent')) return 'border-l-[#0F172A]' // Navy for Jobs
+    if (jobType.includes('tender') || jobType.includes('bid')) return 'border-l-[#F59E0B]' // Gold for Tenders
+    if (jobType.includes('intern') || jobType.includes('trainee')) return 'border-l-[#10B981]' // Emerald for Internships
+    if (jobType.includes('part') || jobType.includes('contract')) return 'border-l-green-500'
+    if (jobType.includes('volunteer') || jobType.includes('unpaid')) return 'border-l-purple-500'
+    return 'border-l-[#1E40AF]' // Default Navy
   }
 
+  // Employer jobs (agency verified) - enhanced look
+  if (jobType.includes('job') || jobType.includes('full') || jobType.includes('permanent')) return 'border-l-[#0F172A]' // Navy for Jobs
+  if (jobType.includes('tender') || jobType.includes('bid')) return 'border-l-[#F59E0B]' // Gold for Tenders
+  if (jobType.includes('intern') || jobType.includes('trainee')) return 'border-l-[#10B981]' // Emerald for Internships
+  if (jobType.includes('part') || jobType.includes('contract')) return 'border-l-green-500'
+  if (jobType.includes('volunteer') || jobType.includes('unpaid')) return 'border-l-purple-500'
+  
+  return 'border-l-[#0F172A]' // Default Navy
+}
 
 
-  return (
-
-    <div className="block">
-
-      <div className={`rounded-2xl border bg-card pt-6 p-4 md:p-6 shadow-sm transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-2 active:scale-105 border-l-4 ${getJobTypeBorderColor()} lg:hover:shadow-2xl`}>
-
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 lg:gap-4">
-
-          <div className="flex gap-3 md:gap-4 flex-1 min-w-0">
-
+return (
+  <div className="block">
+    <div className={`rounded-2xl border bg-card pt-6 p-4 md:p-6 shadow-sm transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-2 active:scale-105 border-l-4 ${getJobTypeBorderColor()} lg:hover:shadow-2xl`}>
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 lg:gap-4">
+        <div className="flex gap-3 md:gap-4 flex-1 min-w-0">
+          <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted transition-transform duration-300 hover:scale-110">
+            <Image
+              src={displayCompany.logo || "/placeholder.svg"}
+              alt={`${displayCompany.name || 'Company'} logo`}
+              fill
+              className="object-cover"
+              loading="lazy"
+              quality={75}
+            />
+          </div>
+          {/* Job Title and Company on same row as Logo */}
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-col gap-y-1 mb-2">
+              <h3 
+                className="text-lg md:text-xl font-bold leading-tight transition-all duration-200 cursor-pointer hover:text-blue-700 hover:underline lg:hover:text-blue-800" 
+                style={{ color: '#1E40AF' }}
+                onClick={handleTitleClick}
+              >
+                {job.title}
+              </h3>
+              {displayCompany.name && (
+                <span className="flex items-center gap-1 font-semibold text-slate-800 text-sm md:text-base">
+                  {displayCompany.name}
+                  {(job.isVerified ?? job.is_verified) && (
+                    <BadgeCheck className="h-4 w-4 text-blue-600 transition-colors hover:text-blue-700" aria-label="Verified company" />
+                  )}
+                  {(job.agencyVerified ?? job.agency_verified) && (
+                    <BadgeCheck className="h-4 w-4 text-blue-500 transition-colors hover:text-blue-600" aria-label="Agency verified" />
+                  )}
+                </span>
+              )}
             <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted transition-transform duration-300 hover:scale-110">
 
               <Image
