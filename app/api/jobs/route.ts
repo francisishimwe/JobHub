@@ -86,10 +86,14 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
+    
+    console.log('📝 Received job submission:', body)
 
     // Determine if this is an employer job (has plan info) or admin job
     const isEmployerJob = body.planId || body.plan_id
     const planId = isEmployerJob ? (body.planId || body.plan_id || 1) : 1
+    
+    console.log('🏢 Job type check:', { isEmployerJob, planId })
     
     // Validate required fields for employer jobs
     if (isEmployerJob) {
@@ -153,17 +157,28 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Generate UUID
     const id = crypto.randomUUID()
     const now = new Date().toISOString()
 
     // Ensure we have a valid company_id
     if (!companyId) {
+      console.error('❌ No company_id found:', { companyId, body })
       return NextResponse.json(
         { error: 'Company information is required. Please select or add a company.' },
         { status: 400 }
       )
     }
+
+    console.log('🏢 Company resolved:', { companyId })
+
+    console.log('🚀 Inserting job with data:', {
+      id,
+      title: body.title,
+      companyId,
+      employerName: body.employerName,
+      opportunity_type: body.opportunity_type,
+      status: isEmployerJob ? 'pending' : 'published'
+    })
 
     const result = await sql`
       INSERT INTO jobs (

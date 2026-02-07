@@ -125,7 +125,11 @@ export function JobProvider({ children }: { children: ReactNode }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(jobData),
     })
-    if (!response.ok) throw new Error('Failed to create job')
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      const errorMessage = errorData.error || `Failed to create job (${response.status})`
+      throw new Error(errorMessage)
+    }
     const data = await response.json()
     // Re-fetch page 0 to show the newest job immediately
     fetchJobs(0, true)
