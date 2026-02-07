@@ -115,6 +115,8 @@ export async function POST(request: NextRequest) {
     
     // For employer jobs, use the employer company info from form
     let companyId = body.company_id
+    
+    // If no company_id but we have employerName, create/find company
     if (!companyId && isEmployerJob && body.employerName) {
       // Check if company already exists
       const existingCompany = await sql`
@@ -155,11 +157,22 @@ export async function POST(request: NextRequest) {
     const id = crypto.randomUUID()
     const now = new Date().toISOString()
 
+    // Ensure we have a valid company_id
+    if (!companyId) {
+      return NextResponse.json(
+        { error: 'Company information is required. Please select or add a company.' },
+        { status: 400 }
+      )
+    }
+
     const result = await sql`
       INSERT INTO jobs (
         id,
         title,
         company_id,
+        employer_name,
+        employer_email,
+        employer_phone,
         location,
         job_type,
         opportunity_type,
@@ -175,11 +188,15 @@ export async function POST(request: NextRequest) {
         priority,
         agency_verified,
         is_verified,
-        created_at
+        created_at,
+        updated_at
       ) VALUES (
         ${id},
         ${body.title},
         ${companyId},
+        ${body.employerName || null},
+        ${body.employerEmail || null},
+        ${body.employerPhone || null},
         ${body.location || null},
         ${body.jobType || body.job_type || null},
         ${body.opportunity_type},
@@ -195,6 +212,7 @@ export async function POST(request: NextRequest) {
         ${priority},
         ${agencyVerified},
         ${agencyVerified},
+        ${now},
         ${now}
       )
       RETURNING *

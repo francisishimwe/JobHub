@@ -117,11 +117,14 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     try {
       console.log("Form data being submitted:", formData)
 
+      // Get company name from selected company
+      const selectedCompany = companies.find(c => c.id === formData.company_id)
+      
       // Clean up empty strings to null for optional fields
-      // Only send fields that exist in the Neon database
       const cleanedData = {
         title: formData.title.trim(),
         company_id: formData.company_id,
+        employerName: selectedCompany?.name || companySearch, // Send employer name for validation
         description: formData.description?.trim() || null,
         location: formData.location?.trim() || null,
         job_type: formData.job_type || null,
