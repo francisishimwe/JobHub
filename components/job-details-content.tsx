@@ -33,8 +33,27 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     })()
 
     const handleApply = async () => {
-        if (job.application_method === "email") {
+        console.log("Current Job Method:", job.application_method)
+        
+        if (job.application_method?.toLowerCase() === 'email') {
             setIsApplyModalOpen(true)
+        } else if (job.application_method?.toLowerCase() === 'link') {
+            if (job.application_link) {
+                // Track in Google Analytics only
+                if (typeof window !== 'undefined' && (window as any).gtag) {
+                    (window as any).gtag('event', 'apply', {
+                        event_category: 'engagement',
+                        event_label: job.title,
+                        job_id: job.id,
+                        company_name: company?.name
+                    })
+                }
+
+                // Open application link
+                window.open(job.application_link, "_blank", "noopener,noreferrer")
+            } else {
+                alert("Please contact us at 0783074056 to apply for this position.")
+            }
         } else if (job.application_link) {
             // Track in Google Analytics only
             if (typeof window !== 'undefined' && (window as any).gtag) {
