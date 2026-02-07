@@ -209,7 +209,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         attachment_url: formData.attachment_url?.trim() || null,
         featured: false,
         plan_id: formData.plan_id, // Include plan_id
-        application_method: formData.application_method,
+        application_method: formData.application_method.includes('Email') ? 'email' : 'link',
         primary_email: formData.application_method === "email" ? formData.primary_email?.trim() || null : null,
         cc_emails: formData.application_method === "email" ? formData.cc_emails?.trim() || null : null,
       }

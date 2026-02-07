@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { MapPin, Briefcase, Clock, ExternalLink, ArrowLeft, Share2, AlertTriangle, BadgeCheck, FileText } from "lucide-react"
 import Image from "next/image"
@@ -16,11 +16,28 @@ interface JobDetailsContentProps {
 }
 
 export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProps) {
+    console.log("DEBUG JOB DATA:", job)
     const { getCompanyById } = useCompanies()
     const contextCompany = job.companyId ? getCompanyById(job.companyId) : null
     const company = initialCompany || contextCompany
     const [showApplicationForm, setShowApplicationForm] = useState(false)
     const [isApplyModalOpen, setIsApplyModalOpen] = useState(false)
+
+    // Global event listener fallback for modal opening
+    React.useEffect(() => {
+        const handleGlobalModalOpen = (event: CustomEvent) => {
+            if (event.detail?.jobId === job.id && event.detail?.action === 'openModal') {
+                console.log("Global modal open event received for job:", job.id)
+                setIsApplyModalOpen(true)
+            }
+        }
+
+        window.addEventListener('openApplicationModal', handleGlobalModalOpen as EventListener)
+        
+        return () => {
+            window.removeEventListener('openApplicationModal', handleGlobalModalOpen as EventListener)
+        }
+    }, [job.id])
 
     // Expired = deadline exists and is before today (date-only comparison)
     const isExpired = (() => {
@@ -36,7 +53,18 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
         console.log("Current Job Method:", job.application_method)
         
         if (job.application_method?.toLowerCase() === 'email') {
+            // Try React state first
             setIsApplyModalOpen(true)
+            
+            // Fallback: Global event listener
+            setTimeout(() => {
+                if (!isApplyModalOpen) {
+                    console.log("React state failed, using global event fallback")
+                    window.dispatchEvent(new CustomEvent('openApplicationModal', {
+                        detail: { jobId: job.id, action: 'openModal' }
+                    }))
+                }
+            }, 100)
         } else if (job.application_method?.toLowerCase() === 'link') {
             if (job.application_link) {
                 // Track in Google Analytics only
@@ -302,6 +330,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             job.opportunityType !== "Education" &&
                             job.opportunityType !== "Announcement" && (
                                 <Button
+                                    type="button"
                                     onClick={() => {
                                         if (job.application_method?.toLowerCase() === 'email') {
                                             setIsApplyModalOpen(true)
@@ -341,18 +370,18 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             </Link>
                         </Button>
                     </div>
-
-                    {/* Internal Application Modal */}
-                    <InternalApplicationModal
-                        open={isApplyModalOpen}
-                        onOpenChange={setIsApplyModalOpen}
-                        jobId={job.id}
-                        jobTitle={job.title}
-                    />
                 </div>
 
 
             </div>
+            
+            {/* Internal Application Modal - Root Level */}
+            <InternalApplicationModal
+                open={isApplyModalOpen}
+                onOpenChange={setIsApplyModalOpen}
+                jobId={job.id}
+                jobTitle={job.title}
+            />
         </div>
     )
 }

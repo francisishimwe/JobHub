@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -17,8 +17,25 @@ interface JobDetailsModalProps {
 }
 
 export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProps) {
+  console.log("DEBUG JOB DATA:", job)
   const [showApplicationForm, setShowApplicationForm] = useState(false)
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false)
+  
+  // Global event listener fallback for modal opening
+  useEffect(() => {
+    const handleGlobalModalOpen = (event: CustomEvent) => {
+      if (event.detail?.jobId === job?.id && event.detail?.action === 'openModal') {
+        console.log("Global modal open event received for job:", job?.id)
+        setIsApplyModalOpen(true)
+      }
+    }
+
+    window.addEventListener('openApplicationModal', handleGlobalModalOpen as EventListener)
+    
+    return () => {
+      window.removeEventListener('openApplicationModal', handleGlobalModalOpen as EventListener)
+    }
+  }, [job?.id])
   
   if (!job) return null
 
@@ -26,7 +43,18 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
     console.log("Current Job Method:", job.application_method)
     
     if (job.application_method?.toLowerCase() === 'email') {
+      // Try React state first
       setIsApplyModalOpen(true)
+      
+      // Fallback: Global event listener
+      setTimeout(() => {
+        if (!isApplyModalOpen) {
+          console.log("React state failed, using global event fallback")
+          window.dispatchEvent(new CustomEvent('openApplicationModal', {
+            detail: { jobId: job.id, action: 'openModal' }
+          }))
+        }
+      }, 100)
     } else if (job.application_method?.toLowerCase() === 'link') {
       if (job.application_link) {
         window.open(job.application_link, "_blank", "noopener,noreferrer")
@@ -128,7 +156,7 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
               job.opportunityType !== "Scholarship" &&
               job.opportunityType !== "Education" &&
               job.opportunityType !== "Announcement" && (
-                <Button onClick={() => {
+                <Button type="button" onClick={() => {
                 if (job.application_method?.toLowerCase() === 'email') {
                   setIsApplyModalOpen(true)
                 } else {
@@ -140,15 +168,15 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
                 </Button>
               )}
           </div>
-          
-          {/* Internal Application Modal */}
-          <InternalApplicationModal
-            open={isApplyModalOpen}
-            onOpenChange={setIsApplyModalOpen}
-            jobId={job.id}
-            jobTitle={job.title}
-          />
         </div>
+        
+        {/* Internal Application Modal - Root Level */}
+        <InternalApplicationModal
+          open={isApplyModalOpen}
+          onOpenChange={setIsApplyModalOpen}
+          jobId={job.id}
+          jobTitle={job.title}
+        />
       </DialogContent>
     </Dialog>
   )
