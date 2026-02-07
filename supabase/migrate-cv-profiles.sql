@@ -28,7 +28,8 @@ CREATE TABLE IF NOT EXISTS job_applications (
     applicant_name TEXT NOT NULL,
     status TEXT DEFAULT 'pending', -- 'pending', 'shortlisted', 'rejected'
     match_score INTEGER DEFAULT 0, -- Calculated by your match service
-    applied_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    applied_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    documents_json JSONB -- Store uploaded document information
 );
 
 -- 4. Add indexes for faster Match-Making queries
@@ -54,3 +55,6 @@ CREATE TRIGGER update_cv_profiles_updated_at
     BEFORE UPDATE ON cv_profiles 
     FOR EACH ROW 
     EXECUTE FUNCTION update_updated_at_column();
+
+-- 7. Add unique constraint for email to prevent duplicates
+ALTER TABLE cv_profiles ADD CONSTRAINT unique_email UNIQUE (email);

@@ -48,7 +48,12 @@ interface CVProfile {
   job_applications?: Array<{
     status: string
     match_score: number
-    application_date: string
+    applied_at: string
+    documents_json?: Array<{
+      name: string
+      url: string
+      type: string
+    }>
   }>
 }
 
@@ -383,6 +388,37 @@ export function ApplicantReview({ jobId, jobTitle, jobCategory, isOpen, onClose 
                         <div className="mb-3">
                           <h5 className="font-medium text-sm mb-2">Experience:</h5>
                           <p className="text-sm text-gray-600 line-clamp-2">{applicant.experience}</p>
+                        </div>
+                      )}
+                      
+                      {/* Uploaded Documents Section */}
+                      {applicant.job_applications?.[0]?.documents_json && applicant.job_applications[0].documents_json.length > 0 && (
+                        <div className="mb-3">
+                          <h5 className="font-medium text-sm mb-2 flex items-center gap-2">
+                            <FileText className="h-4 w-4" />
+                            Uploaded Documents ({applicant.job_applications[0].documents_json.length})
+                          </h5>
+                          <div className="space-y-2">
+                            {applicant.job_applications[0].documents_json.map((doc, index) => (
+                              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded border">
+                                <div className="flex items-center gap-2">
+                                  <FileText className="h-3 w-3 text-blue-600" />
+                                  <span className="text-sm text-gray-700">{doc.name}</span>
+                                  <Badge variant="outline" className="text-xs">
+                                    {doc.type === 'cover_letter' ? 'Cover Letter' : 'Document'}
+                                  </Badge>
+                                </div>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => window.open(`https://rwandajobhub.rw${doc.url}`, '_blank')}
+                                  className="h-6 w-6 p-0"
+                                >
+                                  <Download className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                       

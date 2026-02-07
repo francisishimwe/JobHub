@@ -1,12 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { writeFile, mkdir } from 'fs/promises'
+import { join } from 'path'
+import { existsSync } from 'fs'
 
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
     
-    const body = await request.json()
-    const { jobId, jobTitle, primaryEmail, ccEmails, applicant } = body
+    // Parse FormData instead of JSON
+    const formData = await request.formData()
+    const jobId = formData.get('jobId') as string
+    const jobTitle = formData.get('jobTitle') as string
+    const primaryEmail = formData.get('primaryEmail') as string
+    const ccEmailsJson = formData.get('ccEmails') as string
+    const applicantJson = formData.get('applicant') as string
+    
+    const ccEmails = ccEmailsJson ? JSON.parse(ccEmailsJson) : []
+    const applicant = applicantJson ? JSON.parse(applicantJson) : null
+    
+    // Get uploaded files
+    const coverLetter = formData.get('coverLetter') as File | null
+    const otherDocuments: File[] = []
+    
+    // Collect other documents
+    let index = 0
+    while (true) {
+      const doc = formData.get(`otherDocument_${index}`) as File | null
+      if (!doc) break
+      otherDocuments.push(doc)
+      index++
+    }
 
     // Validate required fields
     if (!jobId || !jobTitle || !primaryEmail || !applicant) {
@@ -24,11 +48,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Save applicant data to cv_profiles table for job alerts
+    let cvProfileId = null
     try {
-      const { error: cvProfileError } = await supabase
+      const { data: cvProfile, error: cvProfileError } = await supabase
         .from('cv_profiles')
         .upsert({
-          job_id: jobId,
+          user_id: applicant.email, // Use email as user_id for simplicity
           full_name: applicant.full_name,
           email: applicant.email,
           phone: applicant.phone,
@@ -36,20 +61,95 @@ export async function POST(request: NextRequest) {
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         }, {
-          onConflict: 'job_id,email'
+          onConflict: 'email'
         })
+        .select('id')
+        .single()
 
       if (cvProfileError) {
         console.error('Error saving to cv_profiles:', cvProfileError)
-        // Continue with email sending even if cv_profiles fails
+      } else {
+        cvProfileId = cvProfile.id
       }
     } catch (cvError) {
       console.error('CV Profile save error:', cvError)
-      // Continue with email sending even if cv_profiles fails
+    }
+    
+    // Save uploaded files and create job application record
+    const uploadedFiles = []
+    const uploadsDir = join(process.cwd(), 'public', 'uploads', 'applications')
+    
+    // Create uploads directory if it doesn't exist
+    if (!existsSync(uploadsDir)) {
+      await mkdir(uploadsDir, { recursive: true })
+    }
+    
+    // Save cover letter
+    let coverLetterUrl = null
+    if (coverLetter) {
+      const timestamp = Date.now()
+      const filename = `${applicant.email.replace(/[^a-zA-Z0-9]/g, '_')}_cover_letter_${timestamp}.${coverLetter.name.split('.').pop()}`
+      const filepath = join(uploadsDir, filename)
+      await writeFile(filepath, Buffer.from(await coverLetter.arrayBuffer()))
+      coverLetterUrl = `/uploads/applications/${filename}`
+      uploadedFiles.push({ name: coverLetter.name, url: coverLetterUrl, type: 'cover_letter' })
+    }
+    
+    // Save other documents
+    const otherDocumentUrls = []
+    for (let i = 0; i < otherDocuments.length; i++) {
+      const doc = otherDocuments[i]
+      const timestamp = Date.now()
+      const filename = `${applicant.email.replace(/[^a-zA-Z0-9]/g, '_')}_doc_${i + 1}_${timestamp}.${doc.name.split('.').pop()}`
+      const filepath = join(uploadsDir, filename)
+      await writeFile(filepath, Buffer.from(await doc.arrayBuffer()))
+      const url = `/uploads/applications/${filename}`
+      otherDocumentUrls.push(url)
+      uploadedFiles.push({ name: doc.name, url, type: 'other_document' })
+    }
+    
+    // Save job application with document references
+    if (cvProfileId) {
+      try {
+        const { error: appError } = await supabase
+          .from('job_applications')
+          .insert({
+            job_id: jobId,
+            cv_profile_id: cvProfileId,
+            applicant_name: applicant.full_name,
+            status: 'pending',
+            match_score: 0,
+            applied_at: new Date().toISOString(),
+            // Store document URLs as JSON
+            documents_json: uploadedFiles.length > 0 ? uploadedFiles : null
+          })
+          
+        if (appError) {
+          console.error('Error saving job application:', appError)
+        }
+      } catch (appError) {
+        console.error('Job application save error:', appError)
+      }
     }
 
     // Send email to employer
     const emailSubject = `New Application for ${jobTitle}`
+    
+    // Build document links for email
+    let documentLinks = ''
+    if (uploadedFiles.length > 0) {
+      documentLinks = `
+        <div style="margin-bottom: 20px;">
+          <strong>Uploaded Documents:</strong>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            ${uploadedFiles.map(file => 
+              `<li><a href="https://rwandajobhub.rw${file.url}" style="color: #0066cc; text-decoration: none;">${file.name}</a> (${file.type === 'cover_letter' ? 'Cover Letter' : 'Additional Document'})</li>`
+            ).join('')}
+          </ul>
+        </div>
+      `
+    }
+    
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
@@ -68,6 +168,8 @@ export async function POST(request: NextRequest) {
               </ul>
             </div>
             
+            ${documentLinks}
+            
             <div style="margin-bottom: 15px;">
               <strong>Application Date:</strong> ${new Date().toLocaleDateString()}
             </div>
@@ -76,6 +178,7 @@ export async function POST(request: NextRequest) {
               <p style="margin: 0; color: #1565c0;">
                 <strong>Note:</strong> This application was submitted via RwandaJobHub. 
                 The applicant's information has been saved for future job matching.
+                ${uploadedFiles.length > 0 ? ' Documents are available for download in the admin dashboard.' : ''}
               </p>
             </div>
           </div>
@@ -83,6 +186,7 @@ export async function POST(request: NextRequest) {
           <div style="text-align: center; color: #666; font-size: 12px;">
             <p>This email was sent from RwandaJobHub - Rwanda's #1 Job Portal</p>
             <p>Visit us at: <a href="https://rwandajobhub.rw" style="color: #0066cc;">rwandajobhub.rw</a></p>
+            <p>Need support? Contact us on WhatsApp: <a href="https://wa.me/250783074056" style="color: #0066cc;">0783074056</a></p>
           </div>
         </div>
       </div>

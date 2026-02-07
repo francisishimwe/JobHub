@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, CheckCircle, Mail } from "lucide-react"
+import { Loader2, CheckCircle, Mail, Upload, X, FileText } from "lucide-react"
 
 interface EmailApplicationFormProps {
   jobId: string
@@ -28,6 +28,8 @@ export function EmailApplicationForm({
     phone: "",
     field_of_study: ""
   })
+  const [coverLetter, setCoverLetter] = useState<File | null>(null)
+  const [otherDocuments, setOtherDocuments] = useState<File[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState("")
@@ -70,23 +72,31 @@ export function EmailApplicationForm({
     }
 
     try {
+      // Create FormData for file upload
+      const submissionData = new FormData()
+      submissionData.append('jobId', jobId)
+      submissionData.append('jobTitle', jobTitle)
+      submissionData.append('primaryEmail', primaryEmail)
+      submissionData.append('ccEmails', JSON.stringify(ccEmails ? ccEmails.split(',').map(email => email.trim()) : []))
+      submissionData.append('applicant', JSON.stringify({
+        full_name: formData.full_name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        field_of_study: formData.field_of_study.trim()
+      }))
+      
+      // Add files if they exist
+      if (coverLetter) {
+        submissionData.append('coverLetter', coverLetter)
+      }
+      
+      otherDocuments.forEach((doc, index) => {
+        submissionData.append(`otherDocument_${index}`, doc)
+      })
+
       const response = await fetch('/api/apply-by-email', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          jobId,
-          jobTitle,
-          primaryEmail,
-          ccEmails: ccEmails ? ccEmails.split(',').map(email => email.trim()) : [],
-          applicant: {
-            full_name: formData.full_name.trim(),
-            email: formData.email.trim(),
-            phone: formData.phone.trim(),
-            field_of_study: formData.field_of_study.trim()
-          }
-        }),
+        body: submissionData,
       })
 
       const data = await response.json()
@@ -199,6 +209,117 @@ export function EmailApplicationForm({
             placeholder="e.g. Computer Science, Business Administration"
             className="h-11"
           />
+        </div>
+
+        {/* Job Title Display (Non-editable) */}
+        <div className="space-y-2">
+          <Label>Position Applied For</Label>
+          <Input
+            value={jobTitle}
+            disabled
+            className="h-11 bg-gray-100 text-gray-900 font-medium"
+          />
+        </div>
+
+        {/* Cover Letter Upload */}
+        <div className="space-y-2">
+          <Label>Upload Cover Letter (PDF/DOCX)</Label>
+          <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+            {coverLetter ? (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm text-gray-700">{coverLetter.name}</span>
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setCoverLetter(null)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ) : (
+              <div className="text-center">
+                <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                <label htmlFor="coverLetter" className="cursor-pointer">
+                  <span className="text-sm text-blue-600 hover:text-blue-800">Choose file</span>
+                  <input
+                    id="coverLetter"
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) {
+                        if (file.size > 5 * 1024 * 1024) {
+                          setError("File size must be less than 5MB")
+                          return
+                        }
+                        setCoverLetter(file)
+                      }
+                    }}
+                    className="hidden"
+                  />
+                </label>
+                <p className="text-xs text-gray-500 mt-1">PDF or DOCX, max 5MB</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Other Documents Upload */}
+        <div className="space-y-2">
+          <Label>Upload Additional Documents (Optional)</Label>
+          <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+            {otherDocuments.length > 0 && (
+              <div className="space-y-2 mb-3">
+                {otherDocuments.map((doc, index) => (
+                  <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-blue-600" />
+                      <span className="text-sm text-gray-700">{doc.name}</span>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setOtherDocuments(prev => prev.filter((_, i) => i !== index))}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="text-center">
+              <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+              <label htmlFor="otherDocuments" className="cursor-pointer">
+                <span className="text-sm text-blue-600 hover:text-blue-800">Add document</span>
+                <input
+                  id="otherDocuments"
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  multiple
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files || [])
+                    const validFiles = files.filter(file => {
+                      if (file.size > 5 * 1024 * 1024) {
+                        setError(`${file.name} is too large (max 5MB)`)
+                        return false
+                      }
+                      return true
+                    })
+                    setOtherDocuments(prev => [...prev, ...validFiles])
+                  }}
+                  className="hidden"
+                />
+              </label>
+              <p className="text-xs text-gray-500 mt-1">PDF or DOCX, max 5MB each</p>
+            </div>
+          </div>
         </div>
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">

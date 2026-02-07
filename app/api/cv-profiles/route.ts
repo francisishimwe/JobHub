@@ -110,7 +110,8 @@ export async function GET(request: NextRequest) {
           job_applications!inner(
             status,
             match_score,
-            application_date
+            applied_at,
+            documents_json
           )
         `)
         .eq('job_id', jobId)
