@@ -8,6 +8,7 @@ import { MapPin, DollarSign, Briefcase, Clock, CheckCircle2, ExternalLink } from
 import Image from "next/image"
 import type { Job } from "@/lib/types"
 import { EmailApplicationForm } from "@/components/email-application-form"
+import { InternalApplicationModal } from "@/components/internal-application-modal"
 
 interface JobDetailsModalProps {
   job: Job | null
@@ -17,12 +18,13 @@ interface JobDetailsModalProps {
 
 export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProps) {
   const [showApplicationForm, setShowApplicationForm] = useState(false)
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false)
   
   if (!job) return null
 
   const handleApply = () => {
     if (job.applicationMethod === 'email' || job.application_method === 'email') {
-      setShowApplicationForm(true)
+      setIsApplyModalOpen(true)
     } else if (job.applicationLink) {
       window.open(job.applicationLink, "_blank", "noopener,noreferrer")
     }
@@ -125,21 +127,13 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
               )}
           </div>
           
-          {/* Email Application Form */}
-          {showApplicationForm && (job.applicationMethod === 'email' || job.application_method === 'email') && (
-            <div className="mt-4">
-              <EmailApplicationForm
-                jobId={job.id}
-                jobTitle={job.title}
-                primaryEmail={job.primaryEmail || job.primary_email || ""}
-                ccEmails={job.ccEmails || job.cc_emails || ""}
-                onSuccess={() => {
-                  setShowApplicationForm(false)
-                  onOpenChange(false)
-                }}
-              />
-            </div>
-          )}
+          {/* Internal Application Modal */}
+          <InternalApplicationModal
+            open={isApplyModalOpen}
+            onOpenChange={setIsApplyModalOpen}
+            jobId={job.id}
+            jobTitle={job.title}
+          />
         </div>
       </DialogContent>
     </Dialog>

@@ -8,6 +8,7 @@ import type { Job, Company } from "@/lib/types"
 import { useCompanies } from "@/lib/company-context"
 import Link from "next/link"
 import { EmailApplicationForm } from "@/components/email-application-form"
+import { InternalApplicationModal } from "@/components/internal-application-modal"
 
 interface JobDetailsContentProps {
   job: Job
@@ -19,6 +20,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     const contextCompany = job.companyId ? getCompanyById(job.companyId) : null
     const company = initialCompany || contextCompany
     const [showApplicationForm, setShowApplicationForm] = useState(false)
+    const [isApplyModalOpen, setIsApplyModalOpen] = useState(false)
 
     // Expired = deadline exists and is before today (date-only comparison)
     const isExpired = (() => {
@@ -31,7 +33,9 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     })()
 
     const handleApply = async () => {
-        if (job.applicationLink) {
+        if (job.applicationMethod === "email" || job.application_method === "email") {
+            setIsApplyModalOpen(true)
+        } else if (job.applicationLink) {
             // Track in Google Analytics only
             if (typeof window !== 'undefined' && (window as any).gtag) {
                 (window as any).gtag('event', 'apply', {
@@ -279,11 +283,11 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             job.opportunityType !== "Education" &&
                             job.opportunityType !== "Announcement" && (
                                 <Button
-                                    onClick={(job.applicationMethod === "email" || job.application_method === "email") ? () => setShowApplicationForm(!showApplicationForm) : handleApply}
+                                    onClick={handleApply}
                                     size="lg"
                                     className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
                                 >
-                                    {(job.applicationMethod === "email" || job.application_method === "email") ? (showApplicationForm ? "Hide Application Form" : "Apply Now") : "Apply Now"}
+                                    Apply Now
                                     <ExternalLink className="ml-2 h-5 w-5" />
                                 </Button>
                             )}
@@ -313,20 +317,13 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                         </Button>
                     </div>
 
-                    {/* Email Application Form */}
-                    {showApplicationForm && (job.applicationMethod === "email" || job.application_method === "email") && (
-                        <div className="mt-6">
-                            <EmailApplicationForm
-                                jobId={job.id}
-                                jobTitle={job.title}
-                                primaryEmail={job.primaryEmail || job.primary_email || ""}
-                                ccEmails={job.ccEmails || job.cc_emails || ""}
-                                onSuccess={() => {
-                                    setShowApplicationForm(false)
-                                }}
-                            />
-                        </div>
-                    )}
+                    {/* Internal Application Modal */}
+                    <InternalApplicationModal
+                        open={isApplyModalOpen}
+                        onOpenChange={setIsApplyModalOpen}
+                        jobId={job.id}
+                        jobTitle={job.title}
+                    />
                 </div>
 
 
