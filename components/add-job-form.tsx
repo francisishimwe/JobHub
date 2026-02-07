@@ -44,6 +44,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     deadline: "",
     application_link: "",
     attachment_url: "",
+    plan_id: 1, // Default to Basic plan
   })
 
   // Filter companies based on search
@@ -133,6 +134,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         application_link: formData.application_link?.trim() || null,
         attachment_url: formData.attachment_url?.trim() || null,
         featured: false,
+        plan_id: formData.plan_id, // Include plan_id
       }
 
       console.log("Cleaned data being sent to addJob:", cleanedData)
@@ -150,6 +152,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         deadline: "",
         application_link: "",
         attachment_url: "",
+        plan_id: 1, // Reset to default plan
       })
       setCompanySearch("")
       setSelectedFile(null)
@@ -423,6 +426,24 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                 <SelectItem value="Statistics">Statistics</SelectItem>
                 <SelectItem value="Telecommunications">Telecommunications</SelectItem>
                 <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="plan_id">Plan Tier</Label>
+            <Select
+              value={formData.plan_id.toString()}
+              onValueChange={(value: string) => setFormData({ ...formData, plan_id: parseInt(value) })}
+            >
+              <SelectTrigger className="h-11 text-base">
+                <SelectValue placeholder="Select plan tier" />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                <SelectItem value="1">Tier 1 - Basic (50,000 RWF)</SelectItem>
+                <SelectItem value="2">Tier 2 - Featured+ (75,000 RWF)</SelectItem>
+                <SelectItem value="3">Tier 3 - Super Featured (100,000 RWF)</SelectItem>
+                <SelectItem value="4">Tier 4 - Short-listing (150,000 RWF)</SelectItem>
               </SelectContent>
             </Select>
           </div>

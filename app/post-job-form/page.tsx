@@ -177,7 +177,7 @@ export default function PostJobFormPage() {
         localStorage.removeItem('selectedPlan')
         
         setTimeout(() => {
-          router.push('/')
+          router.push('/job-submission-success')
         }, 2000)
       } else {
         const errorData = await response.json()
