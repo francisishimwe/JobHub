@@ -1,11 +1,13 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { MapPin, Briefcase, Clock, ExternalLink, ArrowLeft, Share2, AlertTriangle, BadgeCheck, FileText } from "lucide-react"
 import Image from "next/image"
 import type { Job, Company } from "@/lib/types"
 import { useCompanies } from "@/lib/company-context"
 import Link from "next/link"
+import { EmailApplicationForm } from "@/components/email-application-form"
 
 interface JobDetailsContentProps {
   job: Job
@@ -16,6 +18,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     const { getCompanyById } = useCompanies()
     const contextCompany = job.companyId ? getCompanyById(job.companyId) : null
     const company = initialCompany || contextCompany
+    const [showApplicationForm, setShowApplicationForm] = useState(false)
 
     // Expired = deadline exists and is before today (date-only comparison)
     const isExpired = (() => {
@@ -283,6 +286,19 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                     <ExternalLink className="ml-2 h-5 w-5" />
                                 </Button>
                             )}
+                        
+                        {/* Email Application Button */}
+                        {job.applicationMethod === "email" && !isExpired && (
+                            <Button
+                                onClick={() => setShowApplicationForm(!showApplicationForm)}
+                                size="lg"
+                                className="w-full sm:w-auto flex-1 bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
+                            >
+                                {showApplicationForm ? "Hide Application Form" : "Apply via Email"}
+                                <ExternalLink className="ml-2 h-5 w-5" />
+                            </Button>
+                        )}
+                        
                         <Button
                             onClick={handleShareWhatsApp}
                             size="lg"
@@ -307,6 +323,21 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             </Link>
                         </Button>
                     </div>
+
+                    {/* Email Application Form */}
+                    {showApplicationForm && job.applicationMethod === "email" && (
+                        <div className="mt-6">
+                            <EmailApplicationForm
+                                jobId={job.id}
+                                jobTitle={job.title}
+                                primaryEmail={job.primaryEmail || ""}
+                                ccEmails={job.ccEmails || ""}
+                                onSuccess={() => {
+                                    setShowApplicationForm(false)
+                                }}
+                            />
+                        </div>
+                    )}
                 </div>
 
 

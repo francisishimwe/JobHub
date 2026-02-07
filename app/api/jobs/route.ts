@@ -22,27 +22,30 @@ export async function GET(request: NextRequest) {
     // Rank 3: Admin "Trending" jobs and Basic (Tier 1) Employer jobs - newest first
     const jobs = await sql`
       SELECT 
-        id,
-        title,
-        company_id,
-        location,
-        location_type,
-        job_type,
-        opportunity_type,
-        experience_level,
-        deadline,
-        featured,
-        description,
-        attachment_url,
-        application_link,
-        status,
-        approved,
-        applicants,
-        views,
-        created_at
-      FROM jobs
+        j.id,
+        j.title,
+        j.company_id,
+        j.location,
+        j.location_type,
+        j.job_type,
+        j.opportunity_type,
+        j.experience_level,
+        j.deadline,
+        j.featured,
+        j.description,
+        j.attachment_url,
+        j.application_link,
+        j.status,
+        j.approved,
+        j.applicants,
+        j.views,
+        j.created_at,
+        c.name as company_name,
+        c.logo as company_logo
+      FROM jobs j
+      LEFT JOIN companies c ON j.company_id = c.id
       WHERE ${activeWhere}
-      ORDER BY created_at DESC
+      ORDER BY j.created_at DESC
       LIMIT ${limit} OFFSET ${offset}
     `
 
@@ -255,11 +258,8 @@ export async function POST(request: NextRequest) {
           id,
           title,
           company_id,
-          company_logo,
-          employer_name,
-          employer_email,
-          employer_phone,
           location,
+          location_type,
           job_type,
           opportunity_type,
           experience_level,
@@ -270,29 +270,15 @@ export async function POST(request: NextRequest) {
           application_link,
           status,
           approved,
-          plan_id,
-          priority,
-          agency_verified,
-          is_verified,
-          tier,
-          tier_price,
-          priority_placement,
-          social_media_promotion,
-          whatsapp_promotion,
-          candidate_pre_screening,
-          priority_candidate_matching,
-          matched_candidates_count,
-          created_at,
-          updated_at
+          applicants,
+          views,
+          created_at
         ) VALUES (
           ${id},
           ${body.title},
           ${companyId},
-          ${body.companyLogo || null},
-          ${body.employerName || null},
-          ${body.employerEmail || null},
-          ${body.employerPhone || null},
           ${body.location || null},
+          ${body.location_type || null},
           ${body.jobType || body.job_type || null},
           ${body.opportunity_type},
           ${body.experienceLevel || body.experience_level || null},
@@ -303,19 +289,8 @@ export async function POST(request: NextRequest) {
           ${body.applicationLink || body.application_link || null},
           ${isEmployerJob ? 'pending' : 'published'},
           ${isEmployerJob ? false : true},
-          ${planId},
-          ${priority},
-          ${agencyVerified},
-          ${agencyVerified},
-          ${config.tier},
-          ${config.price},
-          ${config.priority_placement},
-          ${config.social_media_promotion},
-          ${config.whatsapp_promotion},
-          ${config.candidate_pre_screening},
-          ${config.priority_candidate_matching},
           0,
-          ${now},
+          0,
           ${now}
         )
         RETURNING *
@@ -328,8 +303,8 @@ export async function POST(request: NextRequest) {
           id,
           title,
           company_id,
-          company_logo,
           location,
+          location_type,
           job_type,
           opportunity_type,
           experience_level,
@@ -340,13 +315,15 @@ export async function POST(request: NextRequest) {
           application_link,
           status,
           approved,
+          applicants,
+          views,
           created_at
         ) VALUES (
           ${id},
           ${body.title},
           ${companyId},
-          ${body.companyLogo || null},
           ${body.location || null},
+          ${body.location_type || null},
           ${body.jobType || body.job_type || null},
           ${body.opportunity_type},
           ${body.experienceLevel || body.experience_level || null},
@@ -357,6 +334,8 @@ export async function POST(request: NextRequest) {
           ${body.applicationLink || body.application_link || null},
           ${isEmployerJob ? 'pending' : 'published'},
           ${isEmployerJob ? false : true},
+          0,
+          0,
           ${now}
         )
         RETURNING *
@@ -373,8 +352,8 @@ export async function POST(request: NextRequest) {
       id: newJob.id,
       title: newJob.title,
       company_id: newJob.company_id,
-      company_logo: newJob.company_logo,
       location: newJob.location,
+      location_type: newJob.location_type,
       job_type: newJob.job_type,
       opportunity_type: newJob.opportunity_type,
       experience_level: newJob.experience_level,
@@ -385,11 +364,8 @@ export async function POST(request: NextRequest) {
       application_link: newJob.application_link,
       status: newJob.status,
       approved: newJob.approved,
-      // Include employer-specific fields if they exist
-      ...(newJob.plan_id !== undefined && { plan_id: newJob.plan_id }),
-      ...(newJob.priority !== undefined && { priority: newJob.priority }),
-      ...(newJob.agency_verified !== undefined && { agency_verified: newJob.agency_verified }),
-      ...(newJob.is_verified !== undefined && { is_verified: newJob.is_verified }),
+      applicants: newJob.applicants,
+      views: newJob.views,
       created_at: newJob.created_at
     }, { status: 201 })
   } catch (error) {

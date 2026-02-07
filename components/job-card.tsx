@@ -184,14 +184,10 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
 
 
-  // Use company data if available, otherwise use fallback info
-
-  const displayCompany = company || {
-
-    name: "RwandaJobHub Partner",
-
-    logo: job.companyLogo || "/full logo.jpg"
-
+  // Use company data from job if available, otherwise use fallback info
+  const displayCompany = {
+    name: job.companyName || job.company?.name || "RwandaJobHub Partner",
+    logo: job.companyLogo || job.company?.logo || "/full logo.jpg"
   }
 
 
@@ -301,23 +297,6 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
               onClick={handleViewDetails}
             >
               View Details
-            </Button>
-            <Button
-              size="sm"
-              className="bg-green-600 hover:bg-green-700 text-white flex-1 md:flex-initial text-xs md:text-sm font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg lg:hover:shadow-xl whitespace-nowrap"
-              onClick={handleApplyNow}
-            >
-              {job.planId === 4 || job.priority === 'Top' ? (
-                <>
-                  <ExternalLink className="h-3 w-3 mr-1" />
-                  Apply Now
-                </>
-              ) : (
-                <>
-                  <ExternalLink className="h-3 w-3 mr-1" />
-                  Apply Now
-                </>
-              )}
             </Button>
             <Button
               variant="outline"

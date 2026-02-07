@@ -7,6 +7,7 @@ export interface Job {
   // Database format (snake_case) - optional for backward compatibility
   company_id?: string | null;
   company_logo?: string | null;
+  company_name?: string | null;
   job_type?: string;
   opportunity_type?: string;
   created_at?: string;
@@ -23,10 +24,14 @@ export interface Job {
   plan_id?: number;
   priority?: string;
   agency_verified?: boolean;
+  application_method?: string;
+  primary_email?: string | null;
+  cc_emails?: string | null;
 
   // Component format (camelCase) - mapped in your Provider
   companyId?: string | null;
   companyLogo?: string | null;
+  companyName?: string | null;
   jobType?: string;
   opportunityType?: string;
   postedDate?: Date;
@@ -37,6 +42,9 @@ export interface Job {
   isVerified?: boolean;
   planId?: number;
   agencyVerified?: boolean;
+  applicationMethod?: string;
+  primaryEmail?: string | null;
+  ccEmails?: string | null;
   
   // Relational data
   company?: {

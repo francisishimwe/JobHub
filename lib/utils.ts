@@ -19,6 +19,8 @@ export function mapDatabaseJobToUIJob(dbJob: any): Job {
     
     // Database format fields (kept for backwards compatibility)
     company_id: dbJob.company_id || null,
+    company_logo: dbJob.company_logo || null,
+    company_name: dbJob.company_name || null,
     job_type: dbJob.job_type || '',
     opportunity_type: dbJob.opportunity_type || '',
     created_at: dbJob.created_at || '',
@@ -35,6 +37,8 @@ export function mapDatabaseJobToUIJob(dbJob: any): Job {
 
     // Component format fields (camelCase - for component usage)
     companyId: dbJob.company_id || null,
+    companyLogo: dbJob.company_logo || "/full logo.jpg",
+    companyName: dbJob.company_name || "RwandaJobHub Partner",
     jobType: dbJob.job_type || '',
     opportunityType: dbJob.opportunity_type || '',
     postedDate: dbJob.created_at ? new Date(dbJob.created_at) : new Date(Date.now()),
@@ -46,10 +50,8 @@ export function mapDatabaseJobToUIJob(dbJob: any): Job {
     
     // Relational data with safe fallbacks
     company: dbJob.company || { 
-      name: "RwandaJobHub Partner", 
-      logo: "/full logo.jpg" 
+      name: dbJob.company_name || "RwandaJobHub Partner", 
+      logo: dbJob.company_logo || "/full logo.jpg" 
     },
-    companyLogo: dbJob.company?.logo || "/full logo.jpg",
-    applicants: dbJob.applicants || 0,
   }
 }

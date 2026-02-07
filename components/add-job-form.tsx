@@ -45,6 +45,9 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     application_link: "",
     attachment_url: "",
     plan_id: 1, // Default to Basic plan
+    application_method: "link", // Default to link application
+    primary_email: "",
+    cc_emails: "",
   })
 
   // Filter companies based on search
@@ -150,6 +153,35 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       return
     }
 
+    // Validate email application method
+    if (formData.application_method === "email") {
+      if (!formData.primary_email?.trim()) {
+        alert("Please enter a primary email address")
+        setLoading(false)
+        return
+      }
+      
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(formData.primary_email.trim())) {
+        alert("Please enter a valid primary email address")
+        setLoading(false)
+        return
+      }
+      
+      // Validate CC emails if provided
+      if (formData.cc_emails?.trim()) {
+        const ccEmails = formData.cc_emails.split(',').map(email => email.trim())
+        for (const ccEmail of ccEmails) {
+          if (!emailRegex.test(ccEmail)) {
+            alert(`Invalid CC email address: ${ccEmail}`)
+            setLoading(false)
+            return
+          }
+        }
+      }
+    }
+
     try {
       console.log("Form data being submitted:", formData)
 
@@ -171,6 +203,9 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         attachment_url: formData.attachment_url?.trim() || null,
         featured: false,
         plan_id: formData.plan_id, // Include plan_id
+        application_method: formData.application_method,
+        primary_email: formData.application_method === "email" ? formData.primary_email?.trim() || null : null,
+        cc_emails: formData.application_method === "email" ? formData.cc_emails?.trim() || null : null,
       }
 
       console.log("Cleaned data being sent to addJob:", cleanedData)
@@ -189,6 +224,9 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         application_link: "",
         attachment_url: "",
         plan_id: 1, // Reset to default plan
+        application_method: "link",
+        primary_email: "",
+        cc_emails: "",
       })
       setCompanySearch("")
       setSelectedFile(null)
@@ -298,8 +336,56 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
               onChange={(e) => setFormData({ ...formData, application_link: e.target.value })}
               placeholder="https://example.com/apply"
               className="h-11 text-base"
+              disabled={formData.application_method === "email"}
             />
           </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="application_method">Application Method *</Label>
+            <Select
+              value={formData.application_method}
+              onValueChange={(value: string) => setFormData({ ...formData, application_method: value })}
+            >
+              <SelectTrigger className="h-11 text-base">
+                <SelectValue placeholder="Select application method" />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                <SelectItem value="link">External Link</SelectItem>
+                <SelectItem value="email">Email Application</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {formData.application_method === "email" && (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="primary_email">Primary Email *</Label>
+                <Input
+                  id="primary_email"
+                  type="email"
+                  required={formData.application_method === "email"}
+                  value={formData.primary_email}
+                  onChange={(e) => setFormData({ ...formData, primary_email: e.target.value })}
+                  placeholder="employer@company.com"
+                  className="h-11 text-base"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="cc_emails">CC Emails (Optional)</Label>
+                <Input
+                  id="cc_emails"
+                  value={formData.cc_emails}
+                  onChange={(e) => setFormData({ ...formData, cc_emails: e.target.value })}
+                  placeholder="hr@company.com, manager@company.com"
+                  className="h-11 text-base"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Enter multiple email addresses separated by commas
+                </p>
+              </div>
+            </>
+          )}
 
           <div className="space-y-2">
             <Label htmlFor="attachment">Attach Document (Optional)</Label>
