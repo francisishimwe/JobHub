@@ -31,6 +31,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Check if Vercel Blob is configured
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      console.warn('BLOB_READ_WRITE_TOKEN not configured. Using base64 fallback.')
+      
+      // Fallback: Convert to base64 and return as data URL
+      const bytes = await file.arrayBuffer()
+      const base64 = Buffer.from(bytes).toString('base64')
+      const dataUrl = `data:${file.type};base64,${base64}`
+      
+      return NextResponse.json({
+        url: dataUrl,
+        filename: file.name,
+        isBase64: true
+      })
+    }
+
     // Generate unique filename
     const timestamp = Date.now()
     const randomString = Math.random().toString(36).substring(2, 8)

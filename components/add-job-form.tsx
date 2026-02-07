@@ -90,7 +90,8 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to upload logo')
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to upload logo')
       }
 
       const data = await response.json()
@@ -99,7 +100,12 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       console.error('Error uploading logo:', error)
       alert('Failed to upload logo. Please try again.')
       // Fallback to base64 for preview
-      setNewCompany({ ...newCompany, logo: reader.result as string })
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const result = reader.result as string
+        setNewCompany({ ...newCompany, logo: result })
+      }
+      reader.readAsDataURL(file)
     }
   }
 
