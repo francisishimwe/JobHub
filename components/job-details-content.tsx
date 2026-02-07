@@ -50,7 +50,11 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     })()
 
     const handleApply = async () => {
-        console.log("Current Job Method:", job.application_method)
+        console.log("CRITICAL DEBUG - Method is:", job.application_method, "Full Job Object:", job)
+        
+        if (!job.application_method) { 
+            console.error("ERROR: No application method found for this job!"); 
+        }
         
         if (job.application_method?.toLowerCase() === 'email') {
             // Try React state first

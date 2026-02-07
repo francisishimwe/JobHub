@@ -32,7 +32,10 @@ export async function PUT(request: NextRequest, { params }: Props) {
         featured = ${body.featured || false},
         description = ${body.description || null},
         attachment_url = ${body.attachment_url || null},
-        application_link = ${body.application_link || null}
+        application_link = ${body.application_link || null},
+        application_method = ${body.application_method || null},
+        primary_email = ${body.primary_email || null},
+        cc_emails = ${body.cc_emails || null}
       WHERE id = ${id}
       RETURNING *
     `
@@ -57,6 +60,9 @@ export async function PUT(request: NextRequest, { params }: Props) {
       description: updatedJob.description,
       attachment_url: updatedJob.attachment_url,
       application_link: updatedJob.application_link,
+      application_method: updatedJob.application_method,
+      primary_email: updatedJob.primary_email,
+      cc_emails: updatedJob.cc_emails,
       status: updatedJob.status,
       approved: updatedJob.approved,
       created_at: updatedJob.created_at
