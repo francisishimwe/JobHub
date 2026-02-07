@@ -25,34 +25,24 @@ export async function GET(request: NextRequest) {
         id,
         title,
         company_id,
-        company_logo,
         location,
+        location_type,
         job_type,
         opportunity_type,
+        experience_level,
         deadline,
         featured,
-        is_verified,
         description,
         attachment_url,
+        application_link,
         status,
         approved,
-        plan_id,
-        priority,
-        agency_verified,
+        applicants,
+        views,
         created_at
       FROM jobs
       WHERE ${activeWhere}
-      ORDER BY 
-        CASE 
-          -- Rank 1: Employer Tier 4 (Short-listing)
-          WHEN agency_verified = true AND plan_id = 4 THEN 1
-          -- Rank 2: Employer Tier 3/2 (Super Featured, Featured+)
-          WHEN agency_verified = true AND plan_id IN (2,3) THEN 2
-          -- Rank 3: Admin jobs and Basic Employer Tier 1
-          ELSE 3
-        END ASC,
-        -- Within each rank, sort by newest first
-        created_at DESC
+      ORDER BY created_at DESC
       LIMIT ${limit} OFFSET ${offset}
     `
 
