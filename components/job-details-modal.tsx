@@ -25,8 +25,8 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
   const handleApply = () => {
     if (job.application_method === 'email') {
       setIsApplyModalOpen(true)
-    } else if (job.applicationLink) {
-      window.open(job.applicationLink, "_blank", "noopener,noreferrer")
+    } else if (job.application_link) {
+      window.open(job.application_link, "_blank", "noopener,noreferrer")
     }
   }
 
@@ -114,7 +114,7 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
             <Button variant="outline" onClick={() => onOpenChange(false)} className="flex-1 h-14 sm:h-12">
               Close
             </Button>
-            {(job.applicationLink || (job.applicationMethod === 'email' || job.application_method === 'email')) &&
+            {(job.application_link || job.application_method === 'email') &&
               job.opportunityType !== "Tender" &&
               job.opportunityType !== "Blog" &&
               job.opportunityType !== "Scholarship" &&

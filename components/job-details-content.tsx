@@ -35,7 +35,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     const handleApply = async () => {
         if (job.application_method === "email") {
             setIsApplyModalOpen(true)
-        } else if (job.applicationLink) {
+        } else if (job.application_link) {
             // Track in Google Analytics only
             if (typeof window !== 'undefined' && (window as any).gtag) {
                 (window as any).gtag('event', 'apply', {
@@ -47,7 +47,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
             }
 
             // Open application link
-            window.open(job.applicationLink, "_blank", "noopener,noreferrer")
+            window.open(job.application_link, "_blank", "noopener,noreferrer")
         }
     }
 
