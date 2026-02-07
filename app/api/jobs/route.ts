@@ -89,8 +89,8 @@ export async function POST(request: NextRequest) {
     
     console.log('📝 Received job submission:', body)
 
-    // Determine if this is an employer job (has plan info) or admin job
-    const isEmployerJob = body.planId || body.plan_id
+    // Determine if this is an employer job (has employer info or plan info) or admin job
+    const isEmployerJob = body.planId || body.plan_id || body.employerName
     const planId = isEmployerJob ? (body.planId || body.plan_id || 1) : 1
     
     console.log('🏢 Job type check:', { isEmployerJob, planId })
@@ -120,6 +120,12 @@ export async function POST(request: NextRequest) {
     // For employer jobs, use the employer company info from form
     let companyId = body.company_id
     
+    // Helper function to check if a string is a valid UUID
+    function isValidUUID(str: string) {
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+      return uuidRegex.test(str)
+    }
+
     // If no company_id but we have employerName, create/find company
     if (!companyId && isEmployerJob && body.employerName) {
       // Check if company already exists
@@ -155,6 +161,22 @@ export async function POST(request: NextRequest) {
         `
         companyId = newCompany[0].id
       }
+    } else if (companyId && typeof companyId === 'string' && !isValidUUID(companyId)) {
+      // If companyId is not a valid UUID, treat it as a company name and create/find
+      const existingCompany = await sql`
+        SELECT id FROM companies WHERE name = ${companyId} LIMIT 1
+      `
+      
+      if (existingCompany && existingCompany.length > 0) {
+        companyId = existingCompany[0].id
+      } else {
+        const newCompany = await sql`
+          INSERT INTO companies (name, created_at) 
+          VALUES (${companyId}, ${new Date().toISOString()})
+          RETURNING id
+        `
+        companyId = newCompany[0].id
+      }
     }
 
     const id = crypto.randomUUID()
@@ -180,58 +202,101 @@ export async function POST(request: NextRequest) {
       status: isEmployerJob ? 'pending' : 'published'
     })
 
-    const result = await sql`
-      INSERT INTO jobs (
-        id,
-        title,
-        company_id,
-        employer_name,
-        employer_email,
-        employer_phone,
-        location,
-        job_type,
-        opportunity_type,
-        experience_level,
-        deadline,
-        featured,
-        description,
-        attachment_url,
-        application_link,
-        status,
-        approved,
-        plan_id,
-        priority,
-        agency_verified,
-        is_verified,
-        created_at,
-        updated_at
-      ) VALUES (
-        ${id},
-        ${body.title},
-        ${companyId},
-        ${body.employerName || null},
-        ${body.employerEmail || null},
-        ${body.employerPhone || null},
-        ${body.location || null},
-        ${body.jobType || body.job_type || null},
-        ${body.opportunity_type},
-        ${body.experienceLevel || body.experience_level || null},
-        ${body.deadline || null},
-        ${body.featured || false},
-        ${body.description || null},
-        ${body.attachment_url || null},
-        ${body.applicationLink || body.application_link || null},
-        ${isEmployerJob ? 'pending' : 'published'},
-        ${isEmployerJob ? false : true},
-        ${planId},
-        ${priority},
-        ${agencyVerified},
-        ${agencyVerified},
-        ${now},
-        ${now}
-      )
-      RETURNING *
-    `
+    // Try to insert with all columns, fall back to basic columns if schema doesn't exist
+    let result;
+    try {
+      result = await sql`
+        INSERT INTO jobs (
+          id,
+          title,
+          company_id,
+          employer_name,
+          employer_email,
+          employer_phone,
+          location,
+          job_type,
+          opportunity_type,
+          experience_level,
+          deadline,
+          featured,
+          description,
+          attachment_url,
+          application_link,
+          status,
+          approved,
+          plan_id,
+          priority,
+          agency_verified,
+          is_verified,
+          created_at,
+          updated_at
+        ) VALUES (
+          ${id},
+          ${body.title},
+          ${companyId},
+          ${body.employerName || null},
+          ${body.employerEmail || null},
+          ${body.employerPhone || null},
+          ${body.location || null},
+          ${body.jobType || body.job_type || null},
+          ${body.opportunity_type},
+          ${body.experienceLevel || body.experience_level || null},
+          ${body.deadline || null},
+          ${body.featured || false},
+          ${body.description || null},
+          ${body.attachment_url || null},
+          ${body.applicationLink || body.application_link || null},
+          ${isEmployerJob ? 'pending' : 'published'},
+          ${isEmployerJob ? false : true},
+          ${planId},
+          ${priority},
+          ${agencyVerified},
+          ${agencyVerified},
+          ${now},
+          ${now}
+        )
+        RETURNING *
+      `
+    } catch (schemaError) {
+      console.log('⚠️ Schema columns missing, trying basic insert...')
+      // Fallback to basic schema without employer-specific columns
+      result = await sql`
+        INSERT INTO jobs (
+          id,
+          title,
+          company_id,
+          location,
+          job_type,
+          opportunity_type,
+          experience_level,
+          deadline,
+          featured,
+          description,
+          attachment_url,
+          application_link,
+          status,
+          approved,
+          created_at
+        ) VALUES (
+          ${id},
+          ${body.title},
+          ${companyId},
+          ${body.location || null},
+          ${body.jobType || body.job_type || null},
+          ${body.opportunity_type},
+          ${body.experienceLevel || body.experience_level || null},
+          ${body.deadline || null},
+          ${body.featured || false},
+          ${body.description || null},
+          ${body.attachment_url || null},
+          ${body.applicationLink || body.application_link || null},
+          ${isEmployerJob ? 'pending' : 'published'},
+          ${isEmployerJob ? false : true},
+          ${now}
+        )
+        RETURNING *
+      `
+    }
 
     if (!result || result.length === 0) {
       throw new Error('Failed to insert job')
@@ -254,10 +319,11 @@ export async function POST(request: NextRequest) {
       application_link: newJob.application_link,
       status: newJob.status,
       approved: newJob.approved,
-      plan_id: newJob.plan_id,
-      priority: newJob.priority,
-      agency_verified: newJob.agency_verified,
-      is_verified: newJob.is_verified,
+      // Include employer-specific fields if they exist
+      ...(newJob.plan_id !== undefined && { plan_id: newJob.plan_id }),
+      ...(newJob.priority !== undefined && { priority: newJob.priority }),
+      ...(newJob.agency_verified !== undefined && { agency_verified: newJob.agency_verified }),
+      ...(newJob.is_verified !== undefined && { is_verified: newJob.is_verified }),
       created_at: newJob.created_at
     }, { status: 201 })
   } catch (error) {
