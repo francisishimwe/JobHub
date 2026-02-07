@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, CheckCircle, Mail, Upload, X, FileText } from "lucide-react"
 
@@ -121,27 +122,10 @@ export function EmailApplicationForm({
     return (
       <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
         <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-green-800 mb-2">Application Submitted Successfully!</h3>
+        <h3 className="text-lg font-semibold text-green-800 mb-2">Application sent!</h3>
         <p className="text-green-700 mb-4">
-          Your application for {jobTitle} has been sent to the employer.
+          For help, contact 0783074056
         </p>
-        <p className="text-sm text-green-600 mb-4">
-          Need support? Contact us directly on WhatsApp:
-        </p>
-        <Button
-          asChild
-          className="bg-green-600 hover:bg-green-700 text-white"
-        >
-          <a
-            href="https://wa.me/250783074056"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2"
-          >
-            <Mail className="h-4 w-4" />
-            Contact on WhatsApp
-          </a>
-        </Button>
       </div>
     )
   }
@@ -200,15 +184,41 @@ export function EmailApplicationForm({
 
         <div className="space-y-2">
           <Label htmlFor="field_of_study">Field of Study *</Label>
-          <Input
-            id="field_of_study"
-            type="text"
-            required
-            value={formData.field_of_study}
-            onChange={(e) => setFormData({ ...formData, field_of_study: e.target.value })}
-            placeholder="e.g. Computer Science, Business Administration"
-            className="h-11"
-          />
+          <Select value={formData.field_of_study} onValueChange={(value) => setFormData({ ...formData, field_of_study: value })}>
+            <SelectTrigger className="h-11">
+              <SelectValue placeholder="Select your field of study" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Computer Science">Computer Science</SelectItem>
+              <SelectItem value="Information Technology">Information Technology</SelectItem>
+              <SelectItem value="Software Engineering">Software Engineering</SelectItem>
+              <SelectItem value="Business Administration">Business Administration</SelectItem>
+              <SelectItem value="Finance">Finance</SelectItem>
+              <SelectItem value="Accounting">Accounting</SelectItem>
+              <SelectItem value="Marketing">Marketing</SelectItem>
+              <SelectItem value="Human Resources">Human Resources</SelectItem>
+              <SelectItem value="Engineering">Engineering</SelectItem>
+              <SelectItem value="Medicine">Medicine</SelectItem>
+              <SelectItem value="Nursing">Nursing</SelectItem>
+              <SelectItem value="Education">Education</SelectItem>
+              <SelectItem value="Law">Law</SelectItem>
+              <SelectItem value="Agriculture">Agriculture</SelectItem>
+              <SelectItem value="Tourism">Tourism</SelectItem>
+              <SelectItem value="Journalism">Journalism</SelectItem>
+              <SelectItem value="Psychology">Psychology</SelectItem>
+              <SelectItem value="Sociology">Sociology</SelectItem>
+              <SelectItem value="Economics">Economics</SelectItem>
+              <SelectItem value="Statistics">Statistics</SelectItem>
+              <SelectItem value="Mathematics">Mathematics</SelectItem>
+              <SelectItem value="Physics">Physics</SelectItem>
+              <SelectItem value="Chemistry">Chemistry</SelectItem>
+              <SelectItem value="Biology">Biology</SelectItem>
+              <SelectItem value="Environmental Science">Environmental Science</SelectItem>
+              <SelectItem value="Public Health">Public Health</SelectItem>
+              <SelectItem value="Social Work">Social Work</SelectItem>
+              <SelectItem value="Other">Other</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Job Title Display (Non-editable) */}

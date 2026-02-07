@@ -1,11 +1,13 @@
 "use client"
 
+import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { MapPin, DollarSign, Briefcase, Clock, CheckCircle2, ExternalLink } from "lucide-react"
 import Image from "next/image"
 import type { Job } from "@/lib/types"
+import { EmailApplicationForm } from "@/components/email-application-form"
 
 interface JobDetailsModalProps {
   job: Job | null
@@ -14,10 +16,14 @@ interface JobDetailsModalProps {
 }
 
 export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProps) {
+  const [showApplicationForm, setShowApplicationForm] = useState(false)
+  
   if (!job) return null
 
   const handleApply = () => {
-    if (job.applicationLink) {
+    if (job.applicationMethod === 'email' || job.application_method === 'email') {
+      setShowApplicationForm(true)
+    } else if (job.applicationLink) {
       window.open(job.applicationLink, "_blank", "noopener,noreferrer")
     }
   }
@@ -106,7 +112,7 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
             <Button variant="outline" onClick={() => onOpenChange(false)} className="flex-1 h-14 sm:h-12">
               Close
             </Button>
-            {job.applicationLink &&
+            {(job.applicationLink || (job.applicationMethod === 'email' || job.application_method === 'email')) &&
               job.opportunityType !== "Tender" &&
               job.opportunityType !== "Blog" &&
               job.opportunityType !== "Scholarship" &&
@@ -118,6 +124,22 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
                 </Button>
               )}
           </div>
+          
+          {/* Email Application Form */}
+          {showApplicationForm && (job.applicationMethod === 'email' || job.application_method === 'email') && (
+            <div className="mt-4">
+              <EmailApplicationForm
+                jobId={job.id}
+                jobTitle={job.title}
+                primaryEmail={job.primaryEmail || job.primary_email || ""}
+                ccEmails={job.ccEmails || job.cc_emails || ""}
+                onSuccess={() => {
+                  setShowApplicationForm(false)
+                  onOpenChange(false)
+                }}
+              />
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
