@@ -137,7 +137,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
     e.stopPropagation()
 
     // Check if this is an email application
-    if (job.applicationMethod === 'Email' || job.application_method === 'Email') {
+    if (job.applicationMethod === 'Email' || job.applicationMethod === 'email' || job.application_method === 'Email' || job.application_method === 'email') {
       // Email application - open Email Application Form
       setShowEmailApplication(true)
     } else if (job.planId === 4 || job.priority === 'Top') {
@@ -297,7 +297,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
           <div className="flex flex-row md:flex-col gap-2 shrink-0 self-end md:self-start">
             {/* Apply Now Button - Only show for Email applications or short-listing tier */}
-            {(job.applicationMethod === 'Email' || job.application_method === 'Email' || job.planId === 4 || job.priority === 'Top') && (
+            {(job.applicationMethod === 'Email' || job.applicationMethod === 'email' || job.application_method === 'Email' || job.application_method === 'email' || job.planId === 4 || job.priority === 'Top') && (
               <Button
                 size="sm"
                 className="bg-green-600 hover:bg-green-700 text-white flex-1 md:flex-initial text-xs md:text-sm font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg lg:hover:shadow-xl whitespace-nowrap"

@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useRef, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -76,6 +77,8 @@ interface CVData {
 }
 
 export default function EditCV() {
+  const searchParams = useSearchParams()
+  const jobId = searchParams.get('job_id')
   const [currentStep, setCurrentStep] = useState(1)
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
@@ -298,11 +301,17 @@ export default function EditCV() {
     try {
       setLoading(true)
       
-      // Prepare the data for API submission
+      // Prepare data for API submission with required fields
       const cvSubmissionData = {
+        job_id: jobId, // Include job_id from URL params
+        full_name: `${cvData.personalInfo.firstName} ${cvData.personalInfo.lastName}`.trim(),
+        email: cvData.personalInfo.email,
+        phone: cvData.personalInfo.phone,
+        field_of_study: cvData.education[0]?.fieldOfStudy || '', // Use first education's field of study
+        experience: cvData.experience.level,
+        skills: cvData.languages.map(lang => lang.name).join(', '), // Convert languages to skills string
+        education: cvData.education.map(edu => `${edu.degree} in ${edu.fieldOfStudy} from ${edu.institution}`).join('\n'),
         personalInfo: cvData.personalInfo,
-        education: cvData.education,
-        experience: cvData.experience,
         languages: cvData.languages,
         referees: cvData.referees
       }

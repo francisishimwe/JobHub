@@ -279,11 +279,11 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             job.opportunityType !== "Education" &&
                             job.opportunityType !== "Announcement" && (
                                 <Button
-                                    onClick={job.applicationMethod === "email" ? () => setShowApplicationForm(!showApplicationForm) : handleApply}
+                                    onClick={(job.applicationMethod === "email" || job.application_method === "email") ? () => setShowApplicationForm(!showApplicationForm) : handleApply}
                                     size="lg"
                                     className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
                                 >
-                                    {job.applicationMethod === "email" ? (showApplicationForm ? "Hide Application Form" : "Apply Now") : "Apply Now"}
+                                    {(job.applicationMethod === "email" || job.application_method === "email") ? (showApplicationForm ? "Hide Application Form" : "Apply Now") : "Apply Now"}
                                     <ExternalLink className="ml-2 h-5 w-5" />
                                 </Button>
                             )}
@@ -306,7 +306,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             size="lg"
                             className="w-full bg-red-600 hover:bg-red-700 text-white border-2 border-red-600 text-lg font-bold h-14 px-8 rounded-lg transition-all"
                         >
-                            <Link href="/edit-cv">
+                            <Link href={`/edit-cv?job_id=${job.id}`}>
                                 <FileText className="mr-2 h-5 w-5" />
                                 Build your CV for this Job
                             </Link>
@@ -314,13 +314,13 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
 
                     {/* Email Application Form */}
-                    {showApplicationForm && job.applicationMethod === "email" && (
+                    {showApplicationForm && (job.applicationMethod === "email" || job.application_method === "email") && (
                         <div className="mt-6">
                             <EmailApplicationForm
                                 jobId={job.id}
                                 jobTitle={job.title}
-                                primaryEmail={job.primaryEmail || ""}
-                                ccEmails={job.ccEmails || ""}
+                                primaryEmail={job.primaryEmail || job.primary_email || ""}
+                                ccEmails={job.ccEmails || job.cc_emails || ""}
                                 onSuccess={() => {
                                     setShowApplicationForm(false)
                                 }}
