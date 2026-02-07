@@ -90,6 +90,18 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
+                <a 
+                  href="https://wa.me/250783074056" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-slate-900 hover:text-green-600 text-[9px] transition-colors flex items-center gap-1"
+                >
+                  <FaWhatsapp className="h-3 w-3 text-green-600" />
+                  WhatsApp Support
+                </a>
+              </div>
+              <div className="flex items-center gap-2">
+                <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
                 <a href="/employers" className="text-slate-900 hover:text-blue-600 text-[9px] transition-colors">Employers</a>
               </div>
             </div>

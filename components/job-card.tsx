@@ -8,10 +8,11 @@ import { useRouter } from "next/navigation"
 
 import Image from "next/image"
 
-import { MapPin, UserCheck, BadgeCheck, Share2, Clock, ExternalLink } from "lucide-react"
+import { MapPin, UserCheck, BadgeCheck, Share2, Clock, ExternalLink, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { CVBuilder } from "@/components/cv-builder"
+import { EmailApplicationForm } from "@/components/email-application-form"
 import { useState } from "react"
 
 import { useCompanies } from "@/lib/company-context"
@@ -37,6 +38,7 @@ const JobCardComponent = ({ job }: JobCardProps) => {
   const company = job.companyId ? getCompanyById(job.companyId) : null
 
   const [showCVBuilder, setShowCVBuilder] = useState(false)
+  const [showEmailApplication, setShowEmailApplication] = useState(false)
 
 
 
@@ -134,8 +136,11 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
     e.preventDefault()
     e.stopPropagation()
 
-    // Check if this is a short-listing tier (plan_id 4)
-    if (job.planId === 4 || job.priority === 'Top') {
+    // Check if this is an email application
+    if (job.applicationMethod === 'Email' || job.application_method === 'Email') {
+      // Email application - open Email Application Form
+      setShowEmailApplication(true)
+    } else if (job.planId === 4 || job.priority === 'Top') {
       // Short-listing tier - open CV Builder
       setShowCVBuilder(true)
     } else {
@@ -291,6 +296,16 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
           </div>
 
           <div className="flex flex-row md:flex-col gap-2 shrink-0 self-end md:self-start">
+            {/* Apply Now Button - Only show for Email applications or short-listing tier */}
+            {(job.applicationMethod === 'Email' || job.application_method === 'Email' || job.planId === 4 || job.priority === 'Top') && (
+              <Button
+                size="sm"
+                className="bg-green-600 hover:bg-green-700 text-white flex-1 md:flex-initial text-xs md:text-sm font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg lg:hover:shadow-xl whitespace-nowrap"
+                onClick={handleApplyNow}
+              >
+                Apply Now
+              </Button>
+            )}
             <Button
               size="sm"
               className="bg-blue-600 hover:bg-blue-700 text-white flex-1 md:flex-initial text-xs md:text-sm font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg lg:hover:shadow-xl whitespace-nowrap"
@@ -322,6 +337,35 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
           alert('Application submitted successfully!')
         }}
       />
+
+      {/* Email Application Modal */}
+      {showEmailApplication && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
+              <h2 className="text-xl font-bold">Apply for {job.title}</h2>
+              <button
+                onClick={() => setShowEmailApplication(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+            <div className="p-4">
+              <EmailApplicationForm
+                jobId={job.id}
+                jobTitle={job.title}
+                primaryEmail={job.primaryEmail || job.primary_email || ''}
+                ccEmails={job.ccEmails || job.cc_emails || ''}
+                onSuccess={() => {
+                  setShowEmailApplication(false)
+                  alert('Application submitted successfully!')
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 

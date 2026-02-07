@@ -23,12 +23,15 @@ export async function POST(request: NextRequest) {
     } = cvData
 
     // Validate required fields
-    if (!job_id || !full_name || !email || !field_of_study || !skills) {
+    if (!job_id || !full_name || !email || !field_of_study) {
       return NextResponse.json(
-        { error: 'Missing required fields: job_id, full_name, email, field_of_study, skills' },
+        { error: 'Missing required fields: job_id, full_name, email, field_of_study' },
         { status: 400 }
       )
     }
+
+    // Ensure skills is an array (default to empty array if not provided)
+    const normalizedSkills = Array.isArray(skills) ? skills : (skills ? [skills] : [])
 
     const cvProfile = {
       job_id,
@@ -36,9 +39,9 @@ export async function POST(request: NextRequest) {
       email,
       phone,
       field_of_study,
-      experience,
-      skills,
-      education,
+      skills: normalizedSkills,
+      experience_json: experience ? { experience } : {},
+      education_json: education ? { education } : {},
       portfolio_url,
       linkedin_url,
       github_url,

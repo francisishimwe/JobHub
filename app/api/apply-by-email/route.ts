@@ -58,6 +58,9 @@ export async function POST(request: NextRequest) {
           email: applicant.email,
           phone: applicant.phone,
           field_of_study: applicant.field_of_study,
+          skills: [], // Default to empty array for email applications
+          experience_json: {}, // Empty JSON for email applications
+          education_json: {}, // Empty JSON for email applications
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         }, {

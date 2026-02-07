@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { MapPinned, Mail, Phone, Clock, SendHorizontal } from "lucide-react"
+import { FaWhatsapp } from "react-icons/fa6"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -139,8 +140,21 @@ export default function ContactPage() {
                   <Button variant="outline" size="sm" className="w-full justify-start">
                     FAQ & Help Center
                   </Button>
-                  <Button variant="outline" size="sm" className="w-full justify-start">
-                    Live Chat Support
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full justify-start gap-2"
+                    asChild
+                  >
+                    <a 
+                      href="https://wa.me/250783074056" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2"
+                    >
+                      <FaWhatsapp className="h-4 w-4 text-green-600" />
+                      WhatsApp Support
+                    </a>
                   </Button>
                 </div>
               </div>
