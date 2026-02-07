@@ -250,7 +250,7 @@ export function PendingApprovals() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => window.open(`/jobs/${job.id}`, '_blank')}
+                onClick={() => window.open(`/dashboard/jobs/${job.id}`, '_blank')}
                 className="active:scale-105 transition-all"
               >
                 <Eye className="h-4 w-4 mr-2" />
@@ -269,7 +269,7 @@ export function PendingApprovals() {
                 variant="outline"
                 size="sm"
                 onClick={() => setJobToDelete(job.id)}
-                className="text-orange-600 hover:text-orange-700 hover:bg-orange-50 active:scale-105 transition-all"
+                className="text-red-600 hover:text-red-700 hover:bg-red-50 active:scale-105 transition-all"
               >
                 <Trash2 className="h-4 w-4 mr-2" />
                 Delete
@@ -310,7 +310,7 @@ export function PendingApprovals() {
             <AlertDialogAction 
               onClick={() => jobToDelete && handleDeleteJob(jobToDelete)}
               disabled={isDeleting}
-              className="bg-orange-600 text-white hover:bg-orange-700"
+              className="bg-red-600 text-white hover:bg-red-700"
             >
               {isDeleting ? 'Deleting...' : 'Delete'}
             </AlertDialogAction>

@@ -183,6 +183,7 @@ export default function PostJobFormPage() {
         contactName: formData.contactName,
         contactEmail: formData.contactEmail,
         contactPhone: `${formData.countryCode} ${formData.contactPhone}`,
+        companyLogo: formData.companyLogo,
         
         // Application & logistics
         applicationMethod: formData.applicationMethod,

@@ -119,7 +119,7 @@ export default function JobSubmissionSuccessPage() {
               className="w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all hover:scale-105 flex items-center justify-center gap-3"
             >
               <ArrowLeft className="w-4 h-4" />
-              Go to Homepage
+              Back to Home
             </Button>
           </div>
         </div>
