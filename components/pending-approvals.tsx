@@ -4,7 +4,16 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { CheckCircle2, Clock, Building2, Calendar, Briefcase, Phone, Mail } from "lucide-react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { CheckCircle2, Clock, Building2, Calendar, Briefcase, Phone, Mail, Trash2, Edit, Eye } from "lucide-react"
 
 interface PendingJob {
   id: string
@@ -27,6 +36,8 @@ export function PendingApprovals() {
   const [pendingJobs, setPendingJobs] = useState<PendingJob[]>([])
   const [loading, setLoading] = useState(true)
   const [processing, setProcessing] = useState<string | null>(null)
+  const [jobToDelete, setJobToDelete] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     fetchPendingJobs()
@@ -63,6 +74,27 @@ export function PendingApprovals() {
       alert('Failed to approve job. Please try again.')
     } finally {
       setProcessing(null)
+    }
+  }
+
+  const handleDeleteJob = async (jobId: string) => {
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/jobs/${jobId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      
+      if (!response.ok) throw new Error('Failed to delete job')
+      
+      // Remove the deleted job from the list
+      setPendingJobs(prev => prev.filter(job => job.id !== jobId))
+      setJobToDelete(null)
+    } catch (error) {
+      console.error('Error deleting job:', error)
+      alert('Failed to delete job. Please try again.')
+    } finally {
+      setIsDeleting(false)
     }
   }
 
@@ -218,9 +250,29 @@ export function PendingApprovals() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => window.open(`/job/${job.id}`, '_blank')}
+                onClick={() => window.open(`/jobs/${job.id}`, '_blank')}
+                className="active:scale-105 transition-all"
               >
+                <Eye className="h-4 w-4 mr-2" />
                 View Details
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => window.open(`/dashboard/edit-job/${job.id}`, '_blank')}
+                className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 active:scale-105 transition-all"
+              >
+                <Edit className="h-4 w-4 mr-2" />
+                Edit
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setJobToDelete(job.id)}
+                className="text-orange-600 hover:text-orange-700 hover:bg-orange-50 active:scale-105 transition-all"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete
               </Button>
               <Button
                 onClick={() => handleApproveJob(job.id)}
@@ -243,6 +295,28 @@ export function PendingApprovals() {
           </CardContent>
         </Card>
       ))}
+      
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!jobToDelete} onOpenChange={(open) => !open && setJobToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Job Post</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this job post? This action cannot be undone and will permanently remove the job listing.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex justify-end gap-3">
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={() => jobToDelete && handleDeleteJob(jobToDelete)}
+              disabled={isDeleting}
+              className="bg-orange-600 text-white hover:bg-orange-700"
+            >
+              {isDeleting ? 'Deleting...' : 'Delete'}
+            </AlertDialogAction>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

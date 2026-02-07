@@ -138,6 +138,7 @@ export function JobList() {
                         variant="ghost" 
                         size="icon" 
                         onClick={() => setJobToEdit(job)}
+                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 active:scale-105 transition-all"
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>

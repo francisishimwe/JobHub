@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { AlertCircle, CheckCircle, Upload, X, FileText, ArrowLeft, ArrowRight } from "lucide-react"
+import { AlertCircle, CheckCircle, Upload, X, FileText, ArrowLeft, ArrowRight, Building2 } from "lucide-react"
 import { RichTextEditor } from "@/components/rich-text-editor"
 
 const planDetails = {
@@ -25,6 +25,8 @@ export default function PostJobFormPage() {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
   const [currentStep, setCurrentStep] = useState(1)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [companyLogoFile, setCompanyLogoFile] = useState<File | null>(null)
+  const [companyLogoPreview, setCompanyLogoPreview] = useState<string>("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
 
@@ -35,6 +37,7 @@ export default function PostJobFormPage() {
     contactEmail: "",
     contactPhone: "",
     countryCode: "+250", // Rwanda default
+    companyLogo: "",
     
     // Step 2: Job Details
     jobTitle: "",
@@ -90,6 +93,40 @@ export default function PostJobFormPage() {
     
     setSelectedFile(file)
     setFormData(prev => ({ ...prev, attachmentUrl: file.name }))
+  }
+
+  const handleCompanyLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Check if file is an image
+    if (!file.type.startsWith('image/')) {
+      alert("Please upload an image file (PNG, JPG)")
+      return
+    }
+    
+    // Check file size (1MB limit)
+    if (file.size > 1 * 1024 * 1024) {
+      alert("Company logo must be less than 1MB")
+      return
+    }
+    
+    setCompanyLogoFile(file)
+    
+    // Create preview
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      const result = reader.result as string
+      setCompanyLogoPreview(result)
+      setFormData(prev => ({ ...prev, companyLogo: result }))
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const handleRemoveCompanyLogo = () => {
+    setCompanyLogoFile(null)
+    setCompanyLogoPreview("")
+    setFormData(prev => ({ ...prev, companyLogo: "" }))
   }
 
   const handleRemoveFile = () => {
@@ -309,6 +346,60 @@ export default function PostJobFormPage() {
                         required
                         className="active:scale-105 transition-all"
                       />
+                    </div>
+
+                    {/* Company Logo Upload */}
+                    <div className="space-y-2 md:col-span-2">
+                      <Label htmlFor="companyLogo">
+                        Company Logo
+                      </Label>
+                      <div className="flex items-center gap-4">
+                        <div className="w-20 h-20 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50">
+                          {companyLogoPreview ? (
+                            <img 
+                              src={companyLogoPreview} 
+                              alt="Company logo preview" 
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          ) : (
+                            <Building2 className="h-8 w-8 text-gray-400" />
+                          )}
+                        </div>
+                        <div className="flex-1 space-y-2">
+                          {!companyLogoPreview ? (
+                            <div>
+                              <Input
+                                id="companyLogo"
+                                type="file"
+                                accept="image/png,image/jpeg,image/jpg"
+                                onChange={handleCompanyLogoChange}
+                                className="hidden"
+                              />
+                              <Label
+                                htmlFor="companyLogo"
+                                className="flex items-center justify-center gap-2 px-4 py-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md cursor-pointer transition-colors active:scale-105"
+                              >
+                                <Upload className="h-4 w-4" />
+                                Upload Logo
+                              </Label>
+                              <p className="text-xs text-muted-foreground">
+                                PNG, JPG (max. 1MB)
+                              </p>
+                            </div>
+                          ) : (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={handleRemoveCompanyLogo}
+                              className="gap-2 active:scale-105 transition-all"
+                            >
+                              <X className="h-4 w-4" />
+                              Remove Logo
+                            </Button>
+                          )}
+                        </div>
+                      </div>
                     </div>
 
                     <div className="space-y-2">

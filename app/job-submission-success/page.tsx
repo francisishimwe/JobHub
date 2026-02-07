@@ -1,30 +1,14 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
-import { CheckCircle2, MessageCircle, Phone, ArrowLeft } from "lucide-react"
+import { CheckCircle2, MessageCircle, Phone, ArrowLeft, Briefcase } from "lucide-react"
 
 export default function JobSubmissionSuccessPage() {
   const router = useRouter()
-  const [countdown, setCountdown] = useState(15)
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer)
-          router.push("/")
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-
-    return () => clearInterval(timer)
-  }, [router])
 
   const handleWhatsAppClick = () => {
     // Replace with actual WhatsApp number
@@ -119,19 +103,23 @@ export default function JobSubmissionSuccessPage() {
             </ol>
           </div>
 
-          {/* Auto-redirect Notice */}
-          <div className="text-center">
-            <p className="text-sm text-gray-500 mb-4">
-              You will be automatically redirected to the homepage in{" "}
-              <span className="font-semibold text-blue-600">{countdown}</span> seconds
-            </p>
+          {/* Navigation Buttons */}
+          <div className="space-y-4">
             <Button
-              variant="outline"
+              onClick={() => router.push("/select-plan")}
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-4 px-6 rounded-lg font-semibold text-lg transition-all hover:scale-105 flex items-center justify-center gap-3"
+            >
+              <Briefcase className="w-6 h-6" />
+              Post Another Job
+            </Button>
+
+            <Button
               onClick={() => router.push("/")}
-              className="gap-2"
+              variant="outline"
+              className="w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all hover:scale-105 flex items-center justify-center gap-3"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back to Homepage
+              Go to Homepage
             </Button>
           </div>
         </div>
