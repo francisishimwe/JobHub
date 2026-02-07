@@ -53,6 +53,13 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
         console.log("CRITICAL DEBUG - Method is:", job.application_method, "Full Job Object:", job)
         
         if (!job.application_method || job.application_method === 'email') {
+            // Check if job has primary_email configured
+            if (!job.primary_email) {
+                // Fallback to WhatsApp support
+                const whatsappUrl = `https://wa.me/250783074056?text=${encodeURIComponent(`Hi, I'm interested in applying for the ${job.title} position at ${company?.name || 'this company'}, but it seems the application email is not configured. Can you help me with the application process? Job ID: ${job.id}`)}`
+                window.open(whatsappUrl, "_blank", "noopener,noreferrer")
+                return
+            }
             setIsApplyModalOpen(true)
         } else if (job.application_method?.toLowerCase() === 'link') {
             if (job.application_link) {
@@ -323,6 +330,13 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                             console.error("Missing Method Data!", job);
                                         }
                                         if (job.application_method?.toLowerCase() === 'email') {
+                                            // Check if job has primary_email configured
+                                            if (!job.primary_email) {
+                                                // Fallback to WhatsApp support
+                                                const whatsappUrl = `https://wa.me/250783074056?text=${encodeURIComponent(`Hi, I'm interested in applying for the ${job.title} position at ${company?.name || 'this company'}, but it seems the application email is not configured. Can you help me with the application process? Job ID: ${job.id}`)}`
+                                                window.open(whatsappUrl, "_blank", "noopener,noreferrer")
+                                                return
+                                            }
                                             setIsApplyModalOpen(true)
                                         } else {
                                             handleApply()

@@ -35,6 +35,9 @@ export function EditJobDialog({ job, open, onOpenChange }: EditJobDialogProps) {
     experienceLevel: job.experienceLevel || "",
     deadline: job.deadline || "",
     applicationLink: job.applicationLink || "",
+    applicationMethod: job.applicationMethod || "link",
+    primaryEmail: job.primaryEmail || "",
+    ccEmails: job.ccEmails || "",
   })
 
   useEffect(() => {
@@ -50,6 +53,9 @@ export function EditJobDialog({ job, open, onOpenChange }: EditJobDialogProps) {
         experienceLevel: job.experienceLevel || "",
         deadline: job.deadline || "",
         applicationLink: job.applicationLink || "",
+        applicationMethod: job.applicationMethod || "link",
+        primaryEmail: job.primaryEmail || "",
+        ccEmails: job.ccEmails || "",
       })
     }
   }, [open, job])
@@ -59,6 +65,35 @@ export function EditJobDialog({ job, open, onOpenChange }: EditJobDialogProps) {
     setLoading(true)
 
     try {
+      // Validate email application method
+      if (formData.applicationMethod === "email") {
+        if (!formData.primaryEmail?.trim()) {
+          alert("Please enter a primary email address")
+          setLoading(false)
+          return
+        }
+        
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(formData.primaryEmail.trim())) {
+          alert("Please enter a valid primary email address")
+          setLoading(false)
+          return
+        }
+        
+        // Validate CC emails if provided
+        if (formData.ccEmails?.trim()) {
+          const ccEmails = formData.ccEmails.split(',').map(email => email.trim())
+          for (const ccEmail of ccEmails) {
+            if (!emailRegex.test(ccEmail)) {
+              alert(`Invalid CC email address: ${ccEmail}`)
+              setLoading(false)
+              return
+            }
+          }
+        }
+      }
+
       // Convert camelCase to snake_case for API
       const apiData = {
         title: formData.title,
@@ -71,6 +106,9 @@ export function EditJobDialog({ job, open, onOpenChange }: EditJobDialogProps) {
         experience_level: formData.experienceLevel,
         deadline: formData.deadline || null,
         application_link: formData.applicationLink,
+        application_method: formData.applicationMethod.includes('Email') ? 'email' : 'link',
+        primary_email: formData.applicationMethod === "email" ? formData.primaryEmail?.trim() || null : null,
+        cc_emails: formData.applicationMethod === "email" ? formData.ccEmails?.trim() || null : null,
       }
       
       await updateJob(job.id, apiData)
@@ -217,8 +255,56 @@ export function EditJobDialog({ job, open, onOpenChange }: EditJobDialogProps) {
                 value={formData.applicationLink}
                 onChange={(e) => setFormData({ ...formData, applicationLink: e.target.value })}
                 className="h-11 text-base"
+                disabled={formData.applicationMethod === "email"}
               />
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="applicationMethod">Application Method *</Label>
+              <Select
+                value={formData.applicationMethod}
+                onValueChange={(value: string) => setFormData({ ...formData, applicationMethod: value })}
+              >
+                <SelectTrigger className="h-11 text-base">
+                  <SelectValue placeholder="Select application method" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="link">External Link</SelectItem>
+                  <SelectItem value="email">Email Application</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {formData.applicationMethod === "email" && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="primaryEmail">Primary Email *</Label>
+                  <Input
+                    id="primaryEmail"
+                    type="email"
+                    required={formData.applicationMethod === "email"}
+                    value={formData.primaryEmail}
+                    onChange={(e) => setFormData({ ...formData, primaryEmail: e.target.value })}
+                    placeholder="employer@company.com"
+                    className="h-11 text-base"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="ccEmails">CC Emails (Optional)</Label>
+                  <Input
+                    id="ccEmails"
+                    value={formData.ccEmails}
+                    onChange={(e) => setFormData({ ...formData, ccEmails: e.target.value })}
+                    placeholder="hr@company.com, manager@company.com"
+                    className="h-11 text-base"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Enter multiple email addresses separated by commas
+                  </p>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="flex justify-end gap-3">

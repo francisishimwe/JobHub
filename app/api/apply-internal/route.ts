@@ -80,6 +80,7 @@ export async function POST(request: NextRequest) {
       }
 
       if (!primaryEmail) {
+        console.error("Missing Employer Email for Job ID:", jobId)
         return NextResponse.json(
           { error: 'No application email configured for this job' },
           { status: 400 }
