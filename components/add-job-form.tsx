@@ -52,16 +52,51 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     company.name.toLowerCase().includes(companySearch.toLowerCase())
   )
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        const result = reader.result as string
-        setImagePreview(result)
-        setNewCompany({ ...newCompany, logo: result })
+    if (!file) return
+
+    // Check if file is an image
+    if (!file.type.startsWith('image/')) {
+      alert("Please upload an image file (PNG, JPG)")
+      return
+    }
+    
+    // Check file size (2MB limit)
+    if (file.size > 2 * 1024 * 1024) {
+      alert("Company logo must be less than 2MB")
+      return
+    }
+
+    // Create preview
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      const result = reader.result as string
+      setImagePreview(result)
+    }
+    reader.readAsDataURL(file)
+
+    // Upload to Vercel Blob
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await fetch('/api/upload/logo', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to upload logo')
       }
-      reader.readAsDataURL(file)
+
+      const data = await response.json()
+      setNewCompany({ ...newCompany, logo: data.url })
+    } catch (error) {
+      console.error('Error uploading logo:', error)
+      alert('Failed to upload logo. Please try again.')
+      // Fallback to base64 for preview
+      setNewCompany({ ...newCompany, logo: reader.result as string })
     }
   }
 

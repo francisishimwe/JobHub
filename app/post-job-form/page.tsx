@@ -95,7 +95,7 @@ export default function PostJobFormPage() {
     setFormData(prev => ({ ...prev, attachmentUrl: file.name }))
   }
 
-  const handleCompanyLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCompanyLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
@@ -118,9 +118,31 @@ export default function PostJobFormPage() {
     reader.onloadend = () => {
       const result = reader.result as string
       setCompanyLogoPreview(result)
-      setFormData(prev => ({ ...prev, companyLogo: result }))
     }
     reader.readAsDataURL(file)
+
+    // Upload to Vercel Blob
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await fetch('/api/upload/logo', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to upload logo')
+      }
+
+      const data = await response.json()
+      setFormData(prev => ({ ...prev, companyLogo: data.url }))
+    } catch (error) {
+      console.error('Error uploading logo:', error)
+      alert('Failed to upload logo. Please try again.')
+      // Fallback to base64 for preview
+      setFormData(prev => ({ ...prev, companyLogo: reader.result as string }))
+    }
   }
 
   const handleRemoveCompanyLogo = () => {
@@ -213,10 +235,7 @@ export default function PostJobFormPage() {
       if (response.ok) {
         setSubmitStatus("success")
         localStorage.removeItem('selectedPlan')
-        
-        setTimeout(() => {
-          router.push('/job-submission-success')
-        }, 2000)
+        router.push('/job-submission-success')
       } else {
         const errorData = await response.json()
         throw new Error(errorData.error || 'Failed to post job')

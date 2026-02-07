@@ -138,8 +138,8 @@ export async function POST(request: NextRequest) {
       } else {
         // Create new company from employer info
         const newCompany = await sql`
-          INSERT INTO companies (name, created_at) 
-          VALUES (${body.employerName}, ${new Date().toISOString()})
+          INSERT INTO companies (name, logo, created_at) 
+          VALUES (${body.employerName}, ${body.companyLogo || null}, ${new Date().toISOString()})
           RETURNING id
         `
         companyId = newCompany[0].id

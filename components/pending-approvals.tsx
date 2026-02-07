@@ -250,7 +250,7 @@ export function PendingApprovals() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => window.open(`/dashboard/jobs/${job.id}`, '_blank')}
+                onClick={() => window.open(`/admin/jobs/${job.id}`, '_blank')}
                 className="active:scale-105 transition-all"
               >
                 <Eye className="h-4 w-4 mr-2" />
