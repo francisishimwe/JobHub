@@ -33,7 +33,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     })()
 
     const handleApply = async () => {
-        if (job.applicationMethod === "email" || job.application_method === "email") {
+        if (job.application_method === "email") {
             setIsApplyModalOpen(true)
         } else if (job.applicationLink) {
             // Track in Google Analytics only

@@ -23,7 +23,7 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
   if (!job) return null
 
   const handleApply = () => {
-    if (job.applicationMethod === 'email' || job.application_method === 'email') {
+    if (job.application_method === 'email') {
       setIsApplyModalOpen(true)
     } else if (job.applicationLink) {
       window.open(job.applicationLink, "_blank", "noopener,noreferrer")

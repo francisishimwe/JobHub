@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     try {
       const { data: jobData, error: jobError } = await supabase
         .from('jobs')
-        .select('primary_email, cc_emails, application_email, application_cc_emails')
+        .select('primary_email, cc_emails')
         .eq('id', jobId)
         .single()
 
@@ -70,11 +70,11 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      // Use the available email fields (support both old and new field names)
-      primaryEmail = jobData.application_email || jobData.primary_email || ""
+      // Use the database email fields
+      primaryEmail = jobData.primary_email || ""
       
-      // Parse CC emails (support both old and new field names)
-      const ccEmailsField = jobData.application_cc_emails || jobData.cc_emails || ""
+      // Parse CC emails
+      const ccEmailsField = jobData.cc_emails || ""
       if (ccEmailsField) {
         ccEmails = ccEmailsField.split(',').map((email: string) => email.trim()).filter((email: string) => email)
       }
