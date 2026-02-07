@@ -38,7 +38,7 @@ export function Footer() {
               </div>
               <div className="flex items-start gap-2">
                 <Phone className="h-3 w-3 text-gray-600 mt-0.5 flex-shrink-0" style={{ fontSize: '12px' }} />
-                <span className="text-slate-900 text-[9px]">+250 783 074 056</span>
+                <span className="text-slate-900 text-[9px]">0783074056</span>
               </div>
               <div className="flex items-start gap-2">
                 <Mail className="h-3 w-3 text-gray-600 mt-0.5 flex-shrink-0" style={{ fontSize: '12px' }} />

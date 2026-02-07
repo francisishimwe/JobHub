@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS jobs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title VARCHAR(255) NOT NULL,
   company_id UUID NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+  company_logo TEXT,
   location VARCHAR(255),
   location_type VARCHAR(100),
   job_type VARCHAR(100),
@@ -105,9 +106,42 @@ CREATE TABLE IF NOT EXISTS visitors (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Create cv_profiles table for CV Builder
+CREATE TABLE IF NOT EXISTS cv_profiles (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  job_id UUID NOT NULL REFERENCES jobs(id) ON DELETE CASCADE,
+  full_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(50),
+  field_of_study VARCHAR(255),
+  experience TEXT,
+  skills TEXT,
+  education TEXT,
+  portfolio_url TEXT,
+  linkedin_url TEXT,
+  github_url TEXT,
+  additional_info TEXT,
+  is_shortlisted BOOLEAN DEFAULT false,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create job_applications table to track applications
+CREATE TABLE IF NOT EXISTS job_applications (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  job_id UUID NOT NULL REFERENCES jobs(id) ON DELETE CASCADE,
+  cv_profile_id UUID NOT NULL REFERENCES cv_profiles(id) ON DELETE CASCADE,
+  application_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  status VARCHAR(50) DEFAULT 'applied' CHECK (status IN ('applied', 'shortlisted', 'rejected', 'hired')),
+  match_score INTEGER DEFAULT 0,
+  notes TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Create indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_jobs_company_id ON jobs(company_id);
 CREATE INDEX IF NOT EXISTS idx_jobs_status_approved ON jobs(status, approved) WHERE status = 'published' AND approved = true;
+CREATE INDEX IF NOT EXISTS idx_jobs_plan_id ON jobs(plan_id);
 CREATE INDEX IF NOT EXISTS idx_exam_questions_exam_id ON exam_questions(exam_id);
 CREATE INDEX IF NOT EXISTS idx_exam_submissions_exam_id ON exam_submissions(exam_id);
 CREATE INDEX IF NOT EXISTS idx_exam_submissions_email ON exam_submissions(user_email);
@@ -115,3 +149,8 @@ CREATE INDEX IF NOT EXISTS idx_email_subscribers_email ON email_subscribers(emai
 CREATE INDEX IF NOT EXISTS idx_page_views_visitor_id ON page_views(visitor_id);
 CREATE INDEX IF NOT EXISTS idx_page_views_created_at ON page_views(created_at);
 CREATE INDEX IF NOT EXISTS idx_visitors_visitor_id ON visitors(visitor_id);
+CREATE INDEX IF NOT EXISTS idx_cv_profiles_job_id ON cv_profiles(job_id);
+CREATE INDEX IF NOT EXISTS idx_cv_profiles_field_of_study ON cv_profiles(field_of_study);
+CREATE INDEX IF NOT EXISTS idx_job_applications_job_id ON job_applications(job_id);
+CREATE INDEX IF NOT EXISTS idx_job_applications_cv_profile_id ON job_applications(cv_profile_id);
+CREATE INDEX IF NOT EXISTS idx_job_applications_status ON job_applications(status);

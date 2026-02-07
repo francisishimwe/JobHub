@@ -8,11 +8,11 @@ import { useRouter } from "next/navigation"
 
 import Image from "next/image"
 
-import { MapPin, UserCheck, BadgeCheck, Share2, Clock } from "lucide-react"
-
+import { MapPin, UserCheck, BadgeCheck, Share2, Clock, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
-
 import { Badge } from "@/components/ui/badge"
+import { CVBuilder } from "@/components/cv-builder"
+import { useState } from "react"
 
 import { useCompanies } from "@/lib/company-context"
 
@@ -35,6 +35,8 @@ const JobCardComponent = ({ job }: JobCardProps) => {
   const { getCompanyById } = useCompanies()
 
   const company = job.companyId ? getCompanyById(job.companyId) : null
+
+  const [showCVBuilder, setShowCVBuilder] = useState(false)
 
 
 
@@ -128,24 +130,30 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
 
 
-  const handleTitleClick = (e: React.MouseEvent) => {
-
+  const handleApplyNow = (e: React.MouseEvent) => {
     e.preventDefault()
-
     e.stopPropagation()
 
+    // Check if this is a short-listing tier (plan_id 4)
+    if (job.planId === 4 || job.priority === 'Top') {
+      // Short-listing tier - open CV Builder
+      setShowCVBuilder(true)
+    } else {
+      // Featured/Featured+ tiers - redirect to external URL
+      const applicationUrl = job.applicationLink || `mailto:info@rwandajobhub.rw?subject=Application for ${job.title}&body=I am interested in applying for the ${job.title} position at ${displayCompany.name}.`
+      window.open(applicationUrl, '_blank')
+    }
+  }
 
+  const handleTitleClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
 
     // Track view interaction
-
     trackInteraction('view')
 
-
-
     // Navigate to job details page in the same window
-
     router.push(`/jobs/${job.id}`)
-
   }
 
 
@@ -182,7 +190,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
     name: "RwandaJobHub Partner",
 
-    logo: "/full logo.jpg"
+    logo: job.companyLogo || "/full logo.jpg"
 
   }
 
@@ -295,6 +303,23 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
               View Details
             </Button>
             <Button
+              size="sm"
+              className="bg-green-600 hover:bg-green-700 text-white flex-1 md:flex-initial text-xs md:text-sm font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg lg:hover:shadow-xl whitespace-nowrap"
+              onClick={handleApplyNow}
+            >
+              {job.planId === 4 || job.priority === 'Top' ? (
+                <>
+                  <ExternalLink className="h-3 w-3 mr-1" />
+                  Apply Now
+                </>
+              ) : (
+                <>
+                  <ExternalLink className="h-3 w-3 mr-1" />
+                  Apply Now
+                </>
+              )}
+            </Button>
+            <Button
               variant="outline"
               size="sm"
               onClick={shareToWhatsApp}
@@ -306,6 +331,18 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
           </div>
         </div>
       </div>
+      
+      {/* CV Builder Dialog */}
+      <CVBuilder
+        jobId={job.id}
+        jobTitle={job.title}
+        isOpen={showCVBuilder}
+        onClose={() => setShowCVBuilder(false)}
+        onSuccess={() => {
+          setShowCVBuilder(false)
+          alert('Application submitted successfully!')
+        }}
+      />
     </div>
   )
 

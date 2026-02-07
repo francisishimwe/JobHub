@@ -25,6 +25,7 @@ export async function GET(request: NextRequest) {
         id,
         title,
         company_id,
+        company_logo,
         location,
         job_type,
         opportunity_type,
@@ -89,11 +90,65 @@ export async function POST(request: NextRequest) {
     
     console.log('📝 Received job submission:', body)
 
+    // Determine tier from selected plan
+    const selectedPlan = body.selectedPlan || 'basic'
+    
+    // Tier configuration
+    const tierConfig: { [key: string]: any } = {
+      'featured': {
+        tier: 'featured',
+        price: 50000,
+        priority_placement: false,
+        social_media_promotion: false,
+        whatsapp_promotion: false,
+        candidate_pre_screening: false,
+        priority_candidate_matching: false
+      },
+      'featured-plus': {
+        tier: 'featured-plus',
+        price: 75000,
+        priority_placement: true,
+        social_media_promotion: true,
+        whatsapp_promotion: false,
+        candidate_pre_screening: false,
+        priority_candidate_matching: false
+      },
+      'super-featured': {
+        tier: 'super-featured',
+        price: 100000,
+        priority_placement: true,
+        social_media_promotion: true,
+        whatsapp_promotion: true,
+        candidate_pre_screening: false,
+        priority_candidate_matching: false
+      },
+      'short-listing': {
+        tier: 'short-listing',
+        price: 150000,
+        priority_placement: true,
+        social_media_promotion: true,
+        whatsapp_promotion: true,
+        candidate_pre_screening: true,
+        priority_candidate_matching: true
+      },
+      'basic': {
+        tier: 'basic',
+        price: 0,
+        priority_placement: false,
+        social_media_promotion: false,
+        whatsapp_promotion: false,
+        candidate_pre_screening: false,
+        priority_candidate_matching: false
+      }
+    }
+
+    const config = tierConfig[selectedPlan] || tierConfig['basic']
+    
     // Determine if this is an employer job (has employer info or plan info) or admin job
-    const isEmployerJob = body.planId || body.plan_id || body.employerName
+    const isEmployerJob = body.planId || body.plan_id || body.employerName || selectedPlan !== 'basic'
     const planId = isEmployerJob ? (body.planId || body.plan_id || 1) : 1
     
-    console.log('🏢 Job type check:', { isEmployerJob, planId })
+    console.log('🏢 Job type check:', { isEmployerJob, planId, selectedPlan, config })
     
     // Validate required fields for employer jobs
     if (isEmployerJob) {
@@ -115,7 +170,7 @@ export async function POST(request: NextRequest) {
 
     // Set agency verification for employer jobs based on plan
     const agencyVerified = isEmployerJob ? true : false
-    const priority = planId === 4 ? 'Top' : (planId >= 2 ? 'High' : 'Normal')
+    const priority = config.tier === 'short-listing' ? 'Top' : (config.priority_placement ? 'High' : 'Normal')
     
     // For employer jobs, use the employer company info from form
     let companyId = body.company_id
@@ -210,6 +265,7 @@ export async function POST(request: NextRequest) {
           id,
           title,
           company_id,
+          company_logo,
           employer_name,
           employer_email,
           employer_phone,
@@ -228,12 +284,21 @@ export async function POST(request: NextRequest) {
           priority,
           agency_verified,
           is_verified,
+          tier,
+          tier_price,
+          priority_placement,
+          social_media_promotion,
+          whatsapp_promotion,
+          candidate_pre_screening,
+          priority_candidate_matching,
+          matched_candidates_count,
           created_at,
           updated_at
         ) VALUES (
           ${id},
           ${body.title},
           ${companyId},
+          ${body.companyLogo || null},
           ${body.employerName || null},
           ${body.employerEmail || null},
           ${body.employerPhone || null},
@@ -252,6 +317,14 @@ export async function POST(request: NextRequest) {
           ${priority},
           ${agencyVerified},
           ${agencyVerified},
+          ${config.tier},
+          ${config.price},
+          ${config.priority_placement},
+          ${config.social_media_promotion},
+          ${config.whatsapp_promotion},
+          ${config.candidate_pre_screening},
+          ${config.priority_candidate_matching},
+          0,
           ${now},
           ${now}
         )
@@ -265,6 +338,7 @@ export async function POST(request: NextRequest) {
           id,
           title,
           company_id,
+          company_logo,
           location,
           job_type,
           opportunity_type,
@@ -281,6 +355,7 @@ export async function POST(request: NextRequest) {
           ${id},
           ${body.title},
           ${companyId},
+          ${body.companyLogo || null},
           ${body.location || null},
           ${body.jobType || body.job_type || null},
           ${body.opportunity_type},
@@ -308,6 +383,7 @@ export async function POST(request: NextRequest) {
       id: newJob.id,
       title: newJob.title,
       company_id: newJob.company_id,
+      company_logo: newJob.company_logo,
       location: newJob.location,
       job_type: newJob.job_type,
       opportunity_type: newJob.opportunity_type,

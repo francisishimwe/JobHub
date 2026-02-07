@@ -111,7 +111,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Phone Number</h3>
-                    <p className="text-muted-foreground">+250 783 074 056</p>
+                    <p className="text-muted-foreground">0783074056</p>
                   </div>
                 </div>
 

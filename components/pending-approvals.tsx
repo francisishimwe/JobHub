@@ -13,7 +13,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { CheckCircle2, Clock, Building2, Calendar, Briefcase, Phone, Mail, Trash2, Edit, Eye } from "lucide-react"
+import { CheckCircle2, Clock, Building2, Calendar, Briefcase, Phone, Mail, Trash2, Edit, Eye, Users } from "lucide-react"
+import { ApplicantReview } from "@/components/applicant-review"
 
 interface PendingJob {
   id: string
@@ -25,6 +26,10 @@ interface PendingJob {
   job_type?: string
   deadline?: string
   plan_id?: number
+  tier?: string
+  candidate_pre_screening?: boolean
+  priority_candidate_matching?: boolean
+  matched_candidates_count?: number
   employer_name?: string
   employer_email?: string
   employer_phone?: string
@@ -38,6 +43,12 @@ export function PendingApprovals() {
   const [processing, setProcessing] = useState<string | null>(null)
   const [jobToDelete, setJobToDelete] = useState<string | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [selectedJob, setSelectedJob] = useState<PendingJob | null>(null)
+  const [matchedCandidates, setMatchedCandidates] = useState<any[]>([])
+  const [showCandidatesDialog, setShowCandidatesDialog] = useState(false)
+  const [loadingCandidates, setLoadingCandidates] = useState(false)
+  const [showApplicantReview, setShowApplicantReview] = useState(false)
+  const [selectedJobForReview, setSelectedJobForReview] = useState<PendingJob | null>(null)
 
   useEffect(() => {
     fetchPendingJobs()
@@ -98,17 +109,67 @@ export function PendingApprovals() {
     }
   }
 
-  const getPlanBadge = (planId?: number) => {
-    switch (planId) {
-      case 4:
-        return <Badge className="bg-purple-100 text-purple-800">Tier 4 - Short-listing</Badge>
-      case 3:
-        return <Badge className="bg-blue-100 text-blue-800">Tier 3 - Super Featured</Badge>
-      case 2:
-        return <Badge className="bg-green-100 text-green-800">Tier 2 - Featured+</Badge>
-      case 1:
+  const handleViewMatchedCandidates = async (job: PendingJob) => {
+    setSelectedJob(job)
+    setShowCandidatesDialog(true)
+    setLoadingCandidates(true)
+    
+    try {
+      // Extract job field for matching
+      const jobTitle = job.title.toLowerCase()
+      const jobDescription = (job.description || '').toLowerCase()
+      
+      // Define skill/field mappings for matching
+      const fieldMappings: { [key: string]: string[] } = {
+        'technology': ['software', 'developer', 'programming', 'it', 'computer science', 'web', 'app', 'data', 'cybersecurity'],
+        'business': ['business', 'management', 'marketing', 'sales', 'finance', 'accounting', 'hr', 'administration'],
+        'healthcare': ['medical', 'nursing', 'healthcare', 'doctor', 'pharmacy', 'hospital'],
+        'education': ['teaching', 'education', 'teacher', 'academic', 'university', 'school'],
+        'engineering': ['engineering', 'civil', 'mechanical', 'electrical', 'construction'],
+        'agriculture': ['agriculture', 'farming', 'agronomy', 'veterinary'],
+        'hospitality': ['hotel', 'tourism', 'restaurant', 'hospitality', 'service'],
+        'media': ['journalism', 'media', 'communication', 'design', 'creative', 'art']
+      }
+
+      // Determine job field
+      let jobField = 'general'
+      for (const [field, keywords] of Object.entries(fieldMappings)) {
+        if (keywords.some(keyword => jobTitle.includes(keyword) || jobDescription.includes(keyword))) {
+          jobField = field
+          break
+        }
+      }
+
+      // Fetch matching CVs
+      const response = await fetch(`/api/cv-profiles?fieldOfStudy=${jobField}&limit=5`)
+      if (!response.ok) throw new Error('Failed to fetch matched candidates')
+      
+      const data = await response.json()
+      setMatchedCandidates(data.data || [])
+    } catch (error) {
+      console.error('Error fetching matched candidates:', error)
+      setMatchedCandidates([])
+    } finally {
+      setLoadingCandidates(false)
+    }
+  }
+
+  const getPlanBadge = (tier?: string, planId?: number) => {
+    // Use tier if available, otherwise fall back to planId
+    const tierValue = tier || (planId === 4 ? 'short-listing' : planId === 3 ? 'super-featured' : planId === 2 ? 'featured-plus' : 'basic')
+    
+    switch (tierValue) {
+      case 'short-listing':
+        return <Badge className="bg-green-100 text-green-800">Short-listing (150k)</Badge>
+      case 'super-featured':
+        return <Badge className="bg-orange-100 text-orange-800">Super Featured (100k)</Badge>
+      case 'featured-plus':
+        return <Badge className="bg-purple-100 text-purple-800">Featured+ (75k)</Badge>
+      case 'featured':
+        return <Badge className="bg-blue-100 text-blue-800">Featured (50k)</Badge>
+      case 'basic':
       default:
-        return <Badge className="bg-gray-100 text-gray-800">Tier 1 - Basic</Badge>
+        return <Badge className="bg-gray-100 text-gray-800">Basic</Badge>
     }
   }
 
@@ -181,7 +242,12 @@ export function PendingApprovals() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3">
                       <CardTitle className="text-lg">{job.title}</CardTitle>
-                      {getPlanBadge(job.plan_id)}
+                      {getPlanBadge(job.tier, job.plan_id)}
+                      {job.matched_candidates_count !== undefined && job.matched_candidates_count > 0 && (
+                        <Badge variant="secondary" className="bg-blue-50 text-blue-700">
+                          {job.matched_candidates_count} Matched Candidates
+                        </Badge>
+                      )}
                     </div>
                     <div className="flex items-center gap-4 text-sm text-gray-600">
                       <div className="flex items-center gap-1">
@@ -289,7 +355,7 @@ export function PendingApprovals() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => window.open(`/jobs/${job.id}`, '_blank')}
+                onClick={() => window.open(`/dashboard/jobs/${job.id}`, '_blank')}
                 className="active:scale-105 transition-all"
               >
                 <Eye className="h-4 w-4 mr-2" />
@@ -304,6 +370,31 @@ export function PendingApprovals() {
                 <Edit className="h-4 w-4 mr-2" />
                 Edit
               </Button>
+              {(job.tier === 'short-listing' || job.candidate_pre_screening) && (
+                <>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleViewMatchedCandidates(job)}
+                    className="text-purple-600 hover:text-purple-700 hover:bg-purple-50 active:scale-105 transition-all"
+                  >
+                    <Eye className="h-4 w-4 mr-2" />
+                    View Shortlist
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedJobForReview(job)
+                      setShowApplicantReview(true)
+                    }}
+                    className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 active:scale-105 transition-all"
+                  >
+                    <Users className="h-4 w-4 mr-2" />
+                    Review Applicants
+                  </Button>
+                </>
+              )}
               <Button
                 variant="outline"
                 size="sm"
@@ -356,6 +447,137 @@ export function PendingApprovals() {
           </div>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Matched Candidates Dialog */}
+      <AlertDialog open={showCandidatesDialog} onOpenChange={(open) => !open && setShowCandidatesDialog(false)}>
+        <AlertDialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Matched Candidates for {selectedJob?.title}</AlertDialogTitle>
+            <AlertDialogDescription>
+              Top 5 candidates matching the job requirements based on field of study and skills.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          
+          <div className="mt-4">
+            {loadingCandidates ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-600 border-t-transparent"></div>
+                <span className="ml-3">Finding matched candidates...</span>
+              </div>
+            ) : matchedCandidates.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-600">No matching candidates found for this position.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {matchedCandidates.map((candidate, index) => (
+                  <Card key={candidate.id} className="border-l-4 border-l-green-500">
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h4 className="font-semibold text-lg">
+                              {candidate.first_name} {candidate.last_name}
+                            </h4>
+                            <Badge variant="secondary">#{index + 1}</Badge>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <span className="font-medium">Email:</span> {candidate.email}
+                            </div>
+                            <div>
+                              <span className="font-medium">Phone:</span> {candidate.phone || 'Not provided'}
+                            </div>
+                            <div>
+                              <span className="font-medium">Experience Level:</span> {candidate.experience_level || 'Not specified'}
+                            </div>
+                            <div>
+                              <span className="font-medium">Years of Experience:</span> {candidate.experience_years || 'Not specified'}
+                            </div>
+                          </div>
+
+                          {candidate.education && candidate.education.length > 0 && (
+                            <div className="mt-3">
+                              <h5 className="font-medium text-sm mb-2">Education:</h5>
+                              <div className="space-y-1">
+                                {candidate.education.slice(0, 2).map((edu: any, eduIndex: number) => (
+                                  <div key={eduIndex} className="text-sm text-gray-600">
+                                    • {edu.degree} in {edu.fieldOfStudy} from {edu.institution}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {candidate.skills && candidate.skills.length > 0 && (
+                            <div className="mt-3">
+                              <h5 className="font-medium text-sm mb-2">Skills:</h5>
+                              <div className="flex flex-wrap gap-2">
+                                {candidate.skills.slice(0, 5).map((skill: string, skillIndex: number) => (
+                                  <Badge key={skillIndex} variant="outline" className="text-xs">
+                                    {skill}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="flex flex-col gap-2">
+                          <Button
+                            size="sm"
+                            onClick={() => window.open(`mailto:${candidate.email}`, '_blank')}
+                            className="text-blue-600 hover:text-blue-700"
+                          >
+                            Contact Candidate
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+          
+          <div className="flex justify-end mt-6">
+            <AlertDialogCancel disabled={loadingCandidates}>
+              Close
+            </AlertDialogCancel>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Applicant Review Dialog */}
+      {selectedJobForReview && (
+        <AlertDialog open={showApplicantReview} onOpenChange={(open) => !open && setShowApplicantReview(false)}>
+          <AlertDialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+            <AlertDialogHeader>
+              <AlertDialogTitle>Review Applicants for {selectedJobForReview.title}</AlertDialogTitle>
+              <AlertDialogDescription>
+                Review and manage applications for this position. Short-list qualified candidates and generate reports for employers.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            
+            <div className="mt-4">
+              <ApplicantReview
+                jobId={selectedJobForReview.id}
+                jobTitle={selectedJobForReview.title}
+                jobCategory={selectedJobForReview.job_type}
+                isOpen={showApplicantReview}
+                onClose={() => setShowApplicantReview(false)}
+              />
+            </div>
+            
+            <div className="flex justify-end mt-6">
+              <AlertDialogCancel>
+                Close
+              </AlertDialogCancel>
+            </div>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </div>
   )
 }

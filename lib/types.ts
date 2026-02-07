@@ -6,6 +6,7 @@ export interface Job {
   
   // Database format (snake_case) - optional for backward compatibility
   company_id?: string | null;
+  company_logo?: string | null;
   job_type?: string;
   opportunity_type?: string;
   created_at?: string;
@@ -25,6 +26,7 @@ export interface Job {
 
   // Component format (camelCase) - mapped in your Provider
   companyId?: string | null;
+  companyLogo?: string | null;
   jobType?: string;
   opportunityType?: string;
   postedDate?: Date;
@@ -41,7 +43,6 @@ export interface Job {
     name: string;
     logo: string;
   };
-  companyLogo?: string;
 }
 
 export interface Company {

@@ -79,6 +79,7 @@ export default function EditCV() {
   const [currentStep, setCurrentStep] = useState(1)
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+  const [loading, setLoading] = useState(false)
   const cvPreviewRef = useRef<HTMLDivElement>(null)
 
   // Load Google Fonts on component mount
@@ -119,6 +120,10 @@ export default function EditCV() {
       currentRole: '',
       employerPhone: '',
       employerEmail: ''
+    },
+    salary: {
+      expectation: '',
+      currency: 'RWF'
     },
     languages: [{
       name: 'Kinyarwanda',
@@ -182,6 +187,13 @@ export default function EditCV() {
           speaking: 'Basic'
         }
       }]
+    }))
+  }
+
+  const removeLanguage = (index: number) => {
+    setCVData(prev => ({
+      ...prev,
+      languages: prev.languages.filter((_, i) => i !== index)
     }))
   }
 
@@ -282,8 +294,45 @@ export default function EditCV() {
     if (currentStep > 1) setCurrentStep(currentStep - 1)
   }
 
-  const handleSubmit = () => {
-    setShowSuccessMessage(true)
+  const handleSubmit = async () => {
+    try {
+      setLoading(true)
+      
+      // Prepare the data for API submission
+      const cvSubmissionData = {
+        personalInfo: cvData.personalInfo,
+        education: cvData.education,
+        experience: cvData.experience,
+        languages: cvData.languages,
+        referees: cvData.referees
+      }
+
+      // Send data to API
+      const response = await fetch('/api/cv-profiles', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(cvSubmissionData),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        console.error('CV submission error:', result)
+        alert(`Failed to save CV: ${result.error || 'Unknown error'}`)
+        return
+      }
+
+      console.log('CV saved successfully:', result)
+      setShowSuccessMessage(true)
+      
+    } catch (error) {
+      console.error('CV submission error:', error)
+      alert('Failed to save CV. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const renderPersonalInfoForm = () => (
