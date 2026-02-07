@@ -131,13 +131,12 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
   }
 
 
-
   const handleApplyNow = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
 
     // Check if this is an email application
-    if (job.applicationMethod === 'Email' || job.applicationMethod === 'email' || job.application_method === 'Email' || job.application_method === 'email') {
+    if (job.application_method?.toLowerCase() === 'email') {
       // Email application - open Email Application Form
       setShowEmailApplication(true)
     } else if (job.planId === 4 || job.priority === 'Top') {
@@ -145,11 +144,12 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
       setShowCVBuilder(true)
     } else {
       // Featured/Featured+ tiers - redirect to external URL
-      const applicationUrl = job.applicationLink || `mailto:info@rwandajobhub.rw?subject=Application for ${job.title}&body=I am interested in applying for the ${job.title} position at ${displayCompany.name}.`
+      const applicationUrl = job.application_link || job.applicationLink || `mailto:info@rwandajobhub.rw?subject=Application for ${job.title}&body=I am interested in applying for ${job.title} position at ${displayCompany.name}.`
       window.open(applicationUrl, '_blank')
     }
   }
 
+  // Define the handleTitleClick function
   const handleTitleClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
@@ -297,7 +297,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
           <div className="flex flex-row md:flex-col gap-2 shrink-0 self-end md:self-start">
             {/* Apply Now Button - Only show for Email applications or short-listing tier */}
-            {(job.applicationMethod === 'Email' || job.applicationMethod === 'email' || job.application_method === 'Email' || job.application_method === 'email' || job.planId === 4 || job.priority === 'Top') && (
+            {(job.application_method?.toLowerCase() === 'email' || job.planId === 4 || job.priority === 'Top') && (
               <Button
                 size="sm"
                 className="bg-green-600 hover:bg-green-700 text-white flex-1 md:flex-initial text-xs md:text-sm font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg lg:hover:shadow-xl whitespace-nowrap"

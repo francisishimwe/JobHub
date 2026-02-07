@@ -302,7 +302,13 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             job.opportunityType !== "Education" &&
                             job.opportunityType !== "Announcement" && (
                                 <Button
-                                    onClick={handleApply}
+                                    onClick={() => {
+                                        if (job.application_method?.toLowerCase() === 'email') {
+                                            setIsApplyModalOpen(true)
+                                        } else {
+                                            handleApply()
+                                        }
+                                    }}
                                     size="lg"
                                     className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
                                 >

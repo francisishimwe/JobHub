@@ -27,6 +27,9 @@ interface JobDetails {
   employer_phone?: string
   description?: string
   application_link?: string
+  application_method?: string
+  primary_email?: string
+  cc_emails?: string
   attachment_url?: string
   created_at: string
 }
@@ -49,6 +52,9 @@ export default function AdminEditJobPage() {
     opportunity_type: "",
     deadline: "",
     application_link: "",
+    application_method: "link",
+    primary_email: "",
+    cc_emails: "",
     plan_id: 1,
   })
 
@@ -81,6 +87,9 @@ export default function AdminEditJobPage() {
         opportunity_type: data.job.opportunity_type || "",
         deadline: data.job.deadline || "",
         application_link: data.job.application_link || "",
+        application_method: data.job.application_method || "link",
+        primary_email: data.job.primary_email || "",
+        cc_emails: data.job.cc_emails || "",
         plan_id: data.job.plan_id || 1,
       })
     } catch (error) {
@@ -207,8 +216,55 @@ export default function AdminEditJobPage() {
                     onChange={(e) => setFormData({ ...formData, application_link: e.target.value })}
                     placeholder="https://example.com/apply"
                     className="h-11 text-base"
+                    disabled={formData.application_method === "email"}
                   />
                 </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="application_method">Application Method</Label>
+                  <Select
+                    value={formData.application_method}
+                    onValueChange={(value: string) => setFormData({ ...formData, application_method: value })}
+                  >
+                    <SelectTrigger className="h-11 text-base">
+                      <SelectValue placeholder="Select application method" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white">
+                      <SelectItem value="link">External Link</SelectItem>
+                      <SelectItem value="email">Email Application</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {formData.application_method === "email" && (
+                  <>
+                    <div className="space-y-2">
+                      <Label htmlFor="primary_email">Primary Email</Label>
+                      <Input
+                        id="primary_email"
+                        type="email"
+                        value={formData.primary_email}
+                        onChange={(e) => setFormData({ ...formData, primary_email: e.target.value })}
+                        placeholder="employer@company.com"
+                        className="h-11 text-base"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="cc_emails">CC Emails</Label>
+                      <Input
+                        id="cc_emails"
+                        value={formData.cc_emails}
+                        onChange={(e) => setFormData({ ...formData, cc_emails: e.target.value })}
+                        placeholder="hr@company.com, manager@company.com"
+                        className="h-11 text-base"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Enter multiple email addresses separated by commas
+                      </p>
+                    </div>
+                  </>
+                )}
 
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="space-y-2">

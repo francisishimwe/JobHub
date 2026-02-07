@@ -128,7 +128,13 @@ export function JobDetailsModal({ job, open, onOpenChange }: JobDetailsModalProp
               job.opportunityType !== "Scholarship" &&
               job.opportunityType !== "Education" &&
               job.opportunityType !== "Announcement" && (
-                <Button onClick={handleApply} className="flex-1 bg-foreground text-background hover:bg-foreground/90 h-14 sm:h-12">
+                <Button onClick={() => {
+                if (job.application_method?.toLowerCase() === 'email') {
+                  setIsApplyModalOpen(true)
+                } else {
+                  handleApply()
+                }
+              }} className="flex-1 bg-foreground text-background hover:bg-foreground/90 h-14 sm:h-12">
                   Apply Now
                   <ExternalLink className="ml-2 h-4 w-4" />
                 </Button>
