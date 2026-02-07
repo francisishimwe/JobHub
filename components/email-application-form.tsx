@@ -112,7 +112,7 @@ export function EmailApplicationForm({
       }, 3000)
     } catch (error) {
       console.error('Application submission error:', error)
-      setError(error instanceof Error ? error.message : 'Failed to submit application. Please try again.')
+      setError(error instanceof Error ? error.message : 'Failed to submit application. Please try again or contact 0783074056 for help.')
     } finally {
       setIsSubmitting(false)
     }
@@ -123,9 +123,15 @@ export function EmailApplicationForm({
       <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
         <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-green-800 mb-2">Application sent!</h3>
-        <p className="text-green-700 mb-4">
-          For help, contact 0783074056
+        <p className="text-green-700 mb-2">
+          Your application has been successfully sent to the employer.
         </p>
+        <div className="bg-green-100 border border-green-300 rounded-lg p-3">
+          <p className="text-green-800 text-sm">
+            <strong>Questions or need help?</strong><br/>
+            Contact us on WhatsApp: <a href="https://wa.me/250783074056" className="text-green-600 underline hover:text-green-800 font-semibold" target="_blank" rel="noopener noreferrer">0783074056</a>
+          </p>
+        </div>
       </div>
     )
   }
@@ -138,6 +144,9 @@ export function EmailApplicationForm({
         <Alert className="mb-4 border-red-200 bg-red-50">
           <AlertDescription className="text-red-700">
             {error}
+            <div className="mt-2 text-sm">
+              <strong>Need help?</strong> Contact us on WhatsApp: <a href="https://wa.me/250783074056" className="text-red-600 underline hover:text-red-800" target="_blank" rel="noopener noreferrer">0783074056</a>
+            </div>
           </AlertDescription>
         </Alert>
       )}
