@@ -61,8 +61,14 @@ export async function GET(request: NextRequest) {
     // Featured tab should count *all* active items (Jobs, Tenders, Internships, Scholarships, Education, Blogs)
     const featuredCount = total
 
+    // Map jobs to ensure application_method has a default
+    const mappedJobs = jobs.map((job: any) => ({
+      ...job,
+      application_method: job.application_method || 'email'
+    }))
+
     return NextResponse.json({
-      jobs,
+      jobs: mappedJobs,
       total,
       featuredCount,
       // Back-compat for older client code paths: keep field but ensure it matches featuredCount

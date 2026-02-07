@@ -52,26 +52,9 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     const handleApply = async () => {
         console.log("CRITICAL DEBUG - Method is:", job.application_method, "Full Job Object:", job)
         
-        if (!job.application_method) { 
-            console.error("ERROR: No application method found for this job!", job); 
-        }
-        
-        const method = job.application_method?.toLowerCase() || 'link';
-        
-        if (method === 'email') {
-            // Try React state first
+        if (!job.application_method || job.application_method === 'email') {
             setIsApplyModalOpen(true)
-            
-            // Fallback: Global event listener
-            setTimeout(() => {
-                if (!isApplyModalOpen) {
-                    console.log("React state failed, using global event fallback")
-                    window.dispatchEvent(new CustomEvent('openApplicationModal', {
-                        detail: { jobId: job.id, action: 'openModal' }
-                    }))
-                }
-            }, 100)
-        } else if (method === 'link') {
+        } else if (job.application_method?.toLowerCase() === 'link') {
             if (job.application_link) {
                 // Track in Google Analytics only
                 if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -85,8 +68,6 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 // Open application link
                 window.open(job.application_link, "_blank", "noopener,noreferrer")
-            } else {
-                alert("Please contact us at 0783074056 to apply for this position.")
             }
         } else if (job.application_link) {
             // Track in Google Analytics only
