@@ -59,7 +59,7 @@ export function RecentJobsSidebar({ currentJobId }: RecentJobsSidebarProps) {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-semibold line-clamp-2 group-hover:text-primary transition-colors">
+                    <h4 className="text-sm font-semibold group-hover:text-primary transition-colors break-words">
                       {job.title}
                     </h4>
                     <p className="text-xs text-muted-foreground mt-1">
@@ -72,7 +72,7 @@ export function RecentJobsSidebar({ currentJobId }: RecentJobsSidebarProps) {
                       {job.location && (
                         <div className="flex items-center gap-1 text-xs text-muted-foreground">
                           <MapPin className="h-3 w-3" />
-                          <span className="truncate">{job.location.split(',')[0]}</span>
+                          <span className="break-words">{job.location.split(',')[0]}</span>
                         </div>
                       )}
                     </div>

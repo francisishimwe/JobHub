@@ -58,7 +58,7 @@ export function SimilarJobs({ jobs = [], currentJobId, className = "" }: Similar
 
                 {/* Job Info */}
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-xs font-medium text-green-700 line-clamp-1 mb-1">
+                  <h4 className="text-xs font-medium text-green-700 mb-1 break-words">
                     {job.title}
                   </h4>
                   <p className="text-xs text-gray-600 mb-1">
@@ -68,7 +68,7 @@ export function SimilarJobs({ jobs = [], currentJobId, className = "" }: Similar
                     {job.location && (
                       <div className="flex items-center gap-1 text-xs text-gray-500">
                         <MapPin className="h-3 w-3" />
-                        <span className="line-clamp-1">{job.location.split(',')[0]}</span>
+                        <span className="break-words">{job.location.split(',')[0]}</span>
                       </div>
                     )}
                     <Badge variant="secondary" className="text-xs px-1.5 py-0.5 bg-green-100 text-green-700 border-green-200">

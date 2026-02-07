@@ -88,7 +88,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
               </div>
 
               {exam.description && (
-                <p className="mb-4 line-clamp-2 leading-relaxed text-sm text-black dark:text-white tracking-wide">
+                <p className="mb-4 leading-relaxed text-sm text-black dark:text-white tracking-wide">
                   {exam.description}
                 </p>
               )}

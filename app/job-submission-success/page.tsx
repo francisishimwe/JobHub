@@ -11,15 +11,15 @@ export default function JobSubmissionSuccessPage() {
   const router = useRouter()
 
   const handleWhatsAppClick = () => {
-    // Replace with actual WhatsApp number
-    const phoneNumber = "+250788123456" // Example Rwanda number
-    const message = encodeURIComponent("Hello, I've submitted a job posting and would like to complete the verification process.")
+    // Admin WhatsApp number
+    const phoneNumber = "250783074056" // Admin Rwanda number
+    const message = encodeURIComponent("Hello Admin, I have just posted a job on JobHub and need it approved.")
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank")
   }
 
   const handleCallClick = () => {
-    // Replace with actual phone number
-    window.open("tel:+250788123456")
+    // Admin phone number
+    window.open("tel:+250783074056")
   }
 
   return (

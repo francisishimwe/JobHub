@@ -164,30 +164,48 @@ export function PendingApprovals() {
             <div className="flex items-start justify-between">
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
-                  <CardTitle className="text-lg">{job.title}</CardTitle>
-                  {getPlanBadge(job.plan_id)}
-                </div>
-                <div className="flex items-center gap-4 text-sm text-gray-600">
-                  <div className="flex items-center gap-1">
-                    <Building2 className="h-4 w-4" />
-                    <span>{job.company_name}</span>
+                  {/* Company Logo */}
+                  <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100 border border-gray-200">
+                    {job.company_logo ? (
+                      <img
+                        src={job.company_logo}
+                        alt={`${job.company_name} logo`}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center bg-gray-200">
+                        <Building2 className="h-6 w-6 text-gray-400" />
+                      </div>
+                    )}
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Briefcase className="h-4 w-4" />
-                    <span>{job.opportunity_type}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3">
+                      <CardTitle className="text-lg">{job.title}</CardTitle>
+                      {getPlanBadge(job.plan_id)}
+                    </div>
+                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                      <div className="flex items-center gap-1">
+                        <Building2 className="h-4 w-4" />
+                        <span>{job.company_name}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Briefcase className="h-4 w-4" />
+                        <span>{job.opportunity_type}</span>
+                      </div>
+                      {job.job_type && (
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-500">•</span>
+                          <span>{job.job_type}</span>
+                        </div>
+                      )}
+                      {job.location && (
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-500">•</span>
+                          <span>{job.location}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  {job.job_type && (
-                    <div className="flex items-center gap-1">
-                      <span className="text-gray-500">•</span>
-                      <span>{job.job_type}</span>
-                    </div>
-                  )}
-                  {job.location && (
-                    <div className="flex items-center gap-1">
-                      <span className="text-gray-500">•</span>
-                      <span>{job.location}</span>
-                    </div>
-                  )}
                 </div>
               </div>
               <div className="text-right">
@@ -230,9 +248,30 @@ export function PendingApprovals() {
               <div>
                 <h4 className="font-medium text-gray-900 mb-2">Job Description</h4>
                 <div className="bg-gray-50 rounded-lg p-4">
-                  <p className="text-sm text-gray-700 line-clamp-3">
-                    {job.description}
-                  </p>
+                  <div 
+                    className="prose prose-sm max-w-none text-slate-700 font-normal leading-relaxed text-sm
+                      [&_p]:mb-2 [&_p]:leading-relaxed [&_p]:break-words [&_p]:overflow-wrap-break-word [&_p]:whitespace-pre-wrap
+                      [&_ul]:list-disc [&_ul]:ml-4 [&_ul]:mb-2 [&_ul]:space-y-1 [&_ul]:break-words
+                      [&_ol]:list-decimal [&_ol]:ml-4 [&_ol]:mb-2 [&_ol]:space-y-1 [&_ol]:break-words
+                      [&_li]:mb-1 [&_li]:leading-relaxed [&_li]:break-words [&_li]:overflow-wrap-break-word
+                      [&_strong]:font-semibold [&_strong]:text-gray-900 [&_strong]:break-words
+                      [&_b]:font-semibold [&_b]:text-gray-900 [&_b]:break-words
+                      [&_h1]:text-base [&_h1]:font-semibold [&_h1]:text-gray-900 [&_h1]:mb-2 [&_h1]:break-words
+                      [&_h2]:text-base [&_h2]:font-semibold [&_h2]:text-gray-900 [&_h2]:mb-2 [&_h2]:break-words
+                      [&_h3]:text-base [&_h3]:font-semibold [&_h3]:text-gray-900 [&_h3]:mb-2 [&_h3]:break-words
+                      [&_h4]:text-base [&_h4]:font-semibold [&_h4]:text-gray-900 [&_h4]:mb-2 [&_h4]:break-words
+                      [&_h5]:text-base [&_h5]:font-semibold [&_h5]:text-gray-900 [&_h5]:mb-2 [&_h5]:break-words
+                      [&_h6]:text-base [&_h6]:font-semibold [&_h6]:text-gray-900 [&_h6]:mb-2 [&_h6]:break-words
+                      [&_a]:text-blue-600 [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-blue-800 [&_a]:break-all
+                      [&_blockquote]:border-l-2 [&_blockquote]:border-gray-300 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:leading-relaxed [&_blockquote]:break-words
+                      [&_code]:bg-gray-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded [&_code]:font-mono [&_code]:text-xs break-all
+                      [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded [&_img]:my-2
+                      [&_table]:w-full [&_table]:border-collapse [&_table]:my-2 [&_table]:overflow-hidden break-words
+                      [&_td]:border [&_td]:border-gray-200 [&_td]:p-2 [&_td]:align-top break-words [&_td]:whitespace-pre-wrap
+                      [&_th]:border [&_th]:border-gray-200 [&_th]:p-2 [&_th]:bg-gray-50 [&_th]:font-semibold [&_th]:text-left [&_th]:break-words
+                    "
+                    dangerouslySetInnerHTML={{ __html: job.description }}
+                  />
                 </div>
               </div>
             )}
@@ -250,7 +289,7 @@ export function PendingApprovals() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => window.open(`/admin/jobs/${job.id}`, '_blank')}
+                onClick={() => window.open(`/jobs/${job.id}`, '_blank')}
                 className="active:scale-105 transition-all"
               >
                 <Eye className="h-4 w-4 mr-2" />
