@@ -53,10 +53,12 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
         console.log("CRITICAL DEBUG - Method is:", job.application_method, "Full Job Object:", job)
         
         if (!job.application_method) { 
-            console.error("ERROR: No application method found for this job!"); 
+            console.error("ERROR: No application method found for this job!", job); 
         }
         
-        if (job.application_method?.toLowerCase() === 'email') {
+        const method = job.application_method?.toLowerCase() || 'link';
+        
+        if (method === 'email') {
             // Try React state first
             setIsApplyModalOpen(true)
             
@@ -69,7 +71,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     }))
                 }
             }, 100)
-        } else if (job.application_method?.toLowerCase() === 'link') {
+        } else if (method === 'link') {
             if (job.application_link) {
                 // Track in Google Analytics only
                 if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -336,6 +338,9 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                 <Button
                                     type="button"
                                     onClick={() => {
+                                        if (!job.application_method) {
+                                            console.error("Missing Method Data!", job);
+                                        }
                                         if (job.application_method?.toLowerCase() === 'email') {
                                             setIsApplyModalOpen(true)
                                         } else {
@@ -344,6 +349,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                     }}
                                     size="lg"
                                     className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
+                                    disabled={!job.id}
                                 >
                                     Apply Now
                                     <ExternalLink className="ml-2 h-5 w-5" />
