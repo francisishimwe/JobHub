@@ -269,53 +269,42 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Action Buttons */}
                 <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                    {/* Share on WhatsApp and Apply Now Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-4 mb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                        {job.applicationLink && !isExpired &&
+                    {/* Row 1: Apply Now and Share on WhatsApp Buttons */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                        {/* Apply Now Button - Smart Logic */}
+                        {!isExpired &&
                             job.opportunityType !== "Tender" &&
                             job.opportunityType !== "Blog" &&
                             job.opportunityType !== "Scholarship" &&
                             job.opportunityType !== "Education" &&
                             job.opportunityType !== "Announcement" && (
                                 <Button
-                                    onClick={handleApply}
+                                    onClick={job.applicationMethod === "email" ? () => setShowApplicationForm(!showApplicationForm) : handleApply}
                                     size="lg"
-                                    className="w-full sm:w-auto flex-1 bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
+                                    className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
                                 >
-                                    Apply Now
+                                    {job.applicationMethod === "email" ? (showApplicationForm ? "Hide Application Form" : "Apply Now") : "Apply Now"}
                                     <ExternalLink className="ml-2 h-5 w-5" />
                                 </Button>
                             )}
                         
-                        {/* Email Application Button */}
-                        {job.applicationMethod === "email" && !isExpired && (
-                            <Button
-                                onClick={() => setShowApplicationForm(!showApplicationForm)}
-                                size="lg"
-                                className="w-full sm:w-auto flex-1 bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
-                            >
-                                {showApplicationForm ? "Hide Application Form" : "Apply via Email"}
-                                <ExternalLink className="ml-2 h-5 w-5" />
-                            </Button>
-                        )}
-                        
                         <Button
                             onClick={handleShareWhatsApp}
                             size="lg"
-                            className="w-full sm:w-auto flex-1 bg-green-600 hover:bg-green-700 text-white text-base font-semibold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
+                            className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
                         >
                             <Share2 className="mr-2 h-5 w-5" />
                             Share on WhatsApp
                         </Button>
                     </div>
 
-                    {/* Build CV Button */}
-                    <div className="flex flex-col sm:flex-row gap-4" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                    {/* Row 2: Build CV Button (Full Width) */}
+                    <div className="w-full" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                         <Button
                             asChild
                             variant="outline"
                             size="lg"
-                            className="w-full sm:w-auto flex-1 bg-red-600 hover:bg-red-700 text-white border-2 border-red-600 text-base font-semibold h-14 px-8 rounded-lg transition-all"
+                            className="w-full bg-red-600 hover:bg-red-700 text-white border-2 border-red-600 text-lg font-bold h-14 px-8 rounded-lg transition-all"
                         >
                             <Link href="/edit-cv">
                                 <FileText className="mr-2 h-5 w-5" />
