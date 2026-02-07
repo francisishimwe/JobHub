@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { useJobs } from "@/lib/job-context"
 import { useCompanies } from "@/lib/company-context"
 import { Button } from "@/components/ui/button"
@@ -20,6 +21,7 @@ interface AddJobFormProps {
 export function AddJobForm({ onSuccess }: AddJobFormProps) {
   const { addJob } = useJobs()
   const { companies, addCompany } = useCompanies()
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [showAddCompany, setShowAddCompany] = useState(false)
   const [imagePreview, setImagePreview] = useState<string>("")
@@ -149,8 +151,8 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       setCompanySearch("")
       setSelectedFile(null)
 
-      alert("Job added successfully!")
-      onSuccess?.()
+      // Redirect to success page for employer job submissions
+      router.push("/job-submission-success")
     } catch (error) {
       console.error("Error adding job:", error)
       const errorMessage = error instanceof Error ? error.message : "Failed to add job. Please try again."

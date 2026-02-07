@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS jobs (
   description TEXT,
   attachment_url TEXT,
   application_link TEXT,
-  status VARCHAR(50) DEFAULT 'published' CHECK (status IN ('published', 'draft', 'closed')),
+  status VARCHAR(50) DEFAULT 'published' CHECK (status IN ('published', 'draft', 'closed', 'pending')),
   approved BOOLEAN DEFAULT true,
   applicants INTEGER DEFAULT 0,
   views INTEGER DEFAULT 0,
