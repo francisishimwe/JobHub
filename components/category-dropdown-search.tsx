@@ -14,7 +14,55 @@ export function CategoryDropdownSearch() {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const categories = ["All Categories", ...JOB_CATEGORIES]
+  const categories = [
+  "All Categories",
+  "Academic",
+  "Accounting", 
+  "Administration",
+  "Agriculture",
+  "Architecture",
+  "Arts and Design",
+  "Automotive",
+  "Aviation",
+  "Banking",
+  "Business",
+  "Community and Social Services",
+  "Computer and IT",
+  "Construction",
+  "Consultancy",
+  "Customer Service",
+  "Education",
+  "Energy and Utilities",
+  "Engineering",
+  "Environmental",
+  "Finance",
+  "Food Sciences",
+  "Geology",
+  "Healthcare",
+  "Hospitality and Tourism",
+  "Human Resource",
+  "Journalism and Media",
+  "Law",
+  "Logistics",
+  "Management",
+  "Manufacturing and Industrial",
+  "Marketing and Sales",
+  "Mechanical Engineering",
+  "Medicine",
+  "Mining",
+  "NGO and International Development",
+  "Pharmacy",
+  "Procurement",
+  "Project Management",
+  "Psychology",
+  "Public Health",
+  "Real Estate",
+  "Research",
+  "Security",
+  "Statistics",
+  "Telecommunications",
+  "Other"
+]
 
   // Close dropdown when clicking outside
   useEffect(() => {
