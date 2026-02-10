@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ChevronDown } from "lucide-react"
 import { Header } from "@/components/header"
-import { CategoryDropdownSearch } from "@/components/category-dropdown-search"
 import { CategoryDiscovery } from "@/components/category-discovery"
 
 export default function HomePage() {
