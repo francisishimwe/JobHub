@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ChevronDown } from "lucide-react"
 import { Header } from "@/components/header"
-import { CategoryDiscovery } from "@/components/category-discovery"
+import { CategoryDropdownSearch } from "@/components/category-dropdown-search"
 
 export default function HomePage() {
   const { jobs, filteredJobs, isLoading, hasMore, loadMore, filters, setFilters } = useJobs()
@@ -270,8 +270,12 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Category Discovery - STICKY */}
-      <CategoryDiscovery />
+      {/* The Search Zone - Category Dropdown Search */}
+      <div className="bg-slate-50">
+        <div className="container mx-auto px-6">
+          <CategoryDropdownSearch />
+        </div>
+      </div>
 
       <div className="container mx-auto px-2 py-1">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-7xl mx-auto">
