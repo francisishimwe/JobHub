@@ -33,21 +33,63 @@ export function CategoryDropdownSearch() {
     setSelectedCategory(category)
     setIsOpen(false)
     
-    // Update search filter based on category
+    // Update filter based on category
     if (category === "All Categories") {
-      setFilters({ search: searchQuery })
+      setFilters({ opportunityTypes: [] })
     } else {
-      const fullSearch = searchQuery ? `${searchQuery} ${category}` : category
-      setFilters({ search: fullSearch })
+      // Map category names to opportunity types
+      const opportunityTypeMap: { [key: string]: string } = {
+        "Accounting & Finance": "job",
+        "Administrative & Office": "job", 
+        "Creative & Design": "job",
+        "Customer Service": "job",
+        "Education & Training": "education",
+        "Engineering & Technical": "job",
+        "Healthcare & Medical": "job",
+        "Hospitality & Tourism": "job",
+        "Human Resources": "job",
+        "Information Technology": "job",
+        "Legal & Compliance": "job",
+        "Marketing & Sales": "job",
+        "Operations & Logistics": "job",
+        "Project Management": "job",
+        "Quality Assurance": "job",
+        "Research & Development": "job",
+        "Security & Protective": "job"
+      }
+      
+      const opportunityType = opportunityTypeMap[category] || category.toLowerCase()
+      setFilters({ opportunityTypes: [opportunityType] })
     }
   }
 
   const handleSearch = () => {
     if (selectedCategory === "All Categories") {
-      setFilters({ search: searchQuery })
+      setFilters({ search: searchQuery, opportunityTypes: [] })
     } else {
-      const fullSearch = searchQuery ? `${searchQuery} ${selectedCategory}` : selectedCategory
-      setFilters({ search: fullSearch })
+      // Map category names to opportunity types
+      const opportunityTypeMap: { [key: string]: string } = {
+        "Accounting & Finance": "job",
+        "Administrative & Office": "job", 
+        "Creative & Design": "job",
+        "Customer Service": "job",
+        "Education & Training": "education",
+        "Engineering & Technical": "job",
+        "Healthcare & Medical": "job",
+        "Hospitality & Tourism": "job",
+        "Human Resources": "job",
+        "Information Technology": "job",
+        "Legal & Compliance": "job",
+        "Marketing & Sales": "job",
+        "Operations & Logistics": "job",
+        "Project Management": "job",
+        "Quality Assurance": "job",
+        "Research & Development": "job",
+        "Security & Protective": "job"
+      }
+      
+      const opportunityType = opportunityTypeMap[selectedCategory] || selectedCategory.toLowerCase()
+      setFilters({ search: searchQuery, opportunityTypes: [opportunityType] })
     }
   }
 
