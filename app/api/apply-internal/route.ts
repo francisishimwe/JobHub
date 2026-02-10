@@ -80,9 +80,11 @@ export async function POST(request: NextRequest) {
       }
 
       if (!primaryEmail) {
-        console.log("Missing Employer Email for Job ID:", jobId, "Using default company email")
-        // NUCLEAR FIX: Use default company email instead of throwing error
-        primaryEmail = "rwandajobhub2050@gmail.com"
+        console.log("Missing Employer Email for Job ID:", jobId, "Application cannot be processed")
+        return NextResponse.json(
+          { error: 'This employer has not provided an email address. Applications cannot be submitted.' },
+          { status: 400 }
+        )
       }
 
     } catch (dbError) {

@@ -124,18 +124,25 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
           alert("Please enter employer name")
           return false
         }
+        if (!formData.logo_url) {
+          alert("Company logo is required")
+          return false
+        }
         if (!formData.contact_name.trim()) {
           alert("Please enter contact name")
           return false
         }
-        if (!formData.primary_email.trim()) {
-          alert("Please enter contact email")
+        // Contact email is only required if application method is email
+        if (formData.application_method === "email" && !formData.primary_email.trim()) {
+          alert("Contact email is required when using Email Application method")
           return false
         }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        if (!emailRegex.test(formData.primary_email.trim())) {
-          alert("Please enter a valid contact email")
-          return false
+        if (formData.primary_email.trim()) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+          if (!emailRegex.test(formData.primary_email.trim())) {
+            alert("Please enter a valid contact email")
+            return false
+          }
         }
         if (!formData.contact_phone.trim()) {
           alert("Please enter contact phone")
@@ -153,8 +160,17 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         }
         return true
       case 3:
+        if (!formData.application_method) {
+          alert("Please select application method")
+          return false
+        }
         if (formData.application_method === 'link' && !formData.application_link.trim()) {
           alert("Please enter application link")
+          return false
+        }
+        // Final check: if email method selected, ensure contact email is provided
+        if (formData.application_method === "email" && !formData.primary_email.trim()) {
+          alert("Contact email is required for Email Application method. Please go back to Step 1 and add it.")
           return false
         }
         return true
@@ -333,16 +349,23 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="primary_email">Contact Email *</Label>
+              <Label htmlFor="primary_email">
+                Contact Email {formData.application_method === "email" ? "*" : "(Optional)"}
+              </Label>
               <Input
                 id="primary_email"
                 type="email"
-                required
+                required={formData.application_method === "email"}
                 value={formData.primary_email}
                 onChange={(e) => setFormData({ ...formData, primary_email: e.target.value })}
                 placeholder="employer@company.com"
                 className="h-11 text-base"
               />
+              {formData.application_method === "email" && (
+                <p className="text-xs text-blue-600">
+                  Required for Email Application method
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -360,7 +383,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
 
             {/* Logo Upload */}
             <div className="space-y-2">
-              <Label>Company Logo (Optional)</Label>
+              <Label>Company Logo *</Label>
               <div className="flex items-center gap-4">
                 {imagePreview ? (
                   <div className="relative">
@@ -380,8 +403,8 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                     </Button>
                   </div>
                 ) : (
-                  <div className="h-20 w-20 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
-                    <Building2 className="h-8 w-8 text-gray-400" />
+                  <div className="h-20 w-20 rounded-lg border-2 border-dashed border-red-300 flex items-center justify-center">
+                    <Building2 className="h-8 w-8 text-red-400" />
                   </div>
                 )}
                 <div>
@@ -399,7 +422,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                     <Upload className="h-4 w-4 mr-2" />
                     Upload Logo
                   </Label>
-                  <p className="text-xs text-gray-500 mt-1">PNG, JPG (max 2MB)</p>
+                  <p className="text-xs text-red-500 mt-1">Company logo is required (PNG, JPG, max 2MB)</p>
                 </div>
               </div>
             </div>
@@ -506,8 +529,13 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
             {formData.application_method === "email" && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <p className="text-sm text-blue-700">
-                  <strong>Note:</strong> Applications will be sent to: <span className="font-mono">{formData.primary_email}</span>
+                  <strong>Note:</strong> Applications will be sent to: <span className="font-mono">{formData.primary_email || "No email provided"}</span>
                 </p>
+                {!formData.primary_email && (
+                  <p className="text-sm text-red-600 mt-2">
+                    ⚠️ Contact email is required in Step 1 for Email Application method. Please go back and add it.
+                  </p>
+                )}
               </div>
             )}
 
