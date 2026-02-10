@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useJobs } from "@/lib/job-context"
+import { JOB_CATEGORIES } from "@/lib/constants/categories"
 
 interface Category {
   id: string
@@ -10,66 +11,97 @@ interface Category {
   keywords: string[]
 }
 
+// Map professional categories to discovery categories with keywords
 const categories: Category[] = [
   {
     id: "tech",
-    label: "Tech & Software",
+    label: "Computer and IT",
     icon: "💻",
-    keywords: ["software", "developer", "it", "tech", "programming", "engineer", "developer", "coding", "software"]
+    keywords: ["computer", "it", "software", "developer", "programming", "coding", "tech", "technology", "data", "system", "network", "cybersecurity"]
   },
   {
     id: "finance",
-    label: "Finance & Accounting",
+    label: "Finance & Banking",
     icon: "💰",
-    keywords: ["finance", "accounting", "financial", "bank", "money", "investment", "audit", "tax"]
+    keywords: ["finance", "banking", "accounting", "financial", "investment", "money", "audit", "tax", "credit", "bank"]
   },
   {
     id: "healthcare",
-    label: "Healthcare",
+    label: "Healthcare & Medicine",
     icon: "🏥",
-    keywords: ["health", "medical", "doctor", "nurse", "hospital", "pharmacy", "clinical", "healthcare"]
+    keywords: ["healthcare", "medical", "medicine", "doctor", "nurse", "hospital", "pharmacy", "clinical", "health", "patient"]
   },
   {
     id: "education",
-    label: "Education & NGO",
+    label: "Education & Academic",
     icon: "🎓",
-    keywords: ["education", "teaching", "school", "university", "ngo", "non-profit", "academic", "training"]
+    keywords: ["education", "academic", "teaching", "school", "university", "research", "training", "learning", "student"]
   },
   {
     id: "engineering",
-    label: "Engineering",
+    label: "Engineering & Construction",
     icon: "🏗️",
-    keywords: ["engineering", "construction", "architect", "civil", "mechanical", "electrical", "project"]
+    keywords: ["engineering", "construction", "architect", "civil", "mechanical", "electrical", "project", "building", "infrastructure"]
   },
   {
-    id: "sales",
-    label: "Sales & Marketing",
+    id: "marketing",
+    label: "Marketing & Sales",
     icon: "📈",
-    keywords: ["sales", "marketing", "business", "commerce", "retail", "customer", "revenue", "growth"]
+    keywords: ["marketing", "sales", "business", "commerce", "retail", "customer", "revenue", "growth", "advertising"]
   },
   {
-    id: "operations",
-    label: "Operations & Admin",
+    id: "admin",
+    label: "Administration & Management",
     icon: "⚙️",
-    keywords: ["operations", "admin", "management", "office", "support", "logistics", "coordination"]
+    keywords: ["administration", "admin", "management", "office", "support", "logistics", "coordination", "operations"]
   },
   {
     id: "legal",
-    label: "Legal",
+    label: "Legal & Compliance",
     icon: "⚖️",
-    keywords: ["legal", "law", "lawyer", "attorney", "court", "justice", "compliance", "regulatory"]
+    keywords: ["legal", "law", "lawyer", "attorney", "court", "justice", "compliance", "regulatory", "paralegal"]
   },
   {
     id: "hospitality",
-    label: "Hospitality",
+    label: "Hospitality & Tourism",
     icon: "🏨",
-    keywords: ["hospitality", "hotel", "restaurant", "tourism", "service", "food", "travel", "accommodation"]
+    keywords: ["hospitality", "tourism", "hotel", "restaurant", "service", "food", "travel", "accommodation", "event"]
   },
   {
     id: "agriculture",
-    label: "Agriculture",
+    label: "Agriculture & Environment",
     icon: "🌱",
-    keywords: ["agriculture", "farming", "agri", "crops", "livestock", "agricultural", "rural", "farm"]
+    keywords: ["agriculture", "farming", "agri", "crops", "livestock", "agricultural", "rural", "farm", "environmental", "sustainability"]
+  },
+  {
+    id: "hr",
+    label: "Human Resource",
+    icon: "👥",
+    keywords: ["human resource", "hr", "recruitment", "staffing", "personnel", "talent", "workforce", "employee"]
+  },
+  {
+    id: "media",
+    label: "Media & Communications",
+    icon: "📺",
+    keywords: ["media", "journalism", "communications", "writing", "content", "creative", "design", "arts"]
+  },
+  {
+    id: "manufacturing",
+    label: "Manufacturing & Industrial",
+    icon: "🏭",
+    keywords: ["manufacturing", "industrial", "production", "factory", "plant", "assembly", "machinery", "warehouse"]
+  },
+  {
+    id: "ngo",
+    label: "NGO & Social Services",
+    icon: "🤝",
+    keywords: ["ngo", "non-profit", "social", "community", "development", "charity", "volunteer", "humanitarian"]
+  },
+  {
+    id: "other",
+    label: "Other Categories",
+    icon: "📋",
+    keywords: ["other", "miscellaneous", "general", "various", "multiple", "different"]
   }
 ]
 

@@ -3,6 +3,7 @@ export interface Job {
   title: string;
   location: string;
   description?: string;
+  category?: string;
   
   // Database format (snake_case) - optional for backward compatibility
   company_id?: string | null;

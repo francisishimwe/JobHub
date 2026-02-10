@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { AlertCircle, CheckCircle, Upload, X, FileText, ArrowLeft, ArrowRight, Building2 } from "lucide-react"
 import { RichTextEditor } from "@/components/rich-text-editor"
+import { JOB_CATEGORIES } from "@/lib/constants/categories"
 
 const planDetails = {
   featured: { name: "Featured", color: "bg-blue-500" },
@@ -544,17 +545,12 @@ export default function PostJobFormPage() {
                         <SelectTrigger className="active:scale-105 transition-all">
                           <SelectValue placeholder="Select category" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="tech">Tech & Software</SelectItem>
-                          <SelectItem value="finance">Finance & Accounting</SelectItem>
-                          <SelectItem value="healthcare">Healthcare</SelectItem>
-                          <SelectItem value="education">Education & NGO</SelectItem>
-                          <SelectItem value="engineering">Engineering & Construction</SelectItem>
-                          <SelectItem value="sales">Sales & Marketing</SelectItem>
-                          <SelectItem value="hospitality">Hospitality & Tourism</SelectItem>
-                          <SelectItem value="agriculture">Agriculture & Agribusiness</SelectItem>
-                          <SelectItem value="legal">Legal & Administration</SelectItem>
-                          <SelectItem value="logistics">Logistics & Transport</SelectItem>
+                        <SelectContent className="max-h-60">
+                          {JOB_CATEGORIES.map((category) => (
+                            <SelectItem key={category} value={category}>
+                              {category}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>

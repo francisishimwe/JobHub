@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { useJobs } from "@/lib/job-context"
 import { useCompanies } from "@/lib/company-context"
 import { useAuth } from "@/lib/auth-context"
+import { JOB_CATEGORIES } from "@/lib/constants/categories"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -476,20 +477,11 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent className="bg-white max-h-60">
-                  <SelectItem value="Academic">Academic</SelectItem>
-                  <SelectItem value="Accounting">Accounting</SelectItem>
-                  <SelectItem value="Administration">Administration</SelectItem>
-                  <SelectItem value="Agriculture">Agriculture</SelectItem>
-                  <SelectItem value="Banking">Banking</SelectItem>
-                  <SelectItem value="Business">Business</SelectItem>
-                  <SelectItem value="Computer and IT">Computer and IT</SelectItem>
-                  <SelectItem value="Engineering">Engineering</SelectItem>
-                  <SelectItem value="Finance">Finance</SelectItem>
-                  <SelectItem value="Human resource">Human resource</SelectItem>
-                  <SelectItem value="Management">Management</SelectItem>
-                  <SelectItem value="Marketing">Marketing</SelectItem>
-                  <SelectItem value="Medicine">Medicine</SelectItem>
-                  <SelectItem value="Other">Other</SelectItem>
+                  {JOB_CATEGORIES.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

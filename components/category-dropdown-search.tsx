@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { ChevronDown, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useJobs } from "@/lib/job-context"
+import { JOB_CATEGORIES } from "@/lib/constants/categories"
 
 export function CategoryDropdownSearch() {
   const { jobs, setFilters } = useJobs()
@@ -13,7 +14,7 @@ export function CategoryDropdownSearch() {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const categories = ["Tech & Software", "Finance & Accounting", "Healthcare", "Education & NGO", "Engineering & Construction", "Sales & Marketing", "Hospitality & Tourism", "Agriculture & Agribusiness", "Legal & Administration", "Logistics & Transport"]
+  const categories = ["All Categories", ...JOB_CATEGORIES]
 
   // Close dropdown when clicking outside
   useEffect(() => {
