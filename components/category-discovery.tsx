@@ -141,7 +141,7 @@ export function CategoryDiscovery() {
   }
 
   return (
-    <div className="bg-gray-50 border-b border-gray-200">
+    <div className="sticky top-0 z-40 bg-gray-50 border-b border-gray-200">
       <div className="container mx-auto px-4 py-2">
         <div className="flex items-center gap-2">
           <span className="text-xs font-medium text-gray-600">Category:</span>
