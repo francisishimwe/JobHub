@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useJobs } from "@/lib/job-context"
 import { JOB_CATEGORIES } from "@/lib/constants/categories"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface Category {
   id: string
@@ -107,18 +108,21 @@ const categories: Category[] = [
 
 export function CategoryDiscovery() {
   const { jobs, filteredJobs, setFilters } = useJobs()
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<string>("")
 
-  const handleCategoryClick = (category: Category) => {
-    if (selectedCategory === category.id) {
-      // Deselect if already selected
-      setSelectedCategory(null)
+  const handleCategoryChange = (categoryId: string) => {
+    setSelectedCategory(categoryId)
+    
+    if (!categoryId || categoryId === "all") {
+      // Clear filter
       setFilters({ search: '' })
     } else {
-      // Select new category and filter jobs
-      setSelectedCategory(category.id)
-      const searchQuery = category.keywords.join(" OR ")
-      setFilters({ search: searchQuery })
+      // Find category and apply filter
+      const category = categories.find(cat => cat.id === categoryId)
+      if (category) {
+        const searchQuery = category.keywords.join(" OR ")
+        setFilters({ search: searchQuery })
+      }
     }
   }
 
@@ -139,90 +143,53 @@ export function CategoryDiscovery() {
   return (
     <div className="bg-white border-b border-slate-200">
       <div className="container mx-auto px-6 py-4">
-        {/* Desktop: Centered wrapping layout */}
-        <div className="hidden lg:flex justify-center flex-wrap gap-3">
-          {categories.map((category) => {
-            const count = getCategoryCount(category)
-            const isSelected = selectedCategory === category.id
-            
-            return (
-              <button
-                key={category.id}
-                onClick={() => handleCategoryClick(category)}
-                className={`
-                  px-4 py-2 rounded-full border transition-all whitespace-nowrap
-                  ${isSelected 
-                    ? 'bg-[#10B981] text-white border-[#10B981]' 
-                    : 'bg-white text-slate-600 border-slate-200 hover:bg-[#10B981] hover:text-white hover:border-[#10B981]'
-                  }
-                `}
-              >
-                <span className="mr-2">{category.icon}</span>
-                {category.label}
-                {count > 0 && (
-                  <span className={`ml-2 text-xs font-semibold rounded-full px-2 py-0.5 ${
-                    isSelected 
-                      ? 'bg-white/20 text-white' 
-                      : 'bg-slate-100 text-slate-600'
-                  }`}>
-                    {count}
-                  </span>
-                )}
-              </button>
-            )
-          })}
-        </div>
-
-        {/* Mobile: Horizontal scrolling layout */}
-        <div className="lg:hidden overflow-x-auto scrollbar-hide">
-          <div className="flex gap-3 pb-2 min-w-max px-2">
-            {categories.map((category) => {
-              const count = getCategoryCount(category)
-              const isSelected = selectedCategory === category.id
-              
-              return (
-                <button
-                  key={category.id}
-                  onClick={() => handleCategoryClick(category)}
-                  className={`
-                    px-4 py-2 rounded-full border transition-all whitespace-nowrap flex-shrink-0 touch-manipulation
-                    ${isSelected 
-                      ? 'bg-[#10B981] text-white border-[#10B981]' 
-                      : 'bg-white text-slate-600 border-slate-200 hover:bg-[#10B981] hover:text-white hover:border-[#10B981]'
-                    }
-                  `}
-                >
-                  <span className="mr-2">{category.icon}</span>
-                  <span className="text-sm">{category.label}</span>
-                  {count > 0 && (
-                    <span className={`ml-2 text-xs font-semibold rounded-full px-2 py-0.5 ${
-                      isSelected 
-                        ? 'bg-white/20 text-white' 
-                        : 'bg-slate-100 text-slate-600'
-                    }`}>
-                      {count}
+        <div className="flex justify-center">
+          <div className="w-full max-w-md">
+            <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+              <SelectTrigger className="w-full h-11 text-base">
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent className="bg-white max-h-60">
+                <SelectItem value="all">
+                  <div className="flex items-center justify-between w-full">
+                    <span>All Categories</span>
+                    <span className="text-sm text-muted-foreground ml-2">
+                      {jobs?.length || 0}
                     </span>
-                  )}
+                  </div>
+                </SelectItem>
+                {categories.map((category) => {
+                  const count = getCategoryCount(category)
+                  return (
+                    <SelectItem key={category.id} value={category.id}>
+                      <div className="flex items-center justify-between w-full">
+                        <div className="flex items-center gap-2">
+                          <span>{category.icon}</span>
+                          <span>{category.label}</span>
+                        </div>
+                        <span className="text-sm text-muted-foreground ml-2">
+                          {count}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  )
+                })}
+              </SelectContent>
+            </Select>
+            
+            {/* Clear filter indicator */}
+            {selectedCategory && selectedCategory !== "all" && (
+              <div className="mt-3 text-center">
+                <button
+                  onClick={() => handleCategoryChange("all")}
+                  className="text-sm text-slate-500 hover:text-slate-700 transition-colors"
+                >
+                  Clear category filter
                 </button>
-              )
-            })}
+              </div>
+            )}
           </div>
         </div>
-
-        {/* Clear filter indicator */}
-        {selectedCategory && (
-          <div className="mt-3 text-center">
-            <button
-              onClick={() => {
-                setSelectedCategory(null)
-                setFilters({ search: '' })
-              }}
-              className="text-sm text-slate-500 hover:text-slate-700 transition-colors"
-            >
-              Clear category filter
-            </button>
-          </div>
-        )}
       </div>
     </div>
   )
