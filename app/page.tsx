@@ -22,6 +22,9 @@ export default function HomePage() {
   const { jobs, filteredJobs, isLoading, hasMore, loadMore, filters, setFilters } = useJobs()
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "deadline">("newest")
 
+  // Debug: Log job loading status
+  console.log("🏠 Home Page - Jobs:", jobs?.length || 0, "Filtered:", filteredJobs?.length || 0, "Loading:", isLoading)
+
   // Sort jobs based on columns that actually exist in your Supabase table
   const sortedJobs = [...filteredJobs].sort((a, b) => {
     switch (sortBy) {
