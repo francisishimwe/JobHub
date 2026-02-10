@@ -62,22 +62,22 @@ export function CategoryDropdownSearch() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="flex items-center bg-white rounded-full shadow-md border border-slate-200 overflow-visible">
+    <div className="max-w-6xl mx-auto px-4">
+      <div className="flex items-center bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden hover:shadow-xl transition-shadow duration-300">
         {/* Left Side - Category Dropdown */}
-        <div className="relative overflow-visible" ref={dropdownRef}>
+        <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="px-6 py-3 text-slate-600 flex items-center gap-2 border-r border-slate-200 hover:bg-slate-50 rounded-l-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#10B981] focus:ring-inset"
+            className="px-6 py-4 text-slate-700 flex items-center gap-3 border-r border-slate-200 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset font-medium"
           >
-            <span className="text-sm font-medium">{selectedCategory}</span>
-            <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+            <span className="text-sm">{selectedCategory}</span>
+            <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {isOpen && (
-            <ul className="absolute top-full left-0 mt-2 w-64 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 py-2">
+            <ul className="absolute top-full left-0 mt-2 w-72 bg-white border border-slate-200 rounded-xl shadow-2xl z-50 py-2 max-h-80 overflow-y-auto">
               {categories.map((cat, index) => (
-                <li key={index} className="px-4 py-3 hover:bg-[#10B981] hover:text-white cursor-pointer transition-colors" onClick={() => handleSelect(cat)}>
+                <li key={index} className="px-4 py-3 hover:bg-blue-600 hover:text-white cursor-pointer transition-all duration-200 text-sm" onClick={() => handleSelect(cat)}>
                   {cat}
                 </li>
               ))}
@@ -90,22 +90,21 @@ export function CategoryDropdownSearch() {
           <input
             ref={inputRef}
             type="text"
-            placeholder="Search opportunities..."
+            placeholder="Search for jobs, tenders, scholarships..."
             value={searchQuery}
             onChange={handleInputChange}
             onKeyPress={handleInputKeyPress}
-            className="w-full pl-4 pr-12 py-3 text-slate-900 placeholder-slate-500 outline-none bg-transparent"
+            className="w-full pl-5 pr-14 py-4 text-slate-900 placeholder-slate-400 outline-none bg-transparent text-sm"
           />
           <Button
             onClick={handleSearch}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#10B981] hover:bg-[#059669] text-white p-2 rounded-full transition-all hover:scale-105"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white p-3 rounded-xl transition-all duration-200 hover:scale-105 shadow-lg"
             size="sm"
           >
             <Search className="h-4 w-4" />
           </Button>
         </div>
       </div>
-
     </div>
   )
 }
