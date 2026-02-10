@@ -52,34 +52,9 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     const handleApply = async () => {
         console.log("CRITICAL DEBUG - Method is:", job.application_method, "Full Job Object:", job)
         
-        // Fix undefined method by defaulting to 'email'
-        const method = job.application_method?.toLowerCase() || 'email'
-        
-        if (method === 'email') {
-            // Check if job has primary_email configured
-            if (!job.primary_email) {
-                // Fallback to WhatsApp support
-                const whatsappUrl = `https://wa.me/250783074056?text=${encodeURIComponent(`Hi, I'm interested in applying for the ${job.title} position at ${company?.name || 'this company'}, but it seems the application email is not configured. Can you help me with the application process? Job ID: ${job.id}`)}`
-                window.open(whatsappUrl, "_blank", "noopener,noreferrer")
-                return
-            }
-            setIsApplyModalOpen(true)
-        } else if (method === 'link') {
-            if (job.application_link) {
-                // Track in Google Analytics only
-                if (typeof window !== 'undefined' && (window as any).gtag) {
-                    (window as any).gtag('event', 'apply', {
-                        event_category: 'engagement',
-                        event_label: job.title,
-                        job_id: job.id,
-                        company_name: company?.name
-                    })
-                }
-
-                // Open application link
-                window.open(job.application_link, "_blank", "noopener,noreferrer")
-            }
-        }
+        // NUCLEAR FIX: NEVER redirect to WhatsApp from Apply Now button
+        // Always open the InternalApplicationModal regardless of method or email configuration
+        setIsApplyModalOpen(true)
     }
 
     const handleShareWhatsApp = () => {
