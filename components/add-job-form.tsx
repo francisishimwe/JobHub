@@ -5,6 +5,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useJobs } from "@/lib/job-context"
 import { useCompanies } from "@/lib/company-context"
+import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -21,6 +22,7 @@ interface AddJobFormProps {
 export function AddJobForm({ onSuccess }: AddJobFormProps) {
   const { addJob } = useJobs()
   const { companies, addCompany } = useCompanies()
+  const { user } = useAuth()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
@@ -218,6 +220,8 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         category: formData.category || null,
         contact_name: formData.contact_name?.trim() || null,
         contact_phone: formData.contact_phone?.trim() || null,
+        // Pass user email for Admin identification
+        userEmail: user?.email || null,
       }
 
       console.log("Final job data for submission:", jobData)
@@ -249,8 +253,13 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       setSelectedFile(null)
       setCurrentStep(1)
 
-      // Success
-      if (onSuccess) onSuccess()
+      // Admin Direct-Post: Redirect to Home page instead of success page
+      if (user?.email === "admin@RwandaJobHub.com") {
+        router.push("/")
+      } else {
+        // Employer redirect to success page
+        router.push("/job-submission-success")
+      }
     } catch (error) {
       console.error("Error adding job:", error)
       const errorMessage = error instanceof Error ? error.message : "Failed to add job. Please try again."

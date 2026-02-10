@@ -92,6 +92,10 @@ export async function POST(request: NextRequest) {
     
     console.log('📝 Received job submission:', body)
 
+    // Check if this is an Admin user (bypass pending status)
+    const isAdmin = body.userEmail === "admin@RwandaJobHub.com"
+    console.log('👤 Admin check:', { userEmail: body.userEmail, isAdmin })
+
     // Determine tier from selected plan
     const selectedPlan = body.selectedPlan || 'basic'
     
@@ -147,27 +151,24 @@ export async function POST(request: NextRequest) {
     const config = tierConfig[selectedPlan] || tierConfig['basic']
     
     // Determine if this is an employer job (has employer info or plan info) or admin job
-    const isEmployerJob = body.planId || body.plan_id || body.employerName || selectedPlan !== 'basic'
+    const isEmployerJob = !isAdmin && (body.planId || body.plan_id || body.employerName || selectedPlan !== 'basic')
     const planId = isEmployerJob ? (body.planId || body.plan_id || 1) : 1
     
-    console.log('🏢 Job type check:', { isEmployerJob, planId, selectedPlan, config })
+    console.log('🏢 Job type check:', { isAdmin, isEmployerJob, planId, selectedPlan, config })
     
-    // Validate required fields for employer jobs
-    if (isEmployerJob) {
-      if (!body.title || !body.employerName || !body.opportunity_type) {
-        return NextResponse.json(
-          { error: 'Missing required fields: title, employerName, opportunity_type' },
-          { status: 400 }
-        )
-      }
-    } else {
-      // Admin job validation
-      if (!body.title || !body.company || !body.opportunity_type) {
-        return NextResponse.json(
-          { error: 'Missing required fields: title, company, opportunity_type' },
-          { status: 400 }
-        )
-      }
+    // Validate required fields
+    if (!body.title || !body.opportunity_type) {
+      return NextResponse.json(
+        { error: 'Missing required fields: title, opportunity_type' },
+        { status: 400 }
+      )
+    }
+
+    if (isEmployerJob && !body.employerName) {
+      return NextResponse.json(
+        { error: 'Missing required field: employerName' },
+        { status: 400 }
+      )
     }
 
     // Set agency verification for employer jobs based on plan
@@ -256,7 +257,8 @@ export async function POST(request: NextRequest) {
       companyId,
       employerName: body.employerName,
       opportunity_type: body.opportunity_type,
-      status: isEmployerJob ? 'pending' : 'published'
+      isAdmin,
+      status: isAdmin ? 'published' : (isEmployerJob ? 'pending' : 'published')
     })
 
     // Try to insert with all columns, fall back to basic columns if schema doesn't exist
@@ -302,8 +304,8 @@ export async function POST(request: NextRequest) {
           ${body.application_method || 'email'},
           ${body.primary_email || null},
           ${body.cc_emails || null},
-          ${isEmployerJob ? 'pending' : 'published'},
-          ${isEmployerJob ? false : true},
+          ${isAdmin ? 'published' : (isEmployerJob ? 'pending' : 'published')},
+          ${isAdmin ? true : (isEmployerJob ? false : true)},
           0,
           0,
           ${now}
@@ -353,8 +355,8 @@ export async function POST(request: NextRequest) {
           ${body.application_method || 'email'},
           ${body.primary_email || null},
           ${body.cc_emails || null},
-          ${isEmployerJob ? 'pending' : 'published'},
-          ${isEmployerJob ? false : true},
+          ${isAdmin ? 'published' : (isEmployerJob ? 'pending' : 'published')},
+          ${isAdmin ? true : (isEmployerJob ? false : true)},
           0,
           0,
           ${now}
