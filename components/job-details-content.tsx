@@ -52,7 +52,10 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     const handleApply = async () => {
         console.log("CRITICAL DEBUG - Method is:", job.application_method, "Full Job Object:", job)
         
-        if (!job.application_method || job.application_method === 'email') {
+        // Fix undefined method by defaulting to 'email'
+        const method = job.application_method?.toLowerCase() || 'email'
+        
+        if (method === 'email') {
             // Check if job has primary_email configured
             if (!job.primary_email) {
                 // Fallback to WhatsApp support
@@ -61,7 +64,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 return
             }
             setIsApplyModalOpen(true)
-        } else if (job.application_method?.toLowerCase() === 'link') {
+        } else if (method === 'link') {
             if (job.application_link) {
                 // Track in Google Analytics only
                 if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -76,19 +79,6 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 // Open application link
                 window.open(job.application_link, "_blank", "noopener,noreferrer")
             }
-        } else if (job.application_link) {
-            // Track in Google Analytics only
-            if (typeof window !== 'undefined' && (window as any).gtag) {
-                (window as any).gtag('event', 'apply', {
-                    event_category: 'engagement',
-                    event_label: job.title,
-                    job_id: job.id,
-                    company_name: company?.name
-                })
-            }
-
-            // Open application link
-            window.open(job.application_link, "_blank", "noopener,noreferrer")
         }
     }
 
@@ -103,7 +93,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
             shareText = `🎓 Scholarship Opportunity!\n\n${company?.name || 'Company'} is offering: ${job.title}\nDeadline: ${formattedDeadline}\n\nApply here: ${window.location.href}\n\n📢 Join our WhatsApp group:\nhttps://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI\n\n📲 Follow our WhatsApp channel:\nhttps://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
         }
 
-        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`
+        // Share to WhatsApp number 0783074056
+        const whatsappUrl = `https://wa.me/250783074056?text=${encodeURIComponent(shareText)}`
         window.open(whatsappUrl, "_blank", "noopener,noreferrer")
     }
 
@@ -325,23 +316,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             job.opportunityType !== "Announcement" && (
                                 <Button
                                     type="button"
-                                    onClick={() => {
-                                        if (!job.application_method) {
-                                            console.error("Missing Method Data!", job);
-                                        }
-                                        if (job.application_method?.toLowerCase() === 'email') {
-                                            // Check if job has primary_email configured
-                                            if (!job.primary_email) {
-                                                // Fallback to WhatsApp support
-                                                const whatsappUrl = `https://wa.me/250783074056?text=${encodeURIComponent(`Hi, I'm interested in applying for the ${job.title} position at ${company?.name || 'this company'}, but it seems the application email is not configured. Can you help me with the application process? Job ID: ${job.id}`)}`
-                                                window.open(whatsappUrl, "_blank", "noopener,noreferrer")
-                                                return
-                                            }
-                                            setIsApplyModalOpen(true)
-                                        } else {
-                                            handleApply()
-                                        }
-                                    }}
+                                    onClick={handleApply}
                                     size="lg"
                                     className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
                                     disabled={!job.id}
