@@ -144,16 +144,16 @@ export function CategoryDiscovery() {
     <div className="bg-white border-b border-slate-200">
       <div className="container mx-auto px-6 py-4">
         <div className="flex justify-center">
-          <div className="w-full max-w-md">
+          <div className="w-64">
             <Select value={selectedCategory} onValueChange={handleCategoryChange}>
-              <SelectTrigger className="w-full h-11 text-base">
-                <SelectValue placeholder="Select a category" />
+              <SelectTrigger className="w-full h-10 text-sm">
+                <SelectValue placeholder="Select category" />
               </SelectTrigger>
-              <SelectContent className="bg-white max-h-60">
+              <SelectContent className="bg-white max-h-60 w-56">
                 <SelectItem value="all">
                   <div className="flex items-center justify-between w-full">
-                    <span>All Categories</span>
-                    <span className="text-sm text-muted-foreground ml-2">
+                    <span className="text-sm">All Categories</span>
+                    <span className="text-xs text-muted-foreground ml-2">
                       {jobs?.length || 0}
                     </span>
                   </div>
@@ -164,10 +164,10 @@ export function CategoryDiscovery() {
                     <SelectItem key={category.id} value={category.id}>
                       <div className="flex items-center justify-between w-full">
                         <div className="flex items-center gap-2">
-                          <span>{category.icon}</span>
-                          <span>{category.label}</span>
+                          <span className="text-sm">{category.icon}</span>
+                          <span className="text-sm">{category.label}</span>
                         </div>
-                        <span className="text-sm text-muted-foreground ml-2">
+                        <span className="text-xs text-muted-foreground ml-2">
                           {count}
                         </span>
                       </div>
@@ -179,12 +179,12 @@ export function CategoryDiscovery() {
             
             {/* Clear filter indicator */}
             {selectedCategory && selectedCategory !== "all" && (
-              <div className="mt-3 text-center">
+              <div className="mt-2 text-center">
                 <button
                   onClick={() => handleCategoryChange("all")}
-                  className="text-sm text-slate-500 hover:text-slate-700 transition-colors"
+                  className="text-xs text-slate-500 hover:text-slate-700 transition-colors"
                 >
-                  Clear category filter
+                  Clear filter
                 </button>
               </div>
             )}
