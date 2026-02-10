@@ -141,54 +141,48 @@ export function CategoryDiscovery() {
   }
 
   return (
-    <div className="bg-white border-b border-slate-200">
-      <div className="container mx-auto px-6 py-3">
-        <div className="flex justify-start">
-          <div className="w-48">
-            <Select value={selectedCategory} onValueChange={handleCategoryChange}>
-              <SelectTrigger className="w-full h-9 text-xs">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent className="bg-white max-h-60 w-44">
-                <SelectItem value="all">
-                  <div className="flex items-center justify-between w-full">
-                    <span className="text-xs">All</span>
-                    <span className="text-xs text-muted-foreground">
-                      {jobs?.length || 0}
-                    </span>
-                  </div>
-                </SelectItem>
-                {categories.map((category) => {
-                  const count = getCategoryCount(category)
-                  return (
-                    <SelectItem key={category.id} value={category.id}>
-                      <div className="flex items-center justify-between w-full">
-                        <div className="flex items-center gap-1">
-                          <span className="text-xs">{category.icon}</span>
-                          <span className="text-xs">{category.label}</span>
-                        </div>
-                        <span className="text-xs text-muted-foreground">
-                          {count}
-                        </span>
+    <div className="bg-gray-50 border-b border-gray-200">
+      <div className="container mx-auto px-4 py-2">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-medium text-gray-600">Category:</span>
+          <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+            <SelectTrigger className="w-40 h-8 text-xs border-gray-300">
+              <SelectValue placeholder="All Jobs" />
+            </SelectTrigger>
+            <SelectContent className="bg-white max-h-60 w-40">
+              <SelectItem value="all">
+                <div className="flex items-center justify-between w-full">
+                  <span className="text-xs">All Jobs</span>
+                </div>
+              </SelectItem>
+              {categories.map((category) => {
+                const count = getCategoryCount(category)
+                return (
+                  <SelectItem key={category.id} value={category.id}>
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center gap-1">
+                        <span className="text-xs">{category.icon}</span>
+                        <span className="text-xs">{category.label}</span>
                       </div>
-                    </SelectItem>
-                  )
-                })}
-              </SelectContent>
-            </Select>
-            
-            {/* Clear filter indicator */}
-            {selectedCategory && selectedCategory !== "all" && (
-              <div className="mt-1">
-                <button
-                  onClick={() => handleCategoryChange("all")}
-                  className="text-xs text-slate-500 hover:text-slate-700 transition-colors"
-                >
-                  Clear
-                </button>
-              </div>
-            )}
-          </div>
+                      <span className="text-xs text-gray-500">
+                        {count}
+                      </span>
+                    </div>
+                  </SelectItem>
+                )
+              })}
+            </SelectContent>
+          </Select>
+          
+          {/* Clear filter indicator */}
+          {selectedCategory && selectedCategory !== "all" && (
+            <button
+              onClick={() => handleCategoryChange("all")}
+              className="text-xs text-blue-600 hover:text-blue-800 transition-colors"
+            >
+              Clear
+            </button>
+          )}
         </div>
       </div>
     </div>
