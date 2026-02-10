@@ -126,230 +126,85 @@ export default function HomePage() {
     <div className="min-h-screen bg-slate-50">
       <Header />
 
-      {/* Modern Category Bar - Desktop Only */}
-      <div className="bg-slate-800 border-b border-slate-700/30 mb-4">
-        <div className="max-w-7xl mx-auto py-3 px-8">
-          {/* Desktop: Single Horizontal Line - All 7 Categories */}
-          <div className="hidden lg:flex items-center justify-center gap-x-10">
-            <Button 
-              variant="ghost" 
-              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
-              onClick={() => handleOpportunityClick('featured')}
-            >
-              Featured
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.featured}</span>
-            </Button>
-            
-            <Button 
-              variant="ghost" 
-              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
-              onClick={() => handleOpportunityClick('job')}
-            >
-              Jobs
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.jobs}</span>
-            </Button>
-            
-            <Button 
-              variant="ghost" 
-              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
-              onClick={() => handleOpportunityClick('tender')}
-            >
-              Tenders
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.tenders}</span>
-            </Button>
-            
-            <Button 
-              variant="ghost" 
-              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
-              onClick={() => handleOpportunityClick('blog')}
-            >
-              Blogs
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.blogs}</span>
-            </Button>
-            
-            <Button 
-              variant="ghost" 
-              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
-              onClick={() => handleOpportunityClick('internship')}
-            >
-              Internships
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.internships}</span>
-            </Button>
-            
-            <Button 
-              variant="ghost" 
-              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
-              onClick={() => handleOpportunityClick('scholarship')}
-            >
-              Scholarships
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.scholarships}</span>
-            </Button>
-            
-            <Button 
-              variant="ghost" 
-              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
-              onClick={() => handleOpportunityClick('education')}
-            >
-              Education
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.education}</span>
-            </Button>
-          </div>
-
-          {/* Mobile: Grid Layout */}
-          <div className="lg:hidden">
-            {/* First Row - 4 items */}
-            <div className="grid grid-cols-4 items-center justify-items-center gap-x-2 mb-2 text-[10px]">
-              <Button 
-                variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                onClick={() => handleOpportunityClick('featured')}
-              >
-                Featured
-                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.featured}</span>
-              </Button>
-              
-              <Button 
-                variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                onClick={() => handleOpportunityClick('job')}
-              >
-                Jobs
-                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.jobs}</span>
-              </Button>
-              
-              <Button 
-                variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                onClick={() => handleOpportunityClick('tender')}
-              >
-                Tenders
-                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.tenders}</span>
-              </Button>
-              
-              <Button 
-                variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                onClick={() => handleOpportunityClick('blog')}
-              >
-                Blogs
-                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.blogs}</span>
-              </Button>
-            </div>
-            
-            {/* Second Row - 3 items, centered */}
-            <div className="flex justify-center gap-2 text-[10px]">
-              <div className="flex justify-center gap-2 w-full max-w-md mx-auto">
-                <Button 
-                  variant="ghost" 
-                  className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                  onClick={() => handleOpportunityClick('scholarship')}
-                >
-                  Scholarships
-                  <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.scholarships}</span>
-                </Button>
-                
-                <Button 
-                  variant="ghost" 
-                  className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                  onClick={() => handleOpportunityClick('education')}
-                >
-                  Education
-                  <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.education}</span>
-                </Button>
-                
-                <Button 
-                  variant="ghost" 
-                  className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                  onClick={() => handleOpportunityClick('internship')}
-                >
-                  Internships
-                  <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.internships}</span>
-                </Button>
-              </div>
-            </div>
-          </div>
+      {/* The Search Zone - Category Dropdown Search - STICKY */}
+      <div className="sticky top-0 z-30 bg-slate-50 border-b border-slate-200">
+        <div className="container mx-auto px-6">
+          <CategoryDropdownSearch />
         </div>
       </div>
 
-    {/* The Search Zone - Category Dropdown Search - STICKY */}
-    <div className="sticky top-0 z-30 bg-slate-50 border-b border-slate-200">
-      <div className="container mx-auto px-6">
-        <CategoryDropdownSearch />
-      </div>
-    </div>
+      {/* Category Discovery - STICKY */}
+      <CategoryDiscovery />
 
-    {/* Category Discovery - STICKY */}
-    <CategoryDiscovery />
-
-    <div className="container mx-auto px-2 py-1">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-7xl mx-auto">
-        <aside className="hidden lg:block lg:col-span-2">
-          <div className="sticky top-4">
-             <AdContainer />
-          </div>
-        </aside>
-
-        <main className="lg:col-span-8">
-          <div className="w-full lg:max-w-6xl mx-auto">
-            <div className="mb-1 flex items-center justify-between">
-              <p className="text-sm text-muted-foreground">Showing results ({filteredJobs.length})</p>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-2 bg-transparent">
-                    Sort: {getSortLabel()}
-                    <ChevronDown className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setSortBy("newest")}>Newest First</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setSortBy("oldest")}>Oldest First</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setSortBy("deadline")}>Deadline (Soonest)</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+      <div className="container mx-auto px-2 py-1">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-7xl mx-auto">
+          <aside className="hidden lg:block lg:col-span-2">
+            <div className="sticky top-4">
+               <AdContainer />
             </div>
+          </aside>
 
-            <div className="space-y-4">
-              {isLoading && filteredJobs.length === 0 ? (
-                <div className="rounded-lg border bg-card p-12 text-center">
-                  <p className="text-muted-foreground">Loading opportunities...</p>
-                </div>
-              ) : sortedJobs.length > 0 ? (
-                <>
-                  {/* Desktop: Single Wide Column */}
-                  <div className="hidden lg:grid lg:grid-cols-1 gap-4">
-                    {sortedJobs.map((job) => (
-                      <JobCard key={job.id} job={job} />
-                    ))}
-                  </div>
+          <main className="lg:col-span-8">
+            <div className="w-full lg:max-w-6xl mx-auto">
+              <div className="mb-1 flex items-center justify-between">
+                <p className="text-sm text-muted-foreground">Showing results ({filteredJobs.length})</p>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="gap-2 bg-transparent">
+                      Sort: {getSortLabel()}
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => setSortBy("newest")}>Newest First</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setSortBy("oldest")}>Oldest First</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setSortBy("deadline")}>Deadline (Soonest)</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
 
-                  {/* Mobile: Single Column Full Width */}
-                  <div className="lg:hidden space-y-4">
-                    {sortedJobs.map((job) => (
-                      <JobCard key={job.id} job={job} />
-                    ))}
+              <div className="space-y-4">
+                {isLoading && filteredJobs.length === 0 ? (
+                  <div className="rounded-lg border bg-card p-12 text-center">
+                    <p className="text-muted-foreground">Loading opportunities...</p>
                   </div>
-                </>
-              ) : (
-                <div className="rounded-lg border bg-card p-12 text-center">
-                  <p className="text-muted-foreground">No jobs found matching your criteria.</p>
+                ) : sortedJobs.length > 0 ? (
+                  <>
+                    {/* Desktop: Single Wide Column */}
+                    <div className="hidden lg:grid lg:grid-cols-1 gap-4">
+                      {sortedJobs.map((job) => (
+                        <JobCard key={job.id} job={job} />
+                      ))}
+                    </div>
+
+                    {/* Mobile: Single Column Full Width */}
+                    <div className="lg:hidden space-y-4">
+                      {sortedJobs.map((job) => (
+                        <JobCard key={job.id} job={job} />
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div className="rounded-lg border bg-card p-12 text-center">
+                    <p className="text-muted-foreground">No jobs found matching your criteria.</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Load More - Adaptive */}
+              {hasMore && (
+                <div className="flex justify-center mt-8 pb-10">
+                  <Button 
+                    onClick={loadMore} 
+                    disabled={isLoading}
+                    className="bg-[#003566] hover:bg-[#002850] text-white px-10 py-3 rounded-lg font-bold shadow-md transition-all"
+                  >
+                    {isLoading ? "Loading..." : "Load More Opportunities"}
+                  </Button>
                 </div>
               )}
             </div>
-
-            {/* Load More - Adaptive */}
-            {hasMore && (
-              <div className="flex justify-center mt-8 pb-10">
-                <Button 
-                  onClick={loadMore} 
-                  disabled={isLoading}
-                  className="bg-[#003566] hover:bg-[#002850] text-white px-10 py-3 rounded-lg font-bold shadow-md transition-all"
-                >
-                  {isLoading ? "Loading..." : "Load More Opportunities"}
-                </Button>
-              </div>
-            )}
-          </div>
-        </main>
+          </main>
 
           <aside className="hidden lg:block lg:col-span-2">
             <div className="sticky top-4">
@@ -360,7 +215,7 @@ export default function HomePage() {
         </div>
       </div>
 
-    <Footer />
+      <Footer />
     </div>
   )
 }
