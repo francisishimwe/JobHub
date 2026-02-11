@@ -160,7 +160,7 @@ export default function PostJobFormPage() {
   const validateStep = (step: number): boolean => {
     switch (step) {
       case 1:
-        return !!(formData.employerName && formData.contactName && formData.contactEmail && formData.contactPhone)
+        return !!(formData.employerName && formData.contactName && formData.contactEmail && formData.contactPhone && formData.companyLogo)
       case 2:
         return !!(formData.jobTitle && formData.offerType && formData.contractType && formData.category && formData.description)
       case 3:

@@ -74,6 +74,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
 
   // Initial Load
   useEffect(() => {
+    console.log("🚀 JobProvider: Initial load starting...")
     fetchJobs(0, true)
   }, [])
 
