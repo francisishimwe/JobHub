@@ -96,6 +96,8 @@ export function InternalApplicationModal({
         field_of_study: formData.field_of_study.trim()
       }))
       
+      console.log("📤 Submitting application to /api/apply-internal...")
+      
       // Add files if they exist
       if (coverLetter) {
         submissionData.append('coverLetter', coverLetter)
@@ -110,11 +112,16 @@ export function InternalApplicationModal({
         body: submissionData,
       })
 
-      const data = await response.json()
-
+      console.log("📥 Response status:", response.status, response.statusText)
+      
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to submit application')
+        const errorText = await response.text()
+        console.log("❌ Error response:", errorText)
+        throw new Error(`Application failed: ${response.status} ${response.statusText}`)
       }
+
+      const data = await response.json()
+      console.log("✅ Application submitted successfully:", data)
 
       setIsSubmitted(true)
       setTimeout(() => {
