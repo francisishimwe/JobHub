@@ -38,11 +38,12 @@ export function JobProvider({ children }: { children: ReactNode }) {
   const fetchJobs = async (pageNumber: number, isNewSearch: boolean = false) => {
     setIsLoading(true)
     try {
+      console.log("🔄 Starting job fetch...")
       const response = await fetch(`/api/jobs?page=${pageNumber}&limit=${JOBS_PER_PAGE}`)
       if (!response.ok) throw new Error('Failed to fetch jobs')
 
       const data = await response.json()
-      console.log(`✓ API Response: ${data.jobs?.length} jobs received (page ${pageNumber})`)
+      console.log(`✓ API Response: ${data.jobs?.length} jobs received (page ${pageNumber})`, data)
 
       if (data.jobs && Array.isArray(data.jobs)) {
         // Use the mapping function to convert snake_case to camelCase
