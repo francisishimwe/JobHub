@@ -100,6 +100,8 @@ export default function PostJobFormPage() {
     const file = e.target.files?.[0]
     if (!file) return
 
+    console.log("📤 Starting logo upload:", file.name, file.size)
+
     // Check if file is an image
     if (!file.type.startsWith('image/')) {
       alert("Please upload an image file (PNG, JPG)")
@@ -119,6 +121,7 @@ export default function PostJobFormPage() {
     reader.onloadend = () => {
       const result = reader.result as string
       setCompanyLogoPreview(result)
+      console.log("🖼️ Logo preview set")
     }
     reader.readAsDataURL(file)
 
@@ -127,6 +130,7 @@ export default function PostJobFormPage() {
       const formData = new FormData()
       formData.append('file', file)
 
+      console.log("🌐 Uploading to /api/upload/logo...")
       const response = await fetch('/api/upload/logo', {
         method: 'POST',
         body: formData,
@@ -137,11 +141,13 @@ export default function PostJobFormPage() {
       }
 
       const data = await response.json()
+      console.log("✅ Logo uploaded successfully:", data.url)
       setFormData(prev => ({ ...prev, companyLogo: data.url }))
     } catch (error) {
-      console.error('Error uploading logo:', error)
+      console.error('❌ Error uploading logo:', error)
       alert('Failed to upload logo. Please try again.')
       // Fallback to base64 for preview
+      console.log("🔄 Using base64 fallback")
       setFormData(prev => ({ ...prev, companyLogo: reader.result as string }))
     }
   }
@@ -158,6 +164,15 @@ export default function PostJobFormPage() {
   }
 
   const validateStep = (step: number): boolean => {
+    console.log(`🔍 Validating step ${step}:`, {
+      employerName: formData.employerName,
+      contactName: formData.contactName,
+      contactEmail: formData.contactEmail,
+      contactPhone: formData.contactPhone,
+      companyLogo: formData.companyLogo ? "✅ Set" : "❌ Empty",
+      companyLogoPreview: companyLogoPreview ? "✅ Set" : "❌ Empty"
+    })
+    
     switch (step) {
       case 1:
         return !!(formData.employerName && formData.contactName && formData.contactEmail && formData.contactPhone && formData.companyLogo)
