@@ -14,7 +14,15 @@ export async function POST(request: NextRequest) {
     const jobTitle = formData.get('jobTitle') as string
     const applicantJson = formData.get('applicant') as string
     
+    console.log("🔍 Apply Internal API - Received data:", {
+      jobId,
+      jobTitle,
+      applicantJson: applicantJson ? "✅ Present" : "❌ Missing"
+    })
+    
     const applicant = applicantJson ? JSON.parse(applicantJson) : null
+    
+    console.log("🔍 Apply Internal API - Parsed applicant:", applicant)
     
     // Get uploaded files
     const coverLetter = formData.get('coverLetter') as File | null
@@ -30,14 +38,29 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate required fields
+    console.log("🔍 Validating required fields:", {
+      jobId: !!jobId,
+      jobTitle: !!jobTitle,
+      applicant: !!applicant
+    })
+    
     if (!jobId || !jobTitle || !applicant) {
+      console.log("❌ Missing required fields:", { jobId, jobTitle, applicant })
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
       )
     }
 
+    console.log("🔍 Validating applicant fields:", {
+      full_name: !!applicant?.full_name,
+      email: !!applicant?.email,
+      phone: !!applicant?.phone,
+      field_of_study: !!applicant?.field_of_study
+    })
+
     if (!applicant.full_name || !applicant.email || !applicant.phone || !applicant.field_of_study) {
+      console.log("❌ Missing applicant information:", applicant)
       return NextResponse.json(
         { error: 'Missing applicant information' },
         { status: 400 }
