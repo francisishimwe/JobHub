@@ -216,12 +216,19 @@ export default function PostJobFormPage() {
         description: formData.description,
         location: "Kigali, Rwanda", // Default or could be added to form
         
+        // Company information
+        company_id: null, // Employer job - no existing company
+        
         // Employer specific fields
         employerName: formData.employerName,
         contactName: formData.contactName,
         contactEmail: formData.contactEmail,
         contactPhone: `${formData.countryCode} ${formData.contactPhone}`,
         companyLogo: formData.companyLogo,
+        
+        // Email fields for applications
+        primary_email: formData.contactEmail, // Map contact email to primary email
+        cc_emails: "", // No CC emails for employer submissions
         
         // Application & logistics
         applicationMethod: formData.applicationMethod,
