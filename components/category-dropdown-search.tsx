@@ -14,6 +14,9 @@ export function CategoryDropdownSearch() {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
+  // Test: Log component render
+  console.log("🔍 CategoryDropdownSearch component rendered!")
+
   const categories = [
   "All Categories",
   "Academic",
@@ -63,6 +66,9 @@ export function CategoryDropdownSearch() {
   "Telecommunications",
   "Other"
 ]
+
+// Debug: Log categories
+console.log("📋 Categories in dropdown:", categories.length, categories)
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -224,21 +230,11 @@ export function CategoryDropdownSearch() {
 
           {isOpen && (
             <ul className="absolute top-full left-0 mt-2 w-80 bg-white border border-slate-200 rounded-xl shadow-2xl z-[9999] py-2 max-h-80 overflow-y-auto">
-              {/* Test: Always show at least one item */}
-              <li className="px-4 py-3 hover:bg-blue-600 hover:text-white cursor-pointer transition-all duration-200 text-sm border-b border-slate-100">
-                Test Category 1
-              </li>
-              <li className="px-4 py-3 hover:bg-blue-600 hover:text-white cursor-pointer transition-all duration-200 text-sm border-b border-slate-100">
-                Test Category 2
-              </li>
-              {categories.length > 0 && categories.map((cat, index) => (
+              {categories.map((cat, index) => (
                 <li key={index} className="px-4 py-3 hover:bg-blue-600 hover:text-white cursor-pointer transition-all duration-200 text-sm border-b border-slate-100 last:border-b-0" onClick={() => handleSelect(cat)}>
                   {cat}
                 </li>
               ))}
-              {categories.length === 0 && (
-                <li className="px-4 py-3 text-red-500">Categories: {categories.length}</li>
-              )}
             </ul>
           )}
         </div>
