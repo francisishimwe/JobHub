@@ -43,7 +43,6 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     category: "",
     description: "",
     // Step 3: Application & Logistics
-    application_method: "email",
     application_link: "",
     deadline: "",
     experience_level: "",
@@ -133,18 +132,6 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
           alert("Please enter contact name")
           return false
         }
-        // Contact email is only required if application method is email
-        if (formData.application_method === "email" && !formData.primary_email.trim()) {
-          alert("Contact email is required when using Email Application method")
-          return false
-        }
-        if (formData.primary_email.trim()) {
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-          if (!emailRegex.test(formData.primary_email.trim())) {
-            alert("Please enter a valid contact email")
-            return false
-          }
-        }
         if (!formData.contact_phone.trim()) {
           alert("Please enter contact phone")
           return false
@@ -161,19 +148,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         }
         return true
       case 3:
-        if (!formData.application_method) {
-          alert("Please select application method")
-          return false
-        }
-        if (formData.application_method === 'link' && !formData.application_link.trim()) {
-          alert("Please enter application link")
-          return false
-        }
-        // Final check: if email method selected, ensure contact email is provided
-        if (formData.application_method === "email" && !formData.primary_email.trim()) {
-          alert("Contact email is required for Email Application method. Please go back to Step 1 and add it.")
-          return false
-        }
+        // No validation needed - application link is optional
         return true
       default:
         return true
@@ -225,11 +200,11 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         job_type: null, // Not used in new structure
         opportunity_type: formData.offer_type,
         deadline: formData.deadline || null,
-        application_link: formData.application_method === "link" ? formData.application_link?.trim() || null : null,
+        application_link: formData.application_link?.trim() || null,
         attachment_url: formData.attachment_url?.trim() || null,
         featured: false,
         plan_id: formData.plan_id,
-        application_method: formData.application_method,
+        application_method: "link", // Always use link method for admin
         primary_email: formData.primary_email?.trim() || null,
         cc_emails: formData.cc_emails?.trim() || null,
         experience_level: formData.experience_level || null,
@@ -237,6 +212,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         category: formData.category || null,
         contact_name: formData.contact_name?.trim() || null,
         contact_phone: formData.contact_phone?.trim() || null,
+        status: 'active', // Set default status as active
         // Pass user email for Admin identification
         userEmail: user?.email || null,
       }
@@ -256,7 +232,6 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         offer_type: "Job",
         category: "",
         description: "",
-        application_method: "email",
         application_link: "",
         deadline: "",
         experience_level: "",
@@ -503,48 +478,16 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
             <h2 className="text-xl font-semibold text-gray-900">Application & Logistics</h2>
             
             <div className="space-y-2">
-              <Label htmlFor="application_method">Application Method *</Label>
-              <Select
-                value={formData.application_method}
-                onValueChange={(value: string) => setFormData({ ...formData, application_method: value })}
-              >
-                <SelectTrigger className="h-11 text-base">
-                  <SelectValue placeholder="Select application method" />
-                </SelectTrigger>
-                <SelectContent className="bg-white">
-                  <SelectItem value="email">Email Application</SelectItem>
-                  <SelectItem value="link">External Link</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label htmlFor="application_link">Application Link (Optional)</Label>
+              <Input
+                id="application_link"
+                type="url"
+                value={formData.application_link}
+                onChange={(e) => setFormData({ ...formData, application_link: e.target.value })}
+                placeholder="https://example.com/apply"
+                className="h-11 text-base"
+              />
             </div>
-
-            {formData.application_method === "email" && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-sm text-blue-700">
-                  <strong>Note:</strong> Applications will be sent to: <span className="font-mono">{formData.primary_email || "No email provided"}</span>
-                </p>
-                {!formData.primary_email && (
-                  <p className="text-sm text-red-600 mt-2">
-                    ⚠️ Contact email is required in Step 1 for Email Application method. Please go back and add it.
-                  </p>
-                )}
-              </div>
-            )}
-
-            {formData.application_method === "link" && (
-              <div className="space-y-2">
-                <Label htmlFor="application_link">Application Link *</Label>
-                <Input
-                  id="application_link"
-                  type="url"
-                  required
-                  value={formData.application_link}
-                  onChange={(e) => setFormData({ ...formData, application_link: e.target.value })}
-                  placeholder="https://example.com/apply"
-                  className="h-11 text-base"
-                />
-              </div>
-            )}
 
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">

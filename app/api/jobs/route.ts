@@ -8,10 +8,10 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '15')
     const offset = page * limit
 
-    // "Active" = published + approved + not expired (deadline in future or null)
-    // (Your schema allows status: published|draft|closed; we exclude expired by deadline)
+    // "Active" = published + approved + active + not expired (deadline in future or null)
+    // (Your schema allows status: published|draft|closed|active; we exclude expired by deadline)
     const activeWhere = sql`
-      status = 'published'
+      (status = 'published' OR status = 'active')
       AND approved = true
       AND (deadline IS NULL OR deadline >= CURRENT_DATE)
     `

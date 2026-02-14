@@ -282,13 +282,15 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
                     {/* Row 1: Apply Now and Share on WhatsApp Buttons */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                        {/* Apply Now Button - Smart Logic */}
+                        {/* Apply Now Button - Only show if external_link exists */}
                         {!isExpired &&
                             job.opportunityType !== "Tender" &&
                             job.opportunityType !== "Blog" &&
                             job.opportunityType !== "Scholarship" &&
                             job.opportunityType !== "Education" &&
-                            job.opportunityType !== "Announcement" && (
+                            job.opportunityType !== "Announcement" &&
+                            job.external_link &&
+                            job.external_link.trim() !== "" && (
                                 <Button
                                     type="button"
                                     onClick={handleApply}
