@@ -71,23 +71,26 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     reader.readAsDataURL(file)
 
     // Upload to server
-    const formData = new FormData()
-    formData.append('logo', file)
+    const uploadFormData = new FormData()
+    uploadFormData.append('file', file)
     
     try {
       const response = await fetch('/api/upload/logo', {
         method: 'POST',
-        body: formData
+        body: uploadFormData
       })
       
       if (response.ok) {
         const data = await response.json()
+        console.log("Logo upload successful:", data)
         setFormData(prev => ({ ...prev, logo_url: data.url }))
       } else {
-        console.error('Logo upload failed')
+        console.error('Logo upload failed:', response.status, response.statusText)
+        alert('Logo upload failed. Please try again.')
       }
     } catch (error) {
       console.error('Upload error:', error)
+      alert('Logo upload failed. Please try again.')
     }
   }
 
@@ -111,13 +114,13 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     setSelectedDocument(file)
 
     // Upload to server
-    const formData = new FormData()
-    formData.append('document', file)
+    const uploadFormData = new FormData()
+    uploadFormData.append('file', file)
     
     try {
       const response = await fetch('/api/upload/document', {
         method: 'POST',
-        body: formData
+        body: uploadFormData
       })
       
       if (response.ok) {
@@ -136,6 +139,13 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     setLoading(true)
 
     // Validation
+    console.log("Form validation check:", {
+      job_title: formData.job_title,
+      company_name: formData.company_name,
+      logo_url: formData.logo_url,
+      logo_url_length: formData.logo_url?.length
+    })
+
     if (!formData.job_title.trim()) {
       alert("Please enter job title")
       setLoading(false)
@@ -148,7 +158,8 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       return
     }
 
-    if (!formData.logo_url) {
+    if (!formData.logo_url || formData.logo_url?.trim() === "") {
+      console.error("Logo validation failed:", formData.logo_url)
       alert("Company logo is required")
       setLoading(false)
       return
