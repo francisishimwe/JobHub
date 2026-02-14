@@ -1,6 +1,12 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Check if API key is available
+const resendApiKey = process.env.RESEND_API_KEY
+if (!resendApiKey) {
+  console.error('❌ RESEND_API_KEY is missing. Please add it to your .env.local file')
+}
+
+const resend = new Resend(resendApiKey || 'dummy-key')
 
 export interface ApplicationEmailData {
   employerEmail: string
@@ -13,6 +19,15 @@ export interface ApplicationEmailData {
 
 export async function sendApplicationEmail(data: ApplicationEmailData) {
   try {
+    // Check if API key is available
+    if (!resendApiKey) {
+      console.error('❌ Cannot send email: RESEND_API_KEY is missing')
+      return { 
+        success: false, 
+        error: 'Email service not configured. Please contact support.' 
+      }
+    }
+
     const { employerEmail, candidateName, jobTitle, fieldOfStudy, coverLetterUrl, additionalDocsUrls } = data
 
     const emailBody = `
