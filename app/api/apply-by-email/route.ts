@@ -47,8 +47,48 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Save applicant data to cv_profiles table for job alerts
-    let cvProfileId = null
+    // Fetch application emails securely from database
+    let primaryEmail = ""
+    let ccEmails: string[] = []
+    
+    try {
+      const { data: jobData, error: jobError } = await supabase
+        .from('jobs')
+        .select('primary_email, cc_emails')
+        .eq('id', jobId)
+        .single()
+
+      if (jobError) {
+        console.error('Error fetching job emails:', jobError)
+        return NextResponse.json(
+          { error: 'Failed to fetch job application details' },
+          { status: 500 }
+        )
+      }
+
+      if (!jobData) {
+        return NextResponse.json(
+          { error: 'Job not found' },
+          { status: 404 }
+        )
+      }
+
+      // Use the database email fields
+      primaryEmail = jobData.primary_email || ""
+      
+      // Parse CC emails
+      const ccEmailsField = jobData.cc_emails || ""
+      if (ccEmailsField) {
+        ccEmails = ccEmailsField.split(',').map((email: string) => email.trim()).filter((email: string) => email)
+      }
+
+      if (!primaryEmail) {
+        console.log("Missing Employer Email for Job ID:", jobId, "Application cannot be processed")
+        return NextResponse.json(
+          { error: 'This employer has not provided an email address. Applications cannot be submitted.' },
+          { status: 400 }
+        )
+      }
     try {
       const { data: cvProfile, error: cvProfileError } = await supabase
         .from('cv_profiles')
