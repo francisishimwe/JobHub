@@ -93,13 +93,61 @@ export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
 
+    // If no ID provided, create a new company (for admin dashboard)
     if (!body.id) {
-      return NextResponse.json(
-        { error: 'Missing required field: id' },
-        { status: 400 }
-      )
+      // Validate required fields for creation
+      if (!body.name) {
+        return NextResponse.json(
+          { error: 'Missing required field: name' },
+          { status: 400 }
+        )
+      }
+
+      // Generate UUID for new company
+      const id = crypto.randomUUID()
+      const now = new Date().toISOString()
+
+      const result = await sql`
+        INSERT INTO companies (
+          id,
+          name,
+          logo,
+          location,
+          industry,
+          website,
+          created_at
+        ) VALUES (
+          ${id},
+          ${body.name},
+          ${body.logo || null},
+          ${body.location || null},
+          ${body.industry || null},
+          ${body.website || null},
+          ${now}
+        )
+        RETURNING id, name, logo, location, industry, website, created_at
+      `
+
+      if (!result || result.length === 0) {
+        throw new Error('Failed to insert company')
+      }
+
+      const company = result[0]
+
+      return NextResponse.json({
+        company: {
+          id: company.id,
+          name: company.name,
+          logo: company.logo,
+          location: company.location,
+          industry: company.industry,
+          website: company.website,
+          created_at: company.created_at
+        }
+      }, { status: 201 })
     }
 
+    // If ID provided, update existing company
     const result = await sql`
       UPDATE companies
       SET 
