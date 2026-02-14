@@ -304,8 +304,8 @@ export async function POST(request: NextRequest) {
           ${body.application_method || 'email'},
           ${body.primary_email || null},
           ${body.cc_emails || null},
-          ${isAdmin ? 'published' : (isEmployerJob ? 'pending' : 'published')},
-          ${isAdmin ? true : (isEmployerJob ? false : true)},
+          ${isAdmin ? 'published' : 'published'}, // All jobs go to home page
+          ${isAdmin ? true : true}, // All jobs are approved
           0,
           0,
           ${now}
@@ -355,8 +355,8 @@ export async function POST(request: NextRequest) {
           ${body.application_method || 'email'},
           ${body.primary_email || null},
           ${body.cc_emails || null},
-          ${isAdmin ? 'published' : (isEmployerJob ? 'pending' : 'published')},
-          ${isAdmin ? true : (isEmployerJob ? false : true)},
+          ${isAdmin ? 'published' : 'published'}, // All jobs go to home page
+          ${isAdmin ? true : true}, // All jobs are approved
           0,
           0,
           ${now}
