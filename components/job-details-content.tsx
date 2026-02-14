@@ -289,8 +289,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             job.opportunityType !== "Scholarship" &&
                             job.opportunityType !== "Education" &&
                             job.opportunityType !== "Announcement" &&
-                            job.external_link &&
-                            job.external_link.trim() !== "" && (
+                            job.applicationLink &&
+                            job.applicationLink?.trim() !== "" && (
                                 <Button
                                     type="button"
                                     onClick={handleApply}
@@ -329,6 +329,43 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 </div>
 
+                {/* Attachment Section */}
+                {(job.attachment_url || job.attachmentUrl) && (job.attachment_url?.trim() || job.attachmentUrl?.trim()) !== "" && (
+                    <div className="mt-6 bg-gray-50 rounded-lg p-4 border border-gray-200">
+                        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <FileText className="h-5 w-5 text-blue-600" />
+                            Attachment
+                        </h3>
+                        <div className="flex items-center gap-4 p-3 bg-white rounded border border-gray-300">
+                            <FileText className="h-8 w-8 text-red-600" />
+                            <div className="flex-1">
+                                <p className="font-medium text-gray-900">
+                                    {/* Extract original filename from URL */}
+                                    {(job.attachment_url || job.attachmentUrl || '').split('/').pop()?.replace(/job-doc-\d+-/, '') || 'Document.pdf'}
+                                </p>
+                                <p className="text-sm text-gray-500">
+                                    Click to view or download
+                                </p>
+                            </div>
+                            <Button
+                                asChild
+                                variant="outline"
+                                size="sm"
+                                className="shrink-0"
+                            >
+                                <a 
+                                    href={job.attachment_url || job.attachmentUrl || ''} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-2"
+                                >
+                                    <FileText className="h-4 w-4" />
+                                    View Document
+                                </a>
+                            </Button>
+                        </div>
+                    </div>
+                )}
 
             </div>
             

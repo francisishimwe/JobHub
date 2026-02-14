@@ -26,132 +26,108 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
   const { user } = useAuth()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [currentStep, setCurrentStep] = useState(1)
   const [imagePreview, setImagePreview] = useState<string>("")
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [selectedDocument, setSelectedDocument] = useState<File | null>(null)
 
   const [formData, setFormData] = useState({
-    // Step 1: Employer Info
-    employer_name: "",
+    job_title: "",
+    company_name: "",
     logo_url: "",
-    contact_name: "",
-    primary_email: "",
-    contact_phone: "",
-    // Step 2: Job Details
-    title: "",
-    offer_type: "Job",
     category: "",
+    location: "",
     description: "",
-    // Step 3: Application & Logistics
-    application_link: "",
+    external_link: "",
     deadline: "",
     experience_level: "",
     education_level: "",
     // System fields
     plan_id: 1,
-    location: "",
     attachment_url: "",
-    cc_emails: "",
   })
 
-  // Handle logo upload for employer
+  // Handle logo upload
   const handleLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
-    // Check if file is an image
+    // Validate file type
     if (!file.type.startsWith('image/')) {
-      alert("Please upload an image file (PNG, JPG)")
-      return
-    }
-    
-    // Check file size (2MB limit)
-    if (file.size > 2 * 1024 * 1024) {
-      alert("Logo must be less than 2MB")
+      alert('Please select an image file')
       return
     }
 
-    // Create preview
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image size should be less than 5MB')
+      return
+    }
+
+    setSelectedFile(file)
     const reader = new FileReader()
     reader.onloadend = () => {
-      const result = reader.result as string
-      setImagePreview(result)
+      setImagePreview(reader.result as string)
     }
     reader.readAsDataURL(file)
 
-    // Upload to Vercel Blob
+    // Upload to server
+    const formData = new FormData()
+    formData.append('logo', file)
+    
     try {
-      const uploadFormData = new FormData()
-      uploadFormData.append('file', file)
-
       const response = await fetch('/api/upload/logo', {
         method: 'POST',
-        body: uploadFormData,
+        body: formData
       })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to upload logo')
+      
+      if (response.ok) {
+        const data = await response.json()
+        setFormData(prev => ({ ...prev, logo_url: data.url }))
+      } else {
+        console.error('Logo upload failed')
       }
-
-      const data = await response.json()
-      setFormData({ ...formData, logo_url: data.url })
     } catch (error) {
-      console.error('Error uploading logo:', error)
-      alert('Failed to upload logo. Please try again.')
+      console.error('Upload error:', error)
     }
   }
 
-  const handleRemoveLogo = () => {
-    setImagePreview("")
-    setFormData({ ...formData, logo_url: "" })
-  }
+  // Handle document upload
+  const handleDocumentChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
 
-  // Navigation functions
-  const nextStep = () => {
-    if (currentStep < 3) setCurrentStep(currentStep + 1)
-  }
+    // Validate file type (PDF only)
+    if (file.type !== 'application/pdf') {
+      alert('Please select a PDF file')
+      return
+    }
 
-  const prevStep = () => {
-    if (currentStep > 1) setCurrentStep(currentStep - 1)
-  }
+    // Validate file size (10MB max)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('PDF size should be less than 10MB')
+      return
+    }
 
-  // Validate current step
-  const validateStep = () => {
-    switch (currentStep) {
-      case 1:
-        if (!formData.employer_name.trim()) {
-          alert("Please enter employer name")
-          return false
-        }
-        if (!formData.logo_url) {
-          alert("Company logo is required")
-          return false
-        }
-        if (!formData.contact_name.trim()) {
-          alert("Please enter contact name")
-          return false
-        }
-        if (!formData.contact_phone.trim()) {
-          alert("Please enter contact phone")
-          return false
-        }
-        return true
-      case 2:
-        if (!formData.title.trim()) {
-          alert("Please enter job title")
-          return false
-        }
-        if (!formData.offer_type) {
-          alert("Please select offer type")
-          return false
-        }
-        return true
-      case 3:
-        // No validation needed - application link is optional
-        return true
-      default:
-        return true
+    setSelectedDocument(file)
+
+    // Upload to server
+    const formData = new FormData()
+    formData.append('document', file)
+    
+    try {
+      const response = await fetch('/api/upload/document', {
+        method: 'POST',
+        body: formData
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        setFormData(prev => ({ ...prev, attachment_url: data.url }))
+      } else {
+        console.error('Document upload failed')
+      }
+    } catch (error) {
+      console.error('Upload error:', error)
     }
   }
 
@@ -159,24 +135,34 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     e.preventDefault()
     setLoading(true)
 
-    // Final validation of all steps
-    if (!validateStep()) {
+    // Validation
+    if (!formData.job_title.trim()) {
+      alert("Please enter job title")
+      setLoading(false)
+      return
+    }
+
+    if (!formData.company_name.trim()) {
+      alert("Please enter company name")
+      setLoading(false)
+      return
+    }
+
+    if (!formData.logo_url) {
+      alert("Company logo is required")
       setLoading(false)
       return
     }
 
     try {
-      console.log("Admin form submitting data:", formData)
-
-      // Create or find company from employer info
+      // Create or find company
       let companyId = null
       try {
-        // For Admin form, we'll create the company directly
         const createCompanyResponse = await fetch('/api/companies', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            name: formData.employer_name,
+            name: formData.company_name,
             logo: formData.logo_url || null
           })
         })
@@ -189,31 +175,30 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         console.error('Error handling company:', companyError)
       }
 
-      // Prepare job data with snake_case fields for database
+      // Prepare job data
       const jobData = {
-        title: formData.title.trim(),
+        title: formData.job_title.trim(),
         company_id: companyId,
-        employerName: formData.employer_name.trim(),
+        employerName: formData.company_name.trim(),
         companyLogo: formData.logo_url || null,
         description: formData.description?.trim() || null,
         location: formData.location?.trim() || null,
-        job_type: null, // Not used in new structure
-        opportunity_type: formData.offer_type,
+        job_type: null,
+        opportunity_type: "Job",
         deadline: formData.deadline || null,
-        application_link: formData.application_link?.trim() || null,
+        application_link: formData.external_link?.trim() || null,
         attachment_url: formData.attachment_url?.trim() || null,
         featured: false,
         plan_id: formData.plan_id,
-        application_method: "link", // Always use link method for admin
-        primary_email: formData.primary_email?.trim() || null,
-        cc_emails: formData.cc_emails?.trim() || null,
+        application_method: "link",
+        primary_email: null,
+        cc_emails: null,
         experience_level: formData.experience_level || null,
         education_level: formData.education_level || null,
         category: formData.category || null,
-        contact_name: formData.contact_name?.trim() || null,
-        contact_phone: formData.contact_phone?.trim() || null,
+        contact_name: null,
+        contact_phone: null,
         status: 'active', // Set default status as active
-        // Pass user email for Admin identification
         userEmail: user?.email || null,
       }
 
@@ -223,225 +208,104 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
 
       // Reset form
       setFormData({
-        employer_name: "",
+        job_title: "",
+        company_name: "",
         logo_url: "",
-        contact_name: "",
-        primary_email: "",
-        contact_phone: "",
-        title: "",
-        offer_type: "Job",
         category: "",
+        location: "",
         description: "",
-        application_link: "",
+        external_link: "",
         deadline: "",
         experience_level: "",
         education_level: "",
         plan_id: 1,
-        location: "",
         attachment_url: "",
-        cc_emails: "",
       })
       setImagePreview("")
       setSelectedFile(null)
-      setCurrentStep(1)
+      setSelectedDocument(null)
 
-      // Admin Direct-Post: Redirect to Home page instead of success page
-      if (user?.email === "admin@RwandaJobHub.com") {
-        router.push("/")
-      } else {
-        // Employer redirect to success page
-        router.push("/job-submission-success")
-      }
+      setLoading(false)
+      onSuccess?.()
     } catch (error) {
-      console.error("Error adding job:", error)
-      const errorMessage = error instanceof Error ? error.message : "Failed to add job. Please try again."
-      alert(errorMessage)
-    } finally {
+      console.error('Error submitting job:', error)
+      alert('Failed to submit job. Please try again.')
       setLoading(false)
     }
   }
 
   return (
-    <>
-      {/* Progress Indicator */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between">
-          {[1, 2, 3].map((step) => (
-            <div key={step} className="flex items-center">
-              <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium ${
-                  currentStep >= step
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 text-gray-600'
-                }`}
-              >
-                {step}
-              </div>
-              {step < 3 && (
-                <div
-                  className={`flex-1 h-1 mx-4 ${
-                    currentStep > step ? 'bg-blue-600' : 'bg-gray-200'
-                  }`}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="flex justify-between mt-2 text-xs text-gray-600">
-          <span>Employer Info</span>
-          <span>Job Details</span>
-          <span>Application & Logistics</span>
-        </div>
-      </div>
-
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-sm">
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Step 1: Employer Info */}
-        {currentStep === 1 && (
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">Add New Job</h1>
+          <p className="text-muted-foreground">
+            Fill in the details below to post a new job listing
+          </p>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* Left Column */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-900">Employer Information</h2>
-            
+            {/* Job Title */}
             <div className="space-y-2">
-              <Label htmlFor="employer_name">Employer Name *</Label>
+              <Label htmlFor="job_title">Job Title *</Label>
               <Input
-                id="employer_name"
+                id="job_title"
                 required
-                value={formData.employer_name}
-                onChange={(e) => setFormData({ ...formData, employer_name: e.target.value })}
-                placeholder="e.g. Acme Corporation"
-                className="h-11 text-base"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="contact_name">Contact Name *</Label>
-              <Input
-                id="contact_name"
-                required
-                value={formData.contact_name}
-                onChange={(e) => setFormData({ ...formData, contact_name: e.target.value })}
-                placeholder="e.g. John Doe"
-                className="h-11 text-base"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="primary_email">
-                Contact Email {formData.application_method === "email" ? "*" : "(Optional)"}
-              </Label>
-              <Input
-                id="primary_email"
-                type="email"
-                required={formData.application_method === "email"}
-                value={formData.primary_email}
-                onChange={(e) => setFormData({ ...formData, primary_email: e.target.value })}
-                placeholder="employer@company.com"
-                className="h-11 text-base"
-              />
-              {formData.application_method === "email" && (
-                <p className="text-xs text-blue-600">
-                  Required for Email Application method
-                </p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="contact_phone">Contact Phone *</Label>
-              <Input
-                id="contact_phone"
-                type="tel"
-                required
-                value={formData.contact_phone}
-                onChange={(e) => setFormData({ ...formData, contact_phone: e.target.value })}
-                placeholder="+250 7XX XXX XXX"
-                className="h-11 text-base"
-              />
-            </div>
-
-            {/* Logo Upload */}
-            <div className="space-y-2">
-              <Label>Company Logo *</Label>
-              <div className="flex items-center gap-4">
-                {imagePreview ? (
-                  <div className="relative">
-                    <img
-                      src={imagePreview}
-                      alt="Company logo preview"
-                      className="h-20 w-20 rounded-lg object-cover border"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={handleRemoveLogo}
-                      className="absolute -top-2 -right-2 h-6 w-6 p-0 bg-red-500 text-white hover:bg-red-600"
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="h-20 w-20 rounded-lg border-2 border-dashed border-red-300 flex items-center justify-center">
-                    <Building2 className="h-8 w-8 text-red-400" />
-                  </div>
-                )}
-                <div>
-                  <Input
-                    id="logo-upload"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleLogoChange}
-                    className="hidden"
-                  />
-                  <Label
-                    htmlFor="logo-upload"
-                    className="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-                  >
-                    <Upload className="h-4 w-4 mr-2" />
-                    Upload Logo
-                  </Label>
-                  <p className="text-xs text-red-500 mt-1">Company logo is required (PNG, JPG, max 2MB)</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 2: Job Details */}
-        {currentStep === 2 && (
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-900">Job Details</h2>
-            
-            <div className="space-y-2">
-              <Label htmlFor="title">Job Title *</Label>
-              <Input
-                id="title"
-                required
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                value={formData.job_title}
+                onChange={(e) => setFormData({ ...formData, job_title: e.target.value })}
                 placeholder="e.g. Senior Software Engineer"
                 className="h-11 text-base"
               />
             </div>
 
+            {/* Company Name */}
             <div className="space-y-2">
-              <Label htmlFor="offer_type">Offer Type *</Label>
-              <Select
-                value={formData.offer_type}
-                onValueChange={(value: string) => setFormData({ ...formData, offer_type: value })}
-              >
-                <SelectTrigger className="h-11 text-base">
-                  <SelectValue placeholder="Select offer type" />
-                </SelectTrigger>
-                <SelectContent className="bg-white">
-                  <SelectItem value="Job">Job</SelectItem>
-                  <SelectItem value="Internship">Internship</SelectItem>
-                  <SelectItem value="Scholarship">Scholarship</SelectItem>
-                  <SelectItem value="Education">Education</SelectItem>
-                  <SelectItem value="Tender">Tender</SelectItem>
-                  <SelectItem value="Blog">Blog</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label htmlFor="company_name">Company Name *</Label>
+              <Input
+                id="company_name"
+                required
+                value={formData.company_name}
+                onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
+                placeholder="e.g. Tech Company"
+                className="h-11 text-base"
+              />
             </div>
 
+            {/* Company Logo */}
+            <div className="space-y-2">
+              <Label>Company Logo *</Label>
+              <div className="flex items-center gap-4">
+                <Avatar className="h-16 w-16">
+                  {imagePreview ? (
+                    <AvatarImage src={imagePreview} alt="Company logo" />
+                  ) : (
+                    <AvatarFallback>
+                      <Building2 className="h-8 w-8" />
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+                <div className="flex-1">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoChange}
+                    className="hidden"
+                    id="logo-upload"
+                  />
+                  <Label
+                    htmlFor="logo-upload"
+                    className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  >
+                    <Upload className="h-4 w-4" />
+                    {imagePreview ? 'Change Logo' : 'Upload Logo'}
+                  </Label>
+                </div>
+              </div>
+            </div>
+
+            {/* Category */}
             <div className="space-y-2">
               <Label htmlFor="category">Category (Optional)</Label>
               <Select
@@ -460,85 +324,11 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                 </SelectContent>
               </Select>
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="description">Job Description (Optional)</Label>
-              <RichTextEditor
-                value={formData.description}
-                onChange={(value) => setFormData({ ...formData, description: value })}
-                placeholder="Describe the job responsibilities, requirements, and qualifications..."
-              />
-            </div>
           </div>
-        )}
 
-        {/* Step 3: Application & Logistics */}
-        {currentStep === 3 && (
+          {/* Right Column */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-900">Application & Logistics</h2>
-            
-            <div className="space-y-2">
-              <Label htmlFor="application_link">Application Link (Optional)</Label>
-              <Input
-                id="application_link"
-                type="url"
-                value={formData.application_link}
-                onChange={(e) => setFormData({ ...formData, application_link: e.target.value })}
-                placeholder="https://example.com/apply"
-                className="h-11 text-base"
-              />
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="experience_level">Experience Level (Optional)</Label>
-                <Select
-                  value={formData.experience_level}
-                  onValueChange={(value: string) => setFormData({ ...formData, experience_level: value })}
-                >
-                  <SelectTrigger className="h-11 text-base">
-                    <SelectValue placeholder="Select experience level" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white">
-                    <SelectItem value="Entry Level">Entry Level</SelectItem>
-                    <SelectItem value="Mid Level">Mid Level</SelectItem>
-                    <SelectItem value="Senior Level">Senior Level</SelectItem>
-                    <SelectItem value="Executive">Executive</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="education_level">Education Level (Optional)</Label>
-                <Select
-                  value={formData.education_level}
-                  onValueChange={(value: string) => setFormData({ ...formData, education_level: value })}
-                >
-                  <SelectTrigger className="h-11 text-base">
-                    <SelectValue placeholder="Select education level" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white">
-                    <SelectItem value="High School">High School</SelectItem>
-                    <SelectItem value="Diploma">Diploma</SelectItem>
-                    <SelectItem value="Bachelor">Bachelor</SelectItem>
-                    <SelectItem value="Master">Master</SelectItem>
-                    <SelectItem value="PhD">PhD</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="deadline">Application Deadline (Optional)</Label>
-              <Input
-                id="deadline"
-                type="date"
-                value={formData.deadline}
-                onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                className="h-11 text-base"
-              />
-            </div>
-
+            {/* Location */}
             <div className="space-y-2">
               <Label htmlFor="location">Location (Optional)</Label>
               <Input
@@ -549,45 +339,91 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                 className="h-11 text-base"
               />
             </div>
-          </div>
-        )}
 
-        {/* Navigation Buttons */}
-        <div className="flex justify-between pt-6 border-t">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={currentStep === 1 ? onSuccess : prevStep}
-            disabled={loading}
-            className="px-6"
-          >
-            {currentStep === 1 ? 'Cancel' : 'Previous'}
-          </Button>
+            {/* External Link */}
+            <div className="space-y-2">
+              <Label htmlFor="external_link">External Link (Optional)</Label>
+              <Input
+                id="external_link"
+                type="url"
+                value={formData.external_link}
+                onChange={(e) => setFormData({ ...formData, external_link: e.target.value })}
+                placeholder="https://example.com/apply"
+                className="h-11 text-base"
+              />
+            </div>
 
-          <div className="flex gap-3">
-            {currentStep < 3 ? (
-              <Button
-                type="button"
-                onClick={() => {
-                  if (validateStep()) nextStep()
-                }}
-                disabled={loading}
-                className="px-6 bg-blue-600 hover:bg-blue-700 text-white"
+            {/* Document Upload */}
+            <div className="space-y-2">
+              <Label htmlFor="document">Document Upload (Optional)</Label>
+              <div className="flex items-center gap-4">
+                <div className="flex-1">
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    onChange={handleDocumentChange}
+                    className="hidden"
+                    id="document-upload"
+                  />
+                  <Label
+                    htmlFor="document-upload"
+                    className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                  >
+                    <FileText className="h-4 w-4" />
+                    {selectedDocument ? selectedDocument.name : 'Upload PDF Document'}
+                  </Label>
+                  {formData.attachment_url && (
+                    <p className="text-sm text-green-600 mt-2">
+                      ✓ Document uploaded successfully
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Experience Level */}
+            <div className="space-y-2">
+              <Label htmlFor="experience_level">Experience Level (Optional)</Label>
+              <Select
+                value={formData.experience_level}
+                onValueChange={(value: string) => setFormData({ ...formData, experience_level: value })}
               >
-                Next Step
-              </Button>
-            ) : (
-              <Button
-                type="submit"
-                disabled={loading}
-                className="px-6 bg-green-600 hover:bg-green-700 text-white"
-              >
-                {loading ? "Creating Job..." : "Create Job"}
-              </Button>
-            )}
+                <SelectTrigger className="h-11 text-base">
+                  <SelectValue placeholder="Select experience level" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="Entry Level">Entry Level</SelectItem>
+                  <SelectItem value="Mid Level">Mid Level</SelectItem>
+                  <SelectItem value="Senior Level">Senior Level</SelectItem>
+                  <SelectItem value="Manager">Manager</SelectItem>
+                  <SelectItem value="Director">Director</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
+
+        {/* Job Description - Full Width */}
+        <div className="space-y-2">
+          <Label htmlFor="description">Job Description (Optional)</Label>
+          <RichTextEditor
+            value={formData.description}
+            onChange={(value) => setFormData({ ...formData, description: value })}
+            placeholder="Describe job responsibilities, requirements, and qualifications..."
+          />
+        </div>
+
+        {/* Submit Button */}
+        <div className="flex justify-end">
+          <Button
+            type="submit"
+            disabled={loading}
+            className="px-8 bg-blue-600 hover:bg-blue-700 text-white font-bold"
+          >
+            {loading ? "Posting Job..." : "Post Job"}
+          </Button>
+        </div>
       </form>
-    </>
+    </div>
   )
 }
