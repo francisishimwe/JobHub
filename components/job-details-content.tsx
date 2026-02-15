@@ -268,8 +268,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Action Buttons */}
                 <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                    {/* Row 1: Apply Now and Share on WhatsApp Buttons - Mobile Optimized */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                    {/* Row 1: Apply Now and Share on WhatsApp Buttons - One Line Mobile */}
+                    <div className="flex flex-col sm:flex-row gap-2 mb-4" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                         {/* Apply Now Button - Green, only if external_link exists */}
                         {!isExpired &&
                             job.opportunityType !== "Tender" &&
@@ -287,7 +287,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                         }
                                     }}
                                     size="lg"
-                                    className="w-full text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
+                                    className="w-full sm:w-1/2 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
                                     style={{ backgroundColor: '#22c55e' }}
                                 >
                                     Apply Now
@@ -297,7 +297,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                         <Button
                             onClick={handleShareWhatsApp}
                             size="lg"
-                            className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
+                            className="w-full sm:w-1/2 bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
                         >
                             <Share2 className="mr-2 h-5 w-5" />
                             Share on WhatsApp
