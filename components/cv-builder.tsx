@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { CVPreview } from "@/components/cv-preview"
 import { User, Mail, Phone, BookOpen, Briefcase, Award, Link, Download, Users, Globe, Calendar, MapPin, UserCircle } from "lucide-react"
 import jsPDF from 'jspdf'
 
@@ -259,12 +260,15 @@ export function CVBuilder({ jobId, jobTitle, isOpen, onClose, onSuccess }: CVBui
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-7xl max-h-[95vh] overflow-hidden">
         <DialogHeader>
-          <DialogTitle>Apply for: {jobTitle}</DialogTitle>
+          <DialogTitle className="text-2xl font-bold text-center">CURRICULUM VITAE (CV)</DialogTitle>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="flex flex-col lg:flex-row h-full gap-6 overflow-hidden">
+          {/* Form Section - Left Side */}
+          <div className="flex-1 overflow-y-auto pr-2">
+            <form onSubmit={handleSubmit} className="space-y-6">
           {/* Personal Information */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold flex items-center gap-2">
@@ -795,7 +799,22 @@ export function CVBuilder({ jobId, jobTitle, isOpen, onClose, onSuccess }: CVBui
               </Button>
             </div>
           </div>
-        </form>
+            </form>
+          </div>
+          
+          {/* Preview Section - Right Side */}
+          <div className="flex-1 lg:border-l border-gray-200 pl-2 overflow-hidden">
+            <div className="h-full overflow-y-auto">
+              <div className="sticky top-0 bg-white p-3 border-b border-gray-200 mb-4">
+                <h3 className="text-lg font-semibold text-center">Live Preview</h3>
+                <p className="text-sm text-gray-600 text-center">See how your CV will look</p>
+              </div>
+              <div className="bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden" style={{ minHeight: '800px' }}>
+                <CVPreview formData={formData} />
+              </div>
+            </div>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   )
