@@ -245,11 +245,11 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
 
                 {/* Attachment Section */}
-                {job.attachmentUrl && (
+                {(job.attachmentUrl || job.attachment_url) && (job.attachmentUrl?.trim() || job.attachment_url?.trim()) !== "" && (
                     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
                         <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Attached Document</h3>
                         <a
-                            href={job.attachmentUrl}
+                            href={job.attachmentUrl || job.attachment_url || '#'}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group"
@@ -263,13 +263,13 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                 </div>
                                 <div className="min-w-0 flex-1" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                                     <p className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}>
-                                        {decodeURIComponent(job.attachmentUrl.split('/').pop()?.split('?')[0] || 'Document').split('-').slice(1).join('-') || 'Download Document'}
+                                        {decodeURIComponent((job.attachmentUrl || job.attachment_url || '').split('/').pop()?.split('?')[0] || 'Document').split('-').slice(1).join('-') || 'Download Document'}
                                     </p>
                                     <p className="text-xs text-gray-600 mt-1" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                                        {job.attachmentUrl.endsWith('.pdf') && 'PDF Document'}
-                                        {job.attachmentUrl.match(/\.(doc|docx)$/i) && 'Word Document'}
-                                        {job.attachmentUrl.match(/\.(xls|xlsx)$/i) && 'Excel Spreadsheet'}
-                                        {!job.attachmentUrl.match(/\.(pdf|doc|docx|xls|xlsx)$/i) && 'Click to download'}
+                                        {(job.attachmentUrl || job.attachment_url || '').endsWith('.pdf') && 'PDF Document'}
+                                        {(job.attachmentUrl || job.attachment_url || '').match(/\.(doc|docx)$/i) && 'Word Document'}
+                                        {(job.attachmentUrl || job.attachment_url || '').match(/\.(xls|xlsx)$/i) && 'Excel Spreadsheet'}
+                                        {!(job.attachmentUrl || job.attachment_url || '').match(/\.(pdf|doc|docx|xls|xlsx)$/i) && 'Click to download'}
                                     </p>
                                 </div>
                             </div>
@@ -358,45 +358,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 </div>
 
-                {/* Attachment Section */}
-                {(job.attachment_url || job.attachmentUrl) && (job.attachment_url?.trim() || job.attachmentUrl?.trim()) !== "" && (
-                    <div className="mt-6 bg-gray-50 rounded-lg p-4 border border-gray-200">
-                        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                            <FileText className="h-5 w-5 text-blue-600" />
-                            Attachment
-                        </h3>
-                        <div className="flex items-center gap-4 p-3 bg-white rounded border border-gray-300">
-                            <FileText className="h-8 w-8 text-red-600" />
-                            <div className="flex-1">
-                                <p className="font-medium text-gray-900">
-                                    {/* Extract original filename from URL */}
-                                    {(job.attachment_url || job.attachmentUrl || '').split('/').pop()?.replace(/job-doc-\d+-/, '') || 'Document.pdf'}
-                                </p>
-                                <p className="text-sm text-gray-500">
-                                    Click to view or download
-                                </p>
-                            </div>
-                            <Button
-                                asChild
-                                variant="outline"
-                                size="sm"
-                                className="shrink-0"
-                            >
-                                <a 
-                                    href={job.attachment_url || job.attachmentUrl || ''} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-2"
-                                >
-                                    <FileText className="h-4 w-4" />
-                                    View Document
-                                </a>
-                            </Button>
-                        </div>
-                    </div>
-                )}
-
-            </div>
+                </div>
             
             {/* Internal Application Modal - Root Level */}
             <InternalApplicationModal
