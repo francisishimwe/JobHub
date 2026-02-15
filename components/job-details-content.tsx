@@ -26,6 +26,14 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
         attachmentUrl: job.attachmentUrl,
         attachment_url: job.attachment_url
     })
+    console.log("DEBUG - Attachment Check:", {
+        hasAttachmentUrl: !!job.attachmentUrl,
+        hasAttachment_url: !!job.attachment_url,
+        attachmentUrlValue: job.attachmentUrl,
+        attachment_urlValue: job.attachment_url,
+        attachmentUrlType: typeof job.attachmentUrl,
+        attachment_urlType: typeof job.attachment_url
+    })
     console.log("DEBUG - Application Link Check:", {
         applicationLink: job.applicationLink,
         application_link: job.application_link,
@@ -253,10 +261,10 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 )}
 
 
-                {/* Attachment Section */}
-                {(job.attachmentUrl || job.attachment_url) && (job.attachmentUrl?.trim() || job.attachment_url?.trim()) !== "" && (
-                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                        <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Attached Document</h3>
+                {/* Attachment Section - Always visible for debugging */}
+                <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
+                    <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Attached Document</h3>
+                    {(job.attachmentUrl || job.attachment_url) ? (
                         <a
                             href={job.attachmentUrl || job.attachment_url || '#'}
                             target="_blank"
@@ -284,8 +292,12 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             </div>
                             <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
                         </a>
-                    </div>
-                )}
+                    ) : (
+                        <div className="text-center text-gray-500 p-4">
+                            No attachment available
+                        </div>
+                    )}
+                </div>
 
                 {/* Expired banner */}
                 {isExpired && (
