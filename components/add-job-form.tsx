@@ -247,6 +247,12 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         alert('Failed to submit job: ' + (jobError instanceof Error ? jobError.message : 'Unknown error'))
         setLoading(false)
       }
+    } catch (error) {
+      console.error('Error submitting job:', error)
+      alert('Failed to submit job. Please try again.')
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-sm">
