@@ -229,44 +229,29 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 )}
 
-
-                {/* Attachment Section - Always visible for debugging */}
-                <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                    <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Attached Document</h3>
-                    {(job.attachmentUrl || job.attachment_url) ? (
-                        <a
-                            href={job.attachmentUrl || job.attachment_url || '#'}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group"
-                            style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}
-                        >
-                            <div className="flex items-center gap-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
-                                <div className="p-3 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
-                                    <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                </div>
-                                <div className="min-w-0 flex-1" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                                    <p className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}>
-                                        {decodeURIComponent((job.attachmentUrl || job.attachment_url || '').split('/').pop()?.split('?')[0] || 'Document').split('-').slice(1).join('-') || 'Download Document'}
-                                    </p>
-                                    <p className="text-xs text-gray-600 mt-1" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                                        {(job.attachmentUrl || job.attachment_url || '').endsWith('.pdf') && 'PDF Document'}
-                                        {(job.attachmentUrl || job.attachment_url || '').match(/\.(doc|docx)$/i) && 'Word Document'}
-                                        {(job.attachmentUrl || job.attachment_url || '').match(/\.(xls|xlsx)$/i) && 'Excel Spreadsheet'}
-                                        {!(job.attachmentUrl || job.attachment_url || '').match(/\.(pdf|doc|docx|xls|xlsx)$/i) && 'Click to download'}
-                                    </p>
-                                </div>
+                {/* Document Attachment Section - Only show if file exists */}
+                {(job.attachmentUrl || job.attachment_url) && (
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
+                        <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Attachment</h3>
+                        <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
+                            <svg className="h-5 w-5 text-red-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 01-2 2v-8a2 2 0 00-2-2H9a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2v-8a2 2 0 00-2-2z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 16h5l-3 3m0 0l5-5m-5 5v-8" />
+                            </svg>
+                            <div className="min-w-0 flex-1" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                                <a 
+                                    href={job.attachmentUrl || job.attachment_url || '#'}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-green-600 hover:text-green-700 underline font-medium transition-colors"
+                                    style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}
+                                >
+                                    Download PDF Attachment
+                                </a>
                             </div>
-                            <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
-                        </a>
-                    ) : (
-                        <div className="text-center text-gray-500 p-4">
-                            No attachment available
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
 
                 {/* Expired banner */}
                 {isExpired && (
@@ -281,10 +266,10 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 )}
 
-                {/* Document Attachment Section */}
-                {(job.attachmentUrl || job.attachment_url) ? (
+                {/* Document Attachment Section - Only show if file exists */}
+                {(job.attachmentUrl || job.attachment_url) && (
                     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                        <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>ATTACHED DOCUMENT</h3>
+                        <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Attachment</h3>
                         <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
                             <svg className="h-5 w-5 text-red-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 01-2 2v-8a2 2 0 00-2-2H9a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2v-8a2 2 0 00-2-2z" />
@@ -298,16 +283,9 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                     className="text-green-600 hover:text-green-700 underline font-medium transition-colors"
                                     style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}
                                 >
-                                    {decodeURIComponent((job.attachmentUrl || job.attachment_url || '').split('/').pop()?.split('?')[0] || 'Document').split('-').slice(1).join('-') || 'attachment_file.pdf'}
+                                    Download PDF Attachment
                                 </a>
                             </div>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                        <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>ATTACHED DOCUMENT</h3>
-                        <div className="text-center text-gray-500 p-4" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                            No attachment available
                         </div>
                     </div>
                 )}
@@ -325,32 +303,19 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             job.opportunityType !== "Announcement" &&
                             (job.applicationLink || job.application_link) &&
                             (job.applicationLink?.trim() !== "" || job.application_link?.trim() !== "") && (
-                                <>
-                                    {console.log("DEBUG - Apply button should be visible!", {
-                                        isExpired,
-                                        opportunityType: job.opportunityType,
-                                        applicationLink: job.applicationLink,
-                                        application_link: job.application_link,
-                                        hasApplicationLink: !!(job.applicationLink || job.application_link),
-                                        linkNotEmpty: !!(job.applicationLink?.trim() !== "" || job.application_link?.trim() !== "")
-                                    })}
-                                    <Button
-                                        type="button"
-                                        onClick={() => {
-                                            // Open the application link in a new tab
-                                            const link = job.applicationLink || job.application_link;
-                                            if (link) {
-                                                window.open(link, '_blank', 'noopener,noreferrer');
-                                            }
-                                        }}
-                                        size="lg"
-                                        className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
-                                        disabled={!job.id}
-                                    >
-                                        Apply Now
-                                        <ExternalLink className="ml-2 h-5 w-5" />
-                                    </Button>
-                                </>
+                                <Button
+                                    type="button"
+                                    onClick={() => {
+                                        // Open the application link in a new tab
+                                        const link = job.applicationLink || job.application_link
+                                        if (link) {
+                                            window.open(link, '_blank')
+                                        }
+                                    }}
+                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                                >
+                                    Apply Now
+                                </Button>
                             )}
                         
                         <Button
