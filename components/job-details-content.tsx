@@ -16,37 +16,6 @@ interface JobDetailsContentProps {
 }
 
 export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProps) {
-    console.log("DEBUG JOB DATA:", job)
-    console.log("DEBUG - Job Overview Check:", {
-        location: job.location,
-        jobType: job.jobType,
-        experienceLevel: job.experienceLevel,
-        deadline: job.deadline,
-        opportunityType: job.opportunityType,
-        attachmentUrl: job.attachmentUrl,
-        attachment_url: job.attachment_url
-    })
-    console.log("DEBUG - Attachment Check:", {
-        hasAttachmentUrl: !!job.attachmentUrl,
-        hasAttachment_url: !!job.attachment_url,
-        attachmentUrlValue: job.attachmentUrl,
-        attachment_urlValue: job.attachment_url,
-        attachmentUrlType: typeof job.attachmentUrl,
-        attachment_urlType: typeof job.attachment_url
-    })
-    console.log("DEBUG - Application Link Check:", {
-        applicationLink: job.applicationLink,
-        application_link: job.application_link,
-        opportunityType: job.opportunityType,
-        isExpired: (() => {
-            if (!job.deadline) return false
-            const today = new Date()
-            today.setHours(0, 0, 0, 0)
-            const deadlineDate = new Date(job.deadline)
-            deadlineDate.setHours(0, 0, 0, 0)
-            return deadlineDate < today
-        })()
-    })
     const { getCompanyById } = useCompanies()
     const contextCompany = job.companyId ? getCompanyById(job.companyId) : null
     const company = initialCompany || contextCompany
@@ -308,6 +277,37 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             <p className="text-sm mt-1">
                                 The application deadline has passed. You can still explore other opportunities on RwandaJobHub.
                             </p>
+                        </div>
+                    </div>
+                )}
+
+                {/* Document Attachment Section */}
+                {(job.attachmentUrl || job.attachment_url) ? (
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
+                        <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>ATTACHED DOCUMENT</h3>
+                        <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
+                            <svg className="h-5 w-5 text-red-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 01-2 2v-8a2 2 0 00-2-2H9a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2v-8a2 2 0 00-2-2z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 16h5l-3 3m0 0l5-5m-5 5v-8" />
+                            </svg>
+                            <div className="min-w-0 flex-1" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                                <a 
+                                    href={job.attachmentUrl || job.attachment_url || '#'}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-green-600 hover:text-green-700 underline font-medium transition-colors"
+                                    style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}
+                                >
+                                    {decodeURIComponent((job.attachmentUrl || job.attachment_url || '').split('/').pop()?.split('?')[0] || 'Document').split('-').slice(1).join('-') || 'attachment_file.pdf'}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
+                        <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>ATTACHED DOCUMENT</h3>
+                        <div className="text-center text-gray-500 p-4" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                            No attachment available
                         </div>
                     </div>
                 )}
