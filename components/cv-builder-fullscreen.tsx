@@ -32,19 +32,21 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
     place_of_birth: "",
     nationality: "",
     
-    // Education
+    // Education (static fields + dynamic array)
     university_degree: "",
     university_graduation: "",
     secondary_degree: "",
     secondary_graduation: "",
+    additional_education: [{ degree: "", graduation_year: "", institution: "" }],
     
-    // Experience
+    // Experience (static fields + dynamic array)
     experience_level: "",
     current_position: "",
     years_experience: "",
     current_employer: "",
+    additional_experience: [{ position: "", company: "", start_date: "", end_date: "", description: "" }],
     
-    // Language Proficiency
+    // Language Proficiency (static fields + dynamic array)
     kinyarwanda_reading: "",
     kinyarwanda_writing: "",
     kinyarwanda_speaking: "",
@@ -54,11 +56,12 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
     french_reading: "",
     french_writing: "",
     french_speaking: "",
-    
-    // Dynamic arrays for additional entries
-    additional_education: [{ degree: "", graduation_year: "", institution: "" }],
-    additional_experience: [{ position: "", company: "", start_date: "", end_date: "", description: "" }],
     additional_languages: [{ name: "", reading: "", writing: "", speaking: "" }],
+    
+    // Referees (static field + dynamic array)
+    referee_name: "",
+    referee_phone: "",
+    referee_email: "",
     additional_referees: [{ name: "", phone: "", email: "", relationship: "" }],
   })
 
@@ -192,14 +195,30 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
         mothers_name: "",
         place_of_birth: "",
         nationality: "",
-        education: [{ degree: "", graduation_year: "", institution: "" }],
-        experience: [{ position: "", company: "", start_date: "", end_date: "", description: "" }],
-        languages: [
-          { name: "Kinyarwanda", reading: "", writing: "", speaking: "" },
-          { name: "English", reading: "", writing: "", speaking: "" },
-          { name: "French", reading: "", writing: "", speaking: "" }
-        ],
-        referees: [{ name: "", phone: "", email: "", relationship: "" }],
+        university_degree: "",
+        university_graduation: "",
+        secondary_degree: "",
+        secondary_graduation: "",
+        additional_education: [{ degree: "", graduation_year: "", institution: "" }],
+        experience_level: "",
+        current_position: "",
+        years_experience: "",
+        current_employer: "",
+        additional_experience: [{ position: "", company: "", start_date: "", end_date: "", description: "" }],
+        kinyarwanda_reading: "",
+        kinyarwanda_writing: "",
+        kinyarwanda_speaking: "",
+        english_reading: "",
+        english_writing: "",
+        english_speaking: "",
+        french_reading: "",
+        french_writing: "",
+        french_speaking: "",
+        additional_languages: [{ name: "", reading: "", writing: "", speaking: "" }],
+        referee_name: "",
+        referee_phone: "",
+        referee_email: "",
+        additional_referees: [{ name: "", phone: "", email: "", relationship: "" }],
       })
     } catch (error) {
       console.error('Error submitting CV:', error)
@@ -576,10 +595,58 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                 </div>
               </div>
               
+              {/* Additional Education */}
+              {formData.additional_education.map((edu, index) => (
+                <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h4 className="font-medium">Additional Education {index + 1}</h4>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeEducation(index)}
+                      className="gap-1"
+                    >
+                      <X className="h-4 w-4" />
+                      Remove
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor={`edu-degree-${index}`}>Degree</Label>
+                      <Input
+                        id={`edu-degree-${index}`}
+                        value={edu.degree}
+                        onChange={(e) => updateEducation(index, 'degree', e.target.value)}
+                        placeholder="Enter degree"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`edu-year-${index}`}>Graduation Year</Label>
+                      <Input
+                        id={`edu-year-${index}`}
+                        value={edu.graduation_year}
+                        onChange={(e) => updateEducation(index, 'graduation_year', e.target.value)}
+                        placeholder="Enter graduation year"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`edu-institution-${index}`}>Institution</Label>
+                      <Input
+                        id={`edu-institution-${index}`}
+                        value={edu.institution}
+                        onChange={(e) => updateEducation(index, 'institution', e.target.value)}
+                        placeholder="Enter institution"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+              
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => alert("Add more education coming soon!")}
+                onClick={addEducation}
                 className="gap-2 mt-4"
               >
                 <Plus className="h-4 w-4" />
@@ -636,10 +703,81 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                 />
               </div>
               
+              {/* Additional Experience */}
+              {formData.additional_experience.map((exp, index) => (
+                <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h4 className="font-medium">Additional Experience {index + 1}</h4>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeExperience(index)}
+                      className="gap-1"
+                    >
+                      <X className="h-4 w-4" />
+                      Remove
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor={`exp-position-${index}`}>Position</Label>
+                      <Input
+                        id={`exp-position-${index}`}
+                        value={exp.position}
+                        onChange={(e) => updateExperience(index, 'position', e.target.value)}
+                        placeholder="Enter position"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`exp-company-${index}`}>Company</Label>
+                      <Input
+                        id={`exp-company-${index}`}
+                        value={exp.company}
+                        onChange={(e) => updateExperience(index, 'company', e.target.value)}
+                        placeholder="Enter company"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor={`exp-start-${index}`}>Start Date</Label>
+                      <Input
+                        id={`exp-start-${index}`}
+                        type="date"
+                        value={exp.start_date}
+                        onChange={(e) => updateExperience(index, 'start_date', e.target.value)}
+                        placeholder="Enter start date"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`exp-end-${index}`}>End Date</Label>
+                      <Input
+                        id={`exp-end-${index}`}
+                        type="date"
+                        value={exp.end_date}
+                        onChange={(e) => updateExperience(index, 'end_date', e.target.value)}
+                        placeholder="Enter end date"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`exp-description-${index}`}>Description</Label>
+                    <Textarea
+                      id={`exp-description-${index}`}
+                      value={exp.description}
+                      onChange={(e) => updateExperience(index, 'description', e.target.value)}
+                      placeholder="Enter job description"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+              ))}
+              
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => alert("Add more experience coming soon!")}
+                onClick={addExperience}
                 className="gap-2 mt-4"
               >
                 <Plus className="h-4 w-4" />
@@ -817,10 +955,85 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                   </div>
                 </div>
                 
+                {/* Additional Languages */}
+                {formData.additional_languages.map((lang, index) => (
+                  <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-4">
+                    <div className="flex justify-between items-center">
+                      <h4 className="font-medium">Language {index + 1}</h4>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => removeLanguage(index)}
+                        className="gap-1"
+                      >
+                        <X className="h-4 w-4" />
+                        Remove
+                      </Button>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`lang-name-${index}`}>Language Name</Label>
+                      <Input
+                        id={`lang-name-${index}`}
+                        value={lang.name}
+                        onChange={(e) => updateLanguage(index, 'name', e.target.value)}
+                        placeholder="Enter language name"
+                      />
+                    </div>
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor={`lang-reading-${index}`}>Reading</Label>
+                        <select 
+                          id={`lang-reading-${index}`}
+                          value={lang.reading}
+                          onChange={(e) => updateLanguage(index, 'reading', e.target.value)}
+                          className="w-full h-10 px-3 border border-gray-300 rounded-md"
+                        >
+                          <option value="">Select</option>
+                          <option value="Excellent">Excellent</option>
+                          <option value="Very Good">Very Good</option>
+                          <option value="Good">Good</option>
+                          <option value="Basic">Basic</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor={`lang-writing-${index}`}>Writing</Label>
+                        <select 
+                          id={`lang-writing-${index}`}
+                          value={lang.writing}
+                          onChange={(e) => updateLanguage(index, 'writing', e.target.value)}
+                          className="w-full h-10 px-3 border border-gray-300 rounded-md"
+                        >
+                          <option value="">Select</option>
+                          <option value="Excellent">Excellent</option>
+                          <option value="Very Good">Very Good</option>
+                          <option value="Good">Good</option>
+                          <option value="Basic">Basic</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor={`lang-speaking-${index}`}>Speaking</Label>
+                        <select 
+                          id={`lang-speaking-${index}`}
+                          value={lang.speaking}
+                          onChange={(e) => updateLanguage(index, 'speaking', e.target.value)}
+                          className="w-full h-10 px-3 border border-gray-300 rounded-md"
+                        >
+                          <option value="">Select</option>
+                          <option value="Excellent">Excellent</option>
+                          <option value="Very Good">Very Good</option>
+                          <option value="Good">Good</option>
+                          <option value="Basic">Basic</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => alert("Add more languages coming soon!")}
+                  onClick={addLanguage}
                   className="gap-2"
                 >
                   <Plus className="h-4 w-4" />
@@ -871,10 +1084,68 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                 </div>
               </div>
               
+              {/* Additional Referees */}
+              {formData.additional_referees.map((referee, index) => (
+                <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h4 className="font-medium">Referee {index + 1}</h4>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeReferee(index)}
+                      className="gap-1"
+                    >
+                      <X className="h-4 w-4" />
+                      Remove
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`referee-name-${index}`}>Name</Label>
+                    <Input
+                      id={`referee-name-${index}`}
+                      value={referee.name}
+                      onChange={(e) => updateReferee(index, 'name', e.target.value)}
+                      placeholder="Enter referee name"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`referee-relationship-${index}`}>Relationship</Label>
+                    <Input
+                      id={`referee-relationship-${index}`}
+                      value={referee.relationship}
+                      onChange={(e) => updateReferee(index, 'relationship', e.target.value)}
+                      placeholder="Enter relationship (e.g., Manager, Professor, Colleague)"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor={`referee-phone-${index}`}>Phone</Label>
+                      <Input
+                        id={`referee-phone-${index}`}
+                        value={referee.phone}
+                        onChange={(e) => updateReferee(index, 'phone', e.target.value)}
+                        placeholder="Enter referee phone"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`referee-email-${index}`}>Email</Label>
+                      <Input
+                        id={`referee-email-${index}`}
+                        type="email"
+                        value={referee.email}
+                        onChange={(e) => updateReferee(index, 'email', e.target.value)}
+                        placeholder="Enter referee email"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+              
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => alert("Add more referees coming soon!")}
+                onClick={addReferee}
                 className="gap-2 mt-4"
               >
                 <Plus className="h-4 w-4" />
