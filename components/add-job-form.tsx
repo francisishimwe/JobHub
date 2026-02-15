@@ -135,6 +135,24 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     }
   }
 
+  // Simple HTML sanitization to prevent SQL issues
+  const sanitizeHTML = (html: string | null): string | null => {
+    if (!html) return null
+    
+    // Remove potentially problematic HTML attributes and content
+    return html
+      .replace(/class="[^"]*"/g, '') // Remove class attributes
+      .replace(/style="[^"]*"/g, '') // Remove style attributes
+      .replace(/data-[^=]*="[^"]*"/g, '') // Remove data attributes
+      .replace(/on\w+="[^"]*"/g, '') // Remove event handlers
+      .replace(/javascript:/gi, '') // Remove javascript: URLs
+      .replace(/<script[^>]*>.*?<\/script>/gi, '') // Remove script tags
+      .replace(/<iframe[^>]*>.*?<\/iframe>/gi, '') // Remove iframe tags
+      .replace(/<object[^>]*>.*?<\/object>/gi, '') // Remove object tags
+      .replace(/<embed[^>]*>/gi, '') // Remove embed tags
+      .trim()
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -193,7 +211,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         company_id: companyId,
         employerName: formData.company_name.trim(),
         companyLogo: formData.logo_url || null,
-        description: formData.description?.trim() || null,
+        description: sanitizeHTML(formData.description?.trim() || null),
         location: formData.location?.trim() || null,
         job_type: null,
         opportunity_type: formData.offer_type,
@@ -213,6 +231,15 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         status: 'active', // Set default status as active
         userEmail: user?.email || null,
       }
+
+      // Log the data for debugging
+      console.log("🔍 Job data being sent:", {
+        title: jobData.title,
+        description: jobData.description,
+        description_length: jobData.description?.length,
+        opportunity_type: jobData.opportunity_type,
+        application_method: jobData.application_method
+      })
 
       console.log("Final job data for submission:", jobData)
 
