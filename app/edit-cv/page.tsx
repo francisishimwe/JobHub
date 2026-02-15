@@ -2,7 +2,7 @@
 
 import { Suspense } from "react"
 import { useSearchParams } from "next/navigation"
-import { CVBuilder } from "@/components/cv-builder"
+import { CVBuilderFullscreen } from "@/components/cv-builder-fullscreen"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
 
@@ -25,14 +25,10 @@ function EditCVContent() {
   }
 
   return (
-    <div className="container mx-auto py-8">
-      <CVBuilder 
-        jobId={jobId} 
-        jobTitle={jobTitle} 
-        isOpen={true} 
-        onClose={() => window.history.back()} 
-      />
-    </div>
+    <CVBuilderFullscreen 
+      jobId={jobId} 
+      jobTitle={jobTitle} 
+    />
   )
 }
 
