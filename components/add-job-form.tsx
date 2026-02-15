@@ -368,12 +368,6 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-sm">
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Add New Job</h1>
-          <p className="text-muted-foreground">
-            Fill in the details below to post a new job listing
-          </p>
-        </div>
 
         <div className="grid gap-6 md:grid-cols-2">
           {/* Left Column */}
@@ -420,6 +414,27 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                   <SelectItem value="Contract">Contract</SelectItem>
                   <SelectItem value="Temporary">Temporary</SelectItem>
                   <SelectItem value="Internship">Internship</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Offer Type */}
+            <div className="space-y-2">
+              <Label htmlFor="offer_type">Offer Type</Label>
+              <Select
+                value={formData.offer_type}
+                onValueChange={(value: string) => setFormData({ ...formData, offer_type: value })}
+              >
+                <SelectTrigger className="h-11 text-base">
+                  <SelectValue placeholder="Select offer type" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="Job">Job</SelectItem>
+                  <SelectItem value="Tender">Tender</SelectItem>
+                  <SelectItem value="Blog">Blog</SelectItem>
+                  <SelectItem value="Internship">Internship</SelectItem>
+                  <SelectItem value="Scholarship">Scholarship</SelectItem>
+                  <SelectItem value="Education">Education</SelectItem>
                 </SelectContent>
               </Select>
             </div>
