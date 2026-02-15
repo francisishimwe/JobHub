@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { CVPreview } from "@/components/cv-preview"
-import { User, Mail, Phone, BookOpen, Briefcase, Award, Link, Download, Users, Globe, Calendar, MapPin, UserCircle, ArrowLeft } from "lucide-react"
+import { User, Mail, Phone, BookOpen, Briefcase, Award, Link, Download, Users, Globe, Calendar, MapPin, UserCircle, ArrowLeft, Plus, X } from "lucide-react"
 import jsPDF from 'jspdf'
 
 interface CVBuilderFullscreenProps {
@@ -54,15 +54,106 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
     french_reading: "",
     french_writing: "",
     french_speaking: "",
-    other_reading: "",
-    other_writing: "",
-    other_speaking: "",
     
-    // Referees
-    referee_name: "",
-    referee_phone: "",
-    referee_email: "",
+    // Dynamic arrays for additional entries
+    additional_education: [{ degree: "", graduation_year: "", institution: "" }],
+    additional_experience: [{ position: "", company: "", start_date: "", end_date: "", description: "" }],
+    additional_languages: [{ name: "", reading: "", writing: "", speaking: "" }],
+    additional_referees: [{ name: "", phone: "", email: "", relationship: "" }],
   })
+
+  // Helper functions for dynamic arrays
+  const addEducation = () => {
+    setFormData({
+      ...formData,
+      additional_education: [...formData.additional_education, { degree: "", graduation_year: "", institution: "" }]
+    })
+  }
+
+  const removeEducation = (index: number) => {
+    setFormData({
+      ...formData,
+      additional_education: formData.additional_education.filter((_, i) => i !== index)
+    })
+  }
+
+  const updateEducation = (index: number, field: string, value: string) => {
+    const updatedEducation = [...formData.additional_education]
+    updatedEducation[index] = { ...updatedEducation[index], [field]: value }
+    setFormData({
+      ...formData,
+      additional_education: updatedEducation
+    })
+  }
+
+  const addExperience = () => {
+    setFormData({
+      ...formData,
+      additional_experience: [...formData.additional_experience, { position: "", company: "", start_date: "", end_date: "", description: "" }]
+    })
+  }
+
+  const removeExperience = (index: number) => {
+    setFormData({
+      ...formData,
+      additional_experience: formData.additional_experience.filter((_, i) => i !== index)
+    })
+  }
+
+  const updateExperience = (index: number, field: string, value: string) => {
+    const updatedExperience = [...formData.additional_experience]
+    updatedExperience[index] = { ...updatedExperience[index], [field]: value }
+    setFormData({
+      ...formData,
+      additional_experience: updatedExperience
+    })
+  }
+
+  const addLanguage = () => {
+    setFormData({
+      ...formData,
+      additional_languages: [...formData.additional_languages, { name: "", reading: "", writing: "", speaking: "" }]
+    })
+  }
+
+  const removeLanguage = (index: number) => {
+    setFormData({
+      ...formData,
+      additional_languages: formData.additional_languages.filter((_, i) => i !== index)
+    })
+  }
+
+  const updateLanguage = (index: number, field: string, value: string) => {
+    const updatedLanguages = [...formData.additional_languages]
+    updatedLanguages[index] = { ...updatedLanguages[index], [field]: value }
+    setFormData({
+      ...formData,
+      additional_languages: updatedLanguages
+    })
+  }
+
+  const addReferee = () => {
+    setFormData({
+      ...formData,
+      additional_referees: [...formData.additional_referees, { name: "", phone: "", email: "", relationship: "" }]
+    })
+  }
+
+  const removeReferee = (index: number) => {
+    setFormData({
+      ...formData,
+      additional_referees: formData.additional_referees.filter((_, i) => i !== index)
+    })
+  }
+
+  const updateReferee = (index: number, field: string, value: string) => {
+    const updatedReferees = [...formData.additional_referees]
+    updatedReferees[index] = { ...updatedReferees[index], [field]: value }
+    setFormData({
+      ...formData,
+      additional_referees: updatedReferees
+    })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -101,29 +192,14 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
         mothers_name: "",
         place_of_birth: "",
         nationality: "",
-        university_degree: "",
-        university_graduation: "",
-        secondary_degree: "",
-        secondary_graduation: "",
-        experience_level: "",
-        current_position: "",
-        years_experience: "",
-        current_employer: "",
-        kinyarwanda_reading: "",
-        kinyarwanda_writing: "",
-        kinyarwanda_speaking: "",
-        english_reading: "",
-        english_writing: "",
-        english_speaking: "",
-        french_reading: "",
-        french_writing: "",
-        french_speaking: "",
-        other_reading: "",
-        other_writing: "",
-        other_speaking: "",
-        referee_name: "",
-        referee_phone: "",
-        referee_email: "",
+        education: [{ degree: "", graduation_year: "", institution: "" }],
+        experience: [{ position: "", company: "", start_date: "", end_date: "", description: "" }],
+        languages: [
+          { name: "Kinyarwanda", reading: "", writing: "", speaking: "" },
+          { name: "English", reading: "", writing: "", speaking: "" },
+          { name: "French", reading: "", writing: "", speaking: "" }
+        ],
+        referees: [{ name: "", phone: "", email: "", relationship: "" }],
       })
     } catch (error) {
       console.error('Error submitting CV:', error)
@@ -500,6 +576,16 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                   </div>
                 </div>
               </div>
+              
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => alert("Add more education coming soon!")}
+                className="gap-2 mt-4"
+              >
+                <Plus className="h-4 w-4" />
+                Add Education
+              </Button>
             </div>
 
             {/* Experience */}
@@ -550,6 +636,16 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                   placeholder="G.S MUGOZI"
                 />
               </div>
+              
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => alert("Add more experience coming soon!")}
+                className="gap-2 mt-4"
+              >
+                <Plus className="h-4 w-4" />
+                Add Experience
+              </Button>
             </div>
 
             {/* Language Proficiency */}
@@ -722,59 +818,15 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                   </div>
                 </div>
                 
-                {/* Other */}
-                <div>
-                  <h4 className="font-medium mb-2">Other</h4>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="other_reading">Reading</Label>
-                      <select 
-                        id="other_reading"
-                        value={formData.other_reading}
-                        onChange={(e) => setFormData({ ...formData, other_reading: e.target.value })}
-                        className="w-full h-10 px-3 border border-gray-300 rounded-md"
-                      >
-                        <option value="">Select</option>
-                        <option value="Excellent">Excellent</option>
-                        <option value="Very Good">Very Good</option>
-                        <option value="Good">Good</option>
-                        <option value="Basic">Basic</option>
-                      </select>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="other_writing">Writing</Label>
-                      <select 
-                        id="other_writing"
-                        value={formData.other_writing}
-                        onChange={(e) => setFormData({ ...formData, other_writing: e.target.value })}
-                        className="w-full h-10 px-3 border border-gray-300 rounded-md"
-                      >
-                        <option value="">Select</option>
-                        <option value="Excellent">Excellent</option>
-                        <option value="Very Good">Very Good</option>
-                        <option value="Good">Good</option>
-                        <option value="Basic">Basic</option>
-                      </select>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="other_speaking">Speaking</Label>
-                      <select 
-                        id="other_speaking"
-                        value={formData.other_speaking}
-                        onChange={(e) => setFormData({ ...formData, other_speaking: e.target.value })}
-                        className="w-full h-10 px-3 border border-gray-300 rounded-md"
-                      >
-                        <option value="">Select</option>
-                        <option value="Excellent">Excellent</option>
-                        <option value="Very Good">Very Good</option>
-                        <option value="Good">Good</option>
-                        <option value="Basic">Basic</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => alert("Add more languages coming soon!")}
+                  className="gap-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add Language
+                </Button>
               </div>
             </div>
 
@@ -819,6 +871,16 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                   </div>
                 </div>
               </div>
+              
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => alert("Add more referees coming soon!")}
+                className="gap-2 mt-4"
+              >
+                <Plus className="h-4 w-4" />
+                Add Referee
+              </Button>
             </div>
 
             {/* Submit Button */}
