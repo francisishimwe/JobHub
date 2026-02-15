@@ -246,6 +246,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       }
 
       // Prepare job data
+      console.log('🔍 Preparing job data with companyId:', companyId)
       const jobData = {
         title: formData.job_title.trim(),
         company_id: companyId,
@@ -278,7 +279,9 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         description: jobData.description,
         description_length: jobData.description?.length,
         opportunity_type: jobData.opportunity_type,
-        application_method: jobData.application_method
+        application_method: jobData.application_method,
+        company_id: jobData.company_id,
+        company_id_type: typeof jobData.company_id
       })
 
       console.log("Final job data for submission:", jobData)
@@ -312,6 +315,11 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         onSuccess?.()
       } catch (jobError) {
         console.error('Error submitting job:', jobError)
+        console.error('Error details:', {
+          message: jobError instanceof Error ? jobError.message : 'Unknown error',
+          stack: jobError instanceof Error ? jobError.stack : undefined,
+          jobData: jobData
+        })
         alert('Failed to submit job: ' + (jobError instanceof Error ? jobError.message : 'Unknown error'))
         setLoading(false)
       }

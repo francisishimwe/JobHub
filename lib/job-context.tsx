@@ -126,19 +126,38 @@ export function JobProvider({ children }: { children: ReactNode }) {
   const setFilters = (newFilters: any) => setFiltersState(prev => ({ ...prev, ...newFilters }))
 
   const addJob = async (jobData: any) => {
-    const response = await fetch('/api/jobs', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(jobData),
-    })
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}))
-      const errorMessage = errorData.error || `Failed to create job (${response.status})`
-      throw new Error(errorMessage)
+    console.log('🚀 addJob called with data:', jobData)
+    console.log('🔍 jobData keys:', Object.keys(jobData))
+    console.log('🔍 jobData.company_id:', jobData.company_id)
+    
+    try {
+      const response = await fetch('/api/jobs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(jobData),
+      })
+      
+      console.log('📡 Response status:', response.status)
+      console.log('📡 Response ok:', response.ok)
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        console.error('❌ API Error response:', errorData)
+        const errorMessage = errorData.error || `Failed to create job (${response.status})`
+        throw new Error(errorMessage)
+      }
+      
+      const data = await response.json()
+      console.log('✅ API Success response:', data)
+      
+      // Re-fetch page 0 to show the newest job immediately
+      console.log('🔄 Refreshing job list...')
+      fetchJobs(0, true)
+    } catch (error) {
+      console.error('❌ addJob error:', error)
+      console.error('❌ Error stack:', error instanceof Error ? error.stack : 'No stack available')
+      throw error
     }
-    const data = await response.json()
-    // Re-fetch page 0 to show the newest job immediately
-    fetchJobs(0, true)
   }
 
   const updateJob = async (jobId: string, jobData: any) => {
