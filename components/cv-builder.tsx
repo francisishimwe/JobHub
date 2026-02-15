@@ -20,6 +20,7 @@ interface CVBuilderProps {
 
 export function CVBuilder({ jobId, jobTitle, isOpen, onClose, onSuccess }: CVBuilderProps) {
   const [loading, setLoading] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
   const [formData, setFormData] = useState({
     // Personal Information
     full_name: "",
@@ -86,10 +87,12 @@ export function CVBuilder({ jobId, jobTitle, isOpen, onClose, onSuccess }: CVBui
       }
 
       alert('CV profile submitted successfully!')
+      setIsSubmitted(true)
       onSuccess?.()
       onClose()
       
       // Reset form
+      setIsSubmitted(false)
       setFormData({
         full_name: "",
         email: "",
@@ -761,16 +764,17 @@ export function CVBuilder({ jobId, jobTitle, isOpen, onClose, onSuccess }: CVBui
 
           {/* Actions */}
           <div className="flex justify-between gap-3 pt-4 border-t">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={generatePDF}
-              className="gap-2 border-red-600 text-red-600 hover:bg-red-50"
-              disabled={!formData.full_name || !formData.email || !formData.phone}
-            >
-              <Download className="h-4 w-4" />
-              Download PDF
-            </Button>
+            {isSubmitted && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={generatePDF}
+                className="gap-2 border-red-600 text-red-600 hover:bg-red-50"
+              >
+                <Download className="h-4 w-4" />
+                Download PDF
+              </Button>
+            )}
             
             <div className="flex gap-3">
               <Button
