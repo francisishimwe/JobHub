@@ -91,6 +91,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     
     console.log('📝 Received job submission:', body)
+    console.log('🔍 Body keys:', Object.keys(body))
+    console.log('🔍 Body company_id:', body.company_id)
+    console.log('🔍 Body employerName:', body.employerName)
+    console.log('🔍 Body company:', body.company)
 
     // Check if this is an Admin user (bypass pending status)
     const isAdmin = body.userEmail === "admin@RwandaJobHub.com"
@@ -191,16 +195,28 @@ export async function POST(request: NextRequest) {
         SELECT id FROM companies WHERE name = ${body.employerName} LIMIT 1
       `
       
-      if (existingCompany && existingCompany.length > 0) {
+      console.log('🔍 Existing company query result:', existingCompany)
+      
+      if (existingCompany && existingCompany.length > 0 && existingCompany[0]) {
         companyId = existingCompany[0].id
+        console.log('✅ Found existing company ID:', companyId)
       } else {
         // Create new company from employer info
+        console.log('🆕 Creating new company:', body.employerName)
         const newCompany = await sql`
           INSERT INTO companies (name, logo, created_at) 
           VALUES (${body.employerName}, ${body.companyLogo || null}, ${new Date().toISOString()})
           RETURNING id
         `
-        companyId = newCompany[0].id
+        
+        console.log('🔍 New company query result:', newCompany)
+        
+        if (newCompany && newCompany.length > 0 && newCompany[0]) {
+          companyId = newCompany[0].id
+          console.log('✅ Created new company ID:', companyId)
+        } else {
+          throw new Error('Failed to create new company - no ID returned')
+        }
       }
     } else if (!companyId && !isEmployerJob && body.company) {
       // Admin job - use company field
@@ -208,16 +224,28 @@ export async function POST(request: NextRequest) {
         SELECT id FROM companies WHERE name = ${body.company} LIMIT 1
       `
       
-      if (existingCompany && existingCompany.length > 0) {
+      console.log('🔍 Admin company query result:', existingCompany)
+      
+      if (existingCompany && existingCompany.length > 0 && existingCompany[0]) {
         companyId = existingCompany[0].id
+        console.log('✅ Found admin company ID:', companyId)
       } else {
         // Create new company
+        console.log('🆕 Creating admin company:', body.company)
         const newCompany = await sql`
           INSERT INTO companies (name, created_at) 
           VALUES (${body.company}, ${new Date().toISOString()})
           RETURNING id
         `
-        companyId = newCompany[0].id
+        
+        console.log('🔍 New admin company result:', newCompany)
+        
+        if (newCompany && newCompany.length > 0 && newCompany[0]) {
+          companyId = newCompany[0].id
+          console.log('✅ Created admin company ID:', companyId)
+        } else {
+          throw new Error('Failed to create admin company - no ID returned')
+        }
       }
     } else if (companyId && typeof companyId === 'string' && !isValidUUID(companyId)) {
       // If companyId is not a valid UUID, treat it as a company name and create/find
@@ -225,15 +253,26 @@ export async function POST(request: NextRequest) {
         SELECT id FROM companies WHERE name = ${companyId} LIMIT 1
       `
       
-      if (existingCompany && existingCompany.length > 0) {
+      console.log('🔍 UUID check company query result:', existingCompany)
+      
+      if (existingCompany && existingCompany.length > 0 && existingCompany[0]) {
         companyId = existingCompany[0].id
+        console.log('✅ Found company by name ID:', companyId)
       } else {
         const newCompany = await sql`
           INSERT INTO companies (name, created_at) 
           VALUES (${companyId}, ${new Date().toISOString()})
           RETURNING id
         `
-        companyId = newCompany[0].id
+        
+        console.log('🔍 New company by name result:', newCompany)
+        
+        if (newCompany && newCompany.length > 0 && newCompany[0]) {
+          companyId = newCompany[0].id
+          console.log('✅ Created company by name ID:', companyId)
+        } else {
+          throw new Error('Failed to create company by name - no ID returned')
+        }
       }
     }
 
