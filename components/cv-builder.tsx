@@ -260,15 +260,15 @@ export function CVBuilder({ jobId, jobTitle, isOpen, onClose, onSuccess }: CVBui
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-7xl max-h-[95vh] overflow-hidden">
-        <DialogHeader>
+      <DialogContent className="w-screen h-screen max-w-none max-h-none p-0">
+        <DialogHeader className="p-6 border-b">
           <DialogTitle className="text-2xl font-bold text-center">CURRICULUM VITAE (CV)</DialogTitle>
         </DialogHeader>
         
-        <div className="flex flex-col lg:flex-row h-full gap-6 overflow-hidden">
+        <div className="flex flex-col lg:flex-row h-[calc(100vh-88px)] gap-6 overflow-hidden p-6">
           {/* Form Section - Left Side */}
-          <div className="flex-1 overflow-y-auto pr-2">
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="flex-1 overflow-y-auto">
+            <form onSubmit={handleSubmit} className="space-y-6 pr-4">
           {/* Personal Information */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold flex items-center gap-2">
@@ -803,13 +803,13 @@ export function CVBuilder({ jobId, jobTitle, isOpen, onClose, onSuccess }: CVBui
           </div>
           
           {/* Preview Section - Right Side */}
-          <div className="flex-1 lg:border-l border-gray-200 pl-2 overflow-hidden">
+          <div className="flex-1 lg:border-l border-gray-200 pl-4 overflow-hidden">
             <div className="h-full overflow-y-auto">
-              <div className="sticky top-0 bg-white p-3 border-b border-gray-200 mb-4">
+              <div className="sticky top-0 bg-white p-3 border-b border-gray-200 mb-4 rounded-t-lg">
                 <h3 className="text-lg font-semibold text-center">Live Preview</h3>
                 <p className="text-sm text-gray-600 text-center">See how your CV will look</p>
               </div>
-              <div className="bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden" style={{ minHeight: '800px' }}>
+              <div className="bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden" style={{ minHeight: 'calc(100% - 80px)' }}>
                 <CVPreview formData={formData} />
               </div>
             </div>
