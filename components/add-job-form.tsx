@@ -45,6 +45,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     // System fields
     plan_id: 1,
     attachment_url: "",
+    company_id: "", // Add company_id field for edit scenarios
   })
 
   // Handle logo upload
@@ -185,42 +186,61 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     }
 
     try {
-      // Create or find company
+      // Check if we already have a company_id from existing companies or job data
       let companyId = null
-      try {
-        const createCompanyResponse = await fetch('/api/companies', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: formData.company_name,
-            logo: formData.logo_url || null
-          })
-        })
-        
-        if (createCompanyResponse.ok) {
-          const newCompanyData = await createCompanyResponse.json()
-          console.log('Company API response:', newCompanyData)
-          // Handle both response formats: { company: { id: ... } } or { id: ... }
-          companyId = newCompanyData.company?.id || newCompanyData.id
-          console.log('Extracted companyId:', companyId)
+      
+      // First, try to find existing company by name
+      const existingCompany = companies.find(c => 
+        c.name.toLowerCase() === formData.company_name.trim().toLowerCase()
+      );
+      
+      if (existingCompany) {
+        companyId = existingCompany.id;
+        console.log('Found existing company:', companyId);
+      } else {
+        // Check if this is an edit scenario with existing company_id
+        // This shouldn't happen with AddJobForm, but let's handle it gracefully
+        if (formData.company_id && typeof formData.company_id === 'string' && formData.company_id.length > 10) {
+          companyId = formData.company_id;
+          console.log('Using existing company_id from form data:', companyId);
         } else {
-          const errorData = await createCompanyResponse.json().catch(() => ({}))
-          console.error('Company creation failed:', errorData)
-          alert('Failed to create company: ' + (errorData.error || 'Unknown error'))
-          setLoading(false)
-          return
+          // Create new company only if no existing one found
+          try {
+            const createCompanyResponse = await fetch('/api/companies', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                name: formData.company_name,
+                logo: formData.logo_url || null
+              })
+            })
+            
+            if (createCompanyResponse.ok) {
+              const newCompanyData = await createCompanyResponse.json()
+              console.log('Company API response:', newCompanyData)
+              // Handle both response formats: { company: { id: ... } } or { id: ... }
+              companyId = newCompanyData.company?.id || newCompanyData.id
+              console.log('Created new companyId:', companyId)
+            } else {
+              const errorData = await createCompanyResponse.json().catch(() => ({}))
+              console.error('Company creation failed:', errorData)
+              alert('Failed to create company: ' + (errorData.error || 'Unknown error'))
+              setLoading(false)
+              return
+            }
+          } catch (companyError) {
+            console.error('Error handling company:', companyError)
+            alert('Failed to create company. Please try again.')
+            setLoading(false)
+            return
+          }
         }
-      } catch (companyError) {
-        console.error('Error handling company:', companyError)
-        alert('Failed to create company. Please try again.')
-        setLoading(false)
-        return
       }
 
       // Validate we have a companyId
       if (!companyId) {
-        console.error('No companyId obtained after company creation')
-        alert('Failed to create company. Please try again.')
+        console.error('No companyId obtained after company lookup/creation')
+        alert('Failed to create or find company. Please try again.')
         setLoading(false)
         return
       }
@@ -282,6 +302,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
           education_level: "",
           plan_id: 1,
           attachment_url: "",
+          company_id: "", // Reset company_id
         })
         setImagePreview("")
         setSelectedFile(null)
