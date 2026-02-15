@@ -243,7 +243,7 @@ export function CVPreview({ formData }: CVPreviewProps) {
         <div className="border-l-4 border-red-600 pl-4">
           <h2 className="text-xl font-semibold mb-3 flex items-center gap-2">
             <Users className="h-5 w-5 text-red-600" />
-            REFRERENCES
+            REFERENCES
           </h2>
           <div className="bg-gray-50 p-3 rounded">
             {formData.referee_name && <div className="font-medium">{formData.referee_name}</div>}
