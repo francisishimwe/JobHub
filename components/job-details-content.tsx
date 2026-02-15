@@ -268,7 +268,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Action Buttons */}
                 <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                    {/* Row 1: Apply Now and Share on WhatsApp Buttons - Force Side-by-Side */}
+                    {/* Row 1: Apply Now and Share on WhatsApp Buttons - Uniform Styling */}
                     <div className="flex flex-row gap-2 mb-4" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                         {/* Apply Now Button - Green, only if external_link exists */}
                         {!isExpired &&
@@ -287,7 +287,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                         }
                                     }}
                                     size="lg"
-                                    className="w-1/2 text-white text-lg font-bold h-14 px-6 rounded-lg shadow-sm hover:shadow-md transition-all"
+                                    className="flex-1 text-white text-lg font-bold h-14 px-6 rounded-lg shadow-sm hover:shadow-md transition-all"
                                     style={{ backgroundColor: '#22c55e' }}
                                 >
                                     Apply Now
@@ -297,9 +297,10 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                         <Button
                             onClick={handleShareWhatsApp}
                             size="lg"
-                            className="w-1/2 bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-6 rounded-lg shadow-sm hover:shadow-md transition-all"
+                            className="flex-1 text-white text-sm sm:text-lg font-bold h-14 px-2 sm:px-6 rounded-lg shadow-sm hover:shadow-md transition-all"
+                            style={{ backgroundColor: '#22c55e' }}
                         >
-                            <Share2 className="mr-2 h-5 w-5" />
+                            <Share2 className="mr-1 sm:mr-2 h-4 sm:h-5 w-4 sm:w-5" />
                             Share on WhatsApp
                         </Button>
                     </div>
