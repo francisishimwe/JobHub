@@ -145,12 +145,16 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       
       if (response.ok) {
         const data = await response.json()
+        console.log('✅ Document upload successful:', data)
         setFormData(prev => ({ ...prev, attachment_url: data.url }))
       } else {
-        console.error('Document upload failed')
+        const errorData = await response.json()
+        console.error('❌ Document upload failed:', errorData)
+        alert(`Upload failed: ${errorData.error || 'Unknown error'}`)
       }
     } catch (error) {
-      console.error('Upload error:', error)
+      console.error('❌ Upload error:', error)
+      alert(`Upload error: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }
 
