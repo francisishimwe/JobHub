@@ -127,7 +127,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 {job.opportunityType !== "Scholarship" && job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && (
                     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
                         <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Overview</h3>
-                        <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
+                        <div className="grid gap-3 grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                             {job.location && (
                                 <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
                                     <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
@@ -268,7 +268,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
                 {/* Action Buttons */}
                 <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                    {/* Row 1: Apply Now and Share on WhatsApp Buttons */}
+                    {/* Row 1: Apply Now and Share on WhatsApp Buttons - Mobile Optimized */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                         {/* Apply Now Button - Green, only if external_link exists */}
                         {!isExpired &&
