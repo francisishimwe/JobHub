@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { User, Mail, Phone, BookOpen, Briefcase, Award, Link, Download } from "lucide-react"
+import { User, Mail, Phone, BookOpen, Briefcase, Award, Link, Download, Users } from "lucide-react"
 import jsPDF from 'jspdf'
 
 interface CVBuilderProps {
@@ -32,6 +32,11 @@ export function CVBuilder({ jobId, jobTitle, isOpen, onClose, onSuccess }: CVBui
     linkedin_url: "",
     github_url: "",
     additional_info: "",
+    referee_name: "",
+    referee_position: "",
+    referee_organization: "",
+    referee_email: "",
+    referee_phone: "",
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -71,6 +76,11 @@ export function CVBuilder({ jobId, jobTitle, isOpen, onClose, onSuccess }: CVBui
         linkedin_url: "",
         github_url: "",
         additional_info: "",
+        referee_name: "",
+        referee_position: "",
+        referee_organization: "",
+        referee_email: "",
+        referee_phone: "",
       })
     } catch (error) {
       console.error('Error submitting CV:', error)
@@ -122,7 +132,17 @@ export function CVBuilder({ jobId, jobTitle, isOpen, onClose, onSuccess }: CVBui
     const educationLines = doc.splitTextToSize(formData.education, 170)
     doc.text(educationLines, 20, 210)
     
-    // Save the PDF
+    // Add referee information
+    doc.setFontSize(14)
+    doc.text('Referee Information', 20, 240)
+    doc.setFontSize(11)
+    doc.text(`Name: ${formData.referee_name}`, 20, 250)
+    doc.text(`Position: ${formData.referee_position}`, 20, 260)
+    doc.text(`Organization: ${formData.referee_organization}`, 20, 270)
+    doc.text(`Email: ${formData.referee_email}`, 20, 280)
+    doc.text(`Phone: ${formData.referee_phone}`, 20, 290)
+    
+    // Save PDF
     doc.save(`${formData.full_name.replace(/\s+/g, '_')}_CV.pdf`)
   }
 
@@ -281,6 +301,69 @@ export function CVBuilder({ jobId, jobTitle, isOpen, onClose, onSuccess }: CVBui
             </div>
           </div>
 
+          {/* Referee Information */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              <Users className="h-5 w-5" />
+              Referee Information
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="referee_name">Referee Name</Label>
+                <Input
+                  id="referee_name"
+                  value={formData.referee_name}
+                  onChange={(e) => setFormData({ ...formData, referee_name: e.target.value })}
+                  placeholder="Dr. John Smith"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="referee_position">Position/Title</Label>
+                <Input
+                  id="referee_position"
+                  value={formData.referee_position}
+                  onChange={(e) => setFormData({ ...formData, referee_position: e.target.value })}
+                  placeholder="Senior Manager, CEO, etc."
+                />
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="referee_organization">Organization</Label>
+              <Input
+                id="referee_organization"
+                value={formData.referee_organization}
+                onChange={(e) => setFormData({ ...formData, referee_organization: e.target.value })}
+                placeholder="Company Name, University, etc."
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="referee_email">Email Address</Label>
+                <Input
+                  id="referee_email"
+                  type="email"
+                  value={formData.referee_email}
+                  onChange={(e) => setFormData({ ...formData, referee_email: e.target.value })}
+                  placeholder="referee@example.com"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="referee_phone">Phone Number</Label>
+                <Input
+                  id="referee_phone"
+                  value={formData.referee_phone}
+                  onChange={(e) => setFormData({ ...formData, referee_phone: e.target.value })}
+                  placeholder="+250 788 123 456"
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Additional Information */}
           <div className="space-y-2">
             <Label htmlFor="additional_info">Additional Information</Label>
@@ -299,7 +382,7 @@ export function CVBuilder({ jobId, jobTitle, isOpen, onClose, onSuccess }: CVBui
               type="button"
               variant="outline"
               onClick={generatePDF}
-              className="gap-2"
+              className="gap-2 border-red-600 text-red-600 hover:bg-red-50"
               disabled={!formData.full_name || !formData.email}
             >
               <Download className="h-4 w-4" />
