@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'fs/promises'
-import { join } from 'path'
-import { existsSync } from 'fs'
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,18 +25,19 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate file size (10MB max)
-    if (file.size > 10 * 1024 * 1024) {
+    // Validate file size (5MB max for base64)
+    if (file.size > 5 * 1024 * 1024) {
       console.log('❌ File too large:', file.size, 'bytes')
       return NextResponse.json(
-        { error: 'File size must be less than 10MB' },
+        { error: 'File size must be less than 5MB' },
         { status: 400 }
       )
     }
 
-    console.log('✅ File validation passed, starting upload process')
+    console.log('✅ File validation passed, converting to base64')
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
+    const base64String = buffer.toString('base64')
     
     // Create a clean filename with timestamp
     const timestamp = Date.now()
@@ -47,28 +45,17 @@ export async function POST(request: NextRequest) {
     const fileName = `job-doc-${timestamp}-${originalName}`
     console.log('🔍 Generated filename:', fileName)
     
-    // Save to uploads directory
-    const uploadsDir = join(process.cwd(), 'public', 'uploads')
-    console.log('🔍 Uploads directory:', uploadsDir)
-    
-    if (!existsSync(uploadsDir)) {
-      console.log('🔍 Creating uploads directory...')
-      await mkdir(uploadsDir, { recursive: true })
-      console.log('✅ Uploads directory created')
-    }
-    
-    const filePath = join(uploadsDir, fileName)
-    console.log('🔍 Saving file to:', filePath)
-    
-    await writeFile(filePath, buffer)
-    console.log('✅ File saved successfully')
+    // Create data URL that can be stored and used directly
+    const dataUrl = `data:application/pdf;base64,${base64String}`
+    console.log('✅ Base64 conversion completed')
 
     const response = NextResponse.json({ 
       success: true,
-      url: `/uploads/${fileName}`,
-      originalName: file.name
+      url: dataUrl, // Store the full data URL
+      originalName: file.name,
+      fileName: fileName
     })
-    console.log('✅ Upload response:', { success: true, url: `/uploads/${fileName}` })
+    console.log('✅ Upload response:', { success: true, fileName })
     
     return response
 
