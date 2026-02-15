@@ -6,6 +6,7 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { AddJobForm } from "@/components/add-job-form"
 import { LoginForm } from "@/components/login-form"
+import { ErrorBoundary } from "@/components/error-boundary"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -40,7 +41,9 @@ export default function AddJobPage() {
           </div>
 
           <div className="bg-card border rounded-lg p-6 shadow-sm">
-            <AddJobForm onSuccess={() => router.push("/dashboard")} />
+            <ErrorBoundary>
+              <AddJobForm onSuccess={() => router.push("/dashboard")} />
+            </ErrorBoundary>
           </div>
         </div>
       </main>

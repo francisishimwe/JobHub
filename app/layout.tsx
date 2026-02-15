@@ -11,6 +11,7 @@ import { ExamProvider } from "@/lib/exam-context"
 import { InquiryProvider } from "@/lib/inquiry-context"
 import { GoogleAnalytics } from "@/components/google-analytics"
 import { ScrollToTop } from "@/components/scroll-to-top"
+import { ErrorBoundary } from "@/components/error-boundary"
 
 export const metadata: Metadata = {
   title: "RwandaJobHub - The #1 job board for Rwandan jobs",
@@ -39,14 +40,16 @@ export default function RootLayout({
         <ReactQueryProvider>
           <AuthProvider>
             <CompanyProvider>
-              <JobProvider>
-                <ExamProvider>
-                  <InquiryProvider>
-                    {children}
-                    <ScrollToTop />
-                  </InquiryProvider>
-                </ExamProvider>
-              </JobProvider>
+              <ErrorBoundary>
+                <JobProvider>
+                  <ExamProvider>
+                    <InquiryProvider>
+                      {children}
+                      <ScrollToTop />
+                    </InquiryProvider>
+                  </ExamProvider>
+                </JobProvider>
+              </ErrorBoundary>
             </CompanyProvider>
           </AuthProvider>
         </ReactQueryProvider>

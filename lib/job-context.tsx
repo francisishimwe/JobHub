@@ -51,7 +51,21 @@ export function JobProvider({ children }: { children: ReactNode }) {
         console.log(`✓ Filtered to ${validJobs.length} valid jobs`)
         
         // Use the mapping function to convert snake_case to camelCase
-        const formattedJobs: Job[] = validJobs.map(mapDatabaseJobToUIJob).filter((job: Job) => job && job.id)
+        const formattedJobs: Job[] = validJobs.map((job: any, index: number) => {
+          try {
+            const mappedJob = mapDatabaseJobToUIJob(job);
+            // Additional validation to ensure we have required fields
+            if (!mappedJob || !mappedJob.id) {
+              console.warn(`⚠️ Job at index ${index} failed mapping:`, job);
+              return null;
+            }
+            return mappedJob;
+          } catch (error) {
+            console.error(`❌ Error mapping job at index ${index}:`, error, job);
+            return null;
+          }
+        }).filter((job: Job | null): job is Job => job !== null && job.id !== '');
+        
         console.log(`✓ Formatted: ${formattedJobs.length} jobs mapped to UI format`)
         
         setJobs(prev => isNewSearch ? formattedJobs : [...prev, ...formattedJobs])

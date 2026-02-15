@@ -175,6 +175,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Additional validation for company_id
+    if (body.company_id && typeof body.company_id !== 'string') {
+      console.error('❌ Invalid company_id type:', typeof body.company_id, body.company_id)
+      return NextResponse.json(
+        { error: 'Invalid company_id format' },
+        { status: 400 }
+      )
+    }
+
     // Set agency verification for employer jobs based on plan
     const agencyVerified = isEmployerJob ? true : false
     const priority = config.tier === 'short-listing' ? 'Top' : (config.priority_placement ? 'High' : 'Normal')
@@ -281,9 +290,18 @@ export async function POST(request: NextRequest) {
 
     // Ensure we have a valid company_id
     if (!companyId) {
-      console.error('❌ No company_id found:', { companyId, body })
+      console.error('❌ No company_id found:', { companyId, body, isEmployerJob })
       return NextResponse.json(
         { error: 'Company information is required. Please select or add a company.' },
+        { status: 400 }
+      )
+    }
+
+    // Final validation of companyId
+    if (!companyId || typeof companyId !== 'string' || companyId.trim() === '') {
+      console.error('❌ Invalid final companyId:', { companyId, type: typeof companyId })
+      return NextResponse.json(
+        { error: 'Invalid company ID. Please try again.' },
         { status: 400 }
       )
     }

@@ -239,8 +239,22 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
 
       // Validate we have a companyId
       if (!companyId) {
-        console.error('No companyId obtained after company lookup/creation')
+        console.error('❌ No companyId obtained after company lookup/creation')
+        console.error('🔍 Debug info:', { 
+          existingCompany: companies.find(c => c.name.toLowerCase() === formData.company_name.trim().toLowerCase()),
+          formDataCompanyId: formData.company_id,
+          companiesLength: companies.length,
+          companyName: formData.company_name.trim()
+        })
         alert('Failed to create or find company. Please try again.')
+        setLoading(false)
+        return
+      }
+
+      // Additional validation for companyId format
+      if (typeof companyId !== 'string' || companyId.trim() === '') {
+        console.error('❌ Invalid companyId format:', { companyId, type: typeof companyId })
+        alert('Invalid company ID format. Please try again.')
         setLoading(false)
         return
       }

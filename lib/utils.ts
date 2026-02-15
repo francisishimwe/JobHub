@@ -14,7 +14,25 @@ export function mapDatabaseJobToUIJob(dbJob: any): Job {
   // Add null/undefined check at the beginning
   if (!dbJob) {
     console.error('❌ mapDatabaseJobToUIJob received null/undefined data')
-    return {} as Job
+    return {
+      id: '',
+      title: '',
+      location: '',
+      description: undefined,
+      company: { name: "Unknown Company", logo: "/full logo.jpg" }
+    } as Job
+  }
+
+  // Additional validation for required fields
+  if (!dbJob.id) {
+    console.error('❌ mapDatabaseJobToUIJob received job without id:', dbJob)
+    return {
+      id: '',
+      title: dbJob.title || 'Untitled Job',
+      location: dbJob.location || '',
+      description: dbJob.description || undefined,
+      company: { name: "Unknown Company", logo: "/full logo.jpg" }
+    } as Job
   }
 
   console.log('🔍 Mapping job data:', { id: dbJob.id, title: dbJob.title })
@@ -64,13 +82,22 @@ export function mapDatabaseJobToUIJob(dbJob: any): Job {
       isVerified: dbJob.is_verified ?? false,
       
       // Relational data with safe fallbacks - only use if dbJob.company exists
-      company: dbJob.company && typeof dbJob.company === 'object' ? dbJob.company : { 
+      company: dbJob.company && typeof dbJob.company === 'object' && dbJob.company !== null ? { 
+        name: dbJob.company.name || dbJob.company_name || "RwandaJobHub Partner", 
+        logo: dbJob.company.logo || dbJob.company_logo || "/full logo.jpg" 
+      } : { 
         name: dbJob.company_name || "RwandaJobHub Partner", 
         logo: dbJob.company_logo || "/full logo.jpg" 
       },
     }
   } catch (error) {
     console.error('❌ Error mapping job data:', error, dbJob)
-    return {} as Job
+    return {
+      id: '',
+      title: 'Error Loading Job',
+      location: '',
+      description: undefined,
+      company: { name: "Error Loading Company", logo: "/full logo.jpg" }
+    } as Job
   }
 }
