@@ -42,11 +42,31 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     deadline: "",
     experience_level: "",
     education_level: "",
+    contract_type: "", // Add contract type field
     // System fields
     plan_id: 1,
     attachment_url: "",
     company_id: "", // Add company_id field for edit scenarios
   })
+
+  // Define the form data interface for TypeScript
+  interface FormData {
+    job_title: string;
+    company_name: string;
+    logo_url: string;
+    offer_type: string;
+    category: string;
+    location: string;
+    description: string;
+    external_link: string;
+    deadline: string;
+    experience_level: string;
+    education_level: string;
+    contract_type: string;
+    plan_id: number;
+    attachment_url: string;
+    company_id: string;
+  }
 
   // Handle logo upload
   const handleLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -268,7 +288,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         companyLogo: formData.logo_url || null,
         description: sanitizeHTML(formData.description?.trim() || null),
         location: formData.location?.trim() || null,
-        job_type: null,
+        job_type: formData.contract_type || null, // Add contract type field
         opportunity_type: formData.offer_type,
         deadline: formData.deadline || null,
         application_link: formData.external_link?.trim() || null,
@@ -317,6 +337,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
           deadline: "",
           experience_level: "",
           education_level: "",
+          contract_type: "", // Reset contract type
           plan_id: 1,
           attachment_url: "",
           company_id: "", // Reset company_id
@@ -381,6 +402,26 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                 placeholder="e.g. Tech Company"
                 className="h-11 text-base"
               />
+            </div>
+
+            {/* Contract Type */}
+            <div className="space-y-2">
+              <Label htmlFor="contract_type">Contract Type</Label>
+              <Select
+                value={formData.contract_type}
+                onValueChange={(value: string) => setFormData({ ...formData, contract_type: value })}
+              >
+                <SelectTrigger className="h-11 text-base">
+                  <SelectValue placeholder="Select contract type" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="Full-time">Full-time</SelectItem>
+                  <SelectItem value="Part-time">Part-time</SelectItem>
+                  <SelectItem value="Contract">Contract</SelectItem>
+                  <SelectItem value="Temporary">Temporary</SelectItem>
+                  <SelectItem value="Internship">Internship</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Company Logo */}

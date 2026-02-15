@@ -289,11 +289,17 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             job.opportunityType !== "Scholarship" &&
                             job.opportunityType !== "Education" &&
                             job.opportunityType !== "Announcement" &&
-                            job.applicationLink &&
-                            job.applicationLink?.trim() !== "" && (
+                            (job.applicationLink || job.application_link) &&
+                            (job.applicationLink?.trim() !== "" || job.application_link?.trim() !== "") && (
                                 <Button
                                     type="button"
-                                    onClick={handleApply}
+                                    onClick={() => {
+                                        // Open the application link in a new tab
+                                        const link = job.applicationLink || job.application_link;
+                                        if (link) {
+                                            window.open(link, '_blank', 'noopener,noreferrer');
+                                        }
+                                    }}
                                     size="lg"
                                     className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
                                     disabled={!job.id}
