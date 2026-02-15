@@ -329,11 +329,15 @@ export async function POST(request: NextRequest) {
       result = await sql`
         INSERT INTO jobs (
           id, title, company_id, location, opportunity_type, 
-          description, status, approved, created_at, application_link
+          description, status, approved, created_at, application_link,
+          job_type, experience_level, education_level, deadline, attachment_url
         ) VALUES (
           ${id}, ${body.title}, ${companyId}, ${body.location || null}, 
           ${body.opportunity_type}, ${body.description || null}, 
-          'published', true, ${now}, ${body.application_link || null}
+          'published', true, ${now}, ${body.application_link || null},
+          ${body.job_type || null}, ${body.experience_level || null}, 
+          ${body.education_level || null}, ${body.deadline || null}, 
+          ${body.attachment_url || null}
         )
         RETURNING *
       `;
@@ -346,11 +350,15 @@ export async function POST(request: NextRequest) {
       result = await sql`
         INSERT INTO jobs (
           id, title, company_id, location, opportunity_type, 
-          description, status, approved, created_at, application_link
+          description, status, approved, created_at, application_link,
+          job_type, experience_level, education_level, deadline, attachment_url
         ) VALUES (
           ${id}, ${body.title}, ${companyId}, ${body.location || null}, 
           ${body.opportunity_type}, ${body.description || null}, 
-          'published', true, ${now}, ${body.application_link || null}
+          'published', true, ${now}, ${body.application_link || null},
+          ${body.job_type || null}, ${body.experience_level || null}, 
+          ${body.education_level || null}, ${body.deadline || null}, 
+          ${body.attachment_url || null}
         )
         RETURNING *
       `
