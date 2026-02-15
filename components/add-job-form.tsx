@@ -34,6 +34,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     job_title: "",
     company_name: "",
     logo_url: "",
+    offer_type: "Job",
     category: "",
     location: "",
     description: "",
@@ -195,7 +196,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         description: formData.description?.trim() || null,
         location: formData.location?.trim() || null,
         job_type: null,
-        opportunity_type: "Job",
+        opportunity_type: formData.offer_type,
         deadline: formData.deadline || null,
         application_link: formData.external_link?.trim() || null,
         attachment_url: formData.attachment_url?.trim() || null,
@@ -215,35 +216,37 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
 
       console.log("Final job data for submission:", jobData)
 
-      await addJob(jobData)
+      try {
+        await addJob(jobData)
+        console.log("Job submitted successfully!")
+        
+        // Reset form
+        setFormData({
+          job_title: "",
+          company_name: "",
+          logo_url: "",
+          offer_type: "Job",
+          category: "",
+          location: "",
+          description: "",
+          external_link: "",
+          deadline: "",
+          experience_level: "",
+          education_level: "",
+          plan_id: 1,
+          attachment_url: "",
+        })
+        setImagePreview("")
+        setSelectedFile(null)
+        setSelectedDocument(null)
 
-      // Reset form
-      setFormData({
-        job_title: "",
-        company_name: "",
-        logo_url: "",
-        category: "",
-        location: "",
-        description: "",
-        external_link: "",
-        deadline: "",
-        experience_level: "",
-        education_level: "",
-        plan_id: 1,
-        attachment_url: "",
-      })
-      setImagePreview("")
-      setSelectedFile(null)
-      setSelectedDocument(null)
-
-      setLoading(false)
-      onSuccess?.()
-    } catch (error) {
-      console.error('Error submitting job:', error)
-      alert('Failed to submit job. Please try again.')
-      setLoading(false)
-    }
-  }
+        setLoading(false)
+        onSuccess?.()
+      } catch (jobError) {
+        console.error('Error submitting job:', jobError)
+        alert('Failed to submit job: ' + (jobError instanceof Error ? jobError.message : 'Unknown error'))
+        setLoading(false)
+      }
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-sm">
