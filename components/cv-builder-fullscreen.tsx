@@ -415,7 +415,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                     required
                     value={formData.full_name}
                     onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                    placeholder="Ishimwe francis"
+                    placeholder="Enter your full name"
                   />
                 </div>
                 
@@ -427,7 +427,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="ishimwefrancis2018@gmail.com"
+                    placeholder="Enter your email address"
                   />
                 </div>
               </div>
@@ -440,7 +440,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                     required
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="+250789298623"
+                    placeholder="Enter your phone number"
                   />
                 </div>
                 
@@ -451,7 +451,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                     required
                     value={formData.nationality}
                     onChange={(e) => setFormData({ ...formData, nationality: e.target.value })}
-                    placeholder="Rwanda"
+                    placeholder="Enter your nationality"
                   />
                 </div>
               </div>
@@ -464,7 +464,6 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                     type="date"
                     value={formData.birth_date}
                     onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
-                    placeholder="2007-02-02"
                   />
                 </div>
                 
@@ -474,7 +473,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                     id="gender"
                     value={formData.gender}
                     onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                    placeholder="Male"
+                    placeholder="Enter your gender"
                   />
                 </div>
               </div>
@@ -486,7 +485,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                     id="fathers_name"
                     value={formData.fathers_name}
                     onChange={(e) => setFormData({ ...formData, fathers_name: e.target.value })}
-                    placeholder="Harindintwari Salomon"
+                    placeholder="Enter father's name"
                   />
                 </div>
                 
@@ -496,7 +495,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                     id="mothers_name"
                     value={formData.mothers_name}
                     onChange={(e) => setFormData({ ...formData, mothers_name: e.target.value })}
-                    placeholder="Nyirabhindi Immacule"
+                    placeholder="Enter mother's name"
                   />
                 </div>
               </div>
@@ -508,7 +507,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                     id="residence"
                     value={formData.residence}
                     onChange={(e) => setFormData({ ...formData, residence: e.target.value })}
-                    placeholder="Mukeke, Nyarubona, Nyamirambo, Nyarugenge"
+                    placeholder="Enter your residence"
                   />
                 </div>
                 
@@ -518,7 +517,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                     id="place_of_birth"
                     value={formData.place_of_birth}
                     onChange={(e) => setFormData({ ...formData, place_of_birth: e.target.value })}
-                    placeholder="Nyamasheke"
+                    placeholder="Enter place of birth"
                   />
                 </div>
               </div>
@@ -539,7 +538,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                       id="university_degree"
                       value={formData.university_degree}
                       onChange={(e) => setFormData({ ...formData, university_degree: e.target.value })}
-                      placeholder="Bachelor's in Economics with Education"
+                      placeholder="Enter your university degree"
                     />
                   </div>
                   
@@ -549,7 +548,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                       id="university_graduation"
                       value={formData.university_graduation}
                       onChange={(e) => setFormData({ ...formData, university_graduation: e.target.value })}
-                      placeholder="2023"
+                      placeholder="Enter graduation year"
                     />
                   </div>
                 </div>
@@ -561,7 +560,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                       id="secondary_degree"
                       value={formData.secondary_degree}
                       onChange={(e) => setFormData({ ...formData, secondary_degree: e.target.value })}
-                      placeholder="A2 in Mathematics_Economics"
+                      placeholder="Enter secondary education"
                     />
                   </div>
                   
@@ -571,7 +570,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                       id="secondary_graduation"
                       value={formData.secondary_graduation}
                       onChange={(e) => setFormData({ ...formData, secondary_graduation: e.target.value })}
-                      placeholder="2018"
+                      placeholder="Enter graduation year"
                     />
                   </div>
                 </div>
@@ -602,7 +601,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                     id="experience_level"
                     value={formData.experience_level}
                     onChange={(e) => setFormData({ ...formData, experience_level: e.target.value })}
-                    placeholder="Junior"
+                    placeholder="Enter experience level"
                   />
                 </div>
                 
@@ -612,7 +611,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                     id="years_experience"
                     value={formData.years_experience}
                     onChange={(e) => setFormData({ ...formData, years_experience: e.target.value })}
-                    placeholder="3"
+                    placeholder="Enter years of experience"
                   />
                 </div>
                 
@@ -622,7 +621,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                     id="current_position"
                     value={formData.current_position}
                     onChange={(e) => setFormData({ ...formData, current_position: e.target.value })}
-                    placeholder="Teacher"
+                    placeholder="Enter current position"
                   />
                 </div>
               </div>
@@ -633,7 +632,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                   id="current_employer"
                   value={formData.current_employer}
                   onChange={(e) => setFormData({ ...formData, current_employer: e.target.value })}
-                  placeholder="G.S MUGOZI"
+                  placeholder="Enter current employer"
                 />
               </div>
               
@@ -844,7 +843,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                     id="referee_name"
                     value={formData.referee_name}
                     onChange={(e) => setFormData({ ...formData, referee_name: e.target.value })}
-                    placeholder="Ishimwe francis"
+                    placeholder="Enter referee name"
                   />
                 </div>
                 
@@ -855,7 +854,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                       id="referee_phone"
                       value={formData.referee_phone}
                       onChange={(e) => setFormData({ ...formData, referee_phone: e.target.value })}
-                      placeholder="+250789298623"
+                      placeholder="Enter referee phone"
                     />
                   </div>
                   
@@ -866,7 +865,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                       type="email"
                       value={formData.referee_email}
                       onChange={(e) => setFormData({ ...formData, referee_email: e.target.value })}
-                      placeholder="ishimwefrancis2018@gmail.com"
+                      placeholder="Enter referee email"
                     />
                   </div>
                 </div>
