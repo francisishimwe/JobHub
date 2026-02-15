@@ -30,7 +30,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [selectedDocument, setSelectedDocument] = useState<File | null>(null)
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     job_title: "",
     company_name: "",
     logo_url: "",
@@ -41,7 +41,6 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     external_link: "",
     deadline: "",
     experience_level: "",
-    education_level: "",
     contract_type: "", // Add contract type field
     // System fields
     plan_id: 1,
@@ -61,7 +60,6 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     external_link: string;
     deadline: string;
     experience_level: string;
-    education_level: string;
     contract_type: string;
     plan_id: number;
     attachment_url: string;
@@ -299,7 +297,6 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         primary_email: null,
         cc_emails: null,
         experience_level: formData.experience_level || null,
-        education_level: formData.education_level || null,
         category: formData.category || null,
         contact_name: null,
         contact_phone: null,
@@ -336,7 +333,6 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
           external_link: "",
           deadline: "",
           experience_level: "",
-          education_level: "",
           contract_type: "", // Reset contract type
           plan_id: 1,
           attachment_url: "",
@@ -502,6 +498,18 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                 placeholder="e.g. Kigali, Rwanda"
+                className="h-11 text-base"
+              />
+            </div>
+
+            {/* Deadline */}
+            <div className="space-y-2">
+              <Label htmlFor="deadline">Deadline Date (Optional)</Label>
+              <Input
+                id="deadline"
+                type="date"
+                value={formData.deadline}
+                onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
                 className="h-11 text-base"
               />
             </div>
