@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { sql } from '@/lib/db'
+import { sql, getSql } from '@/lib/db'
 
 export async function GET(request: NextRequest) {
   try {
@@ -261,118 +261,102 @@ export async function POST(request: NextRequest) {
       status: isAdmin ? 'published' : (isEmployerJob ? 'pending' : 'published')
     })
 
-    // Try to insert with all columns, fall back to basic columns if schema doesn't exist
+    // Check which columns exist in the jobs table
     let result;
     try {
-      console.log('🔍 About to execute SQL with data:', {
-        id,
-        title: body.title,
-        companyId,
-        description: body.description,
-        opportunity_type: body.opportunity_type,
-        application_method: body.application_method
-      })
+      // First, get the actual columns that exist in the jobs table
+      const columnsCheck = await sql`
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_name = 'jobs'
+        ORDER BY ordinal_position
+      `;
       
-      result = await sql`
-        INSERT INTO jobs (
-          id,
-          title,
-          company_id,
-          location,
-          location_type,
-          job_type,
-          opportunity_type,
-          experience_level,
-          deadline,
-          featured,
-          description,
-          attachment_url,
-          application_link,
-          application_method,
-          primary_email,
-          cc_emails,
-          status,
-          approved,
-          applicants,
-          views,
-          created_at
-        ) VALUES (
-          ${id},
-          ${body.title},
-          ${companyId},
-          ${body.location || null},
-          ${body.location_type || null},
-          ${body.jobType || body.job_type || null},
-          ${body.opportunity_type},
-          ${body.experienceLevel || body.experience_level || null},
-          ${body.deadline || null},
-          ${body.featured || false},
-          ${body.description || null},
-          ${body.attachment_url || null},
-          ${body.applicationLink || body.application_link || null},
-          ${body.application_method || 'email'},
-          ${body.primary_email || null},
-          ${body.cc_emails || null},
-          ${isAdmin ? 'published' : 'published'}, // All jobs go to home page
-          ${isAdmin ? true : true}, // All jobs are approved
-          0,
-          0,
-          ${now}
-        )
+      const existingColumns = columnsCheck.map((row: any) => row.column_name);
+      console.log('📋 Existing columns:', existingColumns);
+      
+      // Build dynamic INSERT based on existing columns
+      const columnsToInsert = [
+        'id', 'title', 'company_id', 'location', 'location_type', 'job_type',
+        'opportunity_type', 'experience_level', 'deadline', 'featured', 'description',
+        'attachment_url', 'application_link', 'status', 'approved', 'applicants', 
+        'views', 'created_at'
+      ];
+      
+      // Add optional columns if they exist
+      if (existingColumns.includes('application_method')) {
+        columnsToInsert.push('application_method');
+      }
+      if (existingColumns.includes('primary_email')) {
+        columnsToInsert.push('primary_email');
+      }
+      if (existingColumns.includes('cc_emails')) {
+        columnsToInsert.push('cc_emails');
+      }
+      
+      // Build values array matching the columns
+      const values = [
+        id,
+        body.title,
+        companyId,
+        body.location || null,
+        body.location_type || null,
+        body.jobType || body.job_type || null,
+        body.opportunity_type,
+        body.experienceLevel || body.experience_level || null,
+        body.deadline || null,
+        body.featured || false,
+        body.description || null,
+        body.attachment_url || null,
+        body.applicationLink || body.application_link || null,
+        isAdmin ? 'published' : 'published',
+        isAdmin ? true : true,
+        0,
+        0,
+        now
+      ];
+      
+      // Add optional values if columns exist
+      if (existingColumns.includes('application_method')) {
+        values.push(body.application_method || 'email');
+      }
+      if (existingColumns.includes('primary_email')) {
+        values.push(body.primary_email || null);
+      }
+      if (existingColumns.includes('cc_emails')) {
+        values.push(body.cc_emails || null);
+      }
+      
+      console.log('🔍 About to execute dynamic SQL with columns:', columnsToInsert);
+      console.log('🔍 Values count:', values.length);
+      
+      // Build the SQL query dynamically
+      const columnsStr = columnsToInsert.join(', ');
+      const placeholders = values.map((_, index) => `$${index + 1}`).join(', ');
+      
+      const query = `
+        INSERT INTO jobs (${columnsStr})
+        VALUES (${placeholders})
         RETURNING *
-      `
+      `;
+      
+      console.log('🔍 Executing query:', query);
+      
+      // Use the neon sql client directly with the built query
+      const sqlFn = getSql();
+      result = await sqlFn.unsafe(query, values);
+      
     } catch (schemaError) {
-      console.log('⚠️ Schema columns missing, trying basic insert...')
-      console.log('🔍 Schema error details:', {
-        message: schemaError instanceof Error ? schemaError.message : 'Unknown error',
-        stack: schemaError instanceof Error ? schemaError.stack : undefined
-      })
-      // Fallback to basic schema without employer-specific columns
+      console.log('⚠️ Schema error, trying minimal insert...', schemaError);
+      // Fallback to minimal schema
       result = await sql`
         INSERT INTO jobs (
-          id,
-          title,
-          company_id,
-          location,
-          location_type,
-          job_type,
-          opportunity_type,
-          experience_level,
-          deadline,
-          featured,
-          description,
-          attachment_url,
-          application_link,
-          application_method,
-          primary_email,
-          cc_emails,
-          status,
-          approved,
-          applicants,
-          views,
-          created_at
+          id, title, company_id, location, opportunity_type, 
+          description, status, approved, created_at
         ) VALUES (
-          ${id},
-          ${body.title},
-          ${companyId},
-          ${body.location || null},
-          ${body.location_type || null},
-          ${body.jobType || body.job_type || null},
-          ${body.opportunity_type},
-          ${body.experienceLevel || body.experience_level || null},
-          ${body.deadline || null},
-          ${body.featured || false},
-          ${body.description || null},
-          ${body.attachment_url || null},
-          ${body.applicationLink || body.application_link || null},
-          ${body.application_method || 'email'},
-          ${body.primary_email || null},
-          ${body.cc_emails || null},
-          ${isAdmin ? 'published' : 'published'}, // All jobs go to home page
-          ${isAdmin ? true : true}, // All jobs are approved
-          0,
-          0,
-          ${now}
+          ${id}, ${body.title}, ${companyId}, ${body.location || null}, 
+          ${body.opportunity_type}, ${body.description || null}, 
+          'published', true, ${now}
         )
         RETURNING *
       `

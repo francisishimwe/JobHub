@@ -29,3 +29,6 @@ export function sql(strings: TemplateStringsArray, ...values: any[]) {
   const sqlFn = getSql()
   return sqlFn(strings, ...values)
 }
+
+// Export the getSql function for direct access
+export { getSql }
