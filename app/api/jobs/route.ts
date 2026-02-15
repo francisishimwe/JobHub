@@ -264,6 +264,15 @@ export async function POST(request: NextRequest) {
     // Try to insert with all columns, fall back to basic columns if schema doesn't exist
     let result;
     try {
+      console.log('🔍 About to execute SQL with data:', {
+        id,
+        title: body.title,
+        companyId,
+        description: body.description,
+        opportunity_type: body.opportunity_type,
+        application_method: body.application_method
+      })
+      
       result = await sql`
         INSERT INTO jobs (
           id,
@@ -314,6 +323,10 @@ export async function POST(request: NextRequest) {
       `
     } catch (schemaError) {
       console.log('⚠️ Schema columns missing, trying basic insert...')
+      console.log('🔍 Schema error details:', {
+        message: schemaError instanceof Error ? schemaError.message : 'Unknown error',
+        stack: schemaError instanceof Error ? schemaError.stack : undefined
+      })
       // Fallback to basic schema without employer-specific columns
       result = await sql`
         INSERT INTO jobs (
@@ -396,8 +409,15 @@ export async function POST(request: NextRequest) {
     }, { status: 201 })
   } catch (error) {
     console.error('Error creating job:', error)
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    })
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to create job' },
+      { 
+        error: error instanceof Error ? error.message : 'Failed to create job',
+        details: error instanceof Error ? error.stack : undefined
+      },
       { status: 500 }
     )
   }
