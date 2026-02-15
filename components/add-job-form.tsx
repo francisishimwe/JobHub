@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Plus, Building2, Upload, X, FileText } from "lucide-react"
+import { Plus, Building2, FileText } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { RichTextEditor } from "@/components/rich-text-editor"
 
@@ -318,7 +318,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                     htmlFor="logo-upload"
                     className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                   >
-                    <Upload className="h-4 w-4" />
+                    <Plus className="h-4 w-4" />
                     {imagePreview ? 'Change Logo' : 'Upload Logo'}
                   </Label>
                 </div>
