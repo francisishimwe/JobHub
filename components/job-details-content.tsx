@@ -229,8 +229,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 )}
 
-                {/* Document Attachment Section - Simple check, no duplicates */}
-                {(!job.attachmentUrl && !job.attachment_url) ? null : (
+                {/* Document Attachment Section - Clean one-time display */}
+                {job.attachmentUrl && (
                     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
                         <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Attachment</h3>
                         <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
@@ -240,13 +240,13 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             </svg>
                             <div className="min-w-0 flex-1" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                                 <a 
-                                    href={job.attachmentUrl || job.attachment_url || '#'}
+                                    href={job.attachmentUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-green-600 hover:text-green-700 underline font-medium transition-colors"
                                     style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}
                                 >
-                                    Download Job Description (PDF)
+                                    Download Full Job Details (PDF)
                                 </a>
                             </div>
                         </div>
@@ -286,7 +286,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                             window.open(job.applicationLink, '_blank')
                                         }
                                     }}
-                                    className="w-full text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                                    size="lg"
+                                    className="w-full text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
                                     style={{ backgroundColor: '#22c55e' }}
                                 >
                                     Apply Now
