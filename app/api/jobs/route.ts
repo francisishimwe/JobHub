@@ -318,90 +318,27 @@ export async function POST(request: NextRequest) {
       status: isAdmin ? 'published' : (isEmployerJob ? 'pending' : 'published')
     })
 
-    // Check which columns exist in the jobs table
+    // Simplified approach - use standard SQL template literal
     let result;
     try {
-      // First, get the actual columns that exist in the jobs table
-      const columnsCheck = await sql`
-        SELECT column_name 
-        FROM information_schema.columns 
-        WHERE table_name = 'jobs'
-        ORDER BY ordinal_position
-      `;
+      console.log('🔍 Testing database connection...');
+      const testConnection = await sql`SELECT 1 as test`;
+      console.log('✅ Database connection successful:', testConnection);
       
-      const existingColumns = columnsCheck.map((row: any) => row.column_name);
-      console.log('📋 Existing columns:', existingColumns);
-      
-      // Build dynamic INSERT based on existing columns
-      const columnsToInsert = [
-        'id', 'title', 'company_id', 'location', 'location_type', 'job_type',
-        'opportunity_type', 'experience_level', 'deadline', 'featured', 'description',
-        'attachment_url', 'application_link', 'status', 'approved', 'applicants', 
-        'views', 'created_at'
-      ];
-      
-      // Add optional columns if they exist
-      if (existingColumns.includes('application_method')) {
-        columnsToInsert.push('application_method');
-      }
-      if (existingColumns.includes('primary_email')) {
-        columnsToInsert.push('primary_email');
-      }
-      if (existingColumns.includes('cc_emails')) {
-        columnsToInsert.push('cc_emails');
-      }
-      
-      // Build values array matching the columns
-      const values = [
-        id,
-        body.title,
-        companyId,
-        body.location || null,
-        body.location_type || null,
-        body.jobType || body.job_type || null,
-        body.opportunity_type,
-        body.experienceLevel || body.experience_level || null,
-        body.deadline || null,
-        body.featured || false,
-        body.description || null,
-        body.attachment_url || null,
-        body.applicationLink || body.application_link || null,
-        isAdmin ? 'published' : 'published',
-        isAdmin ? true : true,
-        0,
-        0,
-        now
-      ];
-      
-      // Add optional values if columns exist
-      if (existingColumns.includes('application_method')) {
-        values.push(body.application_method || 'email');
-      }
-      if (existingColumns.includes('primary_email')) {
-        values.push(body.primary_email || null);
-      }
-      if (existingColumns.includes('cc_emails')) {
-        values.push(body.cc_emails || null);
-      }
-      
-      console.log('🔍 About to execute dynamic SQL with columns:', columnsToInsert);
-      console.log('🔍 Values count:', values.length);
-      
-      // Build the SQL query dynamically
-      const columnsStr = columnsToInsert.join(', ');
-      const placeholders = values.map((_, index) => `$${index + 1}`).join(', ');
-      
-      const query = `
-        INSERT INTO jobs (${columnsStr})
-        VALUES (${placeholders})
+      console.log('🔍 Inserting job with simplified approach...');
+      result = await sql`
+        INSERT INTO jobs (
+          id, title, company_id, location, opportunity_type, 
+          description, status, approved, created_at
+        ) VALUES (
+          ${id}, ${body.title}, ${companyId}, ${body.location || null}, 
+          ${body.opportunity_type}, ${body.description || null}, 
+          'published', true, ${now}
+        )
         RETURNING *
       `;
       
-      console.log('🔍 Executing query:', query);
-      
-      // Use the neon sql client directly with the built query
-      const sqlFn = getSql();
-      result = await sqlFn.unsafe(query, values);
+      console.log('✅ Job inserted successfully:', result);
       
     } catch (schemaError) {
       console.log('⚠️ Schema error, trying minimal insert...', schemaError);
@@ -420,10 +357,23 @@ export async function POST(request: NextRequest) {
     }
 
     if (!result || result.length === 0) {
-      throw new Error('Failed to insert job')
+      console.error('❌ No result returned from database insertion:', { result })
+      throw new Error('Failed to insert job - no data returned')
+    }
+
+    if (!result[0]) {
+      console.error('❌ No first item in result array:', { result })
+      throw new Error('Failed to insert job - invalid result format')
     }
 
     const newJob = result[0]
+    
+    if (!newJob.id) {
+      console.error('❌ New job missing ID:', { newJob, result })
+      throw new Error('Failed to insert job - no ID generated')
+    }
+
+    console.log('✅ Successfully created job:', { id: newJob.id, title: newJob.title })
 
     return NextResponse.json({
       id: newJob.id,
