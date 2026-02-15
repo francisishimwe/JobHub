@@ -199,10 +199,30 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
         
         if (createCompanyResponse.ok) {
           const newCompanyData = await createCompanyResponse.json()
-          companyId = newCompanyData.company.id
+          console.log('Company API response:', newCompanyData)
+          // Handle both response formats: { company: { id: ... } } or { id: ... }
+          companyId = newCompanyData.company?.id || newCompanyData.id
+          console.log('Extracted companyId:', companyId)
+        } else {
+          const errorData = await createCompanyResponse.json().catch(() => ({}))
+          console.error('Company creation failed:', errorData)
+          alert('Failed to create company: ' + (errorData.error || 'Unknown error'))
+          setLoading(false)
+          return
         }
       } catch (companyError) {
         console.error('Error handling company:', companyError)
+        alert('Failed to create company. Please try again.')
+        setLoading(false)
+        return
+      }
+
+      // Validate we have a companyId
+      if (!companyId) {
+        console.error('No companyId obtained after company creation')
+        alert('Failed to create company. Please try again.')
+        setLoading(false)
+        return
       }
 
       // Prepare job data
