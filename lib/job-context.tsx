@@ -46,10 +46,14 @@ export function JobProvider({ children }: { children: ReactNode }) {
       console.log(`✓ API Response: ${data.jobs?.length} jobs received (page ${pageNumber})`, data)
 
       if (data.jobs && Array.isArray(data.jobs)) {
+        // Filter out any null/undefined jobs before mapping
+        const validJobs = data.jobs.filter((job: any) => job != null)
+        console.log(`✓ Filtered to ${validJobs.length} valid jobs`)
+        
         // Use the mapping function to convert snake_case to camelCase
-        const formattedJobs: Job[] = data.jobs.map(mapDatabaseJobToUIJob)
-
+        const formattedJobs: Job[] = validJobs.map(mapDatabaseJobToUIJob).filter((job: Job) => job && job.id)
         console.log(`✓ Formatted: ${formattedJobs.length} jobs mapped to UI format`)
+        
         setJobs(prev => isNewSearch ? formattedJobs : [...prev, ...formattedJobs])
         setHasMore(data.hasMore)
         if (isNewSearch) {
