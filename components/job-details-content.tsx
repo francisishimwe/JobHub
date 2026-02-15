@@ -313,7 +313,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             size="lg"
                             className="w-full bg-red-600 hover:bg-red-700 text-white border-2 border-red-600 text-lg font-bold h-14 px-8 rounded-lg transition-all"
                         >
-                            <Link href={`/edit-cv?job_id=${job.id}`}>
+                            <Link href={`/edit-cv?jobId=${job.id}`}>
                                 <FileText className="mr-2 h-5 w-5" />
                                 Build your CV for this Job
                             </Link>
