@@ -6,32 +6,86 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient()
     const cvData = await request.json()
 
-    // Extract and structure the data for our simplified schema
+    // Extract and structure the data from CV builder form
     const {
       job_id,
       full_name,
       email,
       phone,
-      field_of_study,
-      experience,
-      skills,
-      education,
-      portfolio_url,
-      linkedin_url,
-      github_url,
-      additional_info,
+      residence,
+      birth_date,
+      gender,
+      fathers_name,
+      mothers_name,
+      place_of_birth,
+      nationality,
+      university_degree,
+      university_graduation,
+      secondary_degree,
+      secondary_graduation,
+      experience_level,
+      current_position,
+      years_experience,
+      current_employer,
+      kinyarwanda_reading,
+      kinyarwanda_writing,
+      kinyarwanda_speaking,
+      english_reading,
+      english_writing,
+      english_speaking,
+      french_reading,
+      french_writing,
+      french_speaking,
+      other_reading,
+      other_writing,
+      other_speaking,
+      referee_name,
+      referee_phone,
+      referee_email,
     } = cvData
 
     // Validate required fields
-    if (!job_id || !full_name || !email || !field_of_study) {
+    if (!job_id || !full_name || !email) {
       return NextResponse.json(
-        { error: 'Missing required fields: job_id, full_name, email, field_of_study' },
+        { error: 'Missing required fields: job_id, full_name, email' },
         { status: 400 }
       )
     }
 
-    // Ensure skills is an array (default to empty array if not provided)
-    const normalizedSkills = Array.isArray(skills) ? skills : (skills ? [skills] : [])
+    // Create field_of_study from university degree
+    const field_of_study = university_degree || 'General'
+
+    // Create skills from language proficiencies
+    const skills = []
+    if (kinyarwanda_reading || kinyarwanda_writing || kinyarwanda_speaking) {
+      skills.push('Kinyarwanda')
+    }
+    if (english_reading || english_writing || english_speaking) {
+      skills.push('English')
+    }
+    if (french_reading || french_writing || french_speaking) {
+      skills.push('French')
+    }
+
+    // Create experience object
+    const experience = {
+      level: experience_level,
+      years: years_experience,
+      current_position: current_position,
+      current_employer: current_employer
+    }
+
+    // Create education object
+    const education = {
+      university: {
+        degree: university_degree,
+        graduation_year: university_graduation
+      },
+      secondary: {
+        degree: secondary_degree,
+        graduation_year: secondary_graduation
+      }
+    }
 
     const cvProfile = {
       job_id,
@@ -39,13 +93,46 @@ export async function POST(request: NextRequest) {
       email,
       phone,
       field_of_study,
-      skills: normalizedSkills,
-      experience_json: experience ? { experience } : {},
-      education_json: education ? { education } : {},
-      portfolio_url,
-      linkedin_url,
-      github_url,
-      additional_info,
+      experience: JSON.stringify(experience),
+      skills: skills.join(', '),
+      education: JSON.stringify(education),
+      portfolio_url: null,
+      linkedin_url: null,
+      github_url: null,
+      additional_info: JSON.stringify({
+        residence,
+        birth_date,
+        gender,
+        fathers_name,
+        mothers_name,
+        place_of_birth,
+        nationality,
+        referee_name,
+        referee_phone,
+        referee_email,
+        language_proficiency: {
+          kinyarwanda: {
+            reading: kinyarwanda_reading,
+            writing: kinyarwanda_writing,
+            speaking: kinyarwanda_speaking
+          },
+          english: {
+            reading: english_reading,
+            writing: english_writing,
+            speaking: english_speaking
+          },
+          french: {
+            reading: french_reading,
+            writing: french_writing,
+            speaking: french_speaking
+          },
+          other: {
+            reading: other_reading,
+            writing: other_writing,
+            speaking: other_speaking
+          }
+        }
+      })
     }
 
     // Insert new profile
@@ -70,6 +157,7 @@ export async function POST(request: NextRequest) {
         job_id,
         cv_profile_id: result.id,
         status: 'applied',
+        application_date: new Date().toISOString()
       })
 
     if (applicationError) {
