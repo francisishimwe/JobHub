@@ -229,8 +229,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 )}
 
-                {/* Document Attachment Section - Only show if file exists */}
-                {(job.attachmentUrl || job.attachment_url) && (
+                {/* Document Attachment Section - Simple check, no duplicates */}
+                {(!job.attachmentUrl && !job.attachment_url) ? null : (
                     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
                         <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Attachment</h3>
                         <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
@@ -246,7 +246,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                     className="text-green-600 hover:text-green-700 underline font-medium transition-colors"
                                     style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}
                                 >
-                                    Download PDF Attachment
+                                    Download Job Description (PDF)
                                 </a>
                             </div>
                         </div>
@@ -266,30 +266,6 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 )}
 
-                {/* Document Attachment Section - Only show if file exists */}
-                {(job.attachmentUrl || job.attachment_url) && (
-                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                        <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Attachment</h3>
-                        <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
-                            <svg className="h-5 w-5 text-red-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 01-2 2v-8a2 2 0 00-2-2H9a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2v-8a2 2 0 00-2-2z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 16h5l-3 3m0 0l5-5m-5 5v-8" />
-                            </svg>
-                            <div className="min-w-0 flex-1" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
-                                <a 
-                                    href={job.attachmentUrl || job.attachment_url || '#'}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-green-600 hover:text-green-700 underline font-medium transition-colors"
-                                    style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}
-                                >
-                                    Download PDF Attachment
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
                 {/* Action Buttons */}
                 <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
                     {/* Row 1: Apply Now and Share on WhatsApp Buttons */}
@@ -301,18 +277,17 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             job.opportunityType !== "Scholarship" &&
                             job.opportunityType !== "Education" &&
                             job.opportunityType !== "Announcement" &&
-                            (job.applicationLink || job.application_link) &&
-                            (job.applicationLink?.trim() !== "" || job.application_link?.trim() !== "") && (
+                            job.applicationLink && (
                                 <Button
                                     type="button"
                                     onClick={() => {
                                         // Open the application link in a new tab
-                                        const link = job.applicationLink || job.application_link
-                                        if (link) {
-                                            window.open(link, '_blank')
+                                        if (job.applicationLink) {
+                                            window.open(job.applicationLink, '_blank')
                                         }
                                     }}
-                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                                    className="w-full text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                                    style={{ backgroundColor: '#22c55e' }}
                                 >
                                     Apply Now
                                 </Button>
