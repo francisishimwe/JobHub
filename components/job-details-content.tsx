@@ -229,21 +229,22 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 )}
 
-                {/* Document Attachment - Integrated into job details */}
+                {/* Document Attachment - Final green & clean styling */}
                 {job.attachment_url || job.attachmentUrl ? (
-                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div>
+                        <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-6 mb-3 block border-b border-gray-100 pb-2">ATTACHMENT</h3>
                         <div className="flex items-center gap-3">
-                            <svg className="h-5 w-5 text-blue-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            <svg className="h-5 w-5 text-red-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 01-2 2v-8a2 2 0 00-2-2H9a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2v-8a2 2 0 00-2-2z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 16h5l-3 3m0 0l5-5m-5 5v-8" />
                             </svg>
                             <div className="flex-1">
-                                <p className="text-sm font-medium text-blue-900">Job Attachment</p>
                                 <a 
                                     href={job.attachment_url || job.attachmentUrl || '#'}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     download="job-document.pdf"
-                                    className="text-blue-600 hover:text-blue-800 underline text-sm font-medium"
+                                    className="text-green-600 hover:text-green-700 underline font-medium"
                                 >
                                     Download attachment
                                 </a>
