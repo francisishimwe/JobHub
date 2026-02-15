@@ -135,7 +135,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
 
     // Upload to server
     const uploadFormData = new FormData()
-    uploadFormData.append('file', file)
+    uploadFormData.append('document', file)
     
     try {
       const response = await fetch('/api/upload/document', {
