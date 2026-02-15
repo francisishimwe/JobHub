@@ -242,6 +242,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                                     href={job.attachment_url || job.attachmentUrl || '#'}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    download="job-document.pdf"
                                     className="text-blue-600 hover:text-blue-800 underline text-sm font-medium"
                                 >
                                     Download attachment
