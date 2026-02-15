@@ -329,11 +329,11 @@ export async function POST(request: NextRequest) {
       result = await sql`
         INSERT INTO jobs (
           id, title, company_id, location, opportunity_type, 
-          description, status, approved, created_at
+          description, status, approved, created_at, application_link
         ) VALUES (
           ${id}, ${body.title}, ${companyId}, ${body.location || null}, 
           ${body.opportunity_type}, ${body.description || null}, 
-          'published', true, ${now}
+          'published', true, ${now}, ${body.application_link || null}
         )
         RETURNING *
       `;
@@ -346,11 +346,11 @@ export async function POST(request: NextRequest) {
       result = await sql`
         INSERT INTO jobs (
           id, title, company_id, location, opportunity_type, 
-          description, status, approved, created_at
+          description, status, approved, created_at, application_link
         ) VALUES (
           ${id}, ${body.title}, ${companyId}, ${body.location || null}, 
           ${body.opportunity_type}, ${body.description || null}, 
-          'published', true, ${now}
+          'published', true, ${now}, ${body.application_link || null}
         )
         RETURNING *
       `

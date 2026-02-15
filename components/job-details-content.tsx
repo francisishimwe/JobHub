@@ -17,6 +17,19 @@ interface JobDetailsContentProps {
 
 export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProps) {
     console.log("DEBUG JOB DATA:", job)
+    console.log("DEBUG - Application Link Check:", {
+        applicationLink: job.applicationLink,
+        application_link: job.application_link,
+        opportunityType: job.opportunityType,
+        isExpired: (() => {
+            if (!job.deadline) return false
+            const today = new Date()
+            today.setHours(0, 0, 0, 0)
+            const deadlineDate = new Date(job.deadline)
+            deadlineDate.setHours(0, 0, 0, 0)
+            return deadlineDate < today
+        })()
+    })
     const { getCompanyById } = useCompanies()
     const contextCompany = job.companyId ? getCompanyById(job.companyId) : null
     const company = initialCompany || contextCompany
@@ -291,22 +304,32 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             job.opportunityType !== "Announcement" &&
                             (job.applicationLink || job.application_link) &&
                             (job.applicationLink?.trim() !== "" || job.application_link?.trim() !== "") && (
-                                <Button
-                                    type="button"
-                                    onClick={() => {
-                                        // Open the application link in a new tab
-                                        const link = job.applicationLink || job.application_link;
-                                        if (link) {
-                                            window.open(link, '_blank', 'noopener,noreferrer');
-                                        }
-                                    }}
-                                    size="lg"
-                                    className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
-                                    disabled={!job.id}
-                                >
-                                    Apply Now
-                                    <ExternalLink className="ml-2 h-5 w-5" />
-                                </Button>
+                                <>
+                                    {console.log("DEBUG - Apply button should be visible!", {
+                                        isExpired,
+                                        opportunityType: job.opportunityType,
+                                        applicationLink: job.applicationLink,
+                                        application_link: job.application_link,
+                                        hasApplicationLink: !!(job.applicationLink || job.application_link),
+                                        linkNotEmpty: !!(job.applicationLink?.trim() !== "" || job.application_link?.trim() !== "")
+                                    })}
+                                    <Button
+                                        type="button"
+                                        onClick={() => {
+                                            // Open the application link in a new tab
+                                            const link = job.applicationLink || job.application_link;
+                                            if (link) {
+                                                window.open(link, '_blank', 'noopener,noreferrer');
+                                            }
+                                        }}
+                                        size="lg"
+                                        className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-bold h-14 px-8 rounded-lg shadow-sm hover:shadow-md transition-all"
+                                        disabled={!job.id}
+                                    >
+                                        Apply Now
+                                        <ExternalLink className="ml-2 h-5 w-5" />
+                                    </Button>
+                                </>
                             )}
                         
                         <Button
