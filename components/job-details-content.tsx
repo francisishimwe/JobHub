@@ -229,8 +229,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                     </div>
                 )}
 
-                {/* Document Attachment Section - Clean one-time display */}
-                {job.attachmentUrl && (
+                {/* Document Attachment Section - Simple if statement */}
+                {job.attachment_url && (
                     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
                         <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Attachment</h3>
                         <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0' }}>
@@ -240,13 +240,13 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             </svg>
                             <div className="min-w-0 flex-1" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
                                 <a 
-                                    href={job.attachmentUrl}
+                                    href={job.attachment_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-green-600 hover:text-green-700 underline font-medium transition-colors"
                                     style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', hyphens: 'none' }}
                                 >
-                                    Download Full Job Details (PDF)
+                                    Download Job Document (PDF)
                                 </a>
                             </div>
                         </div>
