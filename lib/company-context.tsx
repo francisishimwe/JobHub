@@ -17,7 +17,7 @@ const CompanyContext = createContext<CompanyContextType | undefined>(undefined)
 
 // Fetch companies function using API
 const fetchCompanies = async (): Promise<Company[]> => {
-  const response = await fetch('/api/companies')
+  const response = await fetch('/api/companies-emergency')
   
   if (!response.ok) {
     throw new Error('Failed to fetch companies')

@@ -26,7 +26,7 @@ export function ExamProvider({ children }: { children: ReactNode }) {
 
   const fetchExams = async () => {
     try {
-      const response = await fetch('/api/exams')
+      const response = await fetch('/api/exams-emergency')
       
       if (!response.ok) {
         throw new Error('Failed to fetch exams')
