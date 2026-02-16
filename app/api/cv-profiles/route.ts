@@ -4,6 +4,24 @@ import { createClient } from '@/lib/supabase/server'
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
+    
+    // Test basic database connection first
+    console.log('Testing database connection...')
+    const { data: testConnection, error: connectionError } = await supabase
+      .from('cv_profiles')
+      .select('count')
+      .single()
+    
+    if (connectionError) {
+      console.error('Database connection failed:', connectionError)
+      return NextResponse.json({ 
+        error: 'Database connection failed', 
+        details: connectionError.message 
+      }, { status: 500 })
+    }
+    
+    console.log('Database connection successful, count:', testConnection?.count)
+    
     const cvData = await request.json()
     
     console.log('CV Submission Data:', cvData) // Debug log
