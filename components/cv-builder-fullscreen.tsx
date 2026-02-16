@@ -137,25 +137,6 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
     setLoading(true)
 
     try {
-      // Combine static and dynamic data for API submission
-      const education = [
-        ...formData.additional_education
-      ]
-
-      const experience = [
-        ...formData.additional_experience
-      ]
-
-      const languages = [
-        ...formData.additional_languages
-      ]
-
-      const referees = [
-        ...formData.additional_referees
-      ]
-
-      const skills = [] // Skills can be added later if needed
-
       const response = await fetch('/api/cv-profiles', {
         method: 'POST',
         headers: {
@@ -163,11 +144,6 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
         },
         body: JSON.stringify({
           ...formData,
-          education,
-          experience,
-          languages,
-          referees,
-          skills,
           job_id: jobId,
         }),
       })
