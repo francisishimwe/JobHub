@@ -55,6 +55,46 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Validate job_id format (should be a UUID)
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+    if (!uuidRegex.test(job_id)) {
+      console.error('Invalid job_id format:', job_id)
+      return NextResponse.json(
+        { error: 'Invalid job_id format. Job ID must be a valid UUID.' },
+        { status: 400 }
+      )
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      console.error('Invalid email format:', email)
+      return NextResponse.json(
+        { error: 'Invalid email format.' },
+        { status: 400 }
+      )
+    }
+
+    console.log('Field validation passed') // Debug log
+
+    // Check if job exists
+    console.log('Checking if job exists:', job_id)
+    const { data: jobExists, error: jobCheckError } = await supabase
+      .from('jobs')
+      .select('id, title')
+      .eq('id', job_id)
+      .single()
+    
+    if (jobCheckError || !jobExists) {
+      console.error('Job not found or error:', jobCheckError)
+      return NextResponse.json(
+        { error: 'Job not found. Please check the job listing and try again.' },
+        { status: 404 }
+      )
+    }
+    
+    console.log('Job found:', jobExists.title) // Debug log
+
     // Filter out empty entries from dynamic arrays
     const filteredEducation = additional_education.filter((edu: any) => 
       edu.degree || edu.graduation_year || edu.institution
