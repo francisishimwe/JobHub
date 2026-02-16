@@ -7,20 +7,28 @@ export async function POST(request: NextRequest) {
     
     // Test basic database connection first
     console.log('Testing database connection...')
-    const { data: testConnection, error: connectionError } = await supabase
-      .from('cv_profiles')
-      .select('count')
-      .single()
-    
-    if (connectionError) {
-      console.error('Database connection failed:', connectionError)
+    try {
+      const { data: testConnection, error: connectionError } = await supabase
+        .from('cv_profiles')
+        .select('count')
+        .single()
+      
+      if (connectionError) {
+        console.error('Database connection failed:', connectionError)
+        return NextResponse.json({ 
+          error: 'Database connection failed', 
+          details: connectionError.message 
+        }, { status: 500 })
+      }
+      
+      console.log('Database connection successful, count:', testConnection?.count)
+    } catch (dbError) {
+      console.error('Database connection error:', dbError)
       return NextResponse.json({ 
         error: 'Database connection failed', 
-        details: connectionError.message 
+        details: dbError instanceof Error ? dbError.message : 'Unknown database error'
       }, { status: 500 })
     }
-    
-    console.log('Database connection successful, count:', testConnection?.count)
     
     const cvData = await request.json()
     
