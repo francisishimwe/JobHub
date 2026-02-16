@@ -5,13 +5,17 @@ let sqlCache: any = null
 function getSql() {
   if (sqlCache) return sqlCache
   
-  const connectionString = process.env.NEON_DATABASE_URL || process.env.POSTGRES_URL
+  const connectionString = process.env.DATABASE_URL || process.env.NEON_DATABASE_URL || process.env.POSTGRES_URL
   if (!connectionString) {
-    throw new Error('Database connection string not found. Make sure NEON_DATABASE_URL or POSTGRES_URL is set.')
+    throw new Error('Database connection string not found. Make sure DATABASE_URL, NEON_DATABASE_URL, or POSTGRES_URL is set in your environment variables.')
   }
   
-  sqlCache = neonFactory(connectionString)
-  return sqlCache
+  try {
+    sqlCache = neonFactory(connectionString)
+    return sqlCache
+  } catch (error) {
+    throw new Error(`Failed to initialize database connection: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
 }
 
 // Use a getter that will lazily initialize on first access

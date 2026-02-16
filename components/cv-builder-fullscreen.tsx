@@ -323,11 +323,11 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
       if (otherSkills.length > 0) doc.text(otherSkills.join(', '), 25, yPos)
     }
     
-    // Referees Section
+    // REFEREES Section
     yPos += 15
     doc.setFontSize(14)
     doc.setFont(undefined, 'bold')
-    doc.text('Referees', 20, yPos)
+    doc.text('REFEREES', 20, yPos)
     
     doc.setFontSize(11)
     doc.setFont(undefined, 'normal')
@@ -364,7 +364,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
               type="button"
               variant="outline"
               onClick={generatePDF}
-              className="gap-2 border-red-600 text-red-600 hover:bg-red-50"
+              className="w-full gap-2 border-red-600 text-red-600 hover:bg-red-50"
             >
               <Download className="h-4 w-4" />
               Download PDF

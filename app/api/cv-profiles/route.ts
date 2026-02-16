@@ -1,40 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { sql } from '@/lib/db'
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient()
-    
-    // Test basic database connection first
-    console.log('Testing database connection...')
-    try {
-      const { data: testConnection, error: connectionError } = await supabase
-        .from('cv_profiles')
-        .select('count')
-        .single()
-      
-      if (connectionError) {
-        console.error('Database connection failed:', connectionError)
-        return NextResponse.json({ 
-          error: 'Database connection failed', 
-          details: connectionError.message 
-        }, { status: 500 })
-      }
-      
-      console.log('Database connection successful, count:', testConnection?.count)
-    } catch (dbError) {
-      console.error('Database connection error:', dbError)
-      return NextResponse.json({ 
-        error: 'Database connection failed', 
-        details: dbError instanceof Error ? dbError.message : 'Unknown database error'
-      }, { status: 500 })
-    }
+    console.log('=== CV SUBMISSION START ===')
     
     const cvData = await request.json()
-    
-    console.log('CV Submission Data:', cvData) // Debug log
+    console.log('CV Submission Data:', cvData)
 
-    // Extract and structure the data from CV builder form
+    // Extract fields from CV builder form
     const {
       job_id,
       full_name,
@@ -53,7 +27,7 @@ export async function POST(request: NextRequest) {
       additional_referees = [],
     } = cvData
 
-    console.log('Extracted fields:', { job_id, full_name, email, phone }) // Debug log
+    console.log('Extracted fields:', { job_id, full_name, email, phone })
 
     // Validate required fields
     if (!job_id || !full_name || !email) {
@@ -83,25 +57,25 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log('Field validation passed') // Debug log
+    console.log('Field validation passed')
 
     // Check if job exists
     console.log('Checking if job exists:', job_id)
-    const { data: jobExists, error: jobCheckError } = await supabase
-      .from('jobs')
-      .select('id, title')
-      .eq('id', job_id)
-      .single()
+    const jobResult = await sql`
+      SELECT id, title 
+      FROM jobs 
+      WHERE id = ${job_id}
+    `
     
-    if (jobCheckError || !jobExists) {
-      console.error('Job not found or error:', jobCheckError)
+    if (jobResult.length === 0) {
+      console.error('Job not found')
       return NextResponse.json(
         { error: 'Job not found. Please check the job listing and try again.' },
         { status: 404 }
       )
     }
     
-    console.log('Job found:', jobExists.title) // Debug log
+    console.log('Job found:', jobResult[0].title)
 
     // Filter out empty entries from dynamic arrays
     const filteredEducation = additional_education.filter((edu: any) => 
@@ -132,93 +106,56 @@ export async function POST(request: NextRequest) {
     // Create skills from language proficiencies
     const skills = filteredLanguages.map((lang: any) => lang.name).filter(Boolean)
 
-    // Create experience object from dynamic array
-    const experience = filteredExperience.length > 0 ? filteredExperience : []
-
-    // Create education object from dynamic array
-    const education = filteredEducation.length > 0 ? filteredEducation : []
-
-    // Create referees object from dynamic array
-    const referees = filteredReferees.length > 0 ? filteredReferees : []
-
-    const cvProfile = {
-      job_id,
-      full_name,
-      email,
-      phone,
-      field_of_study,
-      experience: JSON.stringify(experience),
-      skills: skills.join(', '),
-      education: JSON.stringify(education),
-      portfolio_url: null,
-      linkedin_url: null,
-      github_url: null,
-      additional_info: JSON.stringify({
-        residence,
-        birth_date,
-        gender,
-        fathers_name,
-        mothers_name,
-        place_of_birth,
-        nationality,
-        referees,
-        languages: additional_languages
-      })
-    }
-
-    console.log('CV Profile to insert:', cvProfile) // Debug log
-
-    // Insert new profile
-    const { data: result, error } = await supabase
-      .from('cv_profiles')
-      .insert(cvProfile)
-      .select()
-      .single()
-
-    if (error) {
-      console.error('CV Profile save error:', error)
-      console.error('Error details:', JSON.stringify(error, null, 2))
-      return NextResponse.json(
-        { error: 'Failed to save CV profile', details: error.message },
-        { status: 500 }
+    // Insert CV profile into database
+    console.log('Inserting CV profile...')
+    const cvProfileResult = await sql`
+      INSERT INTO cv_profiles (
+        job_id, full_name, email, phone, field_of_study, 
+        experience, skills, education, portfolio_url, 
+        linkedin_url, github_url, additional_info
+      ) VALUES (
+        ${job_id}, ${full_name}, ${email}, ${phone}, ${field_of_study},
+        ${JSON.stringify(filteredExperience)}, ${skills.join(', ')}, ${JSON.stringify(filteredEducation)}, 
+        ${null}, ${null}, ${null}, ${JSON.stringify({
+          residence,
+          birth_date,
+          gender,
+          fathers_name,
+          mothers_name,
+          place_of_birth,
+          nationality,
+          referees: filteredReferees,
+          languages: filteredLanguages
+        })}
       )
-    }
+      RETURNING id
+    `
 
-    console.log('CV Profile saved successfully:', result) // Debug log
-
-    console.log('Creating job application for job_id:', job_id, 'cv_profile_id:', result.id) // Debug log
+    const cvProfileId = cvProfileResult[0].id
+    console.log('CV profile inserted with ID:', cvProfileId)
 
     // Create job application record
-    const { error: applicationError } = await supabase
-      .from('job_applications')
-      .insert({
-        job_id,
-        cv_profile_id: result.id,
-        status: 'applied',
-        application_date: new Date().toISOString()
-      })
-
-    if (applicationError) {
-      console.error('Application Error:', applicationError)
-      console.error('Application Error details:', JSON.stringify(applicationError, null, 2))
-      return NextResponse.json(
-        { error: 'Failed to create application record', details: applicationError.message },
-        { status: 500 }
+    console.log('Creating job application...')
+    await sql`
+      INSERT INTO job_applications (
+        job_id, cv_profile_id, application_date, status
+      ) VALUES (
+        ${job_id}, ${cvProfileId}, ${new Date().toISOString()}, 'applied'
       )
-    }
+    `
 
-    console.log('Job application created successfully') // Debug log
-
+    console.log('=== CV SUBMISSION SUCCESS ===')
+    
     return NextResponse.json({
       success: true,
       message: 'CV profile submitted successfully',
-      data: result
+      cvProfileId
     })
 
   } catch (error) {
-    console.error('CV Profile API error:', error)
+    console.error('=== CV SUBMISSION ERROR ===', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
@@ -226,78 +163,41 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient()
     const { searchParams } = new URL(request.url)
     const jobId = searchParams.get('jobId')
     const fieldOfStudy = searchParams.get('fieldOfStudy')
     const experienceLevel = searchParams.get('experienceLevel')
     const limit = parseInt(searchParams.get('limit') || '10')
 
+    let query = sql`
+      SELECT cp.*, j.title as job_title, c.name as company_name
+      FROM cv_profiles cp
+      JOIN jobs j ON cp.job_id = j.id
+      JOIN companies c ON j.company_id = c.id
+      WHERE 1=1
+    `
+
     if (jobId) {
-      // Get CV profiles for a specific job
-      const { data: cvProfiles, error } = await supabase
-        .from('cv_profiles')
-        .select(`
-          *,
-          job_applications!inner(
-            status,
-            match_score,
-            applied_at,
-            documents_json
-          )
-        `)
-        .eq('job_id', jobId)
-        .order('created_at', { ascending: false })
-
-      if (error) {
-        console.error('Fetch Error:', error)
-        return NextResponse.json(
-          { error: 'Failed to fetch CV profiles' },
-          { status: 500 }
-        )
-      }
-
-      return NextResponse.json({
-        success: true,
-        cvProfiles
-      })
-    } else {
-      // General CV profiles search
-      let query = supabase
-        .from('cv_profiles')
-        .select('*')
-        .order('created_at', { ascending: false })
-
-      // Filter by field of study if provided
-      if (fieldOfStudy) {
-        query = query.ilike('field_of_study', `%${fieldOfStudy}%`)
-      }
-
-      // Filter by experience level if provided
-      if (experienceLevel) {
-        query = query.ilike('experience', `%${experienceLevel}%`)
-      }
-
-      const { data, error } = await query.limit(limit)
-
-      if (error) {
-        console.error('CV Profile fetch error:', error)
-        return NextResponse.json(
-          { error: 'Failed to fetch CV profiles', details: error.message },
-          { status: 500 }
-        )
-      }
-
-      return NextResponse.json({
-        success: true,
-        data: data || []
-      })
+      query = sql`${query} AND cp.job_id = ${jobId}`
+    }
+    if (fieldOfStudy) {
+      query = sql`${query} AND cp.field_of_study ILIKE ${'%' + fieldOfStudy + '%'}`
+    }
+    if (experienceLevel) {
+      query = sql`${query} AND cp.experience ILIKE ${'%' + experienceLevel + '%'}`
     }
 
+    const cvProfiles = await query
+
+    return NextResponse.json({
+      success: true,
+      data: cvProfiles
+    })
+
   } catch (error) {
-    console.error('CV Profile GET error:', error)
+    console.error('Error fetching CV profiles:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
