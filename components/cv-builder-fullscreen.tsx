@@ -137,51 +137,12 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
     setLoading(true)
 
     try {
-      const response = await fetch('/api/cv-profiles', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          job_id: jobId,
-        }),
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        console.error('Server error response:', errorData)
-        throw new Error(errorData.error || 'Failed to submit CV profile')
-      }
-
-      const result = await response.json()
-      console.log('CV submission success:', result)
-
-      alert('CV profile submitted successfully!')
+      generatePDF()
       setIsSubmitted(true)
       onSuccess?.()
-      
-      // Reset form
-      setIsSubmitted(false)
-      setFormData({
-        full_name: "",
-        email: "",
-        phone: "",
-        residence: "",
-        birth_date: "",
-        gender: "",
-        fathers_name: "",
-        mothers_name: "",
-        place_of_birth: "",
-        nationality: "",
-        additional_education: [{ degree: "", graduation_year: "", institution: "" }],
-        additional_experience: [{ position: "", company: "", start_date: "", end_date: "", description: "" }],
-        additional_languages: [{ name: "", reading: "", writing: "", speaking: "" }],
-        additional_referees: [{ name: "", phone: "", email: "", relationship: "" }],
-      })
     } catch (error) {
-      console.error('Error submitting CV:', error)
-      alert('Failed to submit CV. Please try again.')
+      console.error('Error generating PDF:', error)
+      alert('Failed to generate PDF. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -833,7 +794,7 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                 className="text-black hover:opacity-90 px-8"
                 style={{ backgroundColor: '#76c893' }}
               >
-                {loading ? "Submitting..." : "Submit Application"}
+                {loading ? "Downloading..." : "DOWNLOAD YOUR CV"}
               </Button>
             </div>
           </form>

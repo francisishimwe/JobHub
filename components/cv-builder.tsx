@@ -72,66 +72,13 @@ export function CVBuilder({ jobId, jobTitle, isOpen, onClose, onSuccess }: CVBui
     setLoading(true)
 
     try {
-      const response = await fetch('/api/cv-profiles', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          job_id: jobId,
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to submit CV profile')
-      }
-
-      alert('CV profile submitted successfully!')
+      generatePDF()
       setIsSubmitted(true)
       onSuccess?.()
       onClose()
-      
-      // Reset form
-      setIsSubmitted(false)
-      setFormData({
-        full_name: "",
-        email: "",
-        phone: "",
-        residence: "",
-        birth_date: "",
-        gender: "",
-        fathers_name: "",
-        mothers_name: "",
-        place_of_birth: "",
-        nationality: "",
-        university_degree: "",
-        university_graduation: "",
-        secondary_degree: "",
-        secondary_graduation: "",
-        experience_level: "",
-        current_position: "",
-        years_experience: "",
-        current_employer: "",
-        kinyarwanda_reading: "",
-        kinyarwanda_writing: "",
-        kinyarwanda_speaking: "",
-        english_reading: "",
-        english_writing: "",
-        english_speaking: "",
-        french_reading: "",
-        french_writing: "",
-        french_speaking: "",
-        other_reading: "",
-        other_writing: "",
-        other_speaking: "",
-        referee_name: "",
-        referee_phone: "",
-        referee_email: "",
-      })
     } catch (error) {
-      console.error('Error submitting CV:', error)
-      alert('Failed to submit CV. Please try again.')
+      console.error('Error generating PDF:', error)
+      alert('Failed to generate PDF. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -795,7 +742,7 @@ export function CVBuilder({ jobId, jobTitle, isOpen, onClose, onSuccess }: CVBui
                 className="text-black hover:opacity-90"
                 style={{ backgroundColor: '#76c893' }}
               >
-                {loading ? "Submitting..." : "Submit Application"}
+                {loading ? "Downloading..." : "DOWNLOAD YOUR CV"}
               </Button>
             </div>
           </div>
