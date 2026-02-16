@@ -149,8 +149,13 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
       })
 
       if (!response.ok) {
-        throw new Error('Failed to submit CV profile')
+        const errorData = await response.json()
+        console.error('Server error response:', errorData)
+        throw new Error(errorData.error || 'Failed to submit CV profile')
       }
+
+      const result = await response.json()
+      console.log('CV submission success:', result)
 
       alert('CV profile submitted successfully!')
       setIsSubmitted(true)
