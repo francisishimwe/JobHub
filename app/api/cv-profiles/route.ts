@@ -19,29 +19,10 @@ export async function POST(request: NextRequest) {
       mothers_name,
       place_of_birth,
       nationality,
-      university_degree,
-      university_graduation,
-      secondary_degree,
-      secondary_graduation,
-      experience_level,
-      current_position,
-      years_experience,
-      current_employer,
-      kinyarwanda_reading,
-      kinyarwanda_writing,
-      kinyarwanda_speaking,
-      english_reading,
-      english_writing,
-      english_speaking,
-      french_reading,
-      french_writing,
-      french_speaking,
-      other_reading,
-      other_writing,
-      other_speaking,
-      referee_name,
-      referee_phone,
-      referee_email,
+      additional_education = [],
+      additional_experience = [],
+      additional_languages = [],
+      additional_referees = [],
     } = cvData
 
     // Validate required fields
@@ -52,40 +33,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create field_of_study from university degree
-    const field_of_study = university_degree || 'General'
+    // Create field_of_study from first education entry or default
+    const field_of_study = additional_education.length > 0 && additional_education[0].degree 
+      ? additional_education[0].degree 
+      : 'General'
 
     // Create skills from language proficiencies
-    const skills = []
-    if (kinyarwanda_reading || kinyarwanda_writing || kinyarwanda_speaking) {
-      skills.push('Kinyarwanda')
-    }
-    if (english_reading || english_writing || english_speaking) {
-      skills.push('English')
-    }
-    if (french_reading || french_writing || french_speaking) {
-      skills.push('French')
-    }
+    const skills = additional_languages.map((lang: any) => lang.name).filter(Boolean)
 
-    // Create experience object
-    const experience = {
-      level: experience_level,
-      years: years_experience,
-      current_position: current_position,
-      current_employer: current_employer
-    }
+    // Create experience object from dynamic array
+    const experience = additional_experience.length > 0 ? additional_experience : []
 
-    // Create education object
-    const education = {
-      university: {
-        degree: university_degree,
-        graduation_year: university_graduation
-      },
-      secondary: {
-        degree: secondary_degree,
-        graduation_year: secondary_graduation
-      }
-    }
+    // Create education object from dynamic array
+    const education = additional_education.length > 0 ? additional_education : []
+
+    // Create referees object from dynamic array
+    const referees = additional_referees.length > 0 ? additional_referees : []
 
     const cvProfile = {
       job_id,
@@ -107,31 +70,8 @@ export async function POST(request: NextRequest) {
         mothers_name,
         place_of_birth,
         nationality,
-        referee_name,
-        referee_phone,
-        referee_email,
-        language_proficiency: {
-          kinyarwanda: {
-            reading: kinyarwanda_reading,
-            writing: kinyarwanda_writing,
-            speaking: kinyarwanda_speaking
-          },
-          english: {
-            reading: english_reading,
-            writing: english_writing,
-            speaking: english_speaking
-          },
-          french: {
-            reading: french_reading,
-            writing: french_writing,
-            speaking: french_speaking
-          },
-          other: {
-            reading: other_reading,
-            writing: other_writing,
-            speaking: other_speaking
-          }
-        }
+        referees,
+        languages: additional_languages
       })
     }
 
