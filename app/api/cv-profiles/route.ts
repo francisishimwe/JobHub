@@ -55,22 +55,43 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Filter out empty entries from dynamic arrays
+    const filteredEducation = additional_education.filter((edu: any) => 
+      edu.degree || edu.graduation_year || edu.institution
+    )
+    const filteredExperience = additional_experience.filter((exp: any) => 
+      exp.position || exp.company || exp.start_date || exp.end_date || exp.description
+    )
+    const filteredLanguages = additional_languages.filter((lang: any) => 
+      lang.name || lang.reading || lang.writing || lang.speaking
+    )
+    const filteredReferees = additional_referees.filter((ref: any) => 
+      ref.name || ref.phone || ref.email || ref.relationship
+    )
+
+    console.log('Filtered arrays:', { 
+      education: filteredEducation, 
+      experience: filteredExperience, 
+      languages: filteredLanguages, 
+      referees: filteredReferees 
+    })
+
     // Create field_of_study from first education entry or default
-    const field_of_study = additional_education.length > 0 && additional_education[0].degree 
-      ? additional_education[0].degree 
+    const field_of_study = filteredEducation.length > 0 && filteredEducation[0].degree 
+      ? filteredEducation[0].degree 
       : 'General'
 
     // Create skills from language proficiencies
-    const skills = additional_languages.map((lang: any) => lang.name).filter(Boolean)
+    const skills = filteredLanguages.map((lang: any) => lang.name).filter(Boolean)
 
     // Create experience object from dynamic array
-    const experience = additional_experience.length > 0 ? additional_experience : []
+    const experience = filteredExperience.length > 0 ? filteredExperience : []
 
     // Create education object from dynamic array
-    const education = additional_education.length > 0 ? additional_education : []
+    const education = filteredEducation.length > 0 ? filteredEducation : []
 
     // Create referees object from dynamic array
-    const referees = additional_referees.length > 0 ? additional_referees : []
+    const referees = filteredReferees.length > 0 ? filteredReferees : []
 
     const cvProfile = {
       job_id,
