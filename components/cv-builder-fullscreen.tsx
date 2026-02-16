@@ -194,13 +194,19 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
     doc.setFontSize(11)
     doc.setFont(undefined, 'normal')
     yPos += 10
-    if (formData.university_degree || formData.university_graduation) {
-      doc.text(`${formData.university_degree || ''} ${formData.university_graduation ? `- ${formData.university_graduation}` : ''}`, 20, yPos)
-      yPos += 7
-    }
-    if (formData.secondary_degree || formData.secondary_graduation) {
-      doc.text(`${formData.secondary_degree || ''} ${formData.secondary_graduation ? `- ${formData.secondary_graduation}` : ''}`, 20, yPos)
-    }
+    
+    formData.additional_education.forEach((edu, index) => {
+      if (edu.degree || edu.graduation_year || edu.institution) {
+        const eduText = []
+        if (edu.degree) eduText.push(edu.degree)
+        if (edu.institution) eduText.push(edu.institution)
+        if (edu.graduation_year) eduText.push(edu.graduation_year)
+        if (eduText.length > 0) {
+          doc.text(eduText.join(' - '), 20, yPos)
+          yPos += 7
+        }
+      }
+    })
     
     // Experience Section
     yPos += 15
@@ -211,13 +217,23 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
     doc.setFontSize(11)
     doc.setFont(undefined, 'normal')
     yPos += 10
-    if (formData.experience_level || formData.years_experience) {
-      doc.text(`${formData.experience_level || ''}${formData.years_experience ? ` with ${formData.years_experience} years of experience` : ''}`, 20, yPos)
-      yPos += 7
-    }
-    if (formData.current_position) {
-      doc.text(`Current role: ${formData.current_position}`, 20, yPos)
-    }
+    
+    formData.additional_experience.forEach((exp, index) => {
+      if (exp.position || exp.company || exp.start_date || exp.end_date || exp.description) {
+        const expText = []
+        if (exp.position) expText.push(exp.position)
+        if (exp.company) expText.push(`at ${exp.company}`)
+        if (exp.start_date || exp.end_date) expText.push(`(${exp.start_date || ''} - ${exp.end_date || 'Present'})`)
+        if (expText.length > 0) {
+          doc.text(expText.join(' '), 20, yPos)
+          yPos += 7
+        }
+        if (exp.description) {
+          doc.text(exp.description, 25, yPos)
+          yPos += 7
+        }
+      }
+    })
     
     // Language Proficiency Section
     yPos += 15
@@ -229,60 +245,24 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
     doc.setFont(undefined, 'normal')
     yPos += 10
     
-    // Kinyarwanda
-    if (formData.kinyarwanda_reading || formData.kinyarwanda_writing || formData.kinyarwanda_speaking) {
-      doc.setFont(undefined, 'bold')
-      doc.text('Kinyarwanda:', 20, yPos)
-      doc.setFont(undefined, 'normal')
-      yPos += 7
-      const kinyarwandaSkills = []
-      if (formData.kinyarwanda_reading) kinyarwandaSkills.push(`Reading: ${formData.kinyarwanda_reading}`)
-      if (formData.kinyarwanda_writing) kinyarwandaSkills.push(`Writing: ${formData.kinyarwanda_writing}`)
-      if (formData.kinyarwanda_speaking) kinyarwandaSkills.push(`Speaking: ${formData.kinyarwanda_speaking}`)
-      if (kinyarwandaSkills.length > 0) doc.text(kinyarwandaSkills.join(', '), 25, yPos)
-    }
-    
-    // English
-    if (formData.english_reading || formData.english_writing || formData.english_speaking) {
-      yPos += 7
-      doc.setFont(undefined, 'bold')
-      doc.text('English:', 20, yPos)
-      doc.setFont(undefined, 'normal')
-      yPos += 7
-      const englishSkills = []
-      if (formData.english_reading) englishSkills.push(`Reading: ${formData.english_reading}`)
-      if (formData.english_writing) englishSkills.push(`Writing: ${formData.english_writing}`)
-      if (formData.english_speaking) englishSkills.push(`Speaking: ${formData.english_speaking}`)
-      if (englishSkills.length > 0) doc.text(englishSkills.join(', '), 25, yPos)
-    }
-    
-    // French
-    if (formData.french_reading || formData.french_writing || formData.french_speaking) {
-      yPos += 7
-      doc.setFont(undefined, 'bold')
-      doc.text('French:', 20, yPos)
-      doc.setFont(undefined, 'normal')
-      yPos += 7
-      const frenchSkills = []
-      if (formData.french_reading) frenchSkills.push(`Reading: ${formData.french_reading}`)
-      if (formData.french_writing) frenchSkills.push(`Writing: ${formData.french_writing}`)
-      if (formData.french_speaking) frenchSkills.push(`Speaking: ${formData.french_speaking}`)
-      if (frenchSkills.length > 0) doc.text(frenchSkills.join(', '), 25, yPos)
-    }
-    
-    // Other
-    if (formData.other_reading || formData.other_writing || formData.other_speaking) {
-      yPos += 7
-      doc.setFont(undefined, 'bold')
-      doc.text('Other:', 20, yPos)
-      doc.setFont(undefined, 'normal')
-      yPos += 7
-      const otherSkills = []
-      if (formData.other_reading) otherSkills.push(`Reading: ${formData.other_reading}`)
-      if (formData.other_writing) otherSkills.push(`Writing: ${formData.other_writing}`)
-      if (formData.other_speaking) otherSkills.push(`Speaking: ${formData.other_speaking}`)
-      if (otherSkills.length > 0) doc.text(otherSkills.join(', '), 25, yPos)
-    }
+    formData.additional_languages.forEach((lang, index) => {
+      if (lang.name || lang.reading || lang.writing || lang.speaking) {
+        if (lang.name) {
+          doc.setFont(undefined, 'bold')
+          doc.text(`${lang.name}:`, 20, yPos)
+          doc.setFont(undefined, 'normal')
+          yPos += 7
+        }
+        const langSkills = []
+        if (lang.reading) langSkills.push(`Reading: ${lang.reading}`)
+        if (lang.writing) langSkills.push(`Writing: ${lang.writing}`)
+        if (lang.speaking) langSkills.push(`Speaking: ${lang.speaking}`)
+        if (langSkills.length > 0) {
+          doc.text(langSkills.join(', '), 25, yPos)
+          yPos += 7
+        }
+      }
+    })
     
     // REFEREES Section
     yPos += 15
@@ -293,12 +273,23 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
     doc.setFontSize(11)
     doc.setFont(undefined, 'normal')
     yPos += 10
-    if (formData.referee_name) doc.text(formData.referee_name, 20, yPos)
-    yPos += 7
-    const refereeContact = []
-    if (formData.referee_phone) refereeContact.push(formData.referee_phone)
-    if (formData.referee_email) refereeContact.push(formData.referee_email)
-    if (refereeContact.length > 0) doc.text(`Contact: ${refereeContact.join(', ')}`, 20, yPos)
+    
+    formData.additional_referees.forEach((referee, index) => {
+      if (referee.name || referee.phone || referee.email || referee.relationship) {
+        if (referee.name) {
+          doc.text(referee.name, 20, yPos)
+          yPos += 7
+        }
+        const refereeInfo = []
+        if (referee.relationship) refereeInfo.push(referee.relationship)
+        if (referee.phone) refereeInfo.push(referee.phone)
+        if (referee.email) refereeInfo.push(referee.email)
+        if (refereeInfo.length > 0) {
+          doc.text(refereeInfo.join(' | '), 20, yPos)
+          yPos += 7
+        }
+      }
+    })
     
     // Save PDF
     doc.save(`${(formData.full_name || 'CV').replace(/\s+/g, '_')}_CV.pdf`)
