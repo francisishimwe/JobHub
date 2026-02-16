@@ -5,6 +5,8 @@ export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
     const cvData = await request.json()
+    
+    console.log('CV Submission Data:', cvData) // Debug log
 
     // Extract and structure the data from CV builder form
     const {
@@ -24,6 +26,8 @@ export async function POST(request: NextRequest) {
       additional_languages = [],
       additional_referees = [],
     } = cvData
+
+    console.log('Extracted fields:', { job_id, full_name, email, phone }) // Debug log
 
     // Validate required fields
     if (!job_id || !full_name || !email) {
@@ -75,6 +79,8 @@ export async function POST(request: NextRequest) {
       })
     }
 
+    console.log('CV Profile to insert:', cvProfile) // Debug log
+
     // Insert new profile
     const { data: result, error } = await supabase
       .from('cv_profiles')
@@ -84,11 +90,16 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error('CV Profile save error:', error)
+      console.error('Error details:', JSON.stringify(error, null, 2))
       return NextResponse.json(
         { error: 'Failed to save CV profile', details: error.message },
         { status: 500 }
       )
     }
+
+    console.log('CV Profile saved successfully:', result) // Debug log
+
+    console.log('Creating job application for job_id:', job_id, 'cv_profile_id:', result.id) // Debug log
 
     // Create job application record
     const { error: applicationError } = await supabase
@@ -102,11 +113,14 @@ export async function POST(request: NextRequest) {
 
     if (applicationError) {
       console.error('Application Error:', applicationError)
+      console.error('Application Error details:', JSON.stringify(applicationError, null, 2))
       return NextResponse.json(
-        { error: 'Failed to create application record' },
+        { error: 'Failed to create application record', details: applicationError.message },
         { status: 500 }
       )
     }
+
+    console.log('Job application created successfully') // Debug log
 
     return NextResponse.json({
       success: true,
