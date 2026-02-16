@@ -32,36 +32,10 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
     place_of_birth: "",
     nationality: "",
     
-    // Education (static fields + dynamic array)
-    university_degree: "",
-    university_graduation: "",
-    secondary_degree: "",
-    secondary_graduation: "",
+    // Dynamic arrays only
     additional_education: [{ degree: "", graduation_year: "", institution: "" }],
-    
-    // Experience (static fields + dynamic array)
-    experience_level: "",
-    current_position: "",
-    years_experience: "",
-    current_employer: "",
     additional_experience: [{ position: "", company: "", start_date: "", end_date: "", description: "" }],
-    
-    // Language Proficiency (static fields + dynamic array)
-    kinyarwanda_reading: "",
-    kinyarwanda_writing: "",
-    kinyarwanda_speaking: "",
-    english_reading: "",
-    english_writing: "",
-    english_speaking: "",
-    french_reading: "",
-    french_writing: "",
-    french_speaking: "",
     additional_languages: [{ name: "", reading: "", writing: "", speaking: "" }],
-    
-    // Referees (static field + dynamic array)
-    referee_name: "",
-    referee_phone: "",
-    referee_email: "",
     additional_referees: [{ name: "", phone: "", email: "", relationship: "" }],
   })
 
@@ -163,6 +137,25 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
     setLoading(true)
 
     try {
+      // Combine static and dynamic data for API submission
+      const education = [
+        ...formData.additional_education
+      ]
+
+      const experience = [
+        ...formData.additional_experience
+      ]
+
+      const languages = [
+        ...formData.additional_languages
+      ]
+
+      const referees = [
+        ...formData.additional_referees
+      ]
+
+      const skills = [] // Skills can be added later if needed
+
       const response = await fetch('/api/cv-profiles', {
         method: 'POST',
         headers: {
@@ -170,6 +163,11 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
         },
         body: JSON.stringify({
           ...formData,
+          education,
+          experience,
+          languages,
+          referees,
+          skills,
           job_id: jobId,
         }),
       })
@@ -195,29 +193,9 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
         mothers_name: "",
         place_of_birth: "",
         nationality: "",
-        university_degree: "",
-        university_graduation: "",
-        secondary_degree: "",
-        secondary_graduation: "",
         additional_education: [{ degree: "", graduation_year: "", institution: "" }],
-        experience_level: "",
-        current_position: "",
-        years_experience: "",
-        current_employer: "",
         additional_experience: [{ position: "", company: "", start_date: "", end_date: "", description: "" }],
-        kinyarwanda_reading: "",
-        kinyarwanda_writing: "",
-        kinyarwanda_speaking: "",
-        english_reading: "",
-        english_writing: "",
-        english_speaking: "",
-        french_reading: "",
-        french_writing: "",
-        french_speaking: "",
         additional_languages: [{ name: "", reading: "", writing: "", speaking: "" }],
-        referee_name: "",
-        referee_phone: "",
-        referee_email: "",
         additional_referees: [{ name: "", phone: "", email: "", relationship: "" }],
       })
     } catch (error) {
@@ -549,57 +527,11 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                 Education
               </h3>
               
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="university_degree">University Degree</Label>
-                    <Input
-                      id="university_degree"
-                      value={formData.university_degree}
-                      onChange={(e) => setFormData({ ...formData, university_degree: e.target.value })}
-                      placeholder="Enter your university degree"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="university_graduation">Graduation Year</Label>
-                    <Input
-                      id="university_graduation"
-                      value={formData.university_graduation}
-                      onChange={(e) => setFormData({ ...formData, university_graduation: e.target.value })}
-                      placeholder="Enter graduation year"
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="secondary_degree">Secondary Education</Label>
-                    <Input
-                      id="secondary_degree"
-                      value={formData.secondary_degree}
-                      onChange={(e) => setFormData({ ...formData, secondary_degree: e.target.value })}
-                      placeholder="Enter secondary education"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="secondary_graduation">Graduation Year</Label>
-                    <Input
-                      id="secondary_graduation"
-                      value={formData.secondary_graduation}
-                      onChange={(e) => setFormData({ ...formData, secondary_graduation: e.target.value })}
-                      placeholder="Enter graduation year"
-                    />
-                  </div>
-                </div>
-              </div>
-              
               {/* Additional Education */}
               {formData.additional_education.map((edu, index) => (
                 <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-4">
                   <div className="flex justify-between items-center">
-                    <h4 className="font-medium">Additional Education {index + 1}</h4>
+                    <h4 className="font-medium">Education {index + 1}</h4>
                     <Button
                       type="button"
                       variant="outline"
@@ -661,53 +593,11 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                 Experience
               </h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="experience_level">Experience Level</Label>
-                  <Input
-                    id="experience_level"
-                    value={formData.experience_level}
-                    onChange={(e) => setFormData({ ...formData, experience_level: e.target.value })}
-                    placeholder="Enter experience level"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="years_experience">Years of Experience</Label>
-                  <Input
-                    id="years_experience"
-                    value={formData.years_experience}
-                    onChange={(e) => setFormData({ ...formData, years_experience: e.target.value })}
-                    placeholder="Enter years of experience"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="current_position">Current Position</Label>
-                  <Input
-                    id="current_position"
-                    value={formData.current_position}
-                    onChange={(e) => setFormData({ ...formData, current_position: e.target.value })}
-                    placeholder="Enter current position"
-                  />
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="current_employer">Current Employer</Label>
-                <Input
-                  id="current_employer"
-                  value={formData.current_employer}
-                  onChange={(e) => setFormData({ ...formData, current_employer: e.target.value })}
-                  placeholder="Enter current employer"
-                />
-              </div>
-              
               {/* Additional Experience */}
               {formData.additional_experience.map((exp, index) => (
                 <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-4">
                   <div className="flex justify-between items-center">
-                    <h4 className="font-medium">Additional Experience {index + 1}</h4>
+                    <h4 className="font-medium">Experience {index + 1}</h4>
                     <Button
                       type="button"
                       variant="outline"
@@ -792,17 +682,38 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                 Language Proficiency
               </h3>
               
-              <div className="space-y-4">
-                {/* Kinyarwanda */}
-                <div>
-                  <h4 className="font-medium mb-2">Kinyarwanda</h4>
+              {/* Additional Languages */}
+              {formData.additional_languages.map((lang, index) => (
+                <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h4 className="font-medium">Language {index + 1}</h4>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeLanguage(index)}
+                      className="gap-1"
+                    >
+                      <X className="h-4 w-4" />
+                      Remove
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`lang-name-${index}`}>Language Name</Label>
+                    <Input
+                      id={`lang-name-${index}`}
+                      value={lang.name}
+                      onChange={(e) => updateLanguage(index, 'name', e.target.value)}
+                      placeholder="Enter language name"
+                    />
+                  </div>
                   <div className="grid grid-cols-3 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="kinyarwanda_reading">Reading</Label>
+                      <Label htmlFor={`lang-reading-${index}`}>Reading</Label>
                       <select 
-                        id="kinyarwanda_reading"
-                        value={formData.kinyarwanda_reading}
-                        onChange={(e) => setFormData({ ...formData, kinyarwanda_reading: e.target.value })}
+                        id={`lang-reading-${index}`}
+                        value={lang.reading}
+                        onChange={(e) => updateLanguage(index, 'reading', e.target.value)}
                         className="w-full h-10 px-3 border border-gray-300 rounded-md"
                       >
                         <option value="">Select</option>
@@ -812,13 +723,12 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                         <option value="Basic">Basic</option>
                       </select>
                     </div>
-                    
                     <div className="space-y-2">
-                      <Label htmlFor="kinyarwanda_writing">Writing</Label>
+                      <Label htmlFor={`lang-writing-${index}`}>Writing</Label>
                       <select 
-                        id="kinyarwanda_writing"
-                        value={formData.kinyarwanda_writing}
-                        onChange={(e) => setFormData({ ...formData, kinyarwanda_writing: e.target.value })}
+                        id={`lang-writing-${index}`}
+                        value={lang.writing}
+                        onChange={(e) => updateLanguage(index, 'writing', e.target.value)}
                         className="w-full h-10 px-3 border border-gray-300 rounded-md"
                       >
                         <option value="">Select</option>
@@ -828,13 +738,12 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                         <option value="Basic">Basic</option>
                       </select>
                     </div>
-                    
                     <div className="space-y-2">
-                      <Label htmlFor="kinyarwanda_speaking">Speaking</Label>
+                      <Label htmlFor={`lang-speaking-${index}`}>Speaking</Label>
                       <select 
-                        id="kinyarwanda_speaking"
-                        value={formData.kinyarwanda_speaking}
-                        onChange={(e) => setFormData({ ...formData, kinyarwanda_speaking: e.target.value })}
+                        id={`lang-speaking-${index}`}
+                        value={lang.speaking}
+                        onChange={(e) => updateLanguage(index, 'speaking', e.target.value)}
                         className="w-full h-10 px-3 border border-gray-300 rounded-md"
                       >
                         <option value="">Select</option>
@@ -846,200 +755,17 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                     </div>
                   </div>
                 </div>
-                
-                {/* English */}
-                <div>
-                  <h4 className="font-medium mb-2">English</h4>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="english_reading">Reading</Label>
-                      <select 
-                        id="english_reading"
-                        value={formData.english_reading}
-                        onChange={(e) => setFormData({ ...formData, english_reading: e.target.value })}
-                        className="w-full h-10 px-3 border border-gray-300 rounded-md"
-                      >
-                        <option value="">Select</option>
-                        <option value="Excellent">Excellent</option>
-                        <option value="Very Good">Very Good</option>
-                        <option value="Good">Good</option>
-                        <option value="Basic">Basic</option>
-                      </select>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="english_writing">Writing</Label>
-                      <select 
-                        id="english_writing"
-                        value={formData.english_writing}
-                        onChange={(e) => setFormData({ ...formData, english_writing: e.target.value })}
-                        className="w-full h-10 px-3 border border-gray-300 rounded-md"
-                      >
-                        <option value="">Select</option>
-                        <option value="Excellent">Excellent</option>
-                        <option value="Very Good">Very Good</option>
-                        <option value="Good">Good</option>
-                        <option value="Basic">Basic</option>
-                      </select>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="english_speaking">Speaking</Label>
-                      <select 
-                        id="english_speaking"
-                        value={formData.english_speaking}
-                        onChange={(e) => setFormData({ ...formData, english_speaking: e.target.value })}
-                        className="w-full h-10 px-3 border border-gray-300 rounded-md"
-                      >
-                        <option value="">Select</option>
-                        <option value="Excellent">Excellent</option>
-                        <option value="Very Good">Very Good</option>
-                        <option value="Good">Good</option>
-                        <option value="Basic">Basic</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* French */}
-                <div>
-                  <h4 className="font-medium mb-2">French</h4>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="french_reading">Reading</Label>
-                      <select 
-                        id="french_reading"
-                        value={formData.french_reading}
-                        onChange={(e) => setFormData({ ...formData, french_reading: e.target.value })}
-                        className="w-full h-10 px-3 border border-gray-300 rounded-md"
-                      >
-                        <option value="">Select</option>
-                        <option value="Excellent">Excellent</option>
-                        <option value="Very Good">Very Good</option>
-                        <option value="Good">Good</option>
-                        <option value="Basic">Basic</option>
-                      </select>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="french_writing">Writing</Label>
-                      <select 
-                        id="french_writing"
-                        value={formData.french_writing}
-                        onChange={(e) => setFormData({ ...formData, french_writing: e.target.value })}
-                        className="w-full h-10 px-3 border border-gray-300 rounded-md"
-                      >
-                        <option value="">Select</option>
-                        <option value="Excellent">Excellent</option>
-                        <option value="Very Good">Very Good</option>
-                        <option value="Good">Good</option>
-                        <option value="Basic">Basic</option>
-                      </select>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="french_speaking">Speaking</Label>
-                      <select 
-                        id="french_speaking"
-                        value={formData.french_speaking}
-                        onChange={(e) => setFormData({ ...formData, french_speaking: e.target.value })}
-                        className="w-full h-10 px-3 border border-gray-300 rounded-md"
-                      >
-                        <option value="">Select</option>
-                        <option value="Excellent">Excellent</option>
-                        <option value="Very Good">Very Good</option>
-                        <option value="Good">Good</option>
-                        <option value="Basic">Basic</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Additional Languages */}
-                {formData.additional_languages.map((lang, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-4">
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-medium">Language {index + 1}</h4>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => removeLanguage(index)}
-                        className="gap-1"
-                      >
-                        <X className="h-4 w-4" />
-                        Remove
-                      </Button>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor={`lang-name-${index}`}>Language Name</Label>
-                      <Input
-                        id={`lang-name-${index}`}
-                        value={lang.name}
-                        onChange={(e) => updateLanguage(index, 'name', e.target.value)}
-                        placeholder="Enter language name"
-                      />
-                    </div>
-                    <div className="grid grid-cols-3 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor={`lang-reading-${index}`}>Reading</Label>
-                        <select 
-                          id={`lang-reading-${index}`}
-                          value={lang.reading}
-                          onChange={(e) => updateLanguage(index, 'reading', e.target.value)}
-                          className="w-full h-10 px-3 border border-gray-300 rounded-md"
-                        >
-                          <option value="">Select</option>
-                          <option value="Excellent">Excellent</option>
-                          <option value="Very Good">Very Good</option>
-                          <option value="Good">Good</option>
-                          <option value="Basic">Basic</option>
-                        </select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor={`lang-writing-${index}`}>Writing</Label>
-                        <select 
-                          id={`lang-writing-${index}`}
-                          value={lang.writing}
-                          onChange={(e) => updateLanguage(index, 'writing', e.target.value)}
-                          className="w-full h-10 px-3 border border-gray-300 rounded-md"
-                        >
-                          <option value="">Select</option>
-                          <option value="Excellent">Excellent</option>
-                          <option value="Very Good">Very Good</option>
-                          <option value="Good">Good</option>
-                          <option value="Basic">Basic</option>
-                        </select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor={`lang-speaking-${index}`}>Speaking</Label>
-                        <select 
-                          id={`lang-speaking-${index}`}
-                          value={lang.speaking}
-                          onChange={(e) => updateLanguage(index, 'speaking', e.target.value)}
-                          className="w-full h-10 px-3 border border-gray-300 rounded-md"
-                        >
-                          <option value="">Select</option>
-                          <option value="Excellent">Excellent</option>
-                          <option value="Very Good">Very Good</option>
-                          <option value="Good">Good</option>
-                          <option value="Basic">Basic</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={addLanguage}
-                  className="gap-2"
-                >
-                  <Plus className="h-4 w-4" />
-                  Add Language
-                </Button>
-              </div>
+              ))}
+              
+              <Button
+                type="button"
+                variant="outline"
+                onClick={addLanguage}
+                className="gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Add Language
+              </Button>
             </div>
 
             {/* Referees */}
@@ -1048,41 +774,6 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
                 <Users className="h-5 w-5" />
                 Referees
               </h3>
-              
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="referee_name">Referee Name</Label>
-                  <Input
-                    id="referee_name"
-                    value={formData.referee_name}
-                    onChange={(e) => setFormData({ ...formData, referee_name: e.target.value })}
-                    placeholder="Enter referee name"
-                  />
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="referee_phone">Phone</Label>
-                    <Input
-                      id="referee_phone"
-                      value={formData.referee_phone}
-                      onChange={(e) => setFormData({ ...formData, referee_phone: e.target.value })}
-                      placeholder="Enter referee phone"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="referee_email">Email</Label>
-                    <Input
-                      id="referee_email"
-                      type="email"
-                      value={formData.referee_email}
-                      onChange={(e) => setFormData({ ...formData, referee_email: e.target.value })}
-                      placeholder="Enter referee email"
-                    />
-                  </div>
-                </div>
-              </div>
               
               {/* Additional Referees */}
               {formData.additional_referees.map((referee, index) => (
