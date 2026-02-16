@@ -15,29 +15,10 @@ interface CVPreviewProps {
     mothers_name: string
     place_of_birth: string
     nationality: string
-    university_degree: string
-    university_graduation: string
-    secondary_degree: string
-    secondary_graduation: string
-    experience_level: string
-    current_position: string
-    years_experience: string
-    current_employer: string
-    kinyarwanda_reading: string
-    kinyarwanda_writing: string
-    kinyarwanda_speaking: string
-    english_reading: string
-    english_writing: string
-    english_speaking: string
-    french_reading: string
-    french_writing: string
-    french_speaking: string
-    other_reading: string
-    other_writing: string
-    other_speaking: string
-    referee_name: string
-    referee_phone: string
-    referee_email: string
+    additional_education: Array<{ degree: string; graduation_year: string; institution: string }>
+    additional_experience: Array<{ position: string; company: string; start_date: string; end_date: string; description: string }>
+    additional_languages: Array<{ name: string; reading: string; writing: string; speaking: string }>
+    additional_referees: Array<{ name: string; phone: string; email: string; relationship: string }>
   }
 }
 
@@ -144,22 +125,17 @@ export function CVPreview({ formData }: CVPreviewProps) {
             EDUCATION
           </h2>
           <div className="space-y-3">
-            {(formData.university_degree || formData.university_graduation) && (
-              <div className="bg-gray-50 p-3 rounded">
-                <div className="font-medium">{formData.university_degree || "University Degree"}</div>
-                {formData.university_graduation && (
-                  <div className="text-sm text-gray-600">Graduated: {formData.university_graduation}</div>
+            {formData.additional_education.map((edu, index) => (
+              <div key={index} className="bg-gray-50 p-3 rounded">
+                <div className="font-medium">{edu.degree || "Degree"}</div>
+                {edu.graduation_year && (
+                  <div className="text-sm text-gray-600">Graduated: {edu.graduation_year}</div>
+                )}
+                {edu.institution && (
+                  <div className="text-sm text-gray-600">Institution: {edu.institution}</div>
                 )}
               </div>
-            )}
-            {(formData.secondary_degree || formData.secondary_graduation) && (
-              <div className="bg-gray-50 p-3 rounded">
-                <div className="font-medium">{formData.secondary_degree || "Secondary Education"}</div>
-                {formData.secondary_graduation && (
-                  <div className="text-sm text-gray-600">Graduated: {formData.secondary_graduation}</div>
-                )}
-              </div>
-            )}
+            ))}
           </div>
         </div>
 
@@ -170,22 +146,24 @@ export function CVPreview({ formData }: CVPreviewProps) {
             PROFESSIONAL EXPERIENCE
           </h2>
           <div className="space-y-3">
-            {(formData.experience_level || formData.years_experience) && (
-              <div className="bg-gray-50 p-3 rounded">
-                <div className="font-medium">
-                  {formData.experience_level || "Experience Level"} 
-                  {formData.years_experience && ` - ${formData.years_experience} years`}
-                </div>
-              </div>
-            )}
-            {formData.current_position && (
-              <div className="bg-gray-50 p-3 rounded">
-                <div className="font-medium">{formData.current_position}</div>
-                {formData.current_employer && (
-                  <div className="text-sm text-gray-600">Employer: {formData.current_employer}</div>
+            {formData.additional_experience.map((exp, index) => (
+              <div key={index} className="bg-gray-50 p-3 rounded">
+                <div className="font-medium">{exp.position || "Position"}</div>
+                {exp.company && (
+                  <div className="text-sm text-gray-600">Company: {exp.company}</div>
+                )}
+                {(exp.start_date || exp.end_date) && (
+                  <div className="text-sm text-gray-600">
+                    {exp.start_date && <span>From: {formatDate(exp.start_date)}</span>}
+                    {exp.start_date && exp.end_date && <span> - </span>}
+                    {exp.end_date && <span>To: {formatDate(exp.end_date)}</span>}
+                  </div>
+                )}
+                {exp.description && (
+                  <div className="text-sm text-gray-600 mt-2">{exp.description}</div>
                 )}
               </div>
-            )}
+            ))}
           </div>
         </div>
 
@@ -196,46 +174,16 @@ export function CVPreview({ formData }: CVPreviewProps) {
             LANGUAGE PROFICIENCY
           </h2>
           <div className="space-y-3">
-            {(formData.kinyarwanda_reading || formData.kinyarwanda_writing || formData.kinyarwanda_speaking) && (
-              <div className="bg-gray-50 p-3 rounded">
-                <div className="font-medium mb-2">Kinyarwanda</div>
+            {formData.additional_languages.map((lang, index) => (
+              <div key={index} className="bg-gray-50 p-3 rounded">
+                <div className="font-medium mb-2">{lang.name || "Language"}</div>
                 <div className="text-sm grid grid-cols-3 gap-2">
-                  {formData.kinyarwanda_reading && <div>Reading: {formData.kinyarwanda_reading}</div>}
-                  {formData.kinyarwanda_writing && <div>Writing: {formData.kinyarwanda_writing}</div>}
-                  {formData.kinyarwanda_speaking && <div>Speaking: {formData.kinyarwanda_speaking}</div>}
+                  {lang.reading && <div>Reading: {lang.reading}</div>}
+                  {lang.writing && <div>Writing: {lang.writing}</div>}
+                  {lang.speaking && <div>Speaking: {lang.speaking}</div>}
                 </div>
               </div>
-            )}
-            {(formData.english_reading || formData.english_writing || formData.english_speaking) && (
-              <div className="bg-gray-50 p-3 rounded">
-                <div className="font-medium mb-2">English</div>
-                <div className="text-sm grid grid-cols-3 gap-2">
-                  {formData.english_reading && <div>Reading: {formData.english_reading}</div>}
-                  {formData.english_writing && <div>Writing: {formData.english_writing}</div>}
-                  {formData.english_speaking && <div>Speaking: {formData.english_speaking}</div>}
-                </div>
-              </div>
-            )}
-            {(formData.french_reading || formData.french_writing || formData.french_speaking) && (
-              <div className="bg-gray-50 p-3 rounded">
-                <div className="font-medium mb-2">French</div>
-                <div className="text-sm grid grid-cols-3 gap-2">
-                  {formData.french_reading && <div>Reading: {formData.french_reading}</div>}
-                  {formData.french_writing && <div>Writing: {formData.french_writing}</div>}
-                  {formData.french_speaking && <div>Speaking: {formData.french_speaking}</div>}
-                </div>
-              </div>
-            )}
-            {(formData.other_reading || formData.other_writing || formData.other_speaking) && (
-              <div className="bg-gray-50 p-3 rounded">
-                <div className="font-medium mb-2">Other Languages</div>
-                <div className="text-sm grid grid-cols-3 gap-2">
-                  {formData.other_reading && <div>Reading: {formData.other_reading}</div>}
-                  {formData.other_writing && <div>Writing: {formData.other_writing}</div>}
-                  {formData.other_speaking && <div>Speaking: {formData.other_speaking}</div>}
-                </div>
-              </div>
-            )}
+            ))}
           </div>
         </div>
 
@@ -245,14 +193,19 @@ export function CVPreview({ formData }: CVPreviewProps) {
             <Users className="h-5 w-5 text-red-600" />
             REFERENCES
           </h2>
-          <div className="bg-gray-50 p-3 rounded">
-            {formData.referee_name && <div className="font-medium">{formData.referee_name}</div>}
-            <div className="text-sm text-gray-600">
-              {formData.referee_phone && <span>Phone: {formData.referee_phone}</span>}
-              {formData.referee_phone && formData.referee_email && <span> | </span>}
-              {formData.referee_email && <span>Email: {formData.referee_email}</span>}
+          {formData.additional_referees.map((referee, index) => (
+            <div key={index} className="bg-gray-50 p-3 rounded mb-3">
+              <div className="font-medium">{referee.name || "Referee Name"}</div>
+              <div className="text-sm text-gray-600">
+                {referee.phone && <span>Phone: {referee.phone}</span>}
+                {referee.phone && referee.email && <span> | </span>}
+                {referee.email && <span>Email: {referee.email}</span>}
+                {referee.relationship && (
+                  <div className="mt-1">Relationship: {referee.relationship}</div>
+                )}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>
