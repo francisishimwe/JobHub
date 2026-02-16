@@ -31,7 +31,27 @@
    DATABASE_URL=your_connection_string_here
    ```
 
-5. **Restart Your Application**
+5. **Initialize Database Schema**
+   
+   **Option A: Automated Setup (Recommended)**
+   ```bash
+   # Run the setup script
+   node setup-neon-database.js
+   ```
+   
+   **Option B: Manual Setup**
+   ```sql
+   # Run this SQL in your Neon dashboard SQL editor
+   -- Copy contents from schema.sql file
+   ```
+   
+   **Option C: Quick Test Setup**
+   ```bash
+   # Create a sample job for testing
+   curl -X POST https://your-domain.com/api/setup-sample-job
+   ```
+
+6. **Restart Your Application**
    - If running locally: Stop and restart `npm run dev`
    - If on Vercel: Redeploy your application
 
@@ -42,12 +62,36 @@ The application supports multiple environment variable names for flexibility:
 - `NEON_DATABASE_URL` 
 - `POSTGRES_URL`
 
+## Database Schema
+
+The application will automatically create the necessary tables:
+- `companies` - Company information
+- `jobs` - Job listings
+- `cv_profiles` - Stores CV submissions
+- `job_applications` - Links CVs to job postings
+- `exams` - Assessment tests
+- `exam_questions` - Test questions
+- `exam_submissions` - Test results
+- `email_subscribers` - Newsletter subscribers
+- `page_views` - Analytics data
+- `visitors` - Visitor tracking
+
 ## Troubleshooting
 
 ### Error: "Database connection string not found"
 - Make sure you've set one of the environment variables above
 - Check that your `.env.local` file is in the project root
 - Verify Vercel environment variables are properly configured
+
+### Error: "Job not found" (404)
+This means the database doesn't have job listings yet. Run one of these:
+```bash
+# Option 1: Run full setup
+node setup-neon-database.js
+
+# Option 2: Create sample job
+curl -X POST https://your-domain.com/api/setup-sample-job
+```
 
 ### Error: "fetch failed" or connection issues
 - Verify your connection string is correct
@@ -57,15 +101,16 @@ The application supports multiple environment variable names for flexibility:
 ### Testing the Connection
 You can test your database connection by visiting:
 ```
-https://your-domain.com/api/cv-profiles
+https://your-domain.com/api/setup-sample-job
 ```
-If you get a proper JSON response (not an error), your connection is working.
+If you get a successful JSON response, your connection is working.
 
-## Database Schema
-
-The application will automatically create the necessary tables:
-- `cv_profiles` - Stores CV submissions
-- `job_applications` - Links CVs to job postings
+### Importing Existing Jobs
+If you have a `jobs_data.csv` file:
+```bash
+node setup-neon-database.js
+```
+This will automatically import your existing job data.
 
 ## Security Notes
 
@@ -73,3 +118,4 @@ The application will automatically create the necessary tables:
 - Use different database credentials for development and production
 - Regularly rotate your database passwords
 - Enable connection pooling in Neon for better performance
+- The setup script creates tables with proper indexes for performance
