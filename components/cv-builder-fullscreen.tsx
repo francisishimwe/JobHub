@@ -311,17 +311,28 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
             </Button>
             <h1 className="text-2xl font-bold">CURRICULUM VITAE (CV)</h1>
           </div>
-          {isSubmitted && (
+          <div className="flex items-center gap-2">
+            {/* Always visible red download button */}
             <Button
               type="button"
-              variant="outline"
               onClick={generatePDF}
-              className="w-full gap-2 border-red-600 text-red-600 hover:bg-red-50"
+              className="gap-2 bg-red-600 hover:bg-red-700 text-white border-2 border-red-600"
             >
               <Download className="h-4 w-4" />
-              Download PDF
+              Download CV
             </Button>
-          )}
+            {isSubmitted && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={generatePDF}
+                className="gap-2 border-red-600 text-red-600 hover:bg-red-50"
+              >
+                <Download className="h-4 w-4" />
+                Download PDF
+              </Button>
+            )}
+          </div>
         </div>
       </header>
 
