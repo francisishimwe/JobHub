@@ -39,7 +39,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
     setIsLoading(true)
     try {
       console.log("🔄 Starting job fetch...")
-      const response = await fetch(`/api/jobs-emergency?page=${pageNumber}&limit=${JOBS_PER_PAGE}`)
+      const response = await fetch(`/api/jobs?page=${pageNumber}&limit=${JOBS_PER_PAGE}`)
       if (!response.ok) throw new Error('Failed to fetch jobs')
 
       const data = await response.json()
