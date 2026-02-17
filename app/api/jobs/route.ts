@@ -6,7 +6,6 @@ const mockJobs = [
   {
     id: "1",
     title: "Full Stack Developer",
-    company_id: "mock-company-1",
     company_name: "Tech Solutions Rwanda",
     location: "Kigali, Rwanda",
     location_type: "On-site",
@@ -27,7 +26,6 @@ const mockJobs = [
   {
     id: "2", 
     title: "Frontend Developer",
-    company_id: "mock-company-2",
     company_name: "Digital Agency Ltd",
     location: "Kigali, Rwanda",
     location_type: "Hybrid",
@@ -48,7 +46,6 @@ const mockJobs = [
   {
     id: "3",
     title: "Backend Developer", 
-    company_id: "mock-company-3",
     company_name: "Rwanda Innovations",
     location: "Remote",
     location_type: "Remote",
@@ -69,7 +66,6 @@ const mockJobs = [
   {
     id: "4",
     title: "UI/UX Designer",
-    company_id: "mock-company-4",
     company_name: "Creative Studio",
     location: "Kigali, Rwanda",
     location_type: "On-site",
@@ -90,7 +86,6 @@ const mockJobs = [
   {
     id: "5",
     title: "Mobile App Developer",
-    company_id: "mock-company-5",
     company_name: "Mobile First Inc",
     location: "Kigali, Rwanda",
     location_type: "Hybrid",
