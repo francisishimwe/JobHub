@@ -19,7 +19,10 @@ const mockJobs = [
     approved: true,
     applicants: 12,
     views: 245,
-    created_at: "2025-02-17T00:00:00Z"
+    created_at: "2025-02-17T00:00:00Z",
+    application_method: "email",
+    planId: 4,
+    priority: "Top"
   },
   {
     id: "2", 
@@ -37,7 +40,10 @@ const mockJobs = [
     approved: true,
     applicants: 8,
     views: 189,
-    created_at: "2025-02-17T00:00:00Z"
+    created_at: "2025-02-17T00:00:00Z",
+    application_method: "email",
+    planId: 4,
+    priority: "Top"
   },
   {
     id: "3",
@@ -55,7 +61,10 @@ const mockJobs = [
     approved: true,
     applicants: 15,
     views: 312,
-    created_at: "2025-02-17T00:00:00Z"
+    created_at: "2025-02-17T00:00:00Z",
+    application_method: "email",
+    planId: 4,
+    priority: "Top"
   },
   {
     id: "4",
@@ -73,7 +82,10 @@ const mockJobs = [
     approved: true,
     applicants: 6,
     views: 156,
-    created_at: "2025-02-17T00:00:00Z"
+    created_at: "2025-02-17T00:00:00Z",
+    application_method: "email",
+    planId: 4,
+    priority: "Top"
   },
   {
     id: "5",
@@ -91,7 +103,10 @@ const mockJobs = [
     approved: true,
     applicants: 9,
     views: 201,
-    created_at: "2025-02-17T00:00:00Z"
+    created_at: "2025-02-17T00:00:00Z",
+    application_method: "email",
+    planId: 4,
+    priority: "Top"
   }
 ]
 

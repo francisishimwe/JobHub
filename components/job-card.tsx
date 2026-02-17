@@ -296,8 +296,8 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
           </div>
 
           <div className="flex flex-row md:flex-col gap-2 shrink-0 self-end md:self-start">
-            {/* Apply Now Button - Only show for Email applications or short-listing tier */}
-            {(job.application_method?.toLowerCase() === 'email' || job.planId === 4 || job.priority === 'Top') && (
+            {/* Apply Now Button - Disabled for home page */}
+            {false && (
               <Button
                 size="sm"
                 className="bg-green-600 hover:bg-green-700 text-white flex-1 md:flex-initial text-xs md:text-sm font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg lg:hover:shadow-xl whitespace-nowrap"
