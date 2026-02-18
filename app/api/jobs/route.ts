@@ -135,15 +135,8 @@ export async function GET(request: NextRequest) {
           j.experience_level,
           j.deadline,
           j.description,
-          j.attachment_url,
-          j.application_link,
-          j.application_method,
-          j.primary_email,
-          j.cc_emails,
           j.status,
           j.approved,
-          j.applicants,
-          j.views,
           j.created_at,
           c.name as company_name,
           c.logo as company_logo
@@ -167,13 +160,18 @@ export async function GET(request: NextRequest) {
       // Featured tab should count *all* active items (Jobs, Tenders, Internships, Scholarships, Education, Blogs)
       const featuredCount = total
 
-      // Map jobs to ensure application_method has a default and handle missing columns
+      // Map jobs to ensure all required fields have defaults
       const mappedJobs = jobs.map((job: any) => ({
         ...job,
         application_method: job.application_method || 'email',
         featured: job.featured || false,
         applicants: job.applicants || 0,
-        views: job.views || 0
+        views: job.views || 0,
+        attachment_url: job.attachment_url || null,
+        application_link: job.application_link || null,
+        primary_email: job.primary_email || null,
+        cc_emails: job.cc_emails || null,
+        location_type: job.location_type || 'On-site'
       }))
 
       console.log(`✓ Database returned ${mappedJobs.length} jobs`)
