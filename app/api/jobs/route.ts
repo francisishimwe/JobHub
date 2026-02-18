@@ -134,7 +134,6 @@ export async function GET(request: NextRequest) {
           j.opportunity_type,
           j.experience_level,
           j.deadline,
-          COALESCE(j.featured, false) as featured,
           j.description,
           j.attachment_url,
           j.application_link,
@@ -143,8 +142,8 @@ export async function GET(request: NextRequest) {
           j.cc_emails,
           j.status,
           j.approved,
-          COALESCE(j.applicants, 0) as applicants,
-          COALESCE(j.views, 0) as views,
+          j.applicants,
+          j.views,
           j.created_at,
           c.name as company_name,
           c.logo as company_logo
@@ -168,10 +167,13 @@ export async function GET(request: NextRequest) {
       // Featured tab should count *all* active items (Jobs, Tenders, Internships, Scholarships, Education, Blogs)
       const featuredCount = total
 
-      // Map jobs to ensure application_method has a default
+      // Map jobs to ensure application_method has a default and handle missing columns
       const mappedJobs = jobs.map((job: any) => ({
         ...job,
-        application_method: job.application_method || 'email'
+        application_method: job.application_method || 'email',
+        featured: job.featured || false,
+        applicants: job.applicants || 0,
+        views: job.views || 0
       }))
 
       console.log(`✓ Database returned ${mappedJobs.length} jobs`)
