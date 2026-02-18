@@ -782,10 +782,10 @@ export function CVBuilderFullscreen({ jobId, jobTitle, onSuccess }: CVBuilderFul
               <Button
                 type="submit"
                 disabled={loading}
-                className="text-black hover:opacity-90 px-8"
-                style={{ backgroundColor: '#76c893' }}
+                className="text-white hover:opacity-90 px-8 font-bold"
+                style={{ backgroundColor: '#dc2626' }}
               >
-                {loading ? "Downloading..." : "DOWNLOAD YOUR CV"}
+                {loading ? "Downloading..." : "DOWNLOAD CV"}
               </Button>
             </div>
           </form>

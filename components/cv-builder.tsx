@@ -739,10 +739,10 @@ export function CVBuilder({ jobId, jobTitle, isOpen, onClose, onSuccess }: CVBui
               <Button
                 type="submit"
                 disabled={loading}
-                className="text-black hover:opacity-90"
-                style={{ backgroundColor: '#76c893' }}
+                className="text-white hover:opacity-90 font-bold"
+                style={{ backgroundColor: '#dc2626' }}
               >
-                {loading ? "Downloading..." : "DOWNLOAD YOUR CV"}
+                {loading ? "Downloading..." : "DOWNLOAD CV"}
               </Button>
             </div>
           </div>
