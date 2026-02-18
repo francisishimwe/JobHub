@@ -130,7 +130,6 @@ export async function GET(request: NextRequest) {
           j.title,
           j.company_id,
           j.location,
-          j.location_type,
           j.job_type,
           j.opportunity_type,
           j.experience_level,
@@ -151,14 +150,18 @@ export async function GET(request: NextRequest) {
           c.logo as company_logo
         FROM jobs j
         LEFT JOIN companies c ON j.company_id = c.id
-        WHERE ${activeWhere}
+        WHERE (j.status = 'published' OR j.status = 'active')
+        AND j.approved = true
+        AND (j.deadline IS NULL OR j.deadline = '' OR j.deadline IS NOT NULL)
         ORDER BY j.created_at DESC
         LIMIT ${limit} OFFSET ${offset}
       `
 
       const countResult = await sql`
         SELECT COUNT(*) as total FROM jobs 
-        WHERE ${activeWhere}
+        WHERE (status = 'published' OR status = 'active')
+        AND approved = true
+        AND (deadline IS NULL OR deadline = '' OR deadline IS NOT NULL)
       `
 
       const total = countResult[0]?.total || 0
