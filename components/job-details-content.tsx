@@ -9,6 +9,7 @@ import { useCompanies } from "@/lib/company-context"
 import Link from "next/link"
 import { EmailApplicationForm } from "@/components/email-application-form"
 import { InternalApplicationModal } from "@/components/internal-application-modal"
+import { AppDownloadCard } from "@/components/app-download-card"
 
 interface JobDetailsContentProps {
   job: Job
@@ -319,6 +320,11 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                             </Link>
                         </Button>
                     </div>
+                </div>
+
+                {/* Mobile App Download Card - Below Build your CV */}
+                <div className="block lg:hidden mt-6">
+                    <AppDownloadCard />
                 </div>
 
                 </div>

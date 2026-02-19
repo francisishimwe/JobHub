@@ -4,6 +4,7 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { JobDetailsContent } from '@/components/job-details-content'
 import { RecentJobsSidebar } from '@/components/recent-jobs-sidebar'
+import { AppDownloadCard } from '@/components/app-download-card'
 import { JobViewTracker } from '@/components/job-view-tracker'
 import { notFound } from 'next/navigation'
 import { Job, Company } from '@/lib/types'
@@ -139,8 +140,9 @@ export default async function JobPage({ params }: Props) {
                         <div className="lg:col-span-2">
                             <JobDetailsContent job={job} initialCompany={company} />
                         </div>
-                        <div className="hidden lg:block">
+                        <div className="hidden lg:block space-y-6">
                             <RecentJobsSidebar currentJobId={job.id} />
+                            <AppDownloadCard />
                         </div>
                     </div>
                 </main>
