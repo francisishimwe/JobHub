@@ -1,6 +1,8 @@
+'use client'
+
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { HelpCircle, Users, Building2, Phone, Mail, MessageSquare, Search, ChevronDown, ChevronUp, ExternalLink, Book, FileText, Shield } from "lucide-react"
+import { HelpCircle, Users, Building2, Phone, Mail, MessageSquare, ExternalLink, Book, FileText, Shield, ChevronRight, Clock, CheckCircle, Star } from "lucide-react"
 
 export default function HelpPage() {
   // FAQ data organized by category
@@ -154,36 +156,44 @@ export default function HelpPage() {
           </p>
         </div>
 
-        {/* FAQ Categories */}
+        {/* Help Categories with Numbers */}
         <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {Object.entries(faqData).map(([key, category]) => {
+          {Object.entries(faqData).map(([key, category], index) => {
             const Icon = category.icon
             
             return (
-              <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                {/* Category Header */}
-                <div className="px-6 py-4 border-b border-gray-200">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 bg-${category.color}-100 rounded-lg flex items-center justify-center`}>
-                      <Icon className={`h-5 w-5 text-${category.color}-600`} />
-                    </div>
-                    <h3 className="font-semibold text-gray-900">{category.title}</h3>
-                  </div>
+              <div key={key} className="relative">
+                {/* Number Badge */}
+                <div className="absolute -top-4 -left-4 w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg z-10">
+                  {index + 1}
                 </div>
+                
+                {/* Category Card */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow pt-8">
+                  {/* Category Header */}
+                  <div className="px-6 py-4 border-b border-gray-200">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 bg-${category.color}-100 rounded-lg flex items-center justify-center`}>
+                        <Icon className={`h-5 w-5 text-${category.color}-600`} />
+                      </div>
+                      <h3 className="font-semibold text-gray-900">{category.title}</h3>
+                    </div>
+                  </div>
 
-                {/* FAQ Questions */}
-                <div className="divide-y divide-gray-100">
-                  {category.questions.map((item, index) => (
-                    <div key={index} className="px-6 py-4">
-                      <div className="flex items-start gap-3">
-                        <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
-                        <div className="flex-1">
-                          <h4 className="font-medium text-gray-900 mb-2">{item.q}</h4>
-                          <p className="text-gray-600 text-sm leading-relaxed">{item.a}</p>
+                  {/* FAQ Questions */}
+                  <div className="divide-y divide-gray-100">
+                    {category.questions.map((item, qIndex) => (
+                      <div key={qIndex} className="px-6 py-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
+                          <div className="flex-1">
+                            <h4 className="font-medium text-gray-900 mb-2">{item.q}</h4>
+                            <p className="text-gray-600 text-sm leading-relaxed">{item.a}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             )
@@ -233,6 +243,7 @@ export default function HelpPage() {
                     <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
                       <Icon className="h-5 w-5 text-gray-600 group-hover:text-blue-600 transition-colors" />
                     </div>
+                    <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600 transition-colors" />
                   </div>
                   <h3 className="font-semibold text-gray-900 mb-1">{link.title}</h3>
                   <p className="text-sm text-gray-600">{link.description}</p>
@@ -247,15 +258,24 @@ export default function HelpPage() {
           <h2 className="text-3xl font-bold mb-8">We're Here to Help</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div>
-              <div className="text-4xl font-bold mb-2">24/7</div>
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Clock className="h-6 w-6" />
+                <div className="text-4xl font-bold">24/7</div>
+              </div>
               <div className="text-blue-100">WhatsApp Support</div>
             </div>
             <div>
-              <div className="text-4xl font-bold mb-2">&lt;24h</div>
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <CheckCircle className="h-6 w-6" />
+                <div className="text-4xl font-bold">&lt;24h</div>
+              </div>
               <div className="text-blue-100">Email Response Time</div>
             </div>
             <div>
-              <div className="text-4xl font-bold mb-2">98%</div>
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Star className="h-6 w-6" />
+                <div className="text-4xl font-bold">98%</div>
+              </div>
               <div className="text-blue-100">Satisfaction Rate</div>
             </div>
           </div>
