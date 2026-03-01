@@ -102,7 +102,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold mb-1">Email Address</h3>
-                    <p className="text-muted-foreground">rwandaiobhub2050@gmail.com</p>
+                    <p className="text-muted-foreground">info@rwandajobhub.rw</p>
                   </div>
                 </div>
 
