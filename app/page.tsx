@@ -17,7 +17,6 @@ import {
 import { ChevronDown } from "lucide-react"
 import { Header } from "@/components/header"
 import { CategoryDropdownSearch } from "@/components/category-dropdown-search"
-import { ThreeNotificationLinks } from "@/components/three-links"
 
 export default function HomePage() {
   const { jobs, filteredJobs, isLoading, hasMore, loadMore, filters, setFilters } = useJobs()
@@ -271,13 +270,6 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Three Notification Links */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="container mx-auto px-6 py-3">
-          <ThreeNotificationLinks />
         </div>
       </div>
 
