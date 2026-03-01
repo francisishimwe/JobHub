@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Check, Star, Crown, Zap } from "lucide-react"
+import { Check, Star, Crown, Zap, User, Mail, Phone, Building, Lock, ArrowRight } from "lucide-react"
 
 const plans = [
   {
@@ -87,15 +87,249 @@ const plans = [
 export default function SelectPlanPage() {
   const router = useRouter()
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
+  const [showSignUp, setShowSignUp] = useState(false)
+  const [chosenPlan, setChosenPlan] = useState<any>(null)
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    company: '',
+    password: '',
+    confirmPassword: ''
+  })
 
-  const handleSelectPlan = (planId: string) => {
-    setSelectedPlan(planId)
-    // Store the selected plan in localStorage
-    localStorage.setItem('selectedPlan', planId)
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleChoosePlan = (plan: any) => {
+    setChosenPlan(plan)
+    setShowSignUp(true)
+  }
+
+  const handleSignUp = (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    // Basic validation
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.company || !formData.password) {
+      alert('Please fill in all required fields')
+      return
+    }
+    
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match')
+      return
+    }
+    
+    // Store employer data and selected plan
+    localStorage.setItem('employerData', JSON.stringify(formData))
+    localStorage.setItem('selectedPlan', chosenPlan.id)
+    
     // Redirect to post job form
     router.push('/post-job-form')
   }
 
+  // If plan chosen, show sign-up form
+  if (showSignUp && chosenPlan) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
+        <div className="max-w-md mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Building className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-4">
+              Create Employer Account
+            </h1>
+            <p className="text-slate-600">
+              You've selected <strong>{chosenPlan.name}</strong> plan - Sign up to continue
+            </p>
+          </div>
+
+          {/* Selected Plan Summary */}
+          <Card className="mb-6 border-blue-200 bg-blue-50">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-blue-900">{chosenPlan.name}</h3>
+                  <p className="text-blue-700 font-bold">{chosenPlan.price}</p>
+                </div>
+                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center`}>
+                  <chosenPlan.icon className="w-6 h-6 text-white" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Sign Up Form */}
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-xl">Employer Registration</CardTitle>
+              <CardDescription>
+                Fill in your details to complete your {chosenPlan.name} plan registration
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSignUp} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      First Name *
+                    </label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input
+                        type="text"
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="John"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Last Name *
+                    </label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input
+                        type="text"
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Doe"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    Email Address *
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="john@company.com"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    Phone Number
+                  </label>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="+250 788 123 456"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    Company Name *
+                  </label>
+                  <div className="relative">
+                    <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      type="text"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleInputChange}
+                      className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Acme Corporation"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    Password *
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="••••••••"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    Confirm Password *
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      type="password"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleInputChange}
+                      className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="••••••••"
+                    />
+                  </div>
+                </div>
+
+                <Button 
+                  type="submit"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 active:scale-105"
+                >
+                  Complete Registration
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </form>
+            </CardContent>
+            <CardFooter className="text-center">
+              <p className="text-sm text-slate-600">
+                Already have an account?{' '}
+                <Link href="/login" className="text-blue-600 hover:text-blue-700 font-medium">
+                  Sign in
+                </Link>
+              </p>
+            </CardFooter>
+          </Card>
+
+          {/* Back to Plans */}
+          <div className="mt-8 text-center">
+            <button 
+              onClick={() => setShowSignUp(false)}
+              className="text-blue-600 hover:text-blue-700 font-medium underline"
+            >
+              Back to Choose Plan
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Show plan selection first
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
       <div className="max-w-7xl mx-auto">
@@ -158,7 +392,7 @@ export default function SelectPlanPage() {
 
                 <CardFooter>
                   <Button 
-                    onClick={() => handleSelectPlan(plan.id)}
+                    onClick={() => handleChoosePlan(plan)}
                     className={`w-full transition-all duration-200 active:scale-105 ${
                       plan.popular 
                         ? 'bg-purple-600 hover:bg-purple-700 text-white' 
