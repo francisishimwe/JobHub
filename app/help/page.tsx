@@ -1,12 +1,8 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { HelpCircle, Users, Building2, Phone, Mail, MessageSquare, Search, ChevronDown, ChevronUp, ExternalLink, Book, FileText, Shield } from "lucide-react"
-import { useState } from "react"
 
 export default function HelpPage() {
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
-  const [searchQuery, setSearchQuery] = useState("")
-
   // FAQ data organized by category
   const faqData = {
     jobseekers: {
@@ -92,24 +88,6 @@ export default function HelpPage() {
     }
   }
 
-  const toggleCategory = (category: string) => {
-    setExpandedCategory(expandedCategory === category ? null : category)
-  }
-
-  const filteredFAQs = searchQuery 
-    ? Object.entries(faqData).reduce((acc, [key, category]) => {
-        const filteredQuestions = category.questions.filter(
-          item => 
-            item.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            item.a.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-        if (filteredQuestions.length > 0) {
-          acc[key as keyof typeof faqData] = { ...category, questions: filteredQuestions }
-        }
-        return acc
-      }, {} as Partial<typeof faqData>)
-    : faqData
-
   const contactOptions = [
     {
       icon: Phone,
@@ -176,77 +154,37 @@ export default function HelpPage() {
           </p>
         </div>
 
-        {/* Search Bar */}
-        <div className="max-w-2xl mx-auto mb-12">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search for help topics..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
-            />
-          </div>
-        </div>
-
         {/* FAQ Categories */}
         <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {Object.entries(filteredFAQs).map(([key, category]) => {
+          {Object.entries(faqData).map(([key, category]) => {
             const Icon = category.icon
-            const isExpanded = expandedCategory === key
             
             return (
               <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 {/* Category Header */}
-                <button
-                  onClick={() => toggleCategory(key)}
-                  className={`w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors ${
-                    isExpanded ? `bg-${category.color}-50` : ''
-                  }`}
-                >
+                <div className="px-6 py-4 border-b border-gray-200">
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 bg-${category.color}-100 rounded-lg flex items-center justify-center`}>
                       <Icon className={`h-5 w-5 text-${category.color}-600`} />
                     </div>
                     <h3 className="font-semibold text-gray-900">{category.title}</h3>
                   </div>
-                  {isExpanded ? (
-                    <ChevronUp className="h-5 w-5 text-gray-400" />
-                  ) : (
-                    <ChevronDown className="h-5 w-5 text-gray-400" />
-                  )}
-                </button>
+                </div>
 
                 {/* FAQ Questions */}
-                {isExpanded && (
-                  <div className="border-t border-gray-200">
-                    {category.questions.map((item, index) => (
-                      <div key={index} className="border-b border-gray-100 last:border-b-0">
-                        <button
-                          className="w-full px-6 py-4 text-left hover:bg-gray-50 transition-colors"
-                          onClick={() => {
-                            // Simple toggle for individual questions
-                            const element = document.getElementById(`faq-${key}-${index}`)
-                            if (element) {
-                              element.classList.toggle('hidden')
-                            }
-                          }}
-                        >
-                          <div className="flex items-start gap-3">
-                            <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
-                            <div className="flex-1">
-                              <h4 className="font-medium text-gray-900 mb-2">{item.q}</h4>
-                              <p id={`faq-${key}-${index}`} className="text-gray-600 text-sm leading-relaxed hidden">
-                                {item.a}
-                              </p>
-                            </div>
-                          </div>
-                        </button>
+                <div className="divide-y divide-gray-100">
+                  {category.questions.map((item, index) => (
+                    <div key={index} className="px-6 py-4">
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900 mb-2">{item.q}</h4>
+                          <p className="text-gray-600 text-sm leading-relaxed">{item.a}</p>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                )}
+                    </div>
+                  ))}
+                </div>
               </div>
             )
           })}
