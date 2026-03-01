@@ -39,7 +39,7 @@ export function Header() {
   const navigationLinks = [
     { href: "/", label: "Home" },
     { href: "/exams", label: "View Exams" },
-    { href: "/employers", label: "Employers" },
+    { href: "/employers", label: "Partners" },
     { href: "/testimonials", label: "Testimonials" },
     { href: "/help", label: "Help" },
     { href: "/about", label: "About Us" },
