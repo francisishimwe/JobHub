@@ -1,6 +1,9 @@
+'use client'
+
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Building2, Star, Users } from "lucide-react"
+import { Building2, MapPin, Globe, ExternalLink, Users, Star, Phone, Mail, MessageSquare } from "lucide-react"
+import { useState } from "react"
 
 export default function PartnersPage() {
   // Mock partner data - this will be managed through admin dashboard
@@ -82,21 +85,14 @@ export default function PartnersPage() {
             {partners.map((partner) => (
               <div
                 key={partner.id}
-                className="group relative bg-gray-50 rounded-xl p-6 hover:bg-blue-50 hover:shadow-md transition-all duration-300 cursor-pointer"
-                onClick={() => window.open(partner.website, '_blank')}
+                className="group relative bg-gray-50 rounded-xl p-6 hover:bg-blue-50 hover:shadow-md transition-all duration-300"
               >
                 {/* Company Logo */}
-                <div className="aspect-square bg-white rounded-lg mb-4 flex items-center justify-center border border-gray-200 group-hover:border-blue-300 transition-colors">
+                <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                   <img
                     src={partner.logo}
                     alt={`${partner.name} logo`}
-                    className="max-w-full max-h-full object-contain p-3"
-                    onError={(e) => {
-                      // Fallback to company initials if logo fails
-                      const target = e.target as HTMLImageElement
-                      target.style.display = 'none'
-                      target.nextElementSibling?.classList.remove('hidden')
-                    }}
+                    className="w-full h-full object-cover"
                   />
                   {/* Fallback to initials */}
                   <div className="hidden text-2xl font-bold text-gray-400">
