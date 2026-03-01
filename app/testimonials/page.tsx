@@ -1,3 +1,5 @@
+'use client'
+
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Star, Quote, Users, Building2, Award, MessageSquare } from "lucide-react"
@@ -149,11 +151,6 @@ export default function TestimonialsPage() {
                     src={testimonial.image}
                     alt={`${testimonial.name} photo`}
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement
-                      target.style.display = 'none'
-                      target.nextElementSibling?.classList.remove('hidden')
-                    }}
                   />
                   {/* Fallback to initials */}
                   <div className="hidden w-full h-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
