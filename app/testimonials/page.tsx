@@ -4,7 +4,7 @@ import { Star, Quote, Users, Building2, Award, MessageSquare } from "lucide-reac
 import { useState } from "react"
 
 export default function TestimonialsPage() {
-  const [filter, setFilter] = useState<"all" | "jobseekers" | "employers">("all")
+  const [filter, setFilter] = useState<'all' | 'jobseekers' | 'employers'>('all')
 
   // Mock testimonials data - this will be managed through admin dashboard
   const testimonials = [
