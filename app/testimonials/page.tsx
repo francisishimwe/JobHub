@@ -4,7 +4,7 @@ import { Star, Quote, Users, Building2, Award, MessageSquare } from "lucide-reac
 import { useState } from "react"
 
 export default function TestimonialsPage() {
-  const [filter, setFilter] = useState<'all' | 'jobseekers' | 'employers'>('all')
+  const [filter, setFilter] = useState('all')
 
   // Mock testimonials data - this will be managed through admin dashboard
   const testimonials = [
@@ -77,7 +77,7 @@ export default function TestimonialsPage() {
   ]
 
   const filteredTestimonials = testimonials.filter(testimonial => 
-    filter === "all" || testimonial.type === filter
+    filter === 'all' || testimonial.type === filter
   )
 
   const renderStars = (rating: number) => {
@@ -146,9 +146,9 @@ export default function TestimonialsPage() {
         <div className="flex justify-center mb-12">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-1 inline-flex">
             <button
-              onClick={() => setFilter("all")}
+              onClick={() => setFilter('all')}
               className={`px-6 py-2 rounded-md transition-all ${
-                filter === "all"
+                filter === 'all'
                   ? "bg-blue-600 text-white"
                   : "text-gray-600 hover:text-gray-900"
               }`}
@@ -156,9 +156,9 @@ export default function TestimonialsPage() {
               All ({stats.totalTestimonials})
             </button>
             <button
-              onClick={() => setFilter("jobseekers")}
+              onClick={() => setFilter('jobseekers')}
               className={`px-6 py-2 rounded-md transition-all ${
-                filter === "jobseekers"
+                filter === 'jobseekers'
                   ? "bg-blue-600 text-white"
                   : "text-gray-600 hover:text-gray-900"
               }`}
@@ -167,9 +167,9 @@ export default function TestimonialsPage() {
               Job Seekers ({stats.jobseekers})
             </button>
             <button
-              onClick={() => setFilter("employers")}
+              onClick={() => setFilter('employers')}
               className={`px-6 py-2 rounded-md transition-all ${
-                filter === "employers"
+                filter === 'employers'
                   ? "bg-blue-600 text-white"
                   : "text-gray-600 hover:text-gray-900"
               }`}
@@ -257,7 +257,7 @@ export default function TestimonialsPage() {
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">No Testimonials Found</h3>
             <p className="text-gray-600">
-              {filter === "all" 
+              {filter === 'all' 
                 ? "Testimonials will appear here once added through the admin dashboard."
                 : `No ${filter} testimonials available yet.`
               }
