@@ -1,58 +1,56 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { sql } from '@/lib/db'
 import { NotificationService } from '@/lib/notifications'
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const supabase = await createClient()
     const { id } = params
 
     // Update CV profile to mark as shortlisted
-    const { data: cvProfile, error: cvError } = await supabase
-      .from('cv_profiles')
-      .update({ is_shortlisted: true })
-      .eq('id', id)
-      .select()
-      .single()
+    const cvProfileResult = await sql`
+      UPDATE cv_profiles 
+      SET is_shortlisted = true 
+      WHERE id = ${id}
+      RETURNING *
+    `
 
-    if (cvError) {
-      console.error('CV Profile shortlist error:', cvError)
+    if (!cvProfileResult || cvProfileResult.length === 0) {
+      console.error('CV Profile shortlist error: No result returned')
       return NextResponse.json(
         { error: 'Failed to shortlist candidate' },
         { status: 500 }
       )
     }
 
-    // Update job application status
-    const { error: applicationError } = await supabase
-      .from('job_applications')
-      .update({ status: 'shortlisted' })
-      .eq('cv_profile_id', id)
+    const cvProfile = cvProfileResult[0]
 
-    if (applicationError) {
-      console.error('Application update error:', applicationError)
-      return NextResponse.json(
-        { error: 'Failed to update application status' },
-        { status: 500 }
-      )
-    }
+    // Update job application status
+    await sql`
+      UPDATE job_applications 
+      SET status = 'shortlisted' 
+      WHERE cv_profile_id = ${id}
+    `
 
     // Get job details for notification
-    const { data: jobData } = await supabase
-      .from('jobs')
-      .select('title, company_id')
-      .eq('id', cvProfile.job_id)
-      .single()
+    const jobDataResult = await sql`
+      SELECT title, company_id 
+      FROM jobs 
+      WHERE id = ${cvProfile.job_id}
+      LIMIT 1
+    `
+
+    const jobData = jobDataResult[0] || {}
 
     // Get company details
     let companyName = 'Company'
     if (jobData?.company_id) {
-      const { data: companyData } = await supabase
-        .from('companies')
-        .select('name')
-        .eq('id', jobData.company_id)
-        .single()
-      companyName = companyData?.name || 'Company'
+      const companyDataResult = await sql`
+        SELECT name 
+        FROM companies 
+        WHERE id = ${jobData.company_id}
+        LIMIT 1
+      `
+      companyName = companyDataResult[0]?.name || 'Company'
     }
 
     // Send notification to candidate

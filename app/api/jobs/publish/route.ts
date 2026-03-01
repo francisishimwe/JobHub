@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { sql } from '@/lib/db'
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,43 +12,35 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const supabase = await createClient()
-
     // First, get the job details
-    const { data: job, error: jobError } = await supabase
-      .from('jobs')
-      .select('*')
-      .eq('id', jobId)
-      .single()
+    const jobResult = await sql`
+      SELECT * FROM jobs 
+      WHERE id = ${jobId}
+      LIMIT 1
+    `
 
-    if (jobError || !job) {
+    if (!jobResult || jobResult.length === 0) {
       return NextResponse.json(
         { error: 'Job not found' },
         { status: 404 }
       )
     }
 
-    // Update job status to published
-    const { error: updateError } = await supabase
-      .from('jobs')
-      .update({ 
-        status: 'published',
-        approved: true,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', jobId)
+    const job = jobResult[0]
 
-    if (updateError) {
-      console.error('Error publishing job:', updateError)
-      return NextResponse.json(
-        { error: 'Failed to publish job' },
-        { status: 500 }
-      )
-    }
+    // Update job status to published
+    await sql`
+      UPDATE jobs 
+      SET 
+        status = 'published',
+        approved = true,
+        updated_at = ${new Date().toISOString()}
+      WHERE id = ${jobId}
+    `
 
     // If job has candidate matching enabled, find matching CVs
     if (job.priority_candidate_matching || job.candidate_pre_screening) {
-      await findAndNotifyMatchingCandidates(job, supabase)
+      await findAndNotifyMatchingCandidates(job)
     }
 
     return NextResponse.json({
@@ -70,7 +62,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function findAndNotifyMatchingCandidates(job: any, supabase: any) {
+async function findAndNotifyMatchingCandidates(job: any) {
   try {
     console.log('🔍 Finding matching candidates for job:', job.title)
 
@@ -101,41 +93,37 @@ async function findAndNotifyMatchingCandidates(job: any, supabase: any) {
     }
 
     // Search for matching CV profiles
-    let matchingQuery = supabase
-      .from('cv_profiles')
-      .select('*')
-      .eq('is_active', true)
-
+    let whereClause = `is_active = true`
+    
     // Match by field of study in education
     if (jobField !== 'general') {
       const fieldKeywords = fieldMappings[jobField] || []
       for (const keyword of fieldKeywords) {
-        matchingQuery = matchingQuery.or(`education.cs.{fieldOfStudy:*.${keyword}*}`)
+        whereClause += ` OR education ILIKE '%${keyword}%'`
       }
     }
 
-    const { data: matchedCVs, error: cvError } = await matchingQuery.limit(10)
-
-    if (cvError) {
-      console.error('Error finding matching CVs:', cvError)
-      return
-    }
+    const matchedCVs = await sql`
+      SELECT * FROM cv_profiles 
+      WHERE ${whereClause}
+      LIMIT 10
+    `
 
     console.log(`Found ${matchedCVs?.length || 0} matching candidates`)
 
     // Update matched candidates count for the job
     if (matchedCVs && matchedCVs.length > 0) {
-      await supabase
-        .from('jobs')
-        .update({ 
-          matched_candidates_count: matchedCVs.length,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', job.id)
+      await sql`
+        UPDATE jobs 
+        SET 
+          matched_candidates_count = ${matchedCVs.length},
+          updated_at = ${new Date().toISOString()}
+        WHERE id = ${job.id}
+      `
 
       // Send notifications to matched candidates
       for (const cv of matchedCVs) {
-        await sendJobNotification(cv, job, supabase)
+        await sendJobNotification(cv, job)
       }
     }
 
@@ -144,7 +132,7 @@ async function findAndNotifyMatchingCandidates(job: any, supabase: any) {
   }
 }
 
-async function sendJobNotification(candidate: any, job: any, supabase: any) {
+async function sendJobNotification(candidate: any, job: any) {
   try {
     console.log('📧 Sending notification to:', candidate.email)
 
