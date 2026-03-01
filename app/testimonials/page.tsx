@@ -1,11 +1,8 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Star, Quote, Users, Building2, Award, MessageSquare } from "lucide-react"
-import { useState } from "react"
 
 export default function TestimonialsPage() {
-  const [filter, setFilter] = useState('all')
-
   // Mock testimonials data - this will be managed through admin dashboard
   const testimonials = [
     {
@@ -76,10 +73,6 @@ export default function TestimonialsPage() {
     }
   ]
 
-  const filteredTestimonials = testimonials.filter(testimonial => 
-    filter === 'all' || testimonial.type === filter
-  )
-
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
@@ -142,47 +135,9 @@ export default function TestimonialsPage() {
           </div>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="flex justify-center mb-12">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-1 inline-flex">
-            <button
-              onClick={() => setFilter('all')}
-              className={`px-6 py-2 rounded-md transition-all ${
-                filter === 'all'
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              All ({stats.totalTestimonials})
-            </button>
-            <button
-              onClick={() => setFilter('jobseekers')}
-              className={`px-6 py-2 rounded-md transition-all ${
-                filter === 'jobseekers'
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              <Users className="h-4 w-4 inline mr-2" />
-              Job Seekers ({stats.jobseekers})
-            </button>
-            <button
-              onClick={() => setFilter('employers')}
-              className={`px-6 py-2 rounded-md transition-all ${
-                filter === 'employers'
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              <Building2 className="h-4 w-4 inline mr-2" />
-              Employers ({stats.employers})
-            </button>
-          </div>
-        </div>
-
         {/* Testimonials Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {filteredTestimonials.map((testimonial) => (
+          {testimonials.map((testimonial) => (
             <div
               key={testimonial.id}
               className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
@@ -248,22 +203,6 @@ export default function TestimonialsPage() {
             </div>
           ))}
         </div>
-
-        {/* Empty State */}
-        {filteredTestimonials.length === 0 && (
-          <div className="text-center py-16">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <MessageSquare className="h-8 w-8 text-gray-400" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No Testimonials Found</h3>
-            <p className="text-gray-600">
-              {filter === 'all' 
-                ? "Testimonials will appear here once added through the admin dashboard."
-                : `No ${filter} testimonials available yet.`
-              }
-            </p>
-          </div>
-        )}
 
         {/* Submit Testimonial CTA */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-12 text-center text-white">
