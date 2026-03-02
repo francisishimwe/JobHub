@@ -46,6 +46,11 @@ export function Header() {
     { href: "/contact", label: "Contact Us" },
   ]
 
+  const employerLinks = [
+    { href: "/employer-dashboard", label: "Dashboard" },
+    { href: "/select-plan", label: "Post Job" },
+  ]
+
   return (
     <>
       {/* Gorgeous Single-Line Header */}
@@ -105,6 +110,18 @@ export function Header() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                      <Link href="/employer-dashboard" className="gap-2">
+                        <UserCircle2 className="h-4 w-4" />
+                        Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/select-plan" className="gap-2">
+                        <span className="h-4 w-4">+</span>
+                        Post Job
+                      </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogout} className="gap-2">
                       <LogOut className="h-4 w-4" />
                       Logout
