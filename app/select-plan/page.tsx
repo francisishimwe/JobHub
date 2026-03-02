@@ -845,7 +845,7 @@ export default function EmployerHubPage() {
     )
   }
 
-  // Show job form when plan is chosen
+  // Show job form when plan is chosen - DEBUG SECTION
   console.log('Checking job form conditions:', { showJobForm, chosenPlan })
   if (showJobForm && chosenPlan) {
     console.log('Rendering job form for plan:', chosenPlan)
