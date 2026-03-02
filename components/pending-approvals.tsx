@@ -37,8 +37,19 @@ interface PendingJob {
   created_at: string
 }
 
+interface PendingEmployer {
+  id: number
+  email: string
+  plan: string
+  planId: string
+  price: string
+  registrationDate: string
+  status: string
+}
+
 export function PendingApprovals() {
   const [pendingJobs, setPendingJobs] = useState<PendingJob[]>([])
+  const [pendingEmployers, setPendingEmployers] = useState<PendingEmployer[]>([])
   const [loading, setLoading] = useState(true)
   const [processing, setProcessing] = useState<string | null>(null)
   const [jobToDelete, setJobToDelete] = useState<string | null>(null)
@@ -49,9 +60,11 @@ export function PendingApprovals() {
   const [loadingCandidates, setLoadingCandidates] = useState(false)
   const [showApplicantReview, setShowApplicantReview] = useState(false)
   const [selectedJobForReview, setSelectedJobForReview] = useState<PendingJob | null>(null)
+  const [activeTab, setActiveTab] = useState('jobs') // 'jobs' or 'employers'
 
   useEffect(() => {
     fetchPendingJobs()
+    fetchPendingEmployers()
   }, [])
 
   const fetchPendingJobs = async () => {
@@ -65,6 +78,15 @@ export function PendingApprovals() {
       console.error('Error fetching pending jobs:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchPendingEmployers = () => {
+    try {
+      const employers = JSON.parse(localStorage.getItem('pendingEmployers') || '[]')
+      setPendingEmployers(employers)
+    } catch (error) {
+      console.error('Error fetching pending employers:', error)
     }
   }
 
@@ -83,6 +105,68 @@ export function PendingApprovals() {
     } catch (error) {
       console.error('Error approving job:', error)
       alert('Failed to approve job. Please try again.')
+    } finally {
+      setProcessing(null)
+    }
+  }
+
+  const handleApproveEmployer = (employerId: number) => {
+    setProcessing(employerId.toString())
+    
+    try {
+      // Get pending employers
+      const pendingEmployers = JSON.parse(localStorage.getItem('pendingEmployers') || '[]')
+      const employer = pendingEmployers.find((e: PendingEmployer) => e.id === employerId)
+      
+      if (employer) {
+        // Update employer status to approved
+        const employerData = JSON.parse(localStorage.getItem('employerData') || '{}')
+        if (employerData.email === employer.email) {
+          employerData.status = 'approved'
+          localStorage.setItem('employerData', JSON.stringify(employerData))
+        }
+        
+        // Remove from pending list
+        const updatedPending = pendingEmployers.filter((e: PendingEmployer) => e.id !== employerId)
+        localStorage.setItem('pendingEmployers', JSON.stringify(updatedPending))
+        setPendingEmployers(updatedPending)
+        
+        alert(`Employer ${employer.email} has been approved!`)
+      }
+    } catch (error) {
+      console.error('Error approving employer:', error)
+      alert('Failed to approve employer. Please try again.')
+    } finally {
+      setProcessing(null)
+    }
+  }
+
+  const handleRejectEmployer = (employerId: number) => {
+    setProcessing(employerId.toString())
+    
+    try {
+      // Get pending employers
+      const pendingEmployers = JSON.parse(localStorage.getItem('pendingEmployers') || '[]')
+      const employer = pendingEmployers.find((e: PendingEmployer) => e.id === employerId)
+      
+      if (employer) {
+        // Update employer status to rejected
+        const employerData = JSON.parse(localStorage.getItem('employerData') || '{}')
+        if (employerData.email === employer.email) {
+          employerData.status = 'rejected'
+          localStorage.setItem('employerData', JSON.stringify(employerData))
+        }
+        
+        // Remove from pending list
+        const updatedPending = pendingEmployers.filter((e: PendingEmployer) => e.id !== employerId)
+        localStorage.setItem('pendingEmployers', JSON.stringify(updatedPending))
+        setPendingEmployers(updatedPending)
+        
+        alert(`Employer ${employer.email} has been rejected.`)
+      }
+    } catch (error) {
+      console.error('Error rejecting employer:', error)
+      alert('Failed to reject employer. Please try again.')
     } finally {
       setProcessing(null)
     }
@@ -201,25 +285,43 @@ export function PendingApprovals() {
     )
   }
 
-  if (pendingJobs.length === 0) {
+  if (pendingJobs.length === 0 && pendingEmployers.length === 0) {
     return (
       <div className="text-center py-12">
         <CheckCircle2 className="mx-auto h-12 w-12 text-green-500 mb-4" />
         <h3 className="text-lg font-semibold text-gray-900 mb-2">No Pending Approvals</h3>
-        <p className="text-gray-600">All jobs have been reviewed and approved.</p>
+        <p className="text-gray-600">All jobs and employers have been reviewed and approved.</p>
       </div>
     )
   }
 
   return (
     <div className="space-y-4">
+      {/* Tabs for Jobs and Employers */}
       <div className="flex items-center gap-2 mb-6">
         <Clock className="h-5 w-5 text-orange-500" />
         <h2 className="text-xl font-semibold text-gray-900">Pending Approvals</h2>
-        <Badge variant="secondary">{pendingJobs.length} jobs</Badge>
+        <div className="flex gap-2">
+          <Badge variant={activeTab === 'jobs' ? 'default' : 'secondary'} className="cursor-pointer" onClick={() => setActiveTab('jobs')}>
+            {pendingJobs.length} Jobs
+          </Badge>
+          <Badge variant={activeTab === 'employers' ? 'default' : 'secondary'} className="cursor-pointer" onClick={() => setActiveTab('employers')}>
+            {pendingEmployers.length} Employers
+          </Badge>
+        </div>
       </div>
 
-      {pendingJobs.map((job) => (
+      {/* Jobs Tab */}
+      {activeTab === 'jobs' && (
+        <>
+          {pendingJobs.length === 0 ? (
+            <div className="text-center py-12">
+              <CheckCircle2 className="mx-auto h-12 w-12 text-green-500 mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">No Pending Jobs</h3>
+              <p className="text-gray-600">All jobs have been reviewed and approved.</p>
+            </div>
+          ) : (
+            pendingJobs.map((job) => (
         <Card key={job.id} className="border-l-4 border-l-orange-500">
           <CardHeader className="pb-3">
             <div className="flex items-start justify-between">
@@ -425,6 +527,111 @@ export function PendingApprovals() {
           </CardContent>
         </Card>
       ))}
+            </>
+          )}
+
+      {/* Employers Tab */}
+      {activeTab === 'employers' && (
+        <>
+          {pendingEmployers.length === 0 ? (
+            <div className="text-center py-12">
+              <CheckCircle2 className="mx-auto h-12 w-12 text-green-500 mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">No Pending Employers</h3>
+              <p className="text-gray-600">All employers have been reviewed and approved.</p>
+            </div>
+          ) : (
+            pendingEmployers.map((employer) => (
+              <Card key={employer.id} className="border-l-4 border-l-blue-500">
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-3">
+                        <Building2 className="h-6 w-6 text-blue-500" />
+                        <CardTitle className="text-lg">Employer Registration</CardTitle>
+                        <Badge className="bg-blue-100 text-blue-800">{employer.plan}</Badge>
+                      </div>
+                      <div className="flex items-center gap-4 text-sm text-gray-600">
+                        <div className="flex items-center gap-1">
+                          <Mail className="h-4 w-4" />
+                          <span>{employer.email}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-500">•</span>
+                          <span>{employer.price}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-gray-500">Registered</p>
+                      <p className="text-sm font-medium">{formatDate(employer.registrationDate)}</p>
+                    </div>
+                  </div>
+                </CardHeader>
+                
+                <CardContent className="space-y-4">
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <h4 className="font-medium text-gray-900 mb-2">Registration Details</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <span className="font-medium">Email:</span> {employer.email}
+                      </div>
+                      <div>
+                        <span className="font-medium">Selected Plan:</span> {employer.plan}
+                      </div>
+                      <div>
+                        <span className="font-medium">Plan Price:</span> {employer.price}
+                      </div>
+                      <div>
+                        <span className="font-medium">Registration Date:</span> {formatDate(employer.registrationDate)}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex justify-end gap-3 pt-4 border-t">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleRejectEmployer(employer.id)}
+                      disabled={processing === employer.id.toString()}
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50 active:scale-105 transition-all"
+                    >
+                      {processing === employer.id.toString() ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-red-600 border-t-transparent mr-2" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Reject
+                        </>
+                      )}
+                    </Button>
+                    <Button
+                      onClick={() => handleApproveEmployer(employer.id)}
+                      disabled={processing === employer.id.toString()}
+                      className="bg-green-600 hover:bg-green-700 text-white transition-all hover:scale-105"
+                    >
+                      {processing === employer.id.toString() ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle2 className="h-4 w-4 mr-2" />
+                          Approve Employer
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
+        </>
+      )}
       
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={!!jobToDelete} onOpenChange={(open) => !open && setJobToDelete(null)}>

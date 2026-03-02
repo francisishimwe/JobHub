@@ -16,13 +16,27 @@ import { Plus, BriefcaseBusiness, GraduationCap, BarChart3, MessageSquare, Check
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function DashboardPage() {
-  const { isAuthenticated } = useAuth()
+  const { user, isAuthenticated } = useAuth()
   const router = useRouter()
   const [activeTab, setActiveTab] = useState("pending")
 
   // Show login form if not authenticated
   if (!isAuthenticated) {
     return <LoginForm onSuccess={() => { }} />
+  }
+
+  // Redirect employers away from admin dashboard
+  if (user?.role === 'employer') {
+    router.push('/select-plan')
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">Access Denied</h2>
+          <p className="text-gray-600 mb-4">Employers cannot access the admin dashboard.</p>
+          <p className="text-sm text-gray-500">Redirecting to employer dashboard...</p>
+        </div>
+      </div>
+    )
   }
 
   return (

@@ -9,6 +9,7 @@ interface User {
   firstName?: string
   lastName?: string
   company?: string
+  role?: 'admin' | 'employer' // Add role field
 }
 
 interface AuthContextType {
@@ -45,11 +46,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const employer = JSON.parse(savedEmployerData)
       
       // Validate against stored employer data
-      if (employer.email === email && employer.password === password) {
+      if (employer.email === email && employer.password === password && employer.status === 'approved') {
         const newUser: User = {
           email,
           isAuthenticated: true,
-          planType: employer.selectedPlan || 'free'
+          planType: employer.selectedPlan || 'free',
+          role: 'employer' // Set role as employer
         }
         
         setUser(newUser)
@@ -69,7 +71,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const adminUser: User = {
         email,
         isAuthenticated: true,
-        planType: 'admin'
+        planType: 'admin',
+        role: 'admin' // Set role as admin
       }
       
       setUser(adminUser)
