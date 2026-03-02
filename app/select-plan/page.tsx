@@ -709,6 +709,7 @@ export default function EmployerHubPage() {
   }
 
   // Show sign-up form when plan is chosen
+  console.log('Checking conditions:', { showSignUp, chosenPlan })
   if (showSignUp && chosenPlan) {
     console.log('Rendering sign-up form for plan:', chosenPlan)
     return (
