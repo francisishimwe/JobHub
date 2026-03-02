@@ -1,91 +1,81 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Check, Star, Crown, Zap, User, Mail, Phone, Building, Lock, ArrowRight, Briefcase, Upload, Users, MessageSquare, Settings, Eye, EyeOff, Calendar, Filter, Search, TrendingUp, MapPin, BarChart3 } from "lucide-react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 import { useAuth } from "@/lib/auth-context"
+import { Building, Users, Briefcase, TrendingUp, Star, Check, Eye, EyeOff, ChevronRight, Clock, FileText, UserCircle2, LogOut, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, ArrowRight, Zap, Shield, Crown, Target } from "lucide-react"
 import { AddJobForm } from "@/components/add-job-form"
-import { LoginForm } from "@/components/login-form"
 
 const plans = [
   {
-    id: "featured",
-    name: "Featured",
-    price: "50,000 RWF",
-    description: "Perfect for getting started",
-    features: [
-      "Basic job listing",
-      "30-day visibility",
-      "Company logo display",
-      "Email applications",
-      "Basic analytics"
-    ],
+    id: 'featured',
+    name: 'Featured',
+    price: '50,000 RWF',
+    description: 'Perfect for getting started',
     icon: Star,
-    color: "from-green-500 to-green-600",
+    color: 'from-blue-500 to-blue-600',
+    features: [
+      '30-day job posting',
+      'Basic applicant tracking',
+      'Email support',
+      'Company profile',
+      'Job visibility boost'
+    ],
     popular: false
   },
   {
-    id: "featured-plus",
-    name: "Featured+",
-    price: "75,000 RWF",
-    description: "Enhanced visibility for your job",
+    id: 'featured-plus',
+    name: 'Featured+',
+    price: '75,000 RWF',
+    description: 'Enhanced visibility',
+    icon: TrendingUp,
+    color: 'from-purple-500 to-purple-600',
     features: [
-      "Enhanced job listing",
-      "30-day visibility",
-      "Priority placement",
-      "Company logo & banner",
-      "Email & link applications",
-      "Advanced analytics",
-      "Social media promotion"
+      '45-day job posting',
+      'Advanced applicant tracking',
+      'Priority email support',
+      'Enhanced company profile',
+      'Premium job visibility'
     ],
-    icon: Crown,
-    color: "from-purple-500 to-purple-600",
     popular: true
   },
   {
-    id: "super-featured",
-    name: "Super Featured",
-    price: "100,000 RWF",
-    description: "Maximum exposure for top talent",
+    id: 'super-featured',
+    name: 'Super Featured',
+    price: '100,000 RWF',
+    description: 'Maximum exposure',
+    icon: Crown,
+    color: 'from-orange-500 to-orange-600',
     features: [
-      "Premium job listing",
-      "45-day visibility",
-      "Top placement guarantee",
-      "Featured on homepage",
-      "Company branding",
-      "Multiple application methods",
-      "Premium analytics",
-      "WhatsApp promotion",
-      "Dedicated support"
+      '60-day job posting',
+      'Complete applicant management',
+      '24/7 phone support',
+      'Premium company profile',
+      'Maximum job visibility'
     ],
-    icon: Zap,
-    color: "from-orange-500 to-orange-600",
     popular: false
   },
   {
-    id: "short-listing",
-    name: "Short-listing",
-    price: "150,000 RWF",
-    description: "Full-service recruitment",
+    id: 'short-listing',
+    name: 'Short-listing',
+    price: '150,000 RWF',
+    description: 'Complete recruitment solution',
+    icon: Target,
+    color: 'from-green-500 to-green-600',
     features: [
-      "All Super Featured benefits",
-      "60-day visibility",
-      "Candidate pre-screening",
-      "Short-listing service",
-      "Interview coordination",
-      "Priority candidate matching",
-      "Dedicated account manager",
-      "Unlimited edits",
-      "Money-back guarantee"
+      '90-day job posting',
+      'AI-powered applicant matching',
+      'Dedicated account manager',
+      'VIP company profile',
+      'Exclusive short-listing feature'
     ],
-    icon: Crown,
-    color: "from-green-500 to-green-600",
     popular: false
   }
 ]
@@ -119,70 +109,360 @@ export default function EmployerHubPage() {
     type: '',
     deadline: ''
   })
-  const [companyProfile, setCompanyProfile] = useState({
-    logo: '',
-    banner: '',
-    name: '',
-    description: ''
+  const [applications, setApplications] = useState([
+    {
+      id: 1,
+      name: "Jean Mugabo",
+      email: "jean.mugabo@email.com",
+      position: "Senior Developer",
+      applied: "2024-01-15",
+      status: "shortlisted",
+      score: 85,
+      avatar: "JM"
+    },
+    {
+      id: 2,
+      name: "Grace Uwimana",
+      email: "grace.uwimana@email.com",
+      position: "UX Designer",
+      applied: "2024-01-14",
+      status: "interviewing",
+      score: 92,
+      avatar: "GU"
+    },
+    {
+      id: 3,
+      name: "Eric Niyonzima",
+      email: "eric.niyonzima@email.com",
+      position: "Project Manager",
+      applied: "2024-01-13",
+      status: "hired",
+      score: 78,
+      avatar: "EN"
+    }
+  ])
+  const [companyProfile] = useState({
+    name: "Tech Solutions Rwanda",
+    email: "contact@techsolutions.rw",
+    phone: "+250 788 123 456",
+    size: "50-100 employees",
+    website: "www.techsolutions.rw"
   })
-  const [applications, setApplications] = useState([])
-  const [whatsappEnabled, setWhatsappEnabled] = useState(false)
 
   useEffect(() => {
-    // Check if user is already authenticated
-    if (isAuthenticated) {
-      const savedEmployerData = localStorage.getItem('employerData')
-      if (savedEmployerData) {
-        const employer = JSON.parse(savedEmployerData)
-        setCompanyProfile({
-          logo: employer.logo || '/api/placeholder-logo',
-          banner: employer.banner || '/api/placeholder-banner',
-          name: employer.company || '',
-          description: employer.description || ''
-        })
-        setShowHub(true)
-        loadMockApplications()
-      }
+    const savedPlan = localStorage.getItem('selectedPlan')
+    const savedPlanDetails = localStorage.getItem('planDetails')
+    
+    if (savedPlan && savedPlanDetails) {
+      setChosenPlan(JSON.parse(savedPlanDetails))
+      setSelectedPlan(JSON.parse(savedPlanDetails))
+      setShowHub(true)
     }
-  }, [isAuthenticated])
+  }, [])
 
   const loadMockApplications = () => {
+    // Simulate loading applications
     setApplications([
+      ...applications,
       {
-        id: 1,
-        name: 'Jean Mugisha',
-        position: 'Assistant Tea Maker',
-        score: 92,
-        status: 'shortlisted',
-        email: 'jean.m@email.com',
-        appliedDate: '2024-03-02',
-        experience: '3 years'
-      },
-      {
-        id: 2,
-        name: 'Grace Uwimana',
-        position: 'Marketing Manager',
+        id: 4,
+        name: "Alice Kaneza",
+        email: "alice.kaneza@email.com",
+        position: "Marketing Manager",
+        applied: "2024-01-16",
+        status: "shortlisted",
         score: 88,
-        status: 'interviewing',
-        email: 'grace.u@email.com',
-        appliedDate: '2024-03-03',
-        experience: '2 years'
+        avatar: "AK"
       }
     ])
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
+  const handleUploadBanner = () => {
+    alert('Banner upload feature - would open file picker')
   }
 
-  const handleJobDataChange = (field: string, value: string) => {
-    setJobData({
-      ...jobData,
-      [field]: value
-    })
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'shortlisted': return 'bg-blue-100 text-blue-800'
+      case 'interviewing': return 'bg-yellow-100 text-yellow-800'
+      case 'hired': return 'bg-green-100 text-green-800'
+      default: return 'bg-gray-100 text-gray-800'
+    }
+  }
+
+  const getScoreColor = (score: number) => {
+    if (score >= 90) return 'text-green-600'
+    if (score >= 80) return 'text-blue-600'
+    if (score >= 70) return 'text-yellow-600'
+    return 'text-red-600'
+  }
+
+  // Main render - add debugging
+  console.log('Main render - State:', { showSignUp, chosenPlan, showJobForm, showHub, isAuthenticated })
+
+  // Show job form when plan is chosen - CHECK THIS FIRST
+  console.log('Checking job form conditions:', { showJobForm, chosenPlan })
+  if (showJobForm && chosenPlan) {
+    console.log('Rendering job form for plan:', chosenPlan)
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center mx-auto mb-4`}>
+              <chosenPlan.icon className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-4">
+              Post Job - {chosenPlan.name} Plan
+            </h1>
+            <p className="text-slate-600">
+              Fill in the job details for your <strong>{chosenPlan.name}</strong> plan ({chosenPlan.price})
+            </p>
+          </div>
+
+          {/* Selected Plan Summary */}
+          <Card className="mb-6 border-blue-200 bg-blue-50">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-blue-900">{chosenPlan.name}</h3>
+                  <p className="text-blue-700 font-bold">{chosenPlan.price}</p>
+                </div>
+                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center`}>
+                  <chosenPlan.icon className="w-6 h-6 text-white" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Job Form - Using Admin AddJobForm */}
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-2xl text-center">Job Posting Form</CardTitle>
+              <CardDescription className="text-center">
+                Complete the form below to post your job listing
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="p-6 text-center">
+                <h3 className="text-xl font-semibold mb-4">Job Form Placeholder</h3>
+                <p className="text-gray-600 mb-4">This is the job posting form for {chosenPlan.name} plan</p>
+                <button 
+                  onClick={() => {
+                    alert('Job posted successfully!')
+                    setShowJobForm(false)
+                  }}
+                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                >
+                  Submit Job
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Back to Plans */}
+          <div className="mt-8 text-center">
+            <button 
+              onClick={() => setShowJobForm(false)}
+              className="text-blue-600 hover:text-blue-700 font-medium underline"
+            >
+              Back to Choose Plan
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Show sign-up form when plan is chosen - CHECK THIS SECOND
+  console.log('Checking conditions:', { showSignUp, chosenPlan })
+  if (showSignUp && chosenPlan) {
+    console.log('Rendering sign-up form for plan:', chosenPlan)
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
+        <div className="max-w-md mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Building className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-4">
+              Employer Login
+            </h1>
+            <p className="text-slate-600">
+              You've selected <strong>{chosenPlan.name}</strong> plan - Login to continue
+            </p>
+          </div>
+
+          {/* Selected Plan Summary */}
+          <Card className="mb-6 border-blue-200 bg-blue-50">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-blue-900">{chosenPlan.name}</h3>
+                  <p className="text-blue-700 font-bold">{chosenPlan.price}</p>
+                </div>
+                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center`}>
+                  <chosenPlan.icon className="w-6 h-6 text-white" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Employer Login/Signup Form */}
+          <Card className="shadow-lg">
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl text-center">
+                {formData.isSignUp ? 'Employer Sign Up' : formData.isReset ? 'Reset Password' : 'Employer Login'}
+              </CardTitle>
+              <CardDescription className="text-center">
+                {formData.isSignUp 
+                  ? 'Create your employer account to post jobs'
+                  : formData.isReset 
+                  ? 'Enter your email to reset password'
+                  : 'Enter your credentials to access Employer Hub'
+                }
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSignUp} className="space-y-4">
+                {formData.error && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                    <p className="text-red-800 text-sm">{formData.error}</p>
+                  </div>
+                )}
+                
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-slate-700">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter your email"
+                    required
+                  />
+                </div>
+
+                {!formData.isReset && (
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-slate-700">Password</label>
+                    <div className="relative">
+                      <input
+                        type={formData.showPassword ? "text" : "password"}
+                        name="password"
+                        value={formData.password}
+                        onChange={(e) => setFormData({...formData, password: e.target.value})}
+                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter your password"
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setFormData({...formData, showPassword: !formData.showPassword})}
+                      >
+                        {formData.showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {formData.isSignUp && (
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-slate-700">Confirm Password</label>
+                    <div className="relative">
+                      <input
+                        type={formData.showPassword ? "text" : "password"}
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Confirm your password"
+                        required
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <Button 
+                  type="submit"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 active:scale-105"
+                  disabled={formData.isLoading}
+                >
+                  {formData.isLoading 
+                    ? "Processing..." 
+                    : formData.isSignUp 
+                    ? "Sign Up" 
+                    : formData.isReset 
+                    ? "Reset Password" 
+                    : "Sign In"
+                  }
+                </Button>
+
+                {/* Form Mode Switcher */}
+                <div className="text-center space-y-2">
+                  {!formData.isSignUp && !formData.isReset && (
+                    <div>
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          console.log('Sign Up button clicked')
+                          setFormData({...formData, isSignUp: true})
+                          console.log('isSignUp set to true')
+                        }}
+                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                      >
+                        Don't have an account? Sign Up
+                      </button>
+                    </div>
+                  )}
+                  
+                  {!formData.isReset && (
+                    <div>
+                      <button 
+                        type="button"
+                        onClick={() => setFormData({...formData, isReset: true})}
+                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                      >
+                        Forgot Password?
+                      </button>
+                    </div>
+                  )}
+                  
+                  {(formData.isSignUp || formData.isReset) && (
+                    <div>
+                      <button 
+                        type="button"
+                        onClick={() => setFormData({...formData, isSignUp: false, isReset: false})}
+                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                      >
+                        Back to Login
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+
+          {/* Back to Plans */}
+          <div className="mt-8 text-center">
+            <button 
+              onClick={() => setShowSignUp(false)}
+              className="text-blue-600 hover:text-blue-700 font-medium underline"
+            >
+              Back to Choose Plan
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   const handleChoosePlan = (plan: any) => {
@@ -190,6 +470,13 @@ export default function EmployerHubPage() {
     setChosenPlan(plan)
     setShowSignUp(true)
     console.log('showSignUp set to true')
+  }
+
+  const handleJobDataChange = (field: string, value: string) => {
+    setJobData({
+      ...jobData,
+      [field]: value
+    })
   }
 
   const handleSignUp = (e: React.FormEvent) => {
@@ -256,218 +543,12 @@ export default function EmployerHubPage() {
     })
   }
 
-  const handleUploadLogo = () => {
-    alert('Logo upload feature - would open file picker')
+  const handleApplicationAction = (id: number, action: string) => {
+    alert(`${action} application #${id}`)
   }
 
-  const handleUploadBanner = () => {
-    alert('Banner upload feature - would open file picker')
-  }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'shortlisted': return 'bg-blue-100 text-blue-800'
-      case 'interviewing': return 'bg-yellow-100 text-yellow-800'
-      case 'hired': return 'bg-green-100 text-green-800'
-      default: return 'bg-gray-100 text-gray-800'
-    }
-  }
-
-  const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-600'
-    if (score >= 80) return 'text-blue-600'
-    if (score >= 70) return 'text-yellow-600'
-    return 'text-red-600'
-  }
-
-  // Main render - add debugging
-  console.log('Main render - State:', { showSignUp, chosenPlan, showJobForm, showHub, isAuthenticated })
-
-  // Show sign-up form when plan is chosen - CHECK THIS FIRST
-  console.log('Checking conditions:', { showSignUp, chosenPlan })
-  if (showSignUp && chosenPlan) {
-    console.log('Rendering sign-up form for plan:', chosenPlan)
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
-        <div className="max-w-md mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Building className="w-8 h-8 text-white" />
-            </div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-4">
-              Employer Login
-            </h1>
-            <p className="text-slate-600">
-              You've selected <strong>{chosenPlan.name}</strong> plan - Login to continue
-            </p>
-          </div>
-
-          {/* Selected Plan Summary */}
-          <Card className="mb-6 border-blue-200 bg-blue-50">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold text-blue-900">{chosenPlan.name}</h3>
-                  <p className="text-blue-700 font-bold">{chosenPlan.price}</p>
-                </div>
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center`}>
-                  <chosenPlan.icon className="w-6 h-6 text-white" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Employer Login/Signup Form */}
-          <Card className="shadow-lg">
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl text-center">
-                {formData.isSignUp ? 'Employer Sign Up' : formData.isReset ? 'Reset Password' : 'Employer Login'}
-              </CardTitle>
-              <CardDescription className="text-center">
-                {formData.isSignUp 
-                  ? 'Create your employer account to post jobs'
-                  : formData.isReset 
-                  ? 'Enter your email to reset password'
-                  : 'Enter your credentials to access Employer Hub'
-                }
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSignUp} className="space-y-4">
-                {formData.error && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                    <p className="text-red-800 text-sm">{formData.error}</p>
-                  </div>
-                )}
-                
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Enter your email"
-                    required
-                  />
-                </div>
-
-                {!formData.isReset && (
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-slate-700">Password</label>
-                    <div className="relative">
-                      <input
-                        type={formData.showPassword ? "text" : "password"}
-                        name="password"
-                        value={formData.password}
-                        onChange={(e) => setFormData({...formData, password: e.target.value})}
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="Enter your password"
-                        required
-                      />
-                      <button
-                        type="button"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                        onClick={() => setFormData({...formData, showPassword: !formData.showPassword})}
-                      >
-                        {formData.showPassword ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {formData.isSignUp && (
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-slate-700">Confirm Password</label>
-                    <div className="relative">
-                      <input
-                        type={formData.showPassword ? "text" : "password"}
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="Confirm your password"
-                        required
-                      />
-                    </div>
-                  </div>
-                )}
-
-                <Button 
-                  type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 active:scale-105"
-                  disabled={formData.isLoading}
-                >
-                  {formData.isLoading 
-                    ? "Processing..." 
-                    : formData.isSignUp 
-                    ? "Sign Up" 
-                    : formData.isReset 
-                    ? "Reset Password" 
-                    : "Sign In"
-                  }
-                </Button>
-
-                {/* Form Mode Switcher */}
-                <div className="text-center space-y-2">
-                  {!formData.isSignUp && !formData.isReset && (
-                    <div>
-                      <button 
-                        type="button"
-                        onClick={() => setFormData({...formData, isSignUp: true})}
-                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
-                      >
-                        Don't have an account? Sign Up
-                      </button>
-                    </div>
-                  )}
-                  
-                  {!formData.isReset && (
-                    <div>
-                      <button 
-                        type="button"
-                        onClick={() => setFormData({...formData, isReset: true})}
-                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
-                      >
-                        Forgot Password?
-                      </button>
-                    </div>
-                  )}
-                  
-                  {(formData.isSignUp || formData.isReset) && (
-                    <div>
-                      <button 
-                        type="button"
-                        onClick={() => setFormData({...formData, isSignUp: false, isReset: false})}
-                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
-                      >
-                        Back to Login
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-
-          {/* Back to Plans */}
-          <div className="mt-8 text-center">
-            <button 
-              onClick={() => setShowSignUp(false)}
-              className="text-blue-600 hover:text-blue-700 font-medium underline"
-            >
-              Back to Choose Plan
-            </button>
-          </div>
-        </div>
-      </div>
-    )
+  const handleEditApplication = (id: number) => {
+    alert(`Edit application #${id}`)
   }
 
   // If user is authenticated and has hub access, show Employer Hub
@@ -492,11 +573,11 @@ export default function EmployerHubPage() {
                   chosenPlan?.id === 'featured-plus' ? 'bg-purple-100 text-purple-800' :
                   'bg-blue-100 text-blue-800'
                 }>
-                  {chosenPlan?.name} Plan
+                  {chosenPlan?.name}
                 </Badge>
-                <Link href="/">
-                  <Button variant="outline" size="sm">Back to Home</Button>
-                </Link>
+                <Button variant="outline" size="sm" onClick={() => setShowHub(false)}>
+                  Switch Plan
+                </Button>
               </div>
             </div>
           </div>
@@ -504,244 +585,265 @@ export default function EmployerHubPage() {
 
         {/* Hub Content */}
         <div className="container mx-auto px-6 py-8">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="compose" className="gap-2">
-                <Briefcase className="h-4 w-4" />
-                Job Composer
-              </TabsTrigger>
-              <TabsTrigger value="branding" className="gap-2">
-                <Upload className="h-4 w-4" />
-                Branding Tools
-              </TabsTrigger>
-              <TabsTrigger value="candidates" className="gap-2">
-                <Users className="h-4 w-4" />
-                Candidate Manager
-              </TabsTrigger>
-              <TabsTrigger value="settings" className="gap-2">
-                <Settings className="h-4 w-4" />
-                Settings
-              </TabsTrigger>
+              <TabsTrigger value="compose">Post Job</TabsTrigger>
+              <TabsTrigger value="applications">Applications</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="settings">Settings</TabsTrigger>
             </TabsList>
 
-            {/* Job Composer Tab */}
             <TabsContent value="compose" className="space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Briefcase className="h-5 w-5" />
-                    Job Composer
-                  </CardTitle>
-                  <CardDescription>Create and post new job listings using the comprehensive admin job form</CardDescription>
+                  <CardTitle>Post New Job</CardTitle>
+                  <CardDescription>
+                    Create a new job posting for your company
+                  </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <AddJobForm onSuccess={() => {
-                    alert('Job posted successfully! Your job will be reviewed and published.')
-                    setActiveTab('candidates')
-                  }} />
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Branding Tools Tab */}
-            <TabsContent value="branding" className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Company Logo</CardTitle>
-                    <CardDescription>Upload your company logo (Featured+ and above)</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center">
-                      {companyProfile.logo ? (
-                        <img src={companyProfile.logo} alt="Company Logo" className="w-full h-full object-cover rounded-lg" />
-                      ) : (
-                        <Building className="h-12 w-12 text-gray-400" />
-                      )}
-                    </div>
-                    <Button onClick={handleUploadLogo} variant="outline" className="w-full">
-                      <Upload className="h-4 w-4 mr-2" />
-                      Upload Logo
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Company Banner</CardTitle>
-                    <CardDescription>Add a banner for enhanced visibility</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
-                      {companyProfile.banner ? (
-                        <img src={companyProfile.banner} alt="Company Banner" className="w-full h-full object-cover rounded-lg" />
-                      ) : (
-                        <Upload className="h-12 w-12 text-gray-400" />
-                      )}
-                    </div>
-                    <Button onClick={handleUploadBanner} variant="outline" className="w-full">
-                      <Upload className="h-4 w-4 mr-2" />
-                      Upload Banner
-                    </Button>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* Candidate Manager Tab */}
-            <TabsContent value="candidates" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Users className="h-5 w-5" />
-                      Candidate Manager
-                    </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm" className="gap-2">
-                        <Filter className="h-4 w-4" />
-                        Filter
-                      </Button>
-                      <Button variant="outline" size="sm" className="gap-2">
-                        <Search className="h-4 w-4" />
-                        Search
-                      </Button>
-                    </div>
-                  </CardTitle>
-                  <CardDescription>Manage and track all job applications</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead className="bg-gray-50 border-b">
-                        <tr>
-                          <th className="text-left p-4 font-medium">Candidate</th>
-                          <th className="text-left p-4 font-medium">Position</th>
-                          <th className="text-left p-4 font-medium">Match Score</th>
-                          <th className="text-left p-4 font-medium">Experience</th>
-                          <th className="text-left p-4 font-medium">Applied</th>
-                          <th className="text-left p-4 font-medium">Status</th>
-                          <th className="text-left p-4 font-medium">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {applications.map(candidate => (
-                          <tr key={candidate.id} className="border-b hover:bg-gray-50">
-                            <td className="p-4">
-                              <div>
-                                <p className="font-medium">{candidate.name}</p>
-                                <p className="text-sm text-gray-500">{candidate.email}</p>
-                              </div>
-                            </td>
-                            <td className="p-4">{candidate.position}</td>
-                            <td className="p-4">
-                              <div className="flex items-center gap-2">
-                                <span className={`font-bold ${getScoreColor(candidate.score)}`}>
-                                  {candidate.score}%
-                                </span>
-                                <Progress value={candidate.score} className="w-16" />
-                              </div>
-                            </td>
-                            <td className="p-4">{candidate.experience}</td>
-                            <td className="p-4">{candidate.appliedDate}</td>
-                            <td className="p-4">
-                              <Badge className={getStatusColor(candidate.status)}>
-                                {candidate.status}
-                              </Badge>
-                            </td>
-                            <td className="p-4">
-                              <div className="flex gap-2">
-                                <Button variant="outline" size="sm">View CV</Button>
-                                {candidate.status === 'shortlisted' && (
-                                  <Button variant="outline" size="sm">Contact</Button>
-                                )}
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  {/* Short-listing Features for 150k plan */}
-                  {chosenPlan?.id === 'short-listing' && (
-                    <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                      <h4 className="font-semibold text-green-800 mb-2">Short-listing Features Unlocked</h4>
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <Button variant="outline" className="gap-2">
-                          <Filter className="h-4 w-4" />
-                          Pre-screening
-                        </Button>
-                        <Button variant="outline" className="gap-2">
-                          <Calendar className="h-4 w-4" />
-                          Interview Coordination
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Settings Tab */}
-            <TabsContent value="settings" className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>WhatsApp Promotion</CardTitle>
-                    <CardDescription>Social media promotion (Super Featured users)</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium">WhatsApp Promotion</p>
-                        <p className="text-sm text-gray-500">Promote your jobs on WhatsApp</p>
-                      </div>
-                      <Button
-                        variant={whatsappEnabled ? "default" : "outline"}
-                        onClick={() => setWhatsappEnabled(!whatsappEnabled)}
-                        disabled={chosenPlan?.id !== 'super-featured' && chosenPlan?.id !== 'short-listing'}
-                      >
-                        {whatsappEnabled ? 'Enabled' : 'Enable'}
-                      </Button>
-                    </div>
-                    {chosenPlan?.id !== 'super-featured' && chosenPlan?.id !== 'short-listing' && (
-                      <p className="text-sm text-orange-600">Upgrade to Super Featured or Short-listing plan to enable WhatsApp promotion</p>
-                    )}
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Account Settings</CardTitle>
-                    <CardDescription>Manage your account preferences</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700">Company Name</label>
+                      <label className="text-sm font-medium">Job Title</label>
                       <input
                         type="text"
-                        className="w-full p-3 border border-gray-300 rounded-lg"
-                        value={companyProfile.name}
-                        readOnly
+                        value={jobData.title}
+                        onChange={(e) => handleJobDataChange('title', e.target.value)}
+                        className="w-full p-2 border rounded-md"
+                        placeholder="e.g. Senior Software Developer"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700">Email</label>
+                      <label className="text-sm font-medium">Department</label>
                       <input
-                        type="email"
-                        className="w-full p-3 border border-gray-300 rounded-lg"
-                        value={formData.email}
-                        readOnly
+                        type="text"
+                        value={jobData.department}
+                        onChange={(e) => handleJobDataChange('department', e.target.value)}
+                        className="w-full p-2 border rounded-md"
+                        placeholder="e.g. Engineering"
                       />
                     </div>
-                    <Button variant="outline" className="w-full">
-                      <Settings className="h-4 w-4 mr-2" />
-                      Advanced Settings
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Location</label>
+                      <input
+                        type="text"
+                        value={jobData.location}
+                        onChange={(e) => handleJobDataChange('location', e.target.value)}
+                        className="w-full p-2 border rounded-md"
+                        placeholder="e.g. Kigali, Rwanda"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Experience Level</label>
+                      <select
+                        value={jobData.experience}
+                        onChange={(e) => handleJobDataChange('experience', e.target.value)}
+                        className="w-full p-2 border rounded-md"
+                      >
+                        <option value="">Select experience</option>
+                        <option value="entry">Entry Level</option>
+                        <option value="mid">Mid Level</option>
+                        <option value="senior">Senior Level</option>
+                        <option value="executive">Executive Level</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Job Description</label>
+                    <textarea
+                      value={jobData.description}
+                      onChange={(e) => handleJobDataChange('description', e.target.value)}
+                      className="w-full p-2 border rounded-md h-32"
+                      placeholder="Describe the role, responsibilities, and requirements..."
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Requirements</label>
+                    <textarea
+                      value={jobData.requirements}
+                      onChange={(e) => handleJobDataChange('requirements', e.target.value)}
+                      className="w-full p-2 border rounded-md h-24"
+                      placeholder="List the key qualifications and skills required..."
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Job Type</label>
+                    <select
+                      value={jobData.type}
+                      onChange={(e) => handleJobDataChange('type', e.target.value)}
+                      className="w-full p-2 border rounded-md"
+                    >
+                      <option value="">Select job type</option>
+                      <option value="full-time">Full-time</option>
+                      <option value="part-time">Part-time</option>
+                      <option value="contract">Contract</option>
+                      <option value="remote">Remote</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Application Deadline</label>
+                    <input
+                      type="date"
+                      value={jobData.deadline}
+                      onChange={(e) => handleJobDataChange('deadline', e.target.value)}
+                      className="w-full p-2 border rounded-md"
+                    />
+                  </div>
+                  <Button onClick={handlePostJob} className="w-full">
+                    Post Job
+                  </Button>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="applications" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Job Applications</CardTitle>
+                  <CardDescription>
+                    Manage and review applications for your job postings
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {applications.map((app) => (
+                      <div key={app.id} className="border rounded-lg p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold">
+                              {app.avatar}
+                            </div>
+                            <div>
+                              <h4 className="font-semibold">{app.name}</h4>
+                              <p className="text-sm text-gray-600">{app.email}</p>
+                              <p className="text-sm font-medium">{app.position}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <Badge className={getStatusColor(app.status)}>
+                              {app.status}
+                            </Badge>
+                            <p className="text-sm text-gray-500 mt-1">Applied: {app.applied}</p>
+                            <p className={`text-sm font-semibold ${getScoreColor(app.score)}`}>
+                              Score: {app.score}
+                            </p>
+                            <div className="flex gap-2 mt-2">
+                              <Button size="sm" variant="outline" onClick={() => handleApplicationAction(app.id, 'view')}>
+                                View
+                              </Button>
+                              <Button size="sm" onClick={() => handleApplicationAction(app.id, 'shortlist')}>
+                                Shortlist
+                              </Button>
+                              <Button size="sm" variant="destructive" onClick={() => handleApplicationAction(app.id, 'reject')}>
+                                Reject
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="analytics" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Analytics Dashboard</CardTitle>
+                  <CardDescription>
+                    Track performance of your job postings
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-blue-600">247</div>
+                      <div className="text-sm text-gray-600">Total Views</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-green-600">89</div>
+                      <div className="text-sm text-gray-600">Applications</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-purple-600">12</div>
+                      <div className="text-sm text-gray-600">Shortlisted</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="settings" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Company Settings</CardTitle>
+                  <CardDescription>
+                    Manage your company profile and preferences
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Company Name</label>
+                      <input
+                        type="text"
+                        defaultValue={companyProfile.name}
+                        className="w-full p-2 border rounded-md"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Email</label>
+                      <input
+                        type="email"
+                        defaultValue={companyProfile.email}
+                        className="w-full p-2 border rounded-md"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Phone</label>
+                      <input
+                        type="tel"
+                        defaultValue={companyProfile.phone}
+                        className="w-full p-2 border rounded-md"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Company Size</label>
+                      <select
+                        defaultValue={companyProfile.size}
+                        className="w-full p-2 border rounded-md"
+                      >
+                        <option value="1-10">1-10 employees</option>
+                        <option value="11-50">11-50 employees</option>
+                        <option value="51-100">51-100 employees</option>
+                        <option value="100+">100+ employees</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Website</label>
+                      <input
+                        type="url"
+                        defaultValue={companyProfile.website}
+                        className="w-full p-2 border rounded-md"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Company Banner</h3>
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                      <div className="text-gray-500">
+                        <Building className="h-12 w-12 mx-auto mb-2" />
+                        <p className="text-sm">Upload company banner</p>
+                        <p className="text-xs text-gray-400">Recommended size: 1200x300px</p>
+                      </div>
+                    </div>
+                    <Button onClick={handleUploadBanner} className="w-full">
+                      Upload Banner
                     </Button>
-                  </CardContent>
-                </Card>
-              </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
           </Tabs>
         </div>
@@ -749,367 +851,91 @@ export default function EmployerHubPage() {
     )
   }
 
-  // Show plan selection for new users
-  if (!showHub) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-slate-900 mb-4">
-              Choose Your Posting Plan
-            </h1>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              Select the perfect plan to reach top talent and fill your position faster
-            </p>
-          </div>
+  // Main page content - show plan selection
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      <Header />
+      
+      <div className="container mx-auto px-6 py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">
+            Choose Your <span className="text-blue-600">Employer Plan</span>
+          </h1>
+          <p className="text-xl text-slate-600 mb-8">
+            Select the perfect plan for your recruitment needs
+          </p>
+        </div>
 
-          {/* Pricing Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {plans.map((plan) => {
-              const Icon = plan.icon
-              return (
-                <Card 
-                  key={plan.id} 
-                  className={`relative transition-all duration-300 hover:scale-105 hover:shadow-xl ${
-                    plan.popular ? 'border-2 border-purple-500 shadow-lg' : 'border border-slate-200'
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          {plans.map((plan) => (
+            <Card 
+              key={plan.id} 
+              className={`relative transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
+                plan.popular ? 'ring-2 ring-purple-500 shadow-lg' : 'shadow-md'
+              }`}
+            >
+              {plan.popular && (
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <Badge className="bg-purple-500 text-white px-3 py-1 text-xs font-semibold">
+                    Most Popular
+                  </Badge>
+                </div>
+              )}
+              
+              <CardHeader className="text-center pb-4">
+                <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${plan.color} flex items-center justify-center mx-auto mb-4`}>
+                  <plan.icon className="w-8 h-8 text-white" />
+                </div>
+                <CardTitle className="text-xl font-bold text-slate-900">
+                  {plan.name}
+                </CardTitle>
+                <CardDescription className="text-slate-600">
+                  {plan.description}
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent className="flex-1">
+                <ul className="space-y-3">
+                  {plan.features.map((feature, index) => (
+                    <li key={index} className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-slate-700">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+
+              <CardFooter>
+                <Button 
+                  onClick={() => handleChoosePlan(plan)}
+                  className={`w-full transition-all duration-200 active:scale-105 ${
+                    plan.popular 
+                      ? 'bg-purple-600 hover:bg-purple-700 text-white' 
+                      : 'bg-blue-600 hover:bg-blue-700 text-white'
                   }`}
                 >
-                  {plan.popular && (
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-purple-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                        MOST POPULAR
-                      </span>
-                    </div>
-                  )}
-                  
-                  <CardHeader className="text-center pb-4">
-                    <div className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r ${plan.color} flex items-center justify-center`}>
-                      <Icon className="w-8 h-8 text-white" />
-                    </div>
-                    <CardTitle className="text-xl font-bold text-slate-900">
-                      {plan.name}
-                    </CardTitle>
-                    <CardDescription className="text-slate-600">
-                      {plan.description}
-                    </CardDescription>
-                    <div className="mt-4">
-                      <span className="text-3xl font-bold text-slate-900">
-                        {plan.price}
-                      </span>
-                    </div>
-                  </CardHeader>
-
-                  <CardContent className="flex-1">
-                    <ul className="space-y-3">
-                      {plan.features.map((feature, index) => (
-                        <li key={index} className="flex items-start gap-2">
-                          <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-slate-700">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-
-                  <CardFooter>
-                    <Button 
-                      onClick={() => handleChoosePlan(plan)}
-                      className={`w-full transition-all duration-200 active:scale-105 ${
-                        plan.popular 
-                          ? 'bg-purple-600 hover:bg-purple-700 text-white' 
-                          : 'bg-blue-600 hover:bg-blue-700 text-white'
-                      }`}
-                    >
-                      Choose {plan.name}
-                    </Button>
-                  </CardFooter>
-                </Card>
-              )
-            })}
-          </div>
-
-          {/* Footer Info */}
-          <div className="mt-12 text-center">
-            <p className="text-slate-600 mb-4">
-              All plans include basic analytics and applicant management
-            </p>
-            <Link 
-              href="/"
-              className="text-blue-600 hover:text-blue-700 font-medium underline"
-            >
-              Back to Home
-            </Link>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // Show job form when plan is chosen - DEBUG SECTION
-  console.log('Checking job form conditions:', { showJobForm, chosenPlan })
-  if (showJobForm && chosenPlan) {
-    console.log('Rendering job form for plan:', chosenPlan)
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center mx-auto mb-4`}>
-              <chosenPlan.icon className="w-8 h-8 text-white" />
-            </div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-4">
-              Post Job - {chosenPlan.name} Plan
-            </h1>
-            <p className="text-slate-600">
-              Fill in the job details for your <strong>{chosenPlan.name}</strong> plan ({chosenPlan.price})
-            </p>
-          </div>
-
-          {/* Selected Plan Summary */}
-          <Card className="mb-6 border-blue-200 bg-blue-50">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold text-blue-900">{chosenPlan.name}</h3>
-                  <p className="text-blue-700 font-bold">{chosenPlan.price}</p>
-                </div>
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center`}>
-                  <chosenPlan.icon className="w-6 h-6 text-white" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Job Form - Using Admin AddJobForm */}
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-2xl text-center">Job Posting Form</CardTitle>
-              <CardDescription className="text-center">
-                Complete the form below to post your job listing
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="p-6 text-center">
-                <h3 className="text-xl font-semibold mb-4">Job Form Placeholder</h3>
-                <p className="text-gray-600 mb-4">This is the job posting form for {chosenPlan.name} plan</p>
-                <button 
-                  onClick={() => {
-                    alert('Job posted successfully!')
-                    setShowJobForm(false)
-                  }}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
-                >
-                  Submit Job
-                </button>
-              </div>
-              {/* <AddJobForm onSuccess={() => {
-                alert('Job posted successfully! Your job will be reviewed and published.')
-                setShowJobForm(false)
-              }} /> */}
-            </CardContent>
-          </Card>
-
-          {/* Back to Plans */}
-          <div className="mt-8 text-center">
-            <button 
-              onClick={() => setShowJobForm(false)}
-              className="text-blue-600 hover:text-blue-700 font-medium underline"
-            >
-              Back to Choose Plan
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // Show sign-up form when plan is chosen
-  console.log('Checking conditions:', { showSignUp, chosenPlan })
-  if (showSignUp && chosenPlan) {
-    console.log('Rendering sign-up form for plan:', chosenPlan)
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
-        <div className="max-w-md mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Building className="w-8 h-8 text-white" />
-            </div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-4">
-              Employer Login
-            </h1>
-            <p className="text-slate-600">
-              You've selected <strong>{chosenPlan.name}</strong> plan - Login to continue
-            </p>
-          </div>
-
-          {/* Selected Plan Summary */}
-          <Card className="mb-6 border-blue-200 bg-blue-50">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold text-blue-900">{chosenPlan.name}</h3>
-                  <p className="text-blue-700 font-bold">{chosenPlan.price}</p>
-                </div>
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center`}>
-                  <chosenPlan.icon className="w-6 h-6 text-white" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Employer Login/Signup Form */}
-          <Card className="shadow-lg">
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl text-center">
-                {formData.isSignUp ? 'Employer Sign Up' : formData.isReset ? 'Reset Password' : 'Employer Login'}
-              </CardTitle>
-              <CardDescription className="text-center">
-                {formData.isSignUp 
-                  ? 'Create your employer account to post jobs'
-                  : formData.isReset 
-                  ? 'Enter your email to reset password'
-                  : 'Enter your credentials to access Employer Hub'
-                }
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSignUp} className="space-y-4">
-                {formData.error && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                    <p className="text-red-800 text-sm">{formData.error}</p>
-                  </div>
-                )}
-                
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Enter your email"
-                    required
-                  />
-                </div>
-
-                {!formData.isReset && (
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-slate-700">Password</label>
-                    <div className="relative">
-                      <input
-                        type={formData.showPassword ? "text" : "password"}
-                        name="password"
-                        value={formData.password}
-                        onChange={(e) => setFormData({...formData, password: e.target.value})}
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="Enter your password"
-                        required
-                      />
-                      <button
-                        type="button"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                        onClick={() => setFormData({...formData, showPassword: !formData.showPassword})}
-                      >
-                        {formData.showPassword ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {formData.isSignUp && (
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-slate-700">Confirm Password</label>
-                    <div className="relative">
-                      <input
-                        type={formData.showPassword ? "text" : "password"}
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="Confirm your password"
-                        required
-                      />
-                    </div>
-                  </div>
-                )}
-
-                <Button 
-                  type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 active:scale-105"
-                  disabled={formData.isLoading}
-                >
-                  {formData.isLoading 
-                    ? "Processing..." 
-                    : formData.isSignUp 
-                    ? "Sign Up" 
-                    : formData.isReset 
-                    ? "Reset Password" 
-                    : "Sign In"
-                  }
+                  Choose {plan.name}
                 </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
 
-                {/* Form Mode Switcher */}
-                <div className="text-center space-y-2">
-                  {!formData.isSignUp && !formData.isReset && (
-                    <div>
-                      <button 
-                        type="button"
-                        onClick={() => setFormData({...formData, isSignUp: true})}
-                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
-                      >
-                        Don't have an account? Sign Up
-                      </button>
-                    </div>
-                  )}
-                  
-                  {!formData.isReset && (
-                    <div>
-                      <button 
-                        type="button"
-                        onClick={() => setFormData({...formData, isReset: true})}
-                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
-                      >
-                        Forgot Password?
-                      </button>
-                    </div>
-                  )}
-                  
-                  {(formData.isSignUp || formData.isReset) && (
-                    <div>
-                      <button 
-                        type="button"
-                        onClick={() => setFormData({...formData, isSignUp: false, isReset: false})}
-                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
-                      >
-                        Back to Login
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-
-          {/* Back to Plans */}
-          <div className="mt-8 text-center">
-            <button 
-              onClick={() => setShowSignUp(false)}
-              className="text-blue-600 hover:text-blue-700 font-medium underline"
-            >
-              Back to Choose Plan
-            </button>
-          </div>
+        {/* Footer Info */}
+        <div className="mt-12 text-center">
+          <p className="text-slate-600 mb-4">
+            All plans include basic analytics and applicant management
+          </p>
+          <Link 
+            href="/"
+            className="text-blue-600 hover:text-blue-700 font-medium underline"
+          >
+            Back to Home
+          </Link>
         </div>
       </div>
-    )
-  }
-
-  // Fallback
-  return <div>Loading...</div>
+      
+      <Footer />
+    </div>
+  )
 }
