@@ -186,8 +186,10 @@ export default function EmployerHubPage() {
   }
 
   const handleChoosePlan = (plan: any) => {
+    console.log('Plan clicked:', plan)
     setChosenPlan(plan)
     setShowSignUp(true)
+    console.log('showSignUp set to true')
   }
 
   const handleSignUp = (e: React.FormEvent) => {
@@ -708,6 +710,7 @@ export default function EmployerHubPage() {
 
   // Show sign-up form when plan is chosen
   if (showSignUp && chosenPlan) {
+    console.log('Rendering sign-up form for plan:', chosenPlan)
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
         <div className="max-w-md mx-auto">
