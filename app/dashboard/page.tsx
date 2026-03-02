@@ -5,13 +5,14 @@ import { useRouter } from "next/navigation"
 import { useAuth } from "@/lib/auth-context"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { JobList } from "@/components/job-list"
 import { ExamList } from "@/components/exam-list"
 import { InquiryList } from "@/components/inquiry-list"
 import { AnalyticsDashboard } from "@/components/analytics-dashboard"
 import { PendingApprovals } from "@/components/pending-approvals"
 import { LoginForm } from "@/components/login-form"
 import { Button } from "@/components/ui/button"
-import { Plus, GraduationCap, BarChart3, MessageSquare, CheckCircle2 } from "lucide-react"
+import { Plus, BriefcaseBusiness, GraduationCap, BarChart3, MessageSquare, CheckCircle2 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function DashboardPage() {
@@ -31,7 +32,7 @@ export default function DashboardPage() {
       <div className="container mx-auto px-4 py-8 bg-white">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-          <p className="text-muted-foreground">Manage your exams, inquiries, and view analytics</p>
+          <p className="text-muted-foreground">Manage your job postings, exams, inquiries, and view analytics</p>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
@@ -40,6 +41,10 @@ export default function DashboardPage() {
               <TabsTrigger value="pending" className="gap-2">
                 <CheckCircle2 className="h-4 w-4" />
                 Pending Approvals
+              </TabsTrigger>
+              <TabsTrigger value="jobs" className="gap-2">
+                <BriefcaseBusiness className="h-4 w-4" />
+                Jobs
               </TabsTrigger>
               <TabsTrigger value="exams" className="gap-2">
                 <GraduationCap className="h-4 w-4" />
@@ -54,6 +59,17 @@ export default function DashboardPage() {
                 Analytics
               </TabsTrigger>
             </TabsList>
+
+            {activeTab === "jobs" && (
+              <Button
+                className="gap-2 text-black hover:opacity-90"
+                style={{ backgroundColor: '#76c893' }}
+                onClick={() => router.push("/dashboard/add-job")}
+              >
+                <Plus className="h-4 w-4" />
+                Add New Job
+              </Button>
+            )}
 
             {activeTab === "exams" && (
               <Button
@@ -73,6 +89,10 @@ export default function DashboardPage() {
 
           <TabsContent value="analytics" className="space-y-6">
             <AnalyticsDashboard />
+          </TabsContent>
+
+          <TabsContent value="jobs" className="space-y-6">
+            <JobList />
           </TabsContent>
 
           <TabsContent value="exams" className="space-y-6">
