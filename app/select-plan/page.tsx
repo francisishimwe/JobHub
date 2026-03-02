@@ -521,7 +521,7 @@ export default function EmployerHubPage() {
     }
     
     setShowSignUp(false)
-    setShowJobForm(true)
+    // setShowJobForm(true) // Prevent immediate transition - only show job form after user actually submits
     loadMockApplications()
   }
 
