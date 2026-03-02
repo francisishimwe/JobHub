@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { useAuth } from "@/lib/auth-context"
-import { Building, Users, Briefcase, TrendingUp, Star, Check, Eye, EyeOff, ChevronRight, Clock, FileText, UserCircle2, LogOut, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, ArrowRight, Zap, Shield, Crown, Target } from "lucide-react"
+import { Building, Users, Briefcase, TrendingUp, Star, Check, Eye, EyeOff, ChevronRight, Clock, FileText, UserCircle2, LogOut, ArrowRight, Zap, Shield, Crown, Target } from "lucide-react"
 import { AddJobForm } from "@/components/add-job-form"
 
 const plans = [
@@ -195,6 +195,92 @@ export default function EmployerHubPage() {
     if (score >= 80) return 'text-blue-600'
     if (score >= 70) return 'text-yellow-600'
     return 'text-red-600'
+  }
+
+  const handleChoosePlan = (plan: any) => {
+    console.log('Plan clicked:', plan)
+    setChosenPlan(plan)
+    setShowSignUp(true)
+    console.log('showSignUp set to true')
+  }
+
+  const handleJobDataChange = (field: string, value: string) => {
+    setJobData({
+      ...jobData,
+      [field]: value
+    })
+  }
+
+  const handleSignUp = (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log('handleSignUp called - form submitted')
+    console.log('Form data:', formData)
+    
+    // Prevent automatic submission if form is empty
+    if (!formData.email && !formData.password) {
+      console.log('Form is empty - preventing automatic submission')
+      return
+    }
+    
+    if (!formData.email || !formData.password) {
+      alert('Please fill in email and password')
+      return
+    }
+    
+    if (formData.isSignUp && !formData.confirmPassword) {
+      alert('Please confirm your password')
+      return
+    }
+    
+    if (formData.isSignUp && formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match')
+      return
+    }
+    
+    console.log('Form validation passed - proceeding to job form')
+    
+    // Store plan selection and proceed to job form
+    localStorage.setItem('selectedPlan', chosenPlan.id)
+    localStorage.setItem('planDetails', JSON.stringify(chosenPlan))
+    
+    if (formData.isSignUp) {
+      // Store new employer data
+      localStorage.setItem('employerData', JSON.stringify({
+        email: formData.email,
+        password: formData.password,
+        selectedPlan: chosenPlan.id
+      }))
+    }
+    
+    setShowSignUp(false)
+    setShowJobForm(true)
+    loadMockApplications()
+  }
+
+  const handlePostJob = () => {
+    if (!jobData.title || !jobData.description) {
+      alert('Please fill in job title and description')
+      return
+    }
+    alert('Job posted successfully!')
+    setJobData({
+      title: '',
+      department: '',
+      location: '',
+      description: '',
+      requirements: '',
+      experience: '',
+      type: '',
+      deadline: ''
+    })
+  }
+
+  const handleApplicationAction = (id: number, action: string) => {
+    alert(`${action} application #${id}`)
+  }
+
+  const handleEditApplication = (id: number) => {
+    alert(`Edit application #${id}`)
   }
 
   // Main render - add debugging
@@ -463,92 +549,6 @@ export default function EmployerHubPage() {
         </div>
       </div>
     )
-  }
-
-  const handleChoosePlan = (plan: any) => {
-    console.log('Plan clicked:', plan)
-    setChosenPlan(plan)
-    setShowSignUp(true)
-    console.log('showSignUp set to true')
-  }
-
-  const handleJobDataChange = (field: string, value: string) => {
-    setJobData({
-      ...jobData,
-      [field]: value
-    })
-  }
-
-  const handleSignUp = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log('handleSignUp called - form submitted')
-    console.log('Form data:', formData)
-    
-    // Prevent automatic submission if form is empty
-    if (!formData.email && !formData.password) {
-      console.log('Form is empty - preventing automatic submission')
-      return
-    }
-    
-    if (!formData.email || !formData.password) {
-      alert('Please fill in email and password')
-      return
-    }
-    
-    if (formData.isSignUp && !formData.confirmPassword) {
-      alert('Please confirm your password')
-      return
-    }
-    
-    if (formData.isSignUp && formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match')
-      return
-    }
-    
-    console.log('Form validation passed - proceeding to job form')
-    
-    // Store plan selection and proceed to job form
-    localStorage.setItem('selectedPlan', chosenPlan.id)
-    localStorage.setItem('planDetails', JSON.stringify(chosenPlan))
-    
-    if (formData.isSignUp) {
-      // Store new employer data
-      localStorage.setItem('employerData', JSON.stringify({
-        email: formData.email,
-        password: formData.password,
-        selectedPlan: chosenPlan.id
-      }))
-    }
-    
-    setShowSignUp(false)
-    // setShowJobForm(true) // Prevent immediate transition - only show job form after user actually submits
-    loadMockApplications()
-  }
-
-  const handlePostJob = () => {
-    if (!jobData.title || !jobData.description) {
-      alert('Please fill in job title and description')
-      return
-    }
-    alert('Job posted successfully!')
-    setJobData({
-      title: '',
-      department: '',
-      location: '',
-      description: '',
-      requirements: '',
-      experience: '',
-      type: '',
-      deadline: ''
-    })
-  }
-
-  const handleApplicationAction = (id: number, action: string) => {
-    alert(`${action} application #${id}`)
-  }
-
-  const handleEditApplication = (id: number) => {
-    alert(`Edit application #${id}`)
   }
 
   // If user is authenticated and has hub access, show Employer Hub
