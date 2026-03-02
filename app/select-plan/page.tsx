@@ -493,7 +493,7 @@ export default function EmployerHubPage() {
                   <p className="text-blue-700 font-bold">{chosenPlan?.price || 'Price'}</p>
                 </div>
                 <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${chosenPlan?.color || 'from-blue-500 to-blue-600'} flex items-center justify-center`}>
-                  {chosenPlan?.icon && <chosenPlan.icon className="w-6 h-6 text-white" />}
+                  {chosenPlan?.icon ? <chosenPlan.icon className="w-6 h-6 text-white" /> : null}
                 </div>
               </div>
             </CardContent>
@@ -746,7 +746,7 @@ export default function EmployerHubPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  {chosenPlan?.icon && <chosenPlan.icon className="w-5 h-5" />}
+                  {chosenPlan?.icon ? <chosenPlan.icon className="w-5 h-5" /> : null}
                   Your Plan
                 </CardTitle>
               </CardHeader>
