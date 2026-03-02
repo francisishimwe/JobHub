@@ -480,7 +480,7 @@ export default function EmployerHubPage() {
               Employer Login
             </h1>
             <p className="text-slate-600">
-              You've selected <strong>{chosenPlan.name}</strong> plan - Login to continue
+              You've selected <strong>{chosenPlan?.name || 'Plan'}</strong> plan - Login to continue
             </p>
           </div>
 
@@ -489,11 +489,11 @@ export default function EmployerHubPage() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold text-blue-900">{chosenPlan.name}</h3>
-                  <p className="text-blue-700 font-bold">{chosenPlan.price}</p>
+                  <h3 className="font-semibold text-blue-900">{chosenPlan?.name || 'Plan Name'}</h3>
+                  <p className="text-blue-700 font-bold">{chosenPlan?.price || 'Price'}</p>
                 </div>
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center`}>
-                  <chosenPlan.icon className="w-6 h-6 text-white" />
+                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${chosenPlan?.color || 'from-blue-500 to-blue-600'} flex items-center justify-center`}>
+                  {chosenPlan?.icon && <chosenPlan.icon className="w-6 h-6 text-white" />}
                 </div>
               </div>
             </CardContent>
@@ -719,17 +719,17 @@ export default function EmployerHubPage() {
                 <Building className="h-8 w-8 text-blue-600" />
                 <div>
                   <h1 className="text-xl font-bold text-gray-900">Employer Dashboard</h1>
-                  <p className="text-sm text-gray-600">{companyProfile.name} • {chosenPlan.name} Plan</p>
+                  <p className="text-sm text-gray-600">{companyProfile.name} • {chosenPlan?.name || 'Plan'} Plan</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <Badge className={
-                  chosenPlan.id === 'short-listing' ? 'bg-green-100 text-green-800' :
-                  chosenPlan.id === 'super-featured' ? 'bg-orange-100 text-orange-800' :
-                  chosenPlan.id === 'featured-plus' ? 'bg-purple-100 text-purple-800' :
+                  chosenPlan?.id === 'short-listing' ? 'bg-green-100 text-green-800' :
+                  chosenPlan?.id === 'super-featured' ? 'bg-orange-100 text-orange-800' :
+                  chosenPlan?.id === 'featured-plus' ? 'bg-purple-100 text-purple-800' :
                   'bg-blue-100 text-blue-800'
                 }>
-                  {chosenPlan.name}
+                  {chosenPlan?.name || 'Plan'}
                 </Badge>
                 <Button variant="outline" size="sm" onClick={() => setShowHub(false)}>
                   Switch Plan
@@ -746,15 +746,15 @@ export default function EmployerHubPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <chosenPlan.icon className="w-5 h-5" />
+                  {chosenPlan?.icon && <chosenPlan.icon className="w-5 h-5" />}
                   Your Plan
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   <div>
-                    <h3 className="font-semibold text-lg">{chosenPlan.name}</h3>
-                    <p className="text-2xl font-bold text-blue-600">{chosenPlan.price}</p>
+                    <h3 className="font-semibold text-lg">{chosenPlan?.name || 'Plan Name'}</h3>
+                    <p className="text-2xl font-bold text-blue-600">{chosenPlan?.price || 'Price'}</p>
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
