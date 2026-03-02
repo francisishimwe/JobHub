@@ -112,21 +112,12 @@ export function Header() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <div className="flex items-center gap-2">
-                  <Link 
-                    href="/select-plan" 
-                    className="text-blue-600 hover:text-blue-700 font-medium transition-colors px-2 whitespace-nowrap text-xs"
-                  >
-                    Employer Login
-                  </Link>
-                  <span className="text-slate-400">|</span>
-                  <Link 
-                    href="/dashboard" 
-                    className="text-slate-600 hover:text-slate-800 font-medium transition-colors px-2 whitespace-nowrap text-xs"
-                  >
-                    Admin Login
-                  </Link>
-                </div>
+                <Link 
+                  href="/dashboard" 
+                  className="text-slate-600 hover:text-slate-800 font-medium transition-colors px-2 whitespace-nowrap text-xs"
+                >
+                  Admin Login
+                </Link>
               )}
             </div>
           </div>
