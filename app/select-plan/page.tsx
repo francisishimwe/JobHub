@@ -313,6 +313,8 @@ export default function EmployerHubPage() {
       return null
     }
     console.log('Rendering job form for plan:', planToShow)
+    console.log('Current jobData state:', jobData)
+    console.log('handleJobDataChange function exists:', typeof handleJobDataChange)
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
         <div className="max-w-4xl mx-auto">
