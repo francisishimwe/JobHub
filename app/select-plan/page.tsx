@@ -11,7 +11,6 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { useAuth } from "@/lib/auth-context"
 import { Building, Users, Briefcase, TrendingUp, Star, Check, Eye, EyeOff, ChevronRight, Clock, FileText, UserCircle2, LogOut, ArrowRight, Zap, Shield, Crown, Target } from "lucide-react"
-import { AddJobForm } from "@/components/add-job-form"
 
 const plans = [
   {
@@ -347,10 +346,98 @@ export default function EmployerHubPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <AddJobForm onSuccess={() => {
-                alert('Job posted successfully! Your job will be reviewed and published.')
-                setShowJobForm(false)
-              }} />
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Job Title</label>
+                    <input
+                      type="text"
+                      value={jobData.title}
+                      onChange={(e) => handleJobDataChange('title', e.target.value)}
+                      className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="e.g. Senior Software Developer"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Department</label>
+                    <input
+                      type="text"
+                      value={jobData.department}
+                      onChange={(e) => handleJobDataChange('department', e.target.value)}
+                      className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="e.g. Engineering"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Location</label>
+                    <input
+                      type="text"
+                      value={jobData.location}
+                      onChange={(e) => handleJobDataChange('location', e.target.value)}
+                      className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="e.g. Kigali, Rwanda"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Experience Level</label>
+                    <select
+                      value={jobData.experience}
+                      onChange={(e) => handleJobDataChange('experience', e.target.value)}
+                      className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="">Select experience</option>
+                      <option value="entry">Entry Level</option>
+                      <option value="mid">Mid Level</option>
+                      <option value="senior">Senior Level</option>
+                      <option value="executive">Executive Level</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Job Description</label>
+                  <textarea
+                    value={jobData.description}
+                    onChange={(e) => handleJobDataChange('description', e.target.value)}
+                    className="w-full p-3 border border-slate-300 rounded-lg h-32 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Describe the role, responsibilities, and requirements..."
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Requirements</label>
+                  <textarea
+                    value={jobData.requirements}
+                    onChange={(e) => handleJobDataChange('requirements', e.target.value)}
+                    className="w-full p-3 border border-slate-300 rounded-lg h-24 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="List the key qualifications and skills required..."
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Job Type</label>
+                  <select
+                    value={jobData.type}
+                    onChange={(e) => handleJobDataChange('type', e.target.value)}
+                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="">Select job type</option>
+                    <option value="full-time">Full-time</option>
+                    <option value="part-time">Part-time</option>
+                    <option value="contract">Contract</option>
+                    <option value="remote">Remote</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Application Deadline</label>
+                  <input
+                    type="date"
+                    value={jobData.deadline}
+                    onChange={(e) => handleJobDataChange('deadline', e.target.value)}
+                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                <Button onClick={handlePostJob} className="w-full bg-blue-600 hover:bg-blue-700">
+                  Post Job
+                </Button>
+              </div>
             </CardContent>
           </Card>
 
