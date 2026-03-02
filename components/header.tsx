@@ -81,30 +81,45 @@ export function Header() {
 
           {/* Action Buttons - Far Right */}
           <div className="flex items-center gap-x-2">
-            {/* Login Text Link */}
-            {isAuthenticated && user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="gap-2 text-slate-700 hover:bg-gray-100 px-2">
-                    <UserCircle2 className="h-4 w-4" />
-                    <span className="hidden lg:inline text-xs">{user.email}</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={handleLogout} className="gap-2">
-                    <LogOut className="h-4 w-4" />
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Link 
-                href="/dashboard" 
-                className="text-slate-600 hover:text-slate-800 font-medium transition-colors px-2 whitespace-nowrap text-xs"
+            {/* Login Text Link and Post Job Button Grouped */}
+            <div className="flex flex-row items-center gap-x-2">
+              {/* Royal Blue Post a Job Pill - Mobile Optimized - NOW ON LEFT */}
+              <Button 
+                asChild
+                className="bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-6 py-2 text-xs sm:text-sm font-semibold rounded-full transition-all active:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center gap-2"
               >
-                Login
-              </Link>
-            )}
+                <Link href="/select-plan">
+                  <span className="text-sm sm:text-lg">+</span>
+                  <span className="hidden sm:inline">Post a Job</span>
+                  <span className="sm:hidden">Post a Job</span>
+                </Link>
+              </Button>
+
+              {/* Login Text Link - NOW ON RIGHT */}
+              {isAuthenticated && user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="gap-2 text-slate-700 hover:bg-gray-100 px-2">
+                      <UserCircle2 className="h-4 w-4" />
+                      <span className="hidden lg:inline text-xs">{user.email}</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={handleLogout} className="gap-2">
+                      <LogOut className="h-4 w-4" />
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link 
+                  href="/dashboard" 
+                  className="text-slate-600 hover:text-slate-800 font-medium transition-colors px-2 whitespace-nowrap text-xs"
+                >
+                  Login
+                </Link>
+              )}
+            </div>
           </div>
 
           {/* Mobile Menu - Hidden on Desktop, Visible on Mobile (Portrait & Landscape) */}
