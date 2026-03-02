@@ -526,7 +526,7 @@ export function PendingApprovals() {
             </div>
           </CardContent>
         </Card>
-      ))}
+      )))}
             </>
           )}
 
