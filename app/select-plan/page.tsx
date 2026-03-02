@@ -194,6 +194,14 @@ export default function EmployerHubPage() {
 
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('handleSignUp called - form submitted')
+    console.log('Form data:', formData)
+    
+    // Prevent automatic submission if form is empty
+    if (!formData.email && !formData.password) {
+      console.log('Form is empty - preventing automatic submission')
+      return
+    }
     
     if (!formData.email || !formData.password) {
       alert('Please fill in email and password')
@@ -209,6 +217,8 @@ export default function EmployerHubPage() {
       alert('Passwords do not match')
       return
     }
+    
+    console.log('Form validation passed - proceeding to job form')
     
     // Store plan selection and proceed to job form
     localStorage.setItem('selectedPlan', chosenPlan.id)
