@@ -5,6 +5,10 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from "
 interface User {
   email: string
   isAuthenticated: boolean
+  planType?: string
+  firstName?: string
+  lastName?: string
+  company?: string
 }
 
 interface AuthContextType {
@@ -15,11 +19,6 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
-
-const ADMIN_CREDENTIALS = {
-  email: "admin@RwandaJobHub.com",
-  password: "Koral.admin@1234567890",
-}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
@@ -33,15 +32,53 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const login = (email: string, password: string): boolean => {
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      console.error("Invalid email format:", email)
+      return false
+    }
+
+    // Check if user exists in localStorage (from registration)
+    const savedEmployerData = localStorage.getItem("employerData")
+    if (savedEmployerData) {
+      const employer = JSON.parse(savedEmployerData)
+      
+      // Validate against stored employer data
+      if (employer.email === email && employer.password === password) {
+        const newUser: User = {
+          email,
+          isAuthenticated: true,
+          planType: employer.selectedPlan || 'free'
+        }
+        
+        setUser(newUser)
+        localStorage.setItem("RwandaJobHub-auth-user", JSON.stringify(newUser))
+        console.log("Employer logged in successfully:", email)
+        return true
+      }
+    }
+
+    // Fallback to admin credentials for development
+    const ADMIN_CREDENTIALS = {
+      email: "admin@RwandaJobHub.com",
+      password: "Koral.admin@1234567890",
+    }
+
     if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
-      const newUser: User = {
+      const adminUser: User = {
         email,
         isAuthenticated: true,
+        planType: 'admin'
       }
-      setUser(newUser)
-      localStorage.setItem("RwandaJobHub-auth-user", JSON.stringify(newUser))
+      
+      setUser(adminUser)
+      localStorage.setItem("RwandaJobHub-auth-user", JSON.stringify(adminUser))
+      console.log("Admin logged in successfully")
       return true
     }
+
+    console.error("Login failed for:", email)
     return false
   }
 

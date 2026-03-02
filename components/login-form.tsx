@@ -33,7 +33,13 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     if (success) {
       onSuccess?.()
     } else {
-      setError("Invalid email or password. Please try again.")
+      // Check if it's an email format issue
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(formData.email)) {
+        setError("Please enter a valid email address (e.g., name@company.com)")
+      } else {
+        setError("Invalid email or password. Please check your credentials or register if you don't have an account.")
+      }
     }
     
     setIsLoading(false)
