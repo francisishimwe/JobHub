@@ -320,14 +320,14 @@ export default function EmployerHubPage() {
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${planToShow.color || 'from-blue-500 to-blue-600'} flex items-center justify-center mx-auto mb-4`}>
-              {planToShow.icon && <planToShow.icon className="w-8 h-8 text-white" />}
+            <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${planToShow?.color || 'from-blue-500 to-blue-600'} flex items-center justify-center mx-auto mb-4`}>
+              {planToShow?.icon ? <planToShow.icon className="w-8 h-8 text-white" /> : null}
             </div>
             <h1 className="text-3xl font-bold text-slate-900 mb-4">
-              Post Job - {planToShow.name || 'Selected Plan'}
+              Post Job - {planToShow?.name || 'Selected Plan'}
             </h1>
             <p className="text-slate-600">
-              Fill in the job details for your <strong>{planToShow.name || 'Selected'}</strong> plan ({planToShow.price || 'Plan Price'})
+              Fill in the job details for your <strong>{planToShow?.name || 'Selected'}</strong> plan ({planToShow?.price || 'Plan Price'})
             </p>
           </div>
 
@@ -336,11 +336,11 @@ export default function EmployerHubPage() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold text-blue-900">{planToShow.name || 'Plan Name'}</h3>
-                  <p className="text-blue-700 font-bold">{planToShow.price || 'Price'}</p>
+                  <h3 className="font-semibold text-blue-900">{planToShow?.name || 'Plan Name'}</h3>
+                  <p className="text-blue-700 font-bold">{planToShow?.price || 'Price'}</p>
                 </div>
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${planToShow.color || 'from-blue-500 to-blue-600'} flex items-center justify-center`}>
-                  {planToShow.icon && <planToShow.icon className="w-6 h-6 text-white" />}
+                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${planToShow?.color || 'from-blue-500 to-blue-600'} flex items-center justify-center`}>
+                  {planToShow?.icon ? <planToShow.icon className="w-6 h-6 text-white" /> : null}
                 </div>
               </div>
             </CardContent>
