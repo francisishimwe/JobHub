@@ -97,7 +97,8 @@ export default function EmployerHubPage() {
     isLoading: false,
     showPassword: false,
     isSignUp: false,
-    isReset: false
+    isReset: false,
+    status: 'pending' // pending, approved, rejected
   })
   const [jobData, setJobData] = useState({
     title: '',
@@ -152,8 +153,9 @@ export default function EmployerHubPage() {
   useEffect(() => {
     const savedPlan = localStorage.getItem('selectedPlan')
     const savedPlanDetails = localStorage.getItem('planDetails')
+    const employerData = JSON.parse(localStorage.getItem('employerData') || '{}')
     
-    if (savedPlan && savedPlanDetails) {
+    if (savedPlan && savedPlanDetails && employerData.status === 'approved') {
       setChosenPlan(JSON.parse(savedPlanDetails))
       setSelectedPlan(JSON.parse(savedPlanDetails))
       setShowHub(true)
@@ -244,12 +246,27 @@ export default function EmployerHubPage() {
     localStorage.setItem('planDetails', JSON.stringify(chosenPlan))
     
     if (formData.isSignUp) {
-      // Store new employer data
+      // Store new employer data with pending status
       localStorage.setItem('employerData', JSON.stringify({
         email: formData.email,
         password: formData.password,
-        selectedPlan: chosenPlan.id
+        selectedPlan: chosenPlan.id,
+        status: 'pending', // pending admin approval
+        registrationDate: new Date().toISOString()
       }))
+      
+      // Add to admin approval list (mock implementation)
+      const pendingEmployers = JSON.parse(localStorage.getItem('pendingEmployers') || '[]')
+      pendingEmployers.push({
+        id: Date.now(),
+        email: formData.email,
+        plan: chosenPlan.name,
+        planId: chosenPlan.id,
+        price: chosenPlan.price,
+        registrationDate: new Date().toISOString(),
+        status: 'pending'
+      })
+      localStorage.setItem('pendingEmployers', JSON.stringify(pendingEmployers))
     }
     
     setShowSignUp(false)
@@ -542,8 +559,60 @@ export default function EmployerHubPage() {
     )
   }
 
-  // If user is authenticated and has hub access, show Employer Dashboard
-  if (showHub && chosenPlan) {
+  // Check employer approval status before showing dashboard
+  const checkEmployerStatus = () => {
+    const employerData = JSON.parse(localStorage.getItem('employerData') || '{}')
+    return employerData.status || 'pending'
+  }
+
+  // Show pending approval page
+  if (showHub && checkEmployerStatus() === 'pending') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
+        <div className="max-w-md mx-auto text-center">
+          <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Clock className="w-10 h-10 text-orange-600" />
+          </div>
+          <h1 className="text-3xl font-bold text-slate-900 mb-4">
+            Account Under Review
+          </h1>
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <p className="text-slate-600 mb-4">
+              Your employer account is currently pending approval by our admin team.
+            </p>
+            <div className="space-y-3 text-left">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span className="text-sm">Registration submitted successfully</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
+                <span className="text-sm">Admin review in progress</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                <span className="text-sm">You'll receive an email upon approval</span>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-3">
+            <p className="text-sm text-slate-500">
+              Expected approval time: 1-2 business days
+            </p>
+            <Button 
+              onClick={() => setShowHub(false)}
+              variant="outline"
+              className="w-full"
+            >
+              Back to Plan Selection
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  // If user is authenticated and has hub access, show Employer Dashboard (only if approved)
+  if (showHub && chosenPlan && checkEmployerStatus() === 'approved') {
     return (
       <div className="min-h-screen bg-gray-50">
         {/* Dashboard Header */}
