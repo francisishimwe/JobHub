@@ -96,6 +96,7 @@ export default function EmployerHubPage() {
   const [selectedPlan, setSelectedPlan] = useState<any>(null)
   const [showSignUp, setShowSignUp] = useState(false)
   const [chosenPlan, setChosenPlan] = useState<any>(null)
+  const [showJobForm, setShowJobForm] = useState(false)
   const [showHub, setShowHub] = useState(false)
   const [activeTab, setActiveTab] = useState('compose')
   const [formData, setFormData] = useState({
@@ -183,7 +184,7 @@ export default function EmployerHubPage() {
 
   const handleChoosePlan = (plan: any) => {
     setChosenPlan(plan)
-    setShowSignUp(true)
+    setShowJobForm(true)
   }
 
   const handleSignUp = (e: React.FormEvent) => {
@@ -614,6 +615,69 @@ export default function EmployerHubPage() {
             >
               Back to Home
             </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Show job form when plan is chosen
+  if (showJobForm && chosenPlan) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center mx-auto mb-4`}>
+              <chosenPlan.icon className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-4">
+              Post Job - {chosenPlan.name} Plan
+            </h1>
+            <p className="text-slate-600">
+              Fill in the job details for your <strong>{chosenPlan.name}</strong> plan ({chosenPlan.price})
+            </p>
+          </div>
+
+          {/* Selected Plan Summary */}
+          <Card className="mb-6 border-blue-200 bg-blue-50">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-blue-900">{chosenPlan.name}</h3>
+                  <p className="text-blue-700 font-bold">{chosenPlan.price}</p>
+                </div>
+                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center`}>
+                  <chosenPlan.icon className="w-6 h-6 text-white" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Job Form - Using Admin AddJobForm */}
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-2xl text-center">Job Posting Form</CardTitle>
+              <CardDescription className="text-center">
+                Complete the form below to post your job listing
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <AddJobForm onSuccess={() => {
+                alert('Job posted successfully! Your job will be reviewed and published.')
+                setShowJobForm(false)
+              }} />
+            </CardContent>
+          </Card>
+
+          {/* Back to Plans */}
+          <div className="mt-8 text-center">
+            <button 
+              onClick={() => setShowJobForm(false)}
+              className="text-blue-600 hover:text-blue-700 font-medium underline"
+            >
+              Back to Choose Plan
+            </button>
           </div>
         </div>
       </div>
