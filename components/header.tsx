@@ -108,6 +108,7 @@ export function Header() {
           </div>
 
           {/* Mobile Menu - Hidden on Desktop, Visible on Mobile (Portrait & Landscape) */}
+          <div className="lg:hidden">
             {!mounted ? (
               <Button variant="ghost" size="sm" className="lg:hidden text-slate-700 hover:bg-gray-100">
                 <Menu className="h-5 w-5" />
@@ -151,6 +152,7 @@ export function Header() {
                 </SheetContent>
               </Sheet>
             )}
+          </div>
           </div>
         </div>
       </header>
