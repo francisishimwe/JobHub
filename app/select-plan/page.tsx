@@ -846,7 +846,9 @@ export default function EmployerHubPage() {
   }
 
   // Show job form when plan is chosen
+  console.log('Checking job form conditions:', { showJobForm, chosenPlan })
   if (showJobForm && chosenPlan) {
+    console.log('Rendering job form for plan:', chosenPlan)
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
         <div className="max-w-4xl mx-auto">
@@ -887,10 +889,23 @@ export default function EmployerHubPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <AddJobForm onSuccess={() => {
+              <div className="p-6 text-center">
+                <h3 className="text-xl font-semibold mb-4">Job Form Placeholder</h3>
+                <p className="text-gray-600 mb-4">This is the job posting form for {chosenPlan.name} plan</p>
+                <button 
+                  onClick={() => {
+                    alert('Job posted successfully!')
+                    setShowJobForm(false)
+                  }}
+                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                >
+                  Submit Job
+                </button>
+              </div>
+              {/* <AddJobForm onSuccess={() => {
                 alert('Job posted successfully! Your job will be reviewed and published.')
                 setShowJobForm(false)
-              }} />
+              }} /> */}
             </CardContent>
           </Card>
 
