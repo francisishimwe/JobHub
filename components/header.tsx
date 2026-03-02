@@ -46,11 +46,6 @@ export function Header() {
     { href: "/contact", label: "Contact Us" },
   ]
 
-  const employerLinks = [
-    { href: "/employer-dashboard", label: "Dashboard" },
-    { href: "/select-plan", label: "Post Job" },
-  ]
-
   return (
     <>
       {/* Gorgeous Single-Line Header */}
