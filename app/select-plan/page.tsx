@@ -270,6 +270,196 @@ export default function EmployerHubPage() {
     return 'text-red-600'
   }
 
+  // Main render - add debugging
+  console.log('Main render - State:', { showSignUp, chosenPlan, showJobForm, showHub, isAuthenticated })
+
+  // Show sign-up form when plan is chosen - CHECK THIS FIRST
+  console.log('Checking conditions:', { showSignUp, chosenPlan })
+  if (showSignUp && chosenPlan) {
+    console.log('Rendering sign-up form for plan:', chosenPlan)
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
+        <div className="max-w-md mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Building className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-4">
+              Employer Login
+            </h1>
+            <p className="text-slate-600">
+              You've selected <strong>{chosenPlan.name}</strong> plan - Login to continue
+            </p>
+          </div>
+
+          {/* Selected Plan Summary */}
+          <Card className="mb-6 border-blue-200 bg-blue-50">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-blue-900">{chosenPlan.name}</h3>
+                  <p className="text-blue-700 font-bold">{chosenPlan.price}</p>
+                </div>
+                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center`}>
+                  <chosenPlan.icon className="w-6 h-6 text-white" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Employer Login/Signup Form */}
+          <Card className="shadow-lg">
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl text-center">
+                {formData.isSignUp ? 'Employer Sign Up' : formData.isReset ? 'Reset Password' : 'Employer Login'}
+              </CardTitle>
+              <CardDescription className="text-center">
+                {formData.isSignUp 
+                  ? 'Create your employer account to post jobs'
+                  : formData.isReset 
+                  ? 'Enter your email to reset password'
+                  : 'Enter your credentials to access Employer Hub'
+                }
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSignUp} className="space-y-4">
+                {formData.error && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                    <p className="text-red-800 text-sm">{formData.error}</p>
+                  </div>
+                )}
+                
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-slate-700">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter your email"
+                    required
+                  />
+                </div>
+
+                {!formData.isReset && (
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-slate-700">Password</label>
+                    <div className="relative">
+                      <input
+                        type={formData.showPassword ? "text" : "password"}
+                        name="password"
+                        value={formData.password}
+                        onChange={(e) => setFormData({...formData, password: e.target.value})}
+                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter your password"
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setFormData({...formData, showPassword: !formData.showPassword})}
+                      >
+                        {formData.showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {formData.isSignUp && (
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-slate-700">Confirm Password</label>
+                    <div className="relative">
+                      <input
+                        type={formData.showPassword ? "text" : "password"}
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Confirm your password"
+                        required
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <Button 
+                  type="submit"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 active:scale-105"
+                  disabled={formData.isLoading}
+                >
+                  {formData.isLoading 
+                    ? "Processing..." 
+                    : formData.isSignUp 
+                    ? "Sign Up" 
+                    : formData.isReset 
+                    ? "Reset Password" 
+                    : "Sign In"
+                  }
+                </Button>
+
+                {/* Form Mode Switcher */}
+                <div className="text-center space-y-2">
+                  {!formData.isSignUp && !formData.isReset && (
+                    <div>
+                      <button 
+                        type="button"
+                        onClick={() => setFormData({...formData, isSignUp: true})}
+                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                      >
+                        Don't have an account? Sign Up
+                      </button>
+                    </div>
+                  )}
+                  
+                  {!formData.isReset && (
+                    <div>
+                      <button 
+                        type="button"
+                        onClick={() => setFormData({...formData, isReset: true})}
+                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                      >
+                        Forgot Password?
+                      </button>
+                    </div>
+                  )}
+                  
+                  {(formData.isSignUp || formData.isReset) && (
+                    <div>
+                      <button 
+                        type="button"
+                        onClick={() => setFormData({...formData, isSignUp: false, isReset: false})}
+                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                      >
+                        Back to Login
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+
+          {/* Back to Plans */}
+          <div className="mt-8 text-center">
+            <button 
+              onClick={() => setShowSignUp(false)}
+              className="text-blue-600 hover:text-blue-700 font-medium underline"
+            >
+              Back to Choose Plan
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   // If user is authenticated and has hub access, show Employer Hub
   if (showHub && isAuthenticated) {
     return (
