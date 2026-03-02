@@ -153,7 +153,6 @@ export function Header() {
               </Sheet>
             )}
           </div>
-          </div>
         </div>
       </header>
     </>
