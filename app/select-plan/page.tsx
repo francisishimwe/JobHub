@@ -304,21 +304,28 @@ export default function EmployerHubPage() {
 
   // Show job form when plan is chosen - CHECK THIS FIRST
   console.log('Checking job form conditions:', { showJobForm, chosenPlan })
-  if (showJobForm && chosenPlan) {
-    console.log('Rendering job form for plan:', chosenPlan)
+  if (showJobForm) {
+    // Ensure we have a plan, if not, get it from localStorage
+    const planToShow = chosenPlan || JSON.parse(localStorage.getItem('planDetails') || '{}')
+    if (!planToShow.id) {
+      console.error('No plan available for job posting')
+      setShowJobForm(false)
+      return null
+    }
+    console.log('Rendering job form for plan:', planToShow)
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center mx-auto mb-4`}>
-              <chosenPlan.icon className="w-8 h-8 text-white" />
+            <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${planToShow.color} flex items-center justify-center mx-auto mb-4`}>
+              <planToShow.icon className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-slate-900 mb-4">
-              Post Job - {chosenPlan.name} Plan
+              Post Job - {planToShow.name} Plan
             </h1>
             <p className="text-slate-600">
-              Fill in the job details for your <strong>{chosenPlan.name}</strong> plan ({chosenPlan.price})
+              Fill in the job details for your <strong>{planToShow.name}</strong> plan ({planToShow.price})
             </p>
           </div>
 
@@ -327,11 +334,11 @@ export default function EmployerHubPage() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold text-blue-900">{chosenPlan.name}</h3>
-                  <p className="text-blue-700 font-bold">{chosenPlan.price}</p>
+                  <h3 className="font-semibold text-blue-900">{planToShow.name}</h3>
+                  <p className="text-blue-700 font-bold">{planToShow.price}</p>
                 </div>
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center`}>
-                  <chosenPlan.icon className="w-6 h-6 text-white" />
+                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${planToShow.color} flex items-center justify-center`}>
+                  <planToShow.icon className="w-6 h-6 text-white" />
                 </div>
               </div>
             </CardContent>
