@@ -253,7 +253,7 @@ export default function EmployerHubPage() {
     }
     
     setShowSignUp(false)
-    setShowJobForm(true)
+    setShowHub(true)  // Redirect to employer dashboard
     loadMockApplications()
   }
 
@@ -542,29 +542,29 @@ export default function EmployerHubPage() {
     )
   }
 
-  // If user is authenticated and has hub access, show Employer Hub
-  if (showHub && isAuthenticated) {
+  // If user is authenticated and has hub access, show Employer Dashboard
+  if (showHub && chosenPlan) {
     return (
       <div className="min-h-screen bg-gray-50">
-        {/* Hub Header */}
+        {/* Dashboard Header */}
         <div className="bg-white border-b border-gray-200">
           <div className="container mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Building className="h-8 w-8 text-blue-600" />
                 <div>
-                  <h1 className="text-xl font-bold text-gray-900">Employer Hub</h1>
-                  <p className="text-sm text-gray-600">{companyProfile.name} • {chosenPlan?.name} Plan</p>
+                  <h1 className="text-xl font-bold text-gray-900">Employer Dashboard</h1>
+                  <p className="text-sm text-gray-600">{companyProfile.name} • {chosenPlan.name} Plan</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <Badge className={
-                  chosenPlan?.id === 'short-listing' ? 'bg-green-100 text-green-800' :
-                  chosenPlan?.id === 'super-featured' ? 'bg-orange-100 text-orange-800' :
-                  chosenPlan?.id === 'featured-plus' ? 'bg-purple-100 text-purple-800' :
+                  chosenPlan.id === 'short-listing' ? 'bg-green-100 text-green-800' :
+                  chosenPlan.id === 'super-featured' ? 'bg-orange-100 text-orange-800' :
+                  chosenPlan.id === 'featured-plus' ? 'bg-purple-100 text-purple-800' :
                   'bg-blue-100 text-blue-800'
                 }>
-                  {chosenPlan?.name}
+                  {chosenPlan.name}
                 </Badge>
                 <Button variant="outline" size="sm" onClick={() => setShowHub(false)}>
                   Switch Plan
@@ -574,115 +574,128 @@ export default function EmployerHubPage() {
           </div>
         </div>
 
-        {/* Hub Content */}
+        {/* Plan Overview Card */}
         <div className="container mx-auto px-6 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            {/* Plan Details */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <chosenPlan.icon className="w-5 h-5" />
+                  Your Plan
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div>
+                    <h3 className="font-semibold text-lg">{chosenPlan.name}</h3>
+                    <p className="text-2xl font-bold text-blue-600">{chosenPlan.price}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Job Postings</span>
+                      <span className="font-medium">5 / 10</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className="bg-blue-600 h-2 rounded-full" style={{width: '50%'}}></div>
+                    </div>
+                  </div>
+                  <Button variant="outline" className="w-full">
+                    Upgrade Plan
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Actions */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <Button 
+                    onClick={() => setShowJobForm(true)}
+                    className="w-full bg-blue-600 hover:bg-blue-700"
+                  >
+                    Post New Job
+                  </Button>
+                  <Button variant="outline" className="w-full">
+                    View Applications
+                  </Button>
+                  <Button variant="outline" className="w-full">
+                    Edit Profile
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Recent Activity */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Activity</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 text-sm">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span>3 new applications today</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span>Job "Senior Developer" posted</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                    <span>Profile updated 2 days ago</span>
+                  </div>
+                  <Button variant="ghost" className="w-full text-sm">
+                    View All Activity
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Main Dashboard Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="compose">Post Job</TabsTrigger>
+              <TabsTrigger value="jobs">Posted Jobs</TabsTrigger>
               <TabsTrigger value="applications">Applications</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
               <TabsTrigger value="settings">Settings</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="compose" className="space-y-6">
+            <TabsContent value="jobs" className="space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Post New Job</CardTitle>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>Your Posted Jobs</CardTitle>
+                    <Button onClick={() => setShowJobForm(true)}>
+                      Post New Job
+                    </Button>
+                  </div>
                   <CardDescription>
-                    Create a new job posting for your company
+                    Manage and track all your job postings
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Job Title</label>
-                      <input
-                        type="text"
-                        value={jobData.title}
-                        onChange={(e) => handleJobDataChange('title', e.target.value)}
-                        className="w-full p-2 border rounded-md"
-                        placeholder="e.g. Senior Software Developer"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Department</label>
-                      <input
-                        type="text"
-                        value={jobData.department}
-                        onChange={(e) => handleJobDataChange('department', e.target.value)}
-                        className="w-full p-2 border rounded-md"
-                        placeholder="e.g. Engineering"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Location</label>
-                      <input
-                        type="text"
-                        value={jobData.location}
-                        onChange={(e) => handleJobDataChange('location', e.target.value)}
-                        className="w-full p-2 border rounded-md"
-                        placeholder="e.g. Kigali, Rwanda"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Experience Level</label>
-                      <select
-                        value={jobData.experience}
-                        onChange={(e) => handleJobDataChange('experience', e.target.value)}
-                        className="w-full p-2 border rounded-md"
-                      >
-                        <option value="">Select experience</option>
-                        <option value="entry">Entry Level</option>
-                        <option value="mid">Mid Level</option>
-                        <option value="senior">Senior Level</option>
-                        <option value="executive">Executive Level</option>
-                      </select>
-                    </div>
+                <CardContent>
+                  <div className="space-y-4">
+                    {applications.slice(0, 2).map((app) => (
+                      <div key={app.id} className="border rounded-lg p-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h4 className="font-semibold">Senior Software Developer</h4>
+                            <p className="text-sm text-gray-600">Posted 2 days ago • {app.score || 12} applications</p>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button size="sm" variant="outline">Edit</Button>
+                            <Button size="sm">View</Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Job Description</label>
-                    <textarea
-                      value={jobData.description}
-                      onChange={(e) => handleJobDataChange('description', e.target.value)}
-                      className="w-full p-2 border rounded-md h-32"
-                      placeholder="Describe the role, responsibilities, and requirements..."
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Requirements</label>
-                    <textarea
-                      value={jobData.requirements}
-                      onChange={(e) => handleJobDataChange('requirements', e.target.value)}
-                      className="w-full p-2 border rounded-md h-24"
-                      placeholder="List the key qualifications and skills required..."
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Job Type</label>
-                    <select
-                      value={jobData.type}
-                      onChange={(e) => handleJobDataChange('type', e.target.value)}
-                      className="w-full p-2 border rounded-md"
-                    >
-                      <option value="">Select job type</option>
-                      <option value="full-time">Full-time</option>
-                      <option value="part-time">Part-time</option>
-                      <option value="contract">Contract</option>
-                      <option value="remote">Remote</option>
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Application Deadline</label>
-                    <input
-                      type="date"
-                      value={jobData.deadline}
-                      onChange={(e) => handleJobDataChange('deadline', e.target.value)}
-                      className="w-full p-2 border rounded-md"
-                    />
-                  </div>
-                  <Button onClick={handlePostJob} className="w-full">
-                    Post Job
-                  </Button>
                 </CardContent>
               </Card>
             </TabsContent>
@@ -692,7 +705,7 @@ export default function EmployerHubPage() {
                 <CardHeader>
                   <CardTitle>Job Applications</CardTitle>
                   <CardDescription>
-                    Manage and review applications for your job postings
+                    Review and manage applications for your job postings
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
