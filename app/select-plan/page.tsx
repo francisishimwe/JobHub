@@ -241,7 +241,7 @@ export default function EmployerHubPage() {
     console.log('Form validation passed - proceeding to job form')
     
     // Store plan selection and proceed to job form
-    localStorage.setItem('selectedPlan', chosenPlan.id)
+    localStorage.setItem('selectedPlan', chosenPlan?.id || '')
     localStorage.setItem('planDetails', JSON.stringify(chosenPlan))
     
     if (formData.isSignUp) {
@@ -249,7 +249,7 @@ export default function EmployerHubPage() {
       localStorage.setItem('employerData', JSON.stringify({
         email: formData.email,
         password: formData.password,
-        selectedPlan: chosenPlan.id,
+        selectedPlan: chosenPlan?.id || '',
         status: 'pending', // pending admin approval
         registrationDate: new Date().toISOString()
       }))
@@ -259,9 +259,9 @@ export default function EmployerHubPage() {
       pendingEmployers.push({
         id: Date.now(),
         email: formData.email,
-        plan: chosenPlan.name,
-        planId: chosenPlan.id,
-        price: chosenPlan.price,
+        plan: chosenPlan?.name || 'Plan',
+        planId: chosenPlan?.id || '',
+        price: chosenPlan?.price || '0',
         registrationDate: new Date().toISOString(),
         status: 'pending'
       })
