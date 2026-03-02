@@ -5,11 +5,13 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Check, Star, Crown, Zap, User, Mail, Phone, Building, Lock, ArrowRight, Briefcase, Upload, Users, MessageSquare, Settings, Eye, Calendar, Filter, Search, TrendingUp, MapPin, BarChart3 } from "lucide-react"
+import { Check, Star, Crown, Zap, User, Mail, Phone, Building, Lock, ArrowRight, Briefcase, Upload, Users, MessageSquare, Settings, Eye, EyeOff, Calendar, Filter, Search, TrendingUp, MapPin, BarChart3 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { useAuth } from "@/lib/auth-context"
+import { AddJobForm } from "@/components/add-job-form"
+import { LoginForm } from "@/components/login-form"
 
 const plans = [
   {
@@ -97,13 +99,11 @@ export default function EmployerHubPage() {
   const [showHub, setShowHub] = useState(false)
   const [activeTab, setActiveTab] = useState('compose')
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
     email: '',
-    phone: '',
-    company: '',
     password: '',
-    confirmPassword: ''
+    error: '',
+    isLoading: false,
+    showPassword: false
   })
   const [jobData, setJobData] = useState({
     title: '',
@@ -189,27 +189,17 @@ export default function EmployerHubPage() {
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!formData.firstName || !formData.lastName || !formData.email || !formData.company || !formData.password) {
-      alert('Please fill in all required fields')
+    if (!formData.email || !formData.password) {
+      alert('Please fill in email and password')
       return
     }
     
-    if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match')
-      return
-    }
-    
-    localStorage.setItem('employerData', JSON.stringify(formData))
+    // Store plan selection and redirect to job form
     localStorage.setItem('selectedPlan', chosenPlan.id)
+    localStorage.setItem('planDetails', JSON.stringify(chosenPlan))
     
     setShowSignUp(false)
     setShowHub(true)
-    setCompanyProfile({
-      logo: '/api/placeholder-logo',
-      banner: '/api/placeholder-banner',
-      name: formData.company,
-      description: ''
-    })
     loadMockApplications()
   }
 
@@ -317,89 +307,13 @@ export default function EmployerHubPage() {
                     <Briefcase className="h-5 w-5" />
                     Job Composer
                   </CardTitle>
-                  <CardDescription>Create and post new job listings</CardDescription>
+                  <CardDescription>Create and post new job listings using the comprehensive admin job form</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Job Title *</label>
-                      <input
-                        type="text"
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="e.g., Assistant Tea Maker"
-                        value={jobData.title}
-                        onChange={(e) => handleJobDataChange('title', e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
-                      <input
-                        type="text"
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="e.g., Production"
-                        value={jobData.department}
-                        onChange={(e) => handleJobDataChange('department', e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Job Description *</label>
-                    <textarea
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent h-32"
-                      placeholder="Describe the role, responsibilities, and requirements..."
-                      value={jobData.description}
-                      onChange={(e) => handleJobDataChange('description', e.target.value)}
-                    />
-                  </div>
-
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
-                      <input
-                        type="text"
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="e.g., Kigali"
-                        value={jobData.location}
-                        onChange={(e) => handleJobDataChange('location', e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Experience Level</label>
-                      <select
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        value={jobData.experience}
-                        onChange={(e) => handleJobDataChange('experience', e.target.value)}
-                      >
-                        <option value="">Select level</option>
-                        <option value="entry">Entry Level</option>
-                        <option value="mid">Mid Level</option>
-                        <option value="senior">Senior Level</option>
-                        <option value="expert">Expert Level</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Job Type</label>
-                      <select
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        value={jobData.type}
-                        onChange={(e) => handleJobDataChange('type', e.target.value)}
-                      >
-                        <option value="">Select type</option>
-                        <option value="full-time">Full Time</option>
-                        <option value="part-time">Part Time</option>
-                        <option value="contract">Contract</option>
-                        <option value="internship">Internship</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-end">
-                    <Button onClick={handlePostJob} className="gap-2">
-                      <Briefcase className="h-4 w-4" />
-                      Post Job
-                    </Button>
-                  </div>
+                <CardContent>
+                  <AddJobForm onSuccess={() => {
+                    alert('Job posted successfully! Your job will be reviewed and published.')
+                    setActiveTab('candidates')
+                  }} />
                 </CardContent>
               </Card>
             </TabsContent>
@@ -717,10 +631,10 @@ export default function EmployerHubPage() {
               <Building className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-slate-900 mb-4">
-              Create Employer Account
+              Employer Login
             </h1>
             <p className="text-slate-600">
-              You've selected <strong>{chosenPlan.name}</strong> plan - Sign up to continue
+              You've selected <strong>{chosenPlan.name}</strong> plan - Login to continue
             </p>
           </div>
 
@@ -739,142 +653,67 @@ export default function EmployerHubPage() {
             </CardContent>
           </Card>
 
-          {/* Sign Up Form */}
+          {/* Login Form - Same as Admin Form */}
           <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-xl">Employer Registration</CardTitle>
-              <CardDescription>
-                Fill in your details to complete your {chosenPlan.name} plan registration
-              </CardDescription>
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl text-center">Employer Login</CardTitle>
+              <p className="text-sm text-muted-foreground text-center">
+                Enter your credentials to access the Employer Hub
+              </p>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSignUp} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
-                      First Name *
-                    </label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                      <input
-                        type="text"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleInputChange}
-                        className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="John"
-                      />
-                    </div>
+                {formData.error && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                    <p className="text-red-800 text-sm">{formData.error}</p>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
-                      Last Name *
-                    </label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                      <input
-                        type="text"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleInputChange}
-                        className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="Doe"
-                      />
-                    </div>
-                  </div>
+                )}
+                
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-slate-700">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter your email"
+                    required
+                  />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Email Address *
-                  </label>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-slate-700">Password</label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="john@company.com"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Phone Number
-                  </label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="+250 788 123 456"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Company Name *
-                  </label>
-                  <div className="relative">
-                    <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                    <input
-                      type="text"
-                      name="company"
-                      value={formData.company}
-                      onChange={handleInputChange}
-                      className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Acme Corporation"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Password *
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                    <input
-                      type="password"
+                      type={formData.showPassword ? "text" : "password"}
                       name="password"
                       value={formData.password}
-                      onChange={handleInputChange}
-                      className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="••••••••"
+                      onChange={(e) => setFormData({...formData, password: e.target.value})}
+                      className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter your password"
+                      required
                     />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Confirm Password *
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={handleInputChange}
-                      className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="••••••••"
-                    />
+                    <button
+                      type="button"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      onClick={() => setFormData({...formData, showPassword: !formData.showPassword})}
+                    >
+                      {formData.showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
                   </div>
                 </div>
 
                 <Button 
                   type="submit"
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 active:scale-105"
+                  disabled={formData.isLoading}
                 >
-                  Complete Registration
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  {formData.isLoading ? "Signing in..." : "Sign In"}
                 </Button>
               </form>
             </CardContent>
