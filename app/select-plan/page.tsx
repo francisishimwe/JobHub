@@ -150,14 +150,24 @@ export default function EmployerHubPage() {
   })
 
   useEffect(() => {
-    const savedPlan = localStorage.getItem('selectedPlan')
-    const savedPlanDetails = localStorage.getItem('planDetails')
-    const employerData = JSON.parse(localStorage.getItem('employerData') || '{}')
-    
-    if (savedPlan && savedPlanDetails && employerData.status === 'approved') {
-      setChosenPlan(JSON.parse(savedPlanDetails))
-      setSelectedPlan(JSON.parse(savedPlanDetails))
-      setShowHub(true)
+    // Check if user is logged in on app start
+    const savedUser = localStorage.getItem("RwandaJobHub-auth-user")
+    if (savedUser) {
+      // Check if user has employer data and is approved
+      const savedPlan = localStorage.getItem('selectedPlan')
+      const savedPlanDetails = localStorage.getItem('planDetails')
+      const employerData = JSON.parse(localStorage.getItem('employerData') || '{}')
+      
+      // If user is authenticated and approved, show dashboard
+      if (employerData.status === 'approved' && savedPlan && savedPlanDetails) {
+        setChosenPlan(JSON.parse(savedPlanDetails))
+        setSelectedPlan(JSON.parse(savedPlanDetails))
+        setShowHub(true)
+      }
+      // If user is authenticated but no plan selected, show plan selection
+      else if (employerData.status === 'approved') {
+        setShowHub(false)
+      }
     }
   }, [])
 
