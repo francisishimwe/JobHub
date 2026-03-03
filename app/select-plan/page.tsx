@@ -218,9 +218,92 @@ export default function EmployerHubPage() {
     setJobData({ ...jobData, [field]: value })
   }
 
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Employer sign-up submitted')
+    setFormData({...formData, isLoading: true, error: ''})
+
+    try {
+      if (formData.isReset) {
+        // Handle password reset
+        if (!formData.email) {
+          setFormData({...formData, error: 'Email is required for password reset', isLoading: false})
+          return
+        }
+        
+        // Simulate password reset
+        await new Promise(resolve => setTimeout(resolve, 2000))
+        alert('Password reset link sent to your email!')
+        setFormData({...formData, isReset: false, isLoading: false})
+        return
+      }
+
+      if (formData.isSignUp) {
+        // Handle sign up
+        if (!formData.companyName || !formData.email || !formData.password) {
+          setFormData({...formData, error: 'Please fill in all required fields', isLoading: false})
+          return
+        }
+
+        if (formData.password !== formData.confirmPassword) {
+          setFormData({...formData, error: 'Passwords do not match', isLoading: false})
+          return
+        }
+
+        // Simulate sign up
+        await new Promise(resolve => setTimeout(resolve, 2000))
+        
+        // Store employer data in localStorage
+        const employerData = {
+          companyName: formData.companyName,
+          email: formData.email,
+          plan: chosenPlan,
+          status: 'pending',
+          createdAt: new Date().toISOString()
+        }
+        
+        localStorage.setItem('employer', JSON.stringify(employerData))
+        
+        alert('Account created successfully! Please wait for approval.')
+        setFormData({...formData, isLoading: false, isSignUp: false})
+        return
+      }
+
+      // Handle sign in
+      if (!formData.email || !formData.password) {
+        setFormData({...formData, error: 'Email and password are required', isLoading: false})
+        return
+      }
+
+      // Simulate sign in
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      
+      // Check if employer exists and is approved
+      const storedEmployer = localStorage.getItem('employer')
+      if (storedEmployer) {
+        const employer = JSON.parse(storedEmployer)
+        if (employer.email === formData.email) {
+          if (employer.status === 'pending') {
+            setFormData({...formData, error: 'Your account is still pending approval', isLoading: false})
+            return
+          }
+          if (employer.status === 'approved') {
+            setSelectedPlan(employer.plan)
+            setShowSignUp(false)
+            setFormData({...formData, isLoading: false})
+            return
+          }
+          if (employer.status === 'rejected') {
+            setFormData({...formData, error: 'Your account has been rejected', isLoading: false})
+            return
+          }
+        }
+      }
+      
+      setFormData({...formData, error: 'Invalid email or password', isLoading: false})
+      
+    } catch (error) {
+      setFormData({...formData, error: 'Authentication failed. Please try again.', isLoading: false})
+    }
   }
 
   const getStatusColor = (status: string) => {
@@ -286,6 +369,20 @@ export default function EmployerHubPage() {
                     </a>
                   </div>
                   <div className="space-y-2">
+                    <Button 
+                      onClick={() => {
+                        const storedEmployer = localStorage.getItem('employer')
+                        if (storedEmployer) {
+                          const employer = JSON.parse(storedEmployer)
+                          employer.status = 'approved'
+                          localStorage.setItem('employer', JSON.stringify(employer))
+                          window.location.reload()
+                        }
+                      }} 
+                      className="w-full bg-green-600 hover:bg-green-700 mb-2"
+                    >
+                      🚀 Approve Account (Testing)
+                    </Button>
                     <Button 
                       onClick={() => window.location.reload()} 
                       className="w-full bg-blue-600 hover:bg-blue-700"
@@ -567,7 +664,7 @@ export default function EmployerHubPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSignUp} className="space-y-4">
+              <form onSubmit={handleAuth} className="space-y-4">
                 {formData.isSignUp && (
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-slate-700">Company Name</label>
