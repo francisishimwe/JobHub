@@ -54,26 +54,26 @@ const plans = [
     color: 'from-orange-500 to-orange-600',
     features: [
       '60-day job posting',
-      'Premium applicant tracking',
+      'Complete applicant management',
       '24/7 phone support',
-      'Featured company profile',
-      'Top job placement'
+      'Premium company profile',
+      'Maximum job visibility'
     ],
     popular: false
   },
   {
-    id: 'enterprise',
-    name: 'Enterprise',
-    price: '250,000 RWF',
-    description: 'Unlimited posting',
-    icon: Shield,
+    id: 'short-listing',
+    name: 'Short-listing',
+    price: '150,000 RWF',
+    description: 'Complete recruitment solution',
+    icon: Target,
     color: 'from-green-500 to-green-600',
     features: [
-      'Unlimited job postings',
-      'Advanced analytics',
+      '90-day job posting',
+      'AI-powered applicant matching',
       'Dedicated account manager',
-      'Custom branding',
-      'Priority placement'
+      'VIP company profile',
+      'Exclusive short-listing feature'
     ],
     popular: false
   }
@@ -84,9 +84,10 @@ export default function EmployerHubPage() {
   const { user, isAuthenticated } = useAuth()
   const [selectedPlan, setSelectedPlan] = useState<any>(null)
   const [showSignUp, setShowSignUp] = useState(false)
-  const [showJobForm, setShowJobForm] = useState(false)
   const [chosenPlan, setChosenPlan] = useState<any>(null)
-  const [activeTab, setActiveTab] = useState('overview')
+  const [showJobForm, setShowJobForm] = useState(false)
+  const [showHub, setShowHub] = useState(false)
+  const [activeTab, setActiveTab] = useState('compose')
   const [applications, setApplications] = useState([
     {
       id: 1,
@@ -329,81 +330,80 @@ export default function EmployerHubPage() {
     const employer = JSON.parse(storedEmployer)
     if (employer.status === 'pending') {
       return (
-          <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center px-4">
-            <div className="max-w-md w-full">
-              <Card className="shadow-xl border-0">
-                <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Clock className="w-8 h-8 text-white animate-pulse" />
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center px-4">
+          <div className="max-w-md w-full">
+            <Card className="shadow-xl border-0">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Clock className="w-8 h-8 text-white animate-pulse" />
+                </div>
+                <h1 className="text-2xl font-bold text-gray-900 mb-4">Account Under Review</h1>
+                <p className="text-gray-600 mb-6">
+                  Your employer account is being reviewed by our team. This usually takes just a few minutes, not days!
+                </p>
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-center gap-3 text-sm">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    <span>Account submitted for review</span>
                   </div>
-                  <h1 className="text-2xl font-bold text-gray-900 mb-4">Account Under Review</h1>
-                  <p className="text-gray-600 mb-6">
-                    Your employer account is being reviewed by our team. This usually takes just a few minutes, not days!
+                  <div className="flex items-center gap-3 text-sm">
+                    <Clock className="w-4 h-4 text-blue-500" />
+                    <span>Typically approved within minutes</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm">
+                    <Shield className="w-4 h-4 text-purple-500" />
+                    <span>Manual verification for quality</span>
+                  </div>
+                </div>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                  <p className="text-sm text-blue-800 mb-2">
+                    <strong>Need immediate assistance?</strong>
                   </p>
-                  <div className="space-y-3 mb-6">
-                    <div className="flex items-center gap-3 text-sm">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      <span>Account submitted for review</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-sm">
-                      <Clock className="w-4 h-4 text-blue-500" />
-                      <span>Typically approved within minutes</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-sm">
-                      <Shield className="w-4 h-4 text-purple-500" />
-                      <span>Manual verification for quality</span>
-                    </div>
-                  </div>
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                    <p className="text-sm text-blue-800 mb-2">
-                      <strong>Need immediate assistance?</strong>
-                    </p>
-                    <p className="text-sm text-blue-700">
-                      Contact us directly on WhatsApp:
-                    </p>
-                    <a 
-                      href="https://wa.me/250788123456" 
-                      className="inline-flex items-center gap-2 text-green-600 font-semibold hover:text-green-700 mt-2"
-                    >
-                      <MessageSquare className="w-4 h-4" />
-                      +250 788 123 456
-                    </a>
-                  </div>
-                  <div className="space-y-2">
-                    <Button 
-                      onClick={() => {
-                        const storedEmployer = localStorage.getItem('employer')
-                        if (storedEmployer) {
-                          const employer = JSON.parse(storedEmployer)
-                          employer.status = 'approved'
-                          localStorage.setItem('employer', JSON.stringify(employer))
-                          window.location.reload()
-                        }
-                      }} 
-                      className="w-full bg-green-600 hover:bg-green-700 mb-2"
-                    >
-                      🚀 Approve Account (Testing)
-                    </Button>
-                    <Button 
-                      onClick={() => window.location.reload()} 
-                      className="w-full bg-blue-600 hover:bg-blue-700"
-                    >
-                      Check Status
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      onClick={() => router.push('/')}
-                      className="w-full"
-                    >
-                      Back to Home
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+                  <p className="text-sm text-blue-700">
+                    Contact us directly on WhatsApp:
+                  </p>
+                  <a 
+                    href="https://wa.me/250788123456" 
+                    className="inline-flex items-center gap-2 text-green-600 font-semibold hover:text-green-700 mt-2"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                    +250 788 123 456
+                  </a>
+                </div>
+                <div className="space-y-2">
+                  <Button 
+                    onClick={() => {
+                      const storedEmployer = localStorage.getItem('employer')
+                      if (storedEmployer) {
+                        const employer = JSON.parse(storedEmployer)
+                        employer.status = 'approved'
+                        localStorage.setItem('employer', JSON.stringify(employer))
+                        window.location.reload()
+                      }
+                    }} 
+                    className="w-full bg-green-600 hover:bg-green-700 mb-2"
+                  >
+                    🚀 Approve Account (Testing)
+                  </Button>
+                  <Button 
+                    onClick={() => window.location.reload()} 
+                    className="w-full bg-blue-600 hover:bg-blue-700"
+                  >
+                    Check Status
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => router.push('/')}
+                    className="w-full"
+                  >
+                    Back to Home
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
-        )
-      }
+        </div>
+      )
     }
   }
 
