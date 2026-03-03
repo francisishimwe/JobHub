@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { useAuth } from "@/lib/auth-context"
-import { Building, Users, Briefcase, TrendingUp, Star, Check, Eye, EyeOff, ChevronRight, Clock, FileText, UserCircle2, LogOut, ArrowRight, Zap, Shield, Crown, Target, PlusCircle, Settings, MapPin, Calendar, Edit, RefreshCw, CheckCircle, MessageSquare } from "lucide-react"
+import { Building, Users, Briefcase, TrendingUp, Star, Check, Eye, EyeOff, ChevronRight, Clock, FileText, UserCircle2, LogOut, ArrowRight, Zap, Shield, Crown, Target, PlusCircle, Settings, MapPin, Calendar, Edit, RefreshCw, CheckCircle, MessageSquare, CheckCircle2 } from "lucide-react"
 
 const plans = [
   {
@@ -267,6 +267,19 @@ export default function EmployerHubPage() {
           }
           
           localStorage.setItem('employer', JSON.stringify(employerData))
+          
+          // Add to admin approval list
+          const pendingEmployers = JSON.parse(localStorage.getItem('pendingEmployers') || '[]')
+          pendingEmployers.push({
+            id: Date.now(),
+            companyName: formData.companyName,
+            email: formData.email,
+            plan: chosenPlan.name,
+            selectedPlan: chosenPlan,
+            registrationDate: new Date().toISOString(),
+            status: 'pending'
+          })
+          localStorage.setItem('pendingEmployers', JSON.stringify(pendingEmployers))
         }
         
         alert('Account created successfully! Please wait for approval.')
@@ -849,6 +862,96 @@ export default function EmployerHubPage() {
             <p className="text-slate-600">Manage your job postings and track applications</p>
           </div>
 
+          {/* Admin Approval Section */}
+          {user?.role === 'admin' && (
+            <Card className="mb-8 border-orange-200 bg-orange-50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-orange-600" />
+                  Admin: Pending Employer Approvals
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="text-sm text-orange-700">
+                    <p>Review and approve pending employer registrations below.</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {/* This would show pending employers from localStorage */}
+                    {typeof window !== 'undefined' && (() => {
+                      const pendingEmployers = JSON.parse(localStorage.getItem('pendingEmployers') || '[]')
+                      return pendingEmployers.map((employer: any) => (
+                        <Card key={employer.id} className="border-l-4 border-l-orange-500">
+                          <CardContent className="p-4">
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between">
+                                <h4 className="font-semibold">{employer.companyName || employer.email}</h4>
+                                <Badge className="bg-orange-100 text-orange-800">Pending</Badge>
+                              </div>
+                              <p className="text-sm text-gray-600">{employer.email}</p>
+                              <p className="text-sm text-gray-600">Plan: {employer.plan}</p>
+                              <p className="text-xs text-gray-500">Registered: {new Date(employer.registrationDate).toLocaleDateString()}</p>
+                              <div className="flex gap-2 mt-3">
+                                <Button 
+                                  size="sm" 
+                                  className="bg-green-600 hover:bg-green-700"
+                                  onClick={() => {
+                                    if (typeof window !== 'undefined') {
+                                      // Approve employer
+                                      const pendingEmployers = JSON.parse(localStorage.getItem('pendingEmployers') || '[]')
+                                      const updatedEmployers = pendingEmployers.filter((e: any) => e.id !== employer.id)
+                                      localStorage.setItem('pendingEmployers', JSON.stringify(updatedEmployers))
+                                      
+                                      // Update employer status
+                                      const employerData = {
+                                        companyName: employer.companyName,
+                                        email: employer.email,
+                                        plan: employer.selectedPlan,
+                                        status: 'approved',
+                                        createdAt: employer.registrationDate
+                                      }
+                                      localStorage.setItem('employer', JSON.stringify(employerData))
+                                      
+                                      alert(`Approved ${employer.email}`)
+                                      window.location.reload()
+                                    }
+                                  }}
+                                >
+                                  Approve
+                                </Button>
+                                <Button 
+                                  size="sm" 
+                                  variant="destructive"
+                                  onClick={() => {
+                                    if (typeof window !== 'undefined') {
+                                      const pendingEmployers = JSON.parse(localStorage.getItem('pendingEmployers') || '[]')
+                                      const updatedEmployers = pendingEmployers.filter((e: any) => e.id !== employer.id)
+                                      localStorage.setItem('pendingEmployers', JSON.stringify(updatedEmployers))
+                                      alert(`Rejected ${employer.email}`)
+                                      window.location.reload()
+                                    }
+                                  }}
+                                >
+                                  Reject
+                                </Button>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))
+                    })()}
+                  </div>
+                  {typeof window !== 'undefined' && JSON.parse(localStorage.getItem('pendingEmployers') || '[]').length === 0 && (
+                    <div className="text-center py-8 text-gray-500">
+                      <CheckCircle2 className="w-12 h-12 mx-auto mb-2 text-gray-400" />
+                      <p>No pending employer approvals</p>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <Card>
               <CardContent className="p-6">
@@ -945,6 +1048,15 @@ export default function EmployerHubPage() {
                     <Button variant="outline" className="w-full">
                       Edit Profile
                     </Button>
+                    {user?.role === 'admin' && (
+                      <Button 
+                        variant="outline" 
+                        className="w-full border-orange-200 text-orange-600 hover:bg-orange-50"
+                        onClick={() => router.push('/dashboard')}
+                      >
+                        Admin Dashboard
+                      </Button>
+                    )}
                   </div>
                 </CardContent>
               </Card>
