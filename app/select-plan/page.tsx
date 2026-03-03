@@ -145,16 +145,16 @@ export default function EmployerHubPage() {
   })
 
   useEffect(() => {
-    if (isAuthenticated && user) {
-      const storedEmployer = localStorage.getItem('employer')
-      if (storedEmployer) {
-        const employer = JSON.parse(storedEmployer)
-        if (employer.status === 'approved') {
-          setSelectedPlan(employer.plan)
-          setShowJobForm(false)
-        } else if (employer.status === 'pending') {
-          // Show waiting page
-        }
+    // Check for employer data regardless of authentication status
+    const storedEmployer = localStorage.getItem('employer')
+    if (storedEmployer) {
+      const employer = JSON.parse(storedEmployer)
+      if (employer.status === 'approved') {
+        setSelectedPlan(employer.plan)
+        setShowJobForm(false)
+      } else if (employer.status === 'pending') {
+        // Show waiting page - will be handled by the conditional render
+        setShowSignUp(false)
       }
     }
   }, [isAuthenticated, user])
@@ -283,7 +283,9 @@ export default function EmployerHubPage() {
         const employer = JSON.parse(storedEmployer)
         if (employer.email === formData.email) {
           if (employer.status === 'pending') {
-            setFormData({...formData, error: 'Your account is still pending approval', isLoading: false})
+            // Redirect to waiting page for pending accounts
+            setShowSignUp(false)
+            setFormData({...formData, isLoading: false, error: ''})
             return
           }
           if (employer.status === 'approved') {
@@ -322,12 +324,11 @@ export default function EmployerHubPage() {
   }
 
   // Show waiting page for pending approval
-  if (isAuthenticated && user) {
-    const storedEmployer = localStorage.getItem('employer')
-    if (storedEmployer) {
-      const employer = JSON.parse(storedEmployer)
-      if (employer.status === 'pending') {
-        return (
+  const storedEmployer = localStorage.getItem('employer')
+  if (storedEmployer) {
+    const employer = JSON.parse(storedEmployer)
+    if (employer.status === 'pending') {
+      return (
           <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center px-4">
             <div className="max-w-md w-full">
               <Card className="shadow-xl border-0">
