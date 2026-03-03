@@ -119,11 +119,11 @@ export function PendingApprovals() {
       const employer = pendingEmployers.find((e: PendingEmployer) => e.id === employerId)
       
       if (employer) {
-        // Update employer status to approved
-        const employerData = JSON.parse(localStorage.getItem('employerData') || '{}')
+        // Update employer status to approved in the correct localStorage key
+        const employerData = JSON.parse(localStorage.getItem('employer') || '{}')
         if (employerData.email === employer.email) {
           employerData.status = 'approved'
-          localStorage.setItem('employerData', JSON.stringify(employerData))
+          localStorage.setItem('employer', JSON.stringify(employerData))
         }
         
         // Remove from pending list
@@ -150,11 +150,11 @@ export function PendingApprovals() {
       const employer = pendingEmployers.find((e: PendingEmployer) => e.id === employerId)
       
       if (employer) {
-        // Update employer status to rejected
-        const employerData = JSON.parse(localStorage.getItem('employerData') || '{}')
+        // Update employer status to rejected in the correct localStorage key
+        const employerData = JSON.parse(localStorage.getItem('employer') || '{}')
         if (employerData.email === employer.email) {
           employerData.status = 'rejected'
-          localStorage.setItem('employerData', JSON.stringify(employerData))
+          localStorage.setItem('employer', JSON.stringify(employerData))
         }
         
         // Remove from pending list

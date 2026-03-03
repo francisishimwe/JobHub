@@ -154,7 +154,8 @@ export default function EmployerHubPage() {
         const employer = JSON.parse(storedEmployer)
         if (employer.status === 'approved') {
           setSelectedPlan(employer.plan)
-          setShowJobForm(false)
+          setChosenPlan(employer.plan)
+          setShowJobForm(true) // Show job form for approved employers
         } else if (employer.status === 'pending') {
           // Show waiting page - will be handled by the conditional render
           setShowSignUp(false)
@@ -411,6 +412,7 @@ export default function EmployerHubPage() {
         </div>
       )
     }
+    // If employer is approved, continue to show job form or dashboard
   }
 
   // Show job posting form
