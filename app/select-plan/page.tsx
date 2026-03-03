@@ -1361,61 +1361,9 @@ export default function EmployerHubPage() {
       </div>
     )
   }
-              <CardContent>
-                <div className="space-y-3">
-                  <Button 
-                    onClick={() => setShowJobForm(true)}
-                    className="w-full bg-blue-600 hover:bg-blue-700"
-                  >
-                    Post New Job
-                  </Button>
-                  <Button variant="outline" className="w-full">
-                    View Applications
-                  </Button>
-                  <Button variant="outline" className="w-full">
-                    Edit Profile
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
 
-            {/* Recent Activity */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 text-sm">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>3 new applications today</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-sm">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    <span>Job "Senior Developer" posted</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-sm">
-                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                    <span>Profile updated 2 days ago</span>
-                  </div>
-                  <Button variant="ghost" className="w-full text-sm">
-                    View All Activity
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Main Dashboard Tabs */}
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="jobs">Posted Jobs</TabsTrigger>
-              <TabsTrigger value="applications">Applications</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="settings">Settings</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="jobs" className="space-y-6">
+  // Main page content - show plan selection
+  return (
               <Card>
                 <CardHeader>
                   <div className="flex items-center justify-between">
