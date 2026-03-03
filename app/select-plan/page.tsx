@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { useAuth } from "@/lib/auth-context"
-import { Building, Users, Briefcase, TrendingUp, Star, Check, Eye, EyeOff, ChevronRight, Clock, FileText, UserCircle2, LogOut, ArrowRight, Zap, Shield, Crown, Target, PlusCircle, Settings, MapPin, Calendar, Edit, RefreshCw } from "lucide-react"
+import { Building, Users, Briefcase, TrendingUp, Star, Check, Eye, EyeOff, ChevronRight, Clock, FileText, UserCircle2, LogOut, ArrowRight, Zap, Shield, Crown, Target, PlusCircle, Settings, MapPin, Calendar, Edit, RefreshCw, CheckCircle, MessageSquare } from "lucide-react"
 
 const plans = [
   {
@@ -141,7 +141,7 @@ export default function EmployerHubPage() {
     showPassword: false,
     isSignUp: false,
     isReset: false,
-    status: 'pending'
+    status: 'pending' // pending, approved, rejected
   })
 
   useEffect(() => {
@@ -534,7 +534,7 @@ export default function EmployerHubPage() {
     )
   }
 
-  // Show sign-up form when plan is chosen
+  // Show login/sign-up form when plan is chosen
   if (showSignUp && chosenPlan) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
@@ -543,34 +543,50 @@ export default function EmployerHubPage() {
             <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
               <Building className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Create Employer Account</h1>
-            <p className="text-slate-600">Sign up to post jobs with your {chosenPlan.name} plan</p>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">
+              {formData.isSignUp ? 'Create Employer Account' : 'Sign In to Employer Hub'}
+            </h1>
+            <p className="text-slate-600">
+              {formData.isSignUp 
+                ? `Sign up to post jobs with your ${chosenPlan.name} plan`
+                : 'Access your employer dashboard and manage job postings'
+              }
+            </p>
           </div>
 
           <Card>
             <CardHeader>
-              <CardTitle>Employer Registration</CardTitle>
+              <CardTitle>
+                {formData.isSignUp ? 'Employer Registration' : 'Employer Sign In'}
+              </CardTitle>
               <CardDescription>
-                Create your account to start posting jobs
+                {formData.isSignUp 
+                  ? 'Create your account to start posting jobs'
+                  : 'Welcome back! Please sign in to your account'
+                }
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSignUp} className="space-y-4">
+                {formData.isSignUp && (
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-slate-700">Company Name</label>
+                    <input
+                      type="text"
+                      value={formData.companyName || ''}
+                      onChange={(e) => setFormData({...formData, companyName: e.target.value})}
+                      className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter your company name"
+                      required
+                    />
+                  </div>
+                )}
+
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Company Name</label>
-                  <input
-                    type="text"
-                    value={formData.companyName}
-                    onChange={(e) => setFormData({...formData, companyName: e.target.value})}
-                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Enter your company name"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Email Address</label>
+                  <label className="block text-sm font-medium text-slate-700">Email Address</label>
                   <input
                     type="email"
+                    name="email"
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
                     className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -578,40 +594,127 @@ export default function EmployerHubPage() {
                     required
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Password</label>
-                  <input
-                    type="password"
-                    value={formData.password}
-                    onChange={(e) => setFormData({...formData, password: e.target.value})}
-                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Create a password"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Confirm Password</label>
-                  <input
-                    type="password"
-                    value={formData.confirmPassword}
-                    onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Confirm your password"
-                    required
-                  />
-                </div>
+
+                {!formData.isReset && (
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-slate-700">Password</label>
+                    <div className="relative">
+                      <input
+                        type={formData.showPassword ? "text" : "password"}
+                        name="password"
+                        value={formData.password}
+                        onChange={(e) => setFormData({...formData, password: e.target.value})}
+                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter your password"
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setFormData({...formData, showPassword: !formData.showPassword})}
+                      >
+                        {formData.showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {formData.isSignUp && (
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-slate-700">Confirm Password</label>
+                    <div className="relative">
+                      <input
+                        type={formData.showPassword ? "text" : "password"}
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Confirm your password"
+                        required
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {!formData.isSignUp && !formData.isReset && (
+                  <div className="flex items-center justify-between">
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        className="mr-2"
+                      />
+                      <span className="text-sm text-slate-600">Remember me</span>
+                    </label>
+                  </div>
+                )}
+
                 {formData.error && (
                   <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
                     {formData.error}
                   </div>
                 )}
+
                 <Button 
-                  type="submit" 
-                  className="w-full bg-blue-600 hover:bg-blue-700"
+                  type="submit"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 active:scale-105"
                   disabled={formData.isLoading}
                 >
-                  {formData.isLoading ? 'Creating Account...' : 'Create Employer Account'}
+                  {formData.isLoading 
+                    ? "Processing..." 
+                    : formData.isSignUp 
+                    ? "Sign Up" 
+                    : formData.isReset 
+                    ? "Reset Password" 
+                    : "Sign In"
+                  }
                 </Button>
+
+                {/* Form Mode Switcher */}
+                <div className="text-center space-y-2">
+                  {!formData.isSignUp && !formData.isReset && (
+                    <div>
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          console.log('Sign Up button clicked')
+                          setFormData({...formData, isSignUp: true})
+                          console.log('isSignUp set to true')
+                        }}
+                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                      >
+                        Don't have an account? Sign Up
+                      </button>
+                    </div>
+                  )}
+                  
+                  {!formData.isReset && (
+                    <div>
+                      <button 
+                        type="button"
+                        onClick={() => setFormData({...formData, isReset: true})}
+                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                      >
+                        Forgot Password?
+                      </button>
+                    </div>
+                  )}
+                  
+                  {(formData.isSignUp || formData.isReset) && (
+                    <div>
+                      <button 
+                        type="button"
+                        onClick={() => setFormData({...formData, isSignUp: false, isReset: false})}
+                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                      >
+                        {formData.isSignUp ? 'Already have an account? Sign In' : 'Back to Sign In'}
+                      </button>
+                    </div>
+                  )}
+                </div>
               </form>
             </CardContent>
           </Card>
