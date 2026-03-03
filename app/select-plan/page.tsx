@@ -101,13 +101,17 @@ export default function EmployerHubPage() {
   })
   const [jobData, setJobData] = useState({
     title: '',
+    companyName: '',
+    logoUrl: '',
     department: '',
     location: '',
     description: '',
     requirements: '',
     experience: '',
     type: '',
-    deadline: ''
+    category: '',
+    deadline: '',
+    applicationLink: ''
   })
   const [applications, setApplications] = useState([
     {
@@ -225,6 +229,113 @@ export default function EmployerHubPage() {
     setChosenPlan(plan)
     setShowSignUp(true)
     console.log('showSignUp set to true')
+  }
+
+  const handleJobSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    // Validation
+    if (!jobData.title.trim()) {
+      alert('Please enter job title')
+      return
+    }
+    
+    if (!jobData.companyName.trim()) {
+      alert('Please enter company name')
+      return
+    }
+    
+    if (!jobData.description.trim()) {
+      alert('Please enter job description')
+      return
+    }
+    
+    try {
+      // Create job data for API
+      const jobPayload = {
+        title: jobData.title.trim(),
+        company_name: jobData.companyName.trim(),
+        logo_url: jobData.logoUrl || null,
+        category: jobData.category || 'Other',
+        location: jobData.location?.trim() || null,
+        description: jobData.description?.trim() || '',
+        job_type: jobData.type || 'Full-time',
+        experience_level: jobData.experience || null,
+        deadline: jobData.deadline || null,
+        application_link: jobData.applicationLink?.trim() || '',
+        status: 'active', // Jobs go live immediately for employers
+        featured: false,
+        plan_id: chosenPlan?.id || 'featured',
+        opportunity_type: 'Job',
+        application_method: 'link',
+        userEmail: user?.email || null,
+        postedDate: new Date().toISOString()
+      }
+      
+      console.log('Submitting job:', jobPayload)
+      
+      // Submit to API
+      const response = await fetch('/api/jobs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jobPayload)
+      })
+      
+      if (response.ok) {
+        const newJob = await response.json()
+        console.log('Job posted successfully:', newJob)
+        
+        // Show success message
+        alert('🎉 Job posted successfully! Your job is now live on the home page.')
+        
+        // Reset form
+        setJobData({
+          title: '',
+          companyName: '',
+          logoUrl: '',
+          department: '',
+          location: '',
+          description: '',
+          requirements: '',
+          experience: '',
+          type: '',
+          category: '',
+          deadline: '',
+          applicationLink: ''
+        })
+        
+        // Close form and go back to dashboard
+        setShowJobForm(false)
+        
+        // Update applications list to show the new job
+        setApplications([
+          ...applications,
+          {
+            id: newJob.id || Date.now(),
+            name: jobData.companyName,
+            email: user?.email || 'employer@company.com',
+            phone: '+250 788 123 456',
+            position: jobData.title,
+            applied: new Date().toISOString().split('T')[0],
+            appliedDate: new Date().toISOString().split('T')[0],
+            status: 'active',
+            score: 95,
+            avatar: jobData.companyName.substring(0, 2).toUpperCase(),
+            location: jobData.location || 'Kigali, Rwanda'
+          }
+        ])
+        
+      } else {
+        const error = await response.json()
+        console.error('Failed to post job:', error)
+        alert(`Failed to post job: ${error.error || 'Unknown error'}`)
+      }
+    } catch (error) {
+      console.error('Error posting job:', error)
+      alert('Failed to post job. Please try again.')
+    }
   }
 
   const handleJobDataChange = (field: string, value: string) => {
@@ -368,45 +479,210 @@ export default function EmployerHubPage() {
             </CardContent>
           </Card>
 
-          {/* Job Form - Using Admin AddJobForm */}
+          {/* Job Form - Using Complete Admin AddJobForm */}
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle className="text-2xl text-center">Job Posting Form</CardTitle>
               <CardDescription className="text-center">
-                Complete the form below to post your job listing
+                Complete the form below to post your job listing - Jobs go live immediately!
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <form onSubmit={handleJobSubmit} className="space-y-6">
+                {/* Company Information */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-gray-900">Company Information</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Company Name *</label>
+                      <input
+                        type="text"
+                        value={jobData.companyName}
+                        onChange={(e) => handleJobDataChange('companyName', e.target.value)}
+                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="e.g. Tech Solutions Rwanda"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Company Logo *</label>
+                      <input
+                        type="url"
+                        value={jobData.logoUrl}
+                        onChange={(e) => handleJobDataChange('logoUrl', e.target.value)}
+                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="https://example.com/logo.png"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Job Details */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-gray-900">Job Details</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Job Title *</label>
+                      <input
+                        type="text"
+                        value={jobData.title}
+                        onChange={(e) => handleJobDataChange('title', e.target.value)}
+                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="e.g. Senior Software Developer"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Category *</label>
+                      <select
+                        value={jobData.category}
+                        onChange={(e) => handleJobDataChange('category', e.target.value)}
+                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        required
+                      >
+                        <option value="">Select Category</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Education">Education</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Customer Service">Customer Service</option>
+                        <option value="Human Resources">Human Resources</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Location *</label>
+                      <input
+                        type="text"
+                        value={jobData.location}
+                        onChange={(e) => handleJobDataChange('location', e.target.value)}
+                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="e.g. Kigali, Rwanda"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Job Type *</label>
+                      <select
+                        value={jobData.type}
+                        onChange={(e) => handleJobDataChange('type', e.target.value)}
+                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        required
+                      >
+                        <option value="">Select Type</option>
+                        <option value="Full-time">Full-time</option>
+                        <option value="Part-time">Part-time</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Internship">Internship</option>
+                        <option value="Remote">Remote</option>
+                        <option value="Hybrid">Hybrid</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Experience Level</label>
+                      <select
+                        value={jobData.experience}
+                        onChange={(e) => handleJobDataChange('experience', e.target.value)}
+                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <option value="">Select Level</option>
+                        <option value="Entry Level">Entry Level</option>
+                        <option value="Mid Level">Mid Level</option>
+                        <option value="Senior Level">Senior Level</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Director">Director</option>
+                        <option value="Executive">Executive</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Application Deadline</label>
+                      <input
+                        type="date"
+                        value={jobData.deadline}
+                        onChange={(e) => handleJobDataChange('deadline', e.target.value)}
+                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Job Description */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Job Description *</label>
+                  <textarea
+                    value={jobData.description}
+                    onChange={(e) => handleJobDataChange('description', e.target.value)}
+                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[150px]"
+                    placeholder="Provide a detailed description of the job role, responsibilities, and requirements..."
+                    required
+                  />
+                </div>
+
+                {/* Requirements */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Requirements & Qualifications</label>
+                  <textarea
+                    value={jobData.requirements}
+                    onChange={(e) => handleJobDataChange('requirements', e.target.value)}
+                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[100px]"
+                    placeholder="List the required qualifications, skills, and experience..."
+                  />
+                </div>
+
+                {/* Application Method */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-gray-900">Application Method</h3>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Job Title</label>
+                    <label className="text-sm font-medium">Application Link/Email *</label>
                     <input
                       type="text"
-                      value={jobData.title}
-                      onChange={(e) => handleJobDataChange('title', e.target.value)}
+                      value={jobData.applicationLink}
+                      onChange={(e) => handleJobDataChange('applicationLink', e.target.value)}
                       className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="e.g. Senior Software Developer"
+                      placeholder="e.g. https://company.com/careers/apply or careers@company.com"
+                      required
                     />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Department</label>
-                    <input
-                      type="text"
-                      value={jobData.department}
-                      onChange={(e) => handleJobDataChange('department', e.target.value)}
-                      className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="e.g. Engineering"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Location</label>
-                    <input
-                      type="text"
-                      value={jobData.location}
-                      onChange={(e) => handleJobDataChange('location', e.target.value)}
-                      className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="e.g. Kigali, Rwanda"
+                </div>
+
+                {/* Submit Button */}
+                <div className="flex gap-4">
+                  <Button 
+                    type="submit" 
+                    className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-lg transition-all transform hover:scale-105 shadow-lg"
+                  >
+                    Post Job - Go Live Immediately! 🚀
+                  </Button>
+                  <Button 
+                    type="button"
+                    variant="outline"
+                    onClick={() => setShowJobForm(false)}
+                    className="px-6 py-3 border-gray-300 hover:border-gray-400 rounded-lg transition-all"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+
+          {/* Back to Plans */}
+          <div className="mt-8 text-center">
+            <button 
+              onClick={() => setShowJobForm(false)}
+              className="text-blue-600 hover:text-blue-700 font-medium underline"
+            >
+              Back to Choose Plan
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
                     />
                   </div>
                   <div className="space-y-2">
