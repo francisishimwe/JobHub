@@ -147,15 +147,18 @@ export default function EmployerHubPage() {
 
   useEffect(() => {
     // Check for employer data regardless of authentication status
-    const storedEmployer = localStorage.getItem('employer')
-    if (storedEmployer) {
-      const employer = JSON.parse(storedEmployer)
-      if (employer.status === 'approved') {
-        setSelectedPlan(employer.plan)
-        setShowJobForm(false)
-      } else if (employer.status === 'pending') {
-        // Show waiting page - will be handled by the conditional render
-        setShowSignUp(false)
+    // Only run on client side
+    if (typeof window !== 'undefined') {
+      const storedEmployer = localStorage.getItem('employer')
+      if (storedEmployer) {
+        const employer = JSON.parse(storedEmployer)
+        if (employer.status === 'approved') {
+          setSelectedPlan(employer.plan)
+          setShowJobForm(false)
+        } else if (employer.status === 'pending') {
+          // Show waiting page - will be handled by the conditional render
+          setShowSignUp(false)
+        }
       }
     }
   }, [isAuthenticated, user])
@@ -254,15 +257,17 @@ export default function EmployerHubPage() {
         await new Promise(resolve => setTimeout(resolve, 2000))
         
         // Store employer data in localStorage
-        const employerData = {
-          companyName: formData.companyName,
-          email: formData.email,
-          plan: chosenPlan,
-          status: 'pending',
-          createdAt: new Date().toISOString()
+        if (typeof window !== 'undefined') {
+          const employerData = {
+            companyName: formData.companyName,
+            email: formData.email,
+            plan: chosenPlan,
+            status: 'pending',
+            createdAt: new Date().toISOString()
+          }
+          
+          localStorage.setItem('employer', JSON.stringify(employerData))
         }
-        
-        localStorage.setItem('employer', JSON.stringify(employerData))
         
         alert('Account created successfully! Please wait for approval.')
         setFormData({...formData, isLoading: false, isSignUp: false})
@@ -279,7 +284,7 @@ export default function EmployerHubPage() {
       await new Promise(resolve => setTimeout(resolve, 2000))
       
       // Check if employer exists and is approved
-      const storedEmployer = localStorage.getItem('employer')
+      const storedEmployer = typeof window !== 'undefined' ? localStorage.getItem('employer') : null
       if (storedEmployer) {
         const employer = JSON.parse(storedEmployer)
         if (employer.email === formData.email) {
@@ -325,7 +330,7 @@ export default function EmployerHubPage() {
   }
 
   // Show waiting page for pending approval
-  const storedEmployer = localStorage.getItem('employer')
+  const storedEmployer = typeof window !== 'undefined' ? localStorage.getItem('employer') : null
   if (storedEmployer) {
     const employer = JSON.parse(storedEmployer)
     if (employer.status === 'pending') {
@@ -373,12 +378,14 @@ export default function EmployerHubPage() {
                 <div className="space-y-2">
                   <Button 
                     onClick={() => {
-                      const storedEmployer = localStorage.getItem('employer')
-                      if (storedEmployer) {
-                        const employer = JSON.parse(storedEmployer)
-                        employer.status = 'approved'
-                        localStorage.setItem('employer', JSON.stringify(employer))
-                        window.location.reload()
+                      if (typeof window !== 'undefined') {
+                        const storedEmployer = localStorage.getItem('employer')
+                        if (storedEmployer) {
+                          const employer = JSON.parse(storedEmployer)
+                          employer.status = 'approved'
+                          localStorage.setItem('employer', JSON.stringify(employer))
+                          window.location.reload()
+                        }
                       }
                     }} 
                     className="w-full bg-green-600 hover:bg-green-700 mb-2"
