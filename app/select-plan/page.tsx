@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { useAuth } from "@/lib/auth-context"
-import { Building, Users, Briefcase, TrendingUp, Star, Check, Eye, EyeOff, ChevronRight, Clock, FileText, UserCircle2, LogOut, ArrowRight, Zap, Shield, Crown, Target } from "lucide-react"
+import { Building, Users, Briefcase, TrendingUp, Star, Check, Eye, EyeOff, ChevronRight, Clock, FileText, UserCircle2, LogOut, ArrowRight, Zap, Shield, Crown, Target, PlusCircle, Settings, MapPin, Calendar, Edit, RefreshCw } from "lucide-react"
 
 const plans = [
   {
@@ -114,31 +114,40 @@ export default function EmployerHubPage() {
       id: 1,
       name: "Jean Mugabo",
       email: "jean.mugabo@email.com",
+      phone: "+250 788 123 456",
       position: "Senior Developer",
       applied: "2024-01-15",
-      status: "shortlisted",
+      appliedDate: "2024-01-15",
+      status: "active",
       score: 85,
-      avatar: "JM"
+      avatar: "JM",
+      location: "Kigali, Rwanda"
     },
     {
       id: 2,
       name: "Grace Uwimana",
       email: "grace.uwimana@email.com",
+      phone: "+250 787 987 654",
       position: "UX Designer",
       applied: "2024-01-14",
-      status: "interviewing",
+      appliedDate: "2024-01-14",
+      status: "active",
       score: 92,
-      avatar: "GU"
+      avatar: "GU",
+      location: "Kigali, Rwanda"
     },
     {
       id: 3,
       name: "Eric Niyonzima",
       email: "eric.niyonzima@email.com",
+      phone: "+250 785 456 789",
       position: "Project Manager",
       applied: "2024-01-13",
-      status: "hired",
+      appliedDate: "2024-01-13",
+      status: "pending",
       score: 78,
-      avatar: "EN"
+      avatar: "EN",
+      location: "Kigali, Rwanda"
     }
   ])
   const [companyProfile] = useState({
@@ -179,11 +188,14 @@ export default function EmployerHubPage() {
         id: 4,
         name: "Alice Kaneza",
         email: "alice.kaneza@email.com",
+        phone: "+250 788 123 456",
         position: "Marketing Manager",
         applied: "2024-01-16",
-        status: "shortlisted",
+        appliedDate: "2024-01-16",
+        status: "active",
         score: 88,
-        avatar: "AK"
+        avatar: "AK",
+        location: "Kigali, Rwanda"
       }
     ])
   }
@@ -674,74 +686,194 @@ export default function EmployerHubPage() {
   // Show pending approval page
   if (showHub && checkEmployerStatus() === 'pending') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
-        <div className="max-w-md mx-auto text-center">
-          <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Clock className="w-10 h-10 text-orange-600" />
-          </div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-4">
-            Account Under Review
-          </h1>
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <p className="text-slate-600 mb-4">
-              Your employer account is currently pending approval by our admin team.
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-12">
+            {/* Animated Clock Icon */}
+            <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl animate-pulse">
+              <Clock className="w-12 h-12 text-white" />
+            </div>
+            
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+              Account Under Review
+            </h1>
+            <p className="text-xl text-gray-600 mb-8">
+              Your employer account is being reviewed by our admin team
             </p>
-            <div className="space-y-3 text-left">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span className="text-sm">Registration submitted successfully</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
-                <span className="text-sm">Admin review in progress</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-                <span className="text-sm">You'll receive an email upon approval</span>
+          </div>
+
+          {/* Modern Card with Status */}
+          <Card className="bg-white shadow-2xl border-0 rounded-2xl overflow-hidden mb-8">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold mb-2">Review in Progress</h2>
+                  <p className="text-blue-100">We're verifying your account details</p>
+                </div>
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                  <Shield className="w-8 h-8 text-white" />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="space-y-3">
-            <p className="text-sm text-slate-500">
-              Expected approval time: 1-2 business days
-            </p>
+            
+            <CardContent className="p-8">
+              <div className="space-y-6">
+                {/* Status Steps */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                      <Check className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-900">Registration Complete</p>
+                      <p className="text-sm text-gray-600">Your account has been created</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center animate-pulse">
+                      <Clock className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-900">Admin Review</p>
+                      <p className="text-sm text-gray-600">Currently being reviewed</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                      <Target className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-400">Account Activated</p>
+                      <p className="text-sm text-gray-400">Pending approval</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Time Estimate */}
+                <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Clock className="w-5 h-5 text-blue-600" />
+                    <h3 className="font-semibold text-blue-900">Expected Approval Time</h3>
+                  </div>
+                  <p className="text-blue-800 font-medium text-lg mb-2">
+                    ⏱️ Just a few minutes!
+                  </p>
+                  <p className="text-blue-700 text-sm">
+                    Our team typically reviews accounts within 5-15 minutes during business hours. You'll receive an email once your account is approved.
+                  </p>
+                </div>
+
+                {/* WhatsApp Contact */}
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                      <span className="text-white font-bold text-sm">💬</span>
+                    </div>
+                    <h3 className="font-semibold text-green-900">Need Immediate Assistance?</h3>
+                  </div>
+                  <p className="text-green-800 mb-4">
+                    Contact us directly on WhatsApp for faster approval:
+                  </p>
+                  <a 
+                    href="https://wa.me/250788123456" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
+                  >
+                    <span className="text-xl">📱</span>
+                    <span>WhatsApp: +250 788 123 456</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                </div>
+
+                {/* What's Next */}
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">What happens next?</h3>
+                  <ul className="space-y-2 text-gray-600">
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span>Admin reviews your account details</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span>You receive approval email</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span>Access to employer dashboard</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span>Start posting jobs immediately</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
-              onClick={() => setShowHub(false)}
-              variant="outline"
-              className="w-full"
+              onClick={() => window.location.reload()}
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
             >
-              Back to Plan Selection
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Check Status
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={() => setShowHub(false)}
+              className="border-gray-300 hover:border-gray-400 px-8 py-3 rounded-xl font-semibold transition-all"
+            >
+              Back to Plans
             </Button>
           </div>
         </div>
       </div>
     )
   }
+
   // If user is authenticated and has hub access, show Employer Dashboard (only if approved)
   if (showHub && chosenPlan && checkEmployerStatus() === 'approved') {
+    // Calculate real data
+    const totalJobs = applications.length
+    const activeApplications = applications.filter(app => app.status === 'active').length
+    const totalViews = Math.floor(Math.random() * 500) + 100 // Mock views data
+    const pendingApplications = applications.filter(app => app.status === 'pending').length
+    
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
         {/* Dashboard Header */}
-        <div className="bg-white border-b border-gray-200">
-          <div className="container mx-auto px-6 py-4">
+        <div className="bg-white shadow-sm border-b border-gray-100">
+          <div className="container mx-auto px-6 py-6">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Building className="h-8 w-8 text-blue-600" />
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Building className="h-6 w-6 text-white" />
+                </div>
                 <div>
-                  <h1 className="text-xl font-bold text-gray-900">Employer Dashboard</h1>
+                  <h1 className="text-2xl font-bold text-gray-900">Employer Dashboard</h1>
                   <p className="text-sm text-gray-600">{companyProfile.name} • {chosenPlan?.name || 'Plan'} Plan</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <Badge className={
-                  chosenPlan?.id === 'short-listing' ? 'bg-green-100 text-green-800' :
-                  chosenPlan?.id === 'super-featured' ? 'bg-orange-100 text-orange-800' :
-                  chosenPlan?.id === 'featured-plus' ? 'bg-purple-100 text-purple-800' :
-                  'bg-blue-100 text-blue-800'
+                  chosenPlan?.id === 'short-listing' ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-md' :
+                  chosenPlan?.id === 'super-featured' ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md' :
+                  chosenPlan?.id === 'featured-plus' ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-md' :
+                  'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md'
                 }>
                   {chosenPlan?.name || 'Plan'}
                 </Badge>
-                <Button variant="outline" size="sm" onClick={() => setShowHub(false)}>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setShowHub(false)}
+                  className="border-gray-300 hover:border-blue-500 hover:text-blue-600 transition-all"
+                >
                   Switch Plan
                 </Button>
               </div>
@@ -749,11 +881,78 @@ export default function EmployerHubPage() {
           </div>
         </div>
 
-        {/* Plan Overview Card */}
+        {/* Statistics Cards */}
         <div className="container mx-auto px-6 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {/* Total Jobs Card */}
+            <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white border-0 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-blue-100 text-sm font-medium">Total Jobs Posted</p>
+                    <p className="text-3xl font-bold mt-2">{totalJobs}</p>
+                    <p className="text-blue-100 text-xs mt-1">Active listings</p>
+                  </div>
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                    <Briefcase className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Applications Card */}
+            <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white border-0 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-green-100 text-sm font-medium">Total Applications</p>
+                    <p className="text-3xl font-bold mt-2">{activeApplications}</p>
+                    <p className="text-green-100 text-xs mt-1">Pending review</p>
+                  </div>
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                    <Users className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Views Card */}
+            <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white border-0 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-purple-100 text-sm font-medium">Total Views</p>
+                    <p className="text-3xl font-bold mt-2">{totalViews}</p>
+                    <p className="text-purple-100 text-xs mt-1">Job views</p>
+                  </div>
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                    <Eye className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Pending Applications Card */}
+            <Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white border-0 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-orange-100 text-sm font-medium">Pending</p>
+                    <p className="text-3xl font-bold mt-2">{pendingApplications}</p>
+                    <p className="text-orange-100 text-xs mt-1">Need review</p>
+                  </div>
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                    <Clock className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Quick Actions */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             {/* Plan Details */}
-            <Card>
+            <Card className="bg-white shadow-lg hover:shadow-xl transition-all border-0">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   {chosenPlan?.icon ? <chosenPlan.icon className="w-5 h-5" /> : null}
@@ -769,24 +968,201 @@ export default function EmployerHubPage() {
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Job Postings</span>
-                      <span className="font-medium">5 / 10</span>
+                      <span className="font-medium">{totalJobs} / 10</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-blue-600 h-2 rounded-full" style={{width: '50%'}}></div>
+                      <div className="bg-blue-600 h-2 rounded-full" style={{width: `${(totalJobs / 10) * 100}%`}}></div>
                     </div>
                   </div>
-                  <Button variant="outline" className="w-full">
-                    Upgrade Plan
-                  </Button>
                 </div>
               </CardContent>
             </Card>
 
             {/* Quick Actions */}
-            <Card>
+            <Card className="bg-gradient-to-br from-blue-50 to-purple-50 shadow-lg hover:shadow-xl transition-all border-0">
               <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-blue-600" />
+                  Quick Actions
+                </CardTitle>
               </CardHeader>
+              <CardContent className="space-y-3">
+                <Button 
+                  onClick={() => setShowJobForm(true)}
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+                >
+                  <PlusCircle className="w-4 h-4 mr-2" />
+                  Post New Job
+                </Button>
+                <Button variant="outline" className="w-full border-blue-200 text-blue-600 hover:bg-blue-50 transition-all">
+                  <FileText className="w-4 h-4 mr-2" />
+                  View Applications
+                </Button>
+                <Button variant="outline" className="w-full border-purple-200 text-purple-600 hover:bg-purple-50 transition-all">
+                  <Settings className="w-4 h-4 mr-2" />
+                  Account Settings
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Recent Activity */}
+            <Card className="bg-gradient-to-br from-green-50 to-emerald-50 shadow-lg hover:shadow-xl transition-all border-0">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-green-600" />
+                  Recent Activity
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600">New applications today</span>
+                    <span className="font-semibold text-green-600">+{pendingApplications}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600">Profile views</span>
+                    <span className="font-semibold text-blue-600">{totalViews}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600">Active jobs</span>
+                    <span className="font-semibold text-purple-600">{totalJobs}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Jobs and Applications Section */}
+          <Tabs defaultValue="jobs" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-2 bg-gray-100 p-1 rounded-lg">
+              <TabsTrigger value="jobs" className="data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all">
+                <Briefcase className="w-4 h-4 mr-2" />
+                Your Posted Jobs
+              </TabsTrigger>
+              <TabsTrigger value="applications" className="data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all">
+                <Users className="w-4 h-4 mr-2" />
+                Applications
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="jobs" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>Your Posted Jobs</CardTitle>
+                    <Button onClick={() => setShowJobForm(true)} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg transition-all">
+                      <PlusCircle className="w-4 h-4 mr-2" />
+                      Post New Job
+                    </Button>
+                  </div>
+                  <CardDescription>
+                    Manage your job postings and track their performance
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {applications.length === 0 ? (
+                    <div className="text-center py-12">
+                      <Briefcase className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">No Jobs Posted Yet</h3>
+                      <p className="text-gray-600 mb-4">Start by posting your first job to attract qualified candidates</p>
+                      <Button onClick={() => setShowJobForm(true)} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+                        <PlusCircle className="w-4 h-4 mr-2" />
+                        Post Your First Job
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {applications.map((app) => (
+                        <Card key={app.id} className="border-l-4 border-l-blue-500 hover:shadow-md transition-all">
+                          <CardContent className="p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <h4 className="font-semibold text-lg text-gray-900">{app.name}</h4>
+                                <p className="text-gray-600 text-sm mt-1">{app.position}</p>
+                                <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                                  <span className="flex items-center gap-1">
+                                    <MapPin className="w-3 h-3" />
+                                    {app.location}
+                                  </span>
+                                  <span className="flex items-center gap-1">
+                                    <Calendar className="w-3 h-3" />
+                                    {app.appliedDate}
+                                  </span>
+                                  <Badge variant={app.status === 'active' ? 'default' : 'secondary'}>
+                                    {app.status}
+                                  </Badge>
+                                </div>
+                              </div>
+                              <div className="flex gap-2">
+                                <Button variant="outline" size="sm" onClick={() => handleApplicationAction(app.id, 'view')}>
+                                  <Eye className="w-4 h-4" />
+                                </Button>
+                                <Button variant="outline" size="sm" onClick={() => handleEditApplication(app.id)}>
+                                  <Edit className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="applications" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Applications Received</CardTitle>
+                  <CardDescription>
+                    Review and manage applications from interested candidates
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {applications.length === 0 ? (
+                    <div className="text-center py-12">
+                      <Users className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">No Applications Yet</h3>
+                      <p className="text-gray-600">Applications will appear here once candidates start applying</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {applications.map((app) => (
+                        <Card key={app.id} className="hover:shadow-md transition-all">
+                          <CardContent className="p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <h4 className="font-semibold text-lg text-gray-900">{app.name}</h4>
+                                <p className="text-gray-600 text-sm">{app.position}</p>
+                                <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                                  <span>{app.email}</span>
+                                  <span>{app.phone}</span>
+                                  <span>{app.appliedDate}</span>
+                                </div>
+                              </div>
+                              <div className="flex gap-2">
+                                <Button variant="outline" size="sm" onClick={() => handleApplicationAction(app.id, 'view')}>
+                                  View Profile
+                                </Button>
+                                <Button variant="outline" size="sm" onClick={() => handleApplicationAction(app.id, 'contact')}>
+                                  Contact
+                                </Button>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
+    )
+  }
               <CardContent>
                 <div className="space-y-3">
                   <Button 
