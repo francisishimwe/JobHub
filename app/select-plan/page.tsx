@@ -146,17 +146,22 @@ export default function EmployerHubPage() {
   })
 
   useEffect(() => {
+    console.log('🔍 DEBUG - useEffect running')
     // Check for employer data regardless of authentication status
     // Only run on client side
     if (typeof window !== 'undefined') {
       const storedEmployer = localStorage.getItem('employer')
+      console.log('🔍 DEBUG - useEffect storedEmployer:', storedEmployer)
       if (storedEmployer) {
         const employer = JSON.parse(storedEmployer)
+        console.log('🔍 DEBUG - useEffect parsed employer:', employer)
         if (employer.status === 'approved') {
+          console.log('🔍 DEBUG - Employer is approved, setting job form to true')
           setSelectedPlan(employer.plan)
           setChosenPlan(employer.plan)
           setShowJobForm(true) // Show job form for approved employers
         } else if (employer.status === 'pending') {
+          console.log('🔍 DEBUG - Employer is pending, hiding signup')
           // Show waiting page - will be handled by the conditional render
           setShowSignUp(false)
         }
@@ -347,9 +352,16 @@ export default function EmployerHubPage() {
 
   // Show waiting page for pending approval
   const storedEmployer = typeof window !== 'undefined' ? localStorage.getItem('employer') : null
+  console.log('🔍 DEBUG - storedEmployer:', storedEmployer)
   if (storedEmployer) {
     const employer = JSON.parse(storedEmployer)
+    console.log('🔍 DEBUG - parsed employer:', employer)
+    console.log('🔍 DEBUG - employer.status:', employer.status)
+    console.log('🔍 DEBUG - showJobForm:', showJobForm)
+    console.log('🔍 DEBUG - chosenPlan:', chosenPlan)
+    
     if (employer.status === 'pending') {
+      console.log('🔍 DEBUG - Showing pending page')
       return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center px-4">
           <div className="max-w-md w-full">
@@ -411,6 +423,14 @@ export default function EmployerHubPage() {
           </div>
         </div>
       )
+    } else if (employer.status === 'approved') {
+      console.log('🔍 DEBUG - Employer is approved, showing job form directly')
+      // For approved employers, set the plan and show job form immediately
+      if (!showJobForm || !chosenPlan) {
+        setSelectedPlan(employer.plan)
+        setChosenPlan(employer.plan)
+        setShowJobForm(true)
+      }
     }
     // If employer is approved, continue to show job form or dashboard
   }
