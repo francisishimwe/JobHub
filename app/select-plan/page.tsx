@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { EmployerDashboard } from "@/components/employer-dashboard"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { useAuth } from "@/lib/auth-context"
@@ -423,233 +424,33 @@ export default function EmployerHubPage() {
     // If employer is approved, continue to show job form or dashboard
   }
 
-  // Show job posting form
+  // Show employer dashboard for approved employers
   if (showJobForm && chosenPlan) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">
-              Post a Job - {chosenPlan.name}
-            </h1>
-            <p className="text-slate-600">
-              Fill in the job details for your <strong>{chosenPlan.name}</strong> plan ({chosenPlan.price})
-            </p>
-          </div>
-
-          <Card className="mb-6 border-blue-200 bg-blue-50">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold text-blue-900">{chosenPlan.name}</h3>
-                  <p className="text-blue-700 font-bold">{chosenPlan.price}</p>
-                </div>
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center`}>
-                  {typeof chosenPlan.icon === 'function' ? (
-                    <chosenPlan.icon className="w-6 h-6 text-white" />
-                  ) : (
-                    <Star className="w-6 h-6 text-white" />
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-2xl text-center">Job Posting Form</CardTitle>
-              <CardDescription className="text-center">
-                Complete the form below to post your job listing - Jobs go live immediately!
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleJobSubmit} className="space-y-6">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-900">Company Information</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Company Name *</label>
-                      <input
-                        type="text"
-                        value={jobData.companyName}
-                        onChange={(e) => handleJobDataChange('companyName', e.target.value)}
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="e.g. Tech Solutions Rwanda"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Company Logo *</label>
-                      <input
-                        type="url"
-                        value={jobData.logoUrl}
-                        onChange={(e) => handleJobDataChange('logoUrl', e.target.value)}
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="https://example.com/logo.png"
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-900">Job Details</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Job Title *</label>
-                      <input
-                        type="text"
-                        value={jobData.title}
-                        onChange={(e) => handleJobDataChange('title', e.target.value)}
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="e.g. Senior Software Developer"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Category *</label>
-                      <select
-                        value={jobData.category}
-                        onChange={(e) => handleJobDataChange('category', e.target.value)}
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        required
-                      >
-                        <option value="">Select Category</option>
-                        <option value="Technology">Technology</option>
-                        <option value="Healthcare">Healthcare</option>
-                        <option value="Finance">Finance</option>
-                        <option value="Education">Education</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="Sales">Sales</option>
-                        <option value="Engineering">Engineering</option>
-                        <option value="Customer Service">Customer Service</option>
-                        <option value="Human Resources">Human Resources</option>
-                        <option value="Other">Other</option>
-                      </select>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Location *</label>
-                      <input
-                        type="text"
-                        value={jobData.location}
-                        onChange={(e) => handleJobDataChange('location', e.target.value)}
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="e.g. Kigali, Rwanda"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Job Type *</label>
-                      <select
-                        value={jobData.type}
-                        onChange={(e) => handleJobDataChange('type', e.target.value)}
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        required
-                      >
-                        <option value="">Select Type</option>
-                        <option value="Full-time">Full-time</option>
-                        <option value="Part-time">Part-time</option>
-                        <option value="Contract">Contract</option>
-                        <option value="Internship">Internship</option>
-                        <option value="Remote">Remote</option>
-                        <option value="Hybrid">Hybrid</option>
-                      </select>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Experience Level</label>
-                      <select
-                        value={jobData.experience}
-                        onChange={(e) => handleJobDataChange('experience', e.target.value)}
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      >
-                        <option value="">Select Level</option>
-                        <option value="Entry Level">Entry Level</option>
-                        <option value="Mid Level">Mid Level</option>
-                        <option value="Senior Level">Senior Level</option>
-                        <option value="Manager">Manager</option>
-                        <option value="Director">Director</option>
-                        <option value="Executive">Executive</option>
-                      </select>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Application Deadline</label>
-                      <input
-                        type="date"
-                        value={jobData.deadline}
-                        onChange={(e) => handleJobDataChange('deadline', e.target.value)}
-                        className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Job Description *</label>
-                  <textarea
-                    value={jobData.description}
-                    onChange={(e) => handleJobDataChange('description', e.target.value)}
-                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[150px]"
-                    placeholder="Provide a detailed description of the job role, responsibilities, and requirements..."
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Requirements & Qualifications</label>
-                  <textarea
-                    value={jobData.requirements}
-                    onChange={(e) => handleJobDataChange('requirements', e.target.value)}
-                    className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[100px]"
-                    placeholder="List the required qualifications, skills, and experience..."
-                  />
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-900">Application Method</h3>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Application Link/Email *</label>
-                    <input
-                      type="text"
-                      value={jobData.applicationLink}
-                      onChange={(e) => handleJobDataChange('applicationLink', e.target.value)}
-                      className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="e.g. https://company.com/careers/apply or careers@company.com"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="flex gap-4">
-                  <Button 
-                    type="submit" 
-                    className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-lg transition-all transform hover:scale-105 shadow-lg"
-                  >
-                    Post Job - Go Live Immediately! 🚀
-                  </Button>
-                  <Button 
-                    type="button"
-                    variant="outline"
-                    onClick={() => setShowJobForm(false)}
-                    className="px-6 py-3 border-gray-300 hover:border-gray-400 rounded-lg transition-all"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-
-          <div className="mt-8 text-center">
-            <button 
-              onClick={() => setShowJobForm(false)}
-              className="text-blue-600 hover:text-blue-700 font-medium underline"
-            >
-              Back to Choose Plan
-            </button>
-          </div>
-        </div>
-      </div>
-    )
+    // Get the actual stored employer data
+    const storedEmployer = typeof window !== 'undefined' ? localStorage.getItem('employer') : null
+    let employerData
+    
+    if (storedEmployer) {
+      const parsedEmployer = JSON.parse(storedEmployer)
+      employerData = {
+        companyName: parsedEmployer.companyName || 'Company',
+        email: parsedEmployer.email || user?.email || '',
+        plan: parsedEmployer.plan || chosenPlan,
+        status: parsedEmployer.status || 'approved',
+        createdAt: parsedEmployer.createdAt || new Date().toISOString()
+      }
+    } else {
+      // Fallback for testing
+      employerData = {
+        companyName: formData.companyName || 'Company',
+        email: formData.email || user?.email || '',
+        plan: chosenPlan,
+        status: 'approved',
+        createdAt: new Date().toISOString()
+      }
+    }
+    
+    return <EmployerDashboard employerData={employerData} />
   }
 
   // Show login/sign-up form when plan is chosen
