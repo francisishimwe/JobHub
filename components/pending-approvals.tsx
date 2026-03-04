@@ -119,19 +119,13 @@ export function PendingApprovals() {
       const employer = pendingEmployers.find((e: PendingEmployer) => e.id === employerId)
       
       if (employer) {
-        console.log('🔍 DEBUG - Approving employer:', employer)
         // Update employer status to approved in the correct localStorage key
         const employerData = JSON.parse(localStorage.getItem('employer') || '{}')
-        console.log('🔍 DEBUG - Current employerData from localStorage:', employerData)
-        console.log('🔍 DEBUG - Email comparison:', employerData.email, '===', employer.email)
         
         if (employerData.email === employer.email) {
-          console.log('🔍 DEBUG - Updating employer status to approved')
           employerData.status = 'approved'
           localStorage.setItem('employer', JSON.stringify(employerData))
-          console.log('🔍 DEBUG - Updated localStorage:', employerData)
         } else {
-          console.log('🔍 DEBUG - Email mismatch, creating new employer data')
           // Create the employer data if it doesn't exist or email doesn't match
           const newEmployerData = {
             companyName: employer.companyName || employer.email,
@@ -141,7 +135,6 @@ export function PendingApprovals() {
             createdAt: employer.registrationDate
           }
           localStorage.setItem('employer', JSON.stringify(newEmployerData))
-          console.log('🔍 DEBUG - Created new employer data:', newEmployerData)
         }
         
         // Remove from pending list

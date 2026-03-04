@@ -146,22 +146,17 @@ export default function EmployerHubPage() {
   })
 
   useEffect(() => {
-    console.log('🔍 DEBUG - useEffect running')
     // Check for employer data regardless of authentication status
     // Only run on client side
     if (typeof window !== 'undefined') {
       const storedEmployer = localStorage.getItem('employer')
-      console.log('🔍 DEBUG - useEffect storedEmployer:', storedEmployer)
       if (storedEmployer) {
         const employer = JSON.parse(storedEmployer)
-        console.log('🔍 DEBUG - useEffect parsed employer:', employer)
         if (employer.status === 'approved') {
-          console.log('🔍 DEBUG - Employer is approved, setting job form to true')
           setSelectedPlan(employer.plan)
           setChosenPlan(employer.plan)
           setShowJobForm(true) // Show job form for approved employers
         } else if (employer.status === 'pending') {
-          console.log('🔍 DEBUG - Employer is pending, hiding signup')
           // Show waiting page - will be handled by the conditional render
           setShowSignUp(false)
         }
@@ -352,16 +347,10 @@ export default function EmployerHubPage() {
 
   // Show waiting page for pending approval
   const storedEmployer = typeof window !== 'undefined' ? localStorage.getItem('employer') : null
-  console.log('🔍 DEBUG - storedEmployer:', storedEmployer)
   if (storedEmployer) {
     const employer = JSON.parse(storedEmployer)
-    console.log('🔍 DEBUG - parsed employer:', employer)
-    console.log('🔍 DEBUG - employer.status:', employer.status)
-    console.log('🔍 DEBUG - showJobForm:', showJobForm)
-    console.log('🔍 DEBUG - chosenPlan:', chosenPlan)
     
     if (employer.status === 'pending') {
-      console.log('🔍 DEBUG - Showing pending page')
       return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center px-4">
           <div className="max-w-md w-full">
@@ -424,7 +413,6 @@ export default function EmployerHubPage() {
         </div>
       )
     } else if (employer.status === 'approved') {
-      console.log('🔍 DEBUG - Employer is approved, showing job form directly')
       // For approved employers, set the plan and show job form immediately
       if (!showJobForm || !chosenPlan) {
         setSelectedPlan(employer.plan)
@@ -457,7 +445,11 @@ export default function EmployerHubPage() {
                   <p className="text-blue-700 font-bold">{chosenPlan.price}</p>
                 </div>
                 <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${chosenPlan.color} flex items-center justify-center`}>
-                  <chosenPlan.icon className="w-6 h-6 text-white" />
+                  {typeof chosenPlan.icon === 'function' ? (
+                    <chosenPlan.icon className="w-6 h-6 text-white" />
+                  ) : (
+                    <Star className="w-6 h-6 text-white" />
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -1009,7 +1001,11 @@ export default function EmployerHubPage() {
               
               <CardHeader className="text-center pb-4">
                 <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${plan.color} flex items-center justify-center mx-auto mb-4`}>
-                  <plan.icon className="w-8 h-8 text-white" />
+                  {typeof plan.icon === 'function' ? (
+                    <plan.icon className="w-8 h-8 text-white" />
+                  ) : (
+                    <Star className="w-8 h-8 text-white" />
+                  )}
                 </div>
                 <CardTitle className="text-xl font-bold text-slate-900">
                   {plan.name}
