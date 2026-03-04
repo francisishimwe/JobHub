@@ -30,6 +30,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
   const [filters, setFiltersState] = useState({
     search: '',
     location: '',
+    category: '',
     opportunityTypes: [] as string[],
   })
 
@@ -50,10 +51,13 @@ export function JobProvider({ children }: { children: ReactNode }) {
         const validJobs = data.jobs.filter((job: any) => job != null)
         console.log(`✓ Filtered to ${validJobs.length} valid jobs`)
         
-        // Use the mapping function to convert snake_case to camelCase
+        // Use mapping function to convert snake_case to camelCase
         const formattedJobs: Job[] = validJobs.map((job: any, index: number) => {
           try {
+            console.log(`🔍 Mapping job ${index}:`, { id: job.id, title: job.title, category: job.category })
             const mappedJob = mapDatabaseJobToUIJob(job);
+            console.log(`🔍 Mapped job ${index}:`, { id: mappedJob.id, title: mappedJob.title, category: mappedJob.category })
+            console.log(`🔍 Full mapped job ${index}:`, mappedJob)
             // Additional validation to ensure we have required fields
             if (!mappedJob || !mappedJob.id) {
               console.warn(`⚠️ Job at index ${index} failed mapping:`, job);
@@ -67,8 +71,15 @@ export function JobProvider({ children }: { children: ReactNode }) {
         }).filter((job: Job | null): job is Job => job !== null && job.id !== '');
         
         console.log(`✓ Formatted: ${formattedJobs.length} jobs mapped to UI format`)
+        console.log(`🔍 Formatted jobs details:`, formattedJobs.map(job => ({ id: job.id, title: job.title, category: job.category })))
         
-        setJobs(prev => isNewSearch ? formattedJobs : [...prev, ...formattedJobs])
+        setJobs(prev => {
+          console.log('🔄 About to set jobs:', formattedJobs.length, 'jobs')
+          console.log('🔄 Current jobs before set:', prev.length)
+          const result = isNewSearch ? formattedJobs : [...prev, ...formattedJobs]
+          console.log('🔄 Final jobs after set:', result.length)
+          return result
+        })
         setHasMore(data.hasMore)
         if (isNewSearch) {
           // Prefer the canonical featuredCount (server-synced); featuredGroupCount is legacy.
@@ -98,14 +109,52 @@ export function JobProvider({ children }: { children: ReactNode }) {
 
   // Live Filtering Logic
   useEffect(() => {
+    console.log('🔍 Filtering jobs:', {
+      totalJobs: jobs.length,
+      filters: filters,
+      sampleJob: jobs[0] ? {
+        id: jobs[0].id,
+        title: jobs[0].title,
+        category: jobs[0].category,
+        opportunityType: jobs[0].opportunityType
+      } : null
+    })
+    
+    // Log all job categories for debugging
+    console.log('📋 All job categories:', jobs.map(job => ({ id: job.id, title: job.title, category: job.category })))
+    
     let filtered = [...jobs]
+    
+    // IMPORTANT: Don't filter if no filters are set
+    const hasActiveFilters = filters.search || filters.location || filters.category || (filters.opportunityTypes && filters.opportunityTypes.length > 0)
+    
+    if (!hasActiveFilters) {
+      console.log('🔄 No active filters - showing all jobs')
+      setFilteredJobs(jobs)
+      return
+    }
+    
     if (filters.search) {
       const s = filters.search.toLowerCase()
       filtered = filtered.filter(job => job.title.toLowerCase().includes(s) || job.description?.toLowerCase().includes(s))
+      console.log('🔍 After search filter:', filtered.length)
     }
     if (filters.location) {
       const l = filters.location.toLowerCase()
       filtered = filtered.filter(job => job.location.toLowerCase().includes(l))
+      console.log('🔍 After location filter:', filtered.length)
+    }
+    if (filters.category) {
+      const c = filters.category.toLowerCase()
+      console.log('🔍 Filtering by category:', c)
+      console.log('🔍 Available categories in jobs:', [...new Set(jobs.map(job => job.category))])
+      filtered = filtered.filter(job => {
+        const category = (job.category || '').toLowerCase()
+        const matches = category === c || category.includes(c)
+        console.log(`🔍 Job "${job.title}" category "${category}" matches "${c}":`, matches)
+        return matches
+      })
+      console.log('🔍 After category filter:', filtered.length)
     }
     if (filters.opportunityTypes?.length > 0) {
       filtered = filtered.filter(job => {
@@ -122,10 +171,12 @@ export function JobProvider({ children }: { children: ReactNode }) {
           return opportunityType.includes(filter)
         })
       })
+      console.log('🔍 After opportunity types filter:', filtered.length)
     } else {
       // When no opportunity types are selected (Featured is clicked), show ALL active items
       // across Jobs, Tenders, Internships, Scholarships, Education, Blogs (no extra filter).
     }
+    console.log('🔍 Final filtered jobs count:', filtered.length)
     setFilteredJobs(filtered)
   }, [jobs, filters])
 
@@ -163,6 +214,20 @@ export function JobProvider({ children }: { children: ReactNode }) {
       
       const data = await response.json()
       console.log('✅ API Success response:', data)
+      
+      // Handle new response format: { success: true, job: {...}, message: ..., database: ... }
+      // Handle old response format: { id, title, ... } (for backward compatibility)
+      if (data.success && data.job) {
+        console.log('✅ Job created with new format:', data.job)
+        
+        // Show success message if in simulation mode
+        if (!data.database) {
+          console.log('⚠️ Job created in simulation mode:', data.message)
+        }
+      } else {
+        // Fallback to old format for backward compatibility
+        console.log('✅ Job created with old format:', data)
+      }
       
       // Re-fetch page 0 to show the newest job immediately
       console.log('🔄 Refreshing job list...')

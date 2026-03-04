@@ -24,6 +24,9 @@ export default function HomePage() {
 
   // Debug: Log job loading status
   console.log("🏠 Home Page - Jobs:", jobs?.length || 0, "Filtered:", filteredJobs?.length || 0, "Loading:", isLoading)
+  console.log("🏠 Home Page - Raw jobs:", jobs)
+  console.log("🏠 Home Page - Filtered jobs:", filteredJobs)
+  console.log("🏠 Home Page - Filters:", filters)
 
   // Sort jobs based on columns that actually exist in your Supabase table
   const sortedJobs = [...filteredJobs].sort((a, b) => {

@@ -73,9 +73,26 @@ export function PendingApprovals() {
       if (!response.ok) throw new Error('Failed to fetch pending jobs')
       
       const data = await response.json()
-      setPendingJobs(data.jobs || [])
+      console.log('📋 Pending jobs API response:', data)
+      
+      // Handle new response format: { success: true, jobs: [...], database: true/false }
+      // Handle old response format: { jobs: [...] } (for backward compatibility)
+      if (data.success && data.jobs) {
+        setPendingJobs(data.jobs)
+        console.log('✅ Pending jobs loaded with new format:', data.jobs.length)
+        
+        // Show message if in simulation mode
+        if (!data.database) {
+          console.log('⚠️ Pending jobs loaded in simulation mode:', data.message)
+        }
+      } else {
+        // Fallback to old format for backward compatibility
+        setPendingJobs(data.jobs || [])
+        console.log('✅ Pending jobs loaded with old format:', data.jobs?.length || 0)
+      }
     } catch (error) {
       console.error('Error fetching pending jobs:', error)
+      setPendingJobs([])
     } finally {
       setLoading(false)
     }

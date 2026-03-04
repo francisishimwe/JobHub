@@ -3,26 +3,27 @@
 import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { useJobs } from "@/lib/job-context"
-import { useCompanies } from "@/lib/company-context"
 import { useAuth } from "@/lib/auth-context"
 import { JOB_CATEGORIES } from "@/lib/constants/categories"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Plus, Building2, FileText } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { RichTextEditor } from "@/components/rich-text-editor"
 
-interface AddJobFormProps {
+interface EmployerAddJobFormProps {
   onSuccess?: () => void
+  employerData?: {
+    companyName: string
+    email: string
+    plan: any
+    status: string
+  }
 }
 
-export function AddJobForm({ onSuccess }: AddJobFormProps) {
-  const { addJob } = useJobs()
-  const { companies, addCompany } = useCompanies()
+export function EmployerAddJobForm({ onSuccess, employerData }: EmployerAddJobFormProps) {
   const { user } = useAuth()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -30,41 +31,21 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [selectedDocument, setSelectedDocument] = useState<File | null>(null)
 
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState({
     job_title: "",
-    company_name: "",
+    company_name: employerData?.companyName || "",
     logo_url: "",
     offer_type: "Job",
     category: "",
     location: "",
+    location_type: "",
     description: "",
     external_link: "",
     deadline: "",
     experience_level: "",
-    contract_type: "", // Add contract type field
-    // System fields
-    plan_id: 1,
+    contract_type: "",
     attachment_url: "",
-    company_id: "", // Add company_id field for edit scenarios
   })
-
-  // Define the form data interface for TypeScript
-  interface FormData {
-    job_title: string;
-    company_name: string;
-    logo_url: string;
-    offer_type: string;
-    category: string;
-    location: string;
-    description: string;
-    external_link: string;
-    deadline: string;
-    experience_level: string;
-    contract_type: string;
-    plan_id: number;
-    attachment_url: string;
-    company_id: string;
-  }
 
   // Handle logo upload
   const handleLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,15 +83,14 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       
       if (response.ok) {
         const data = await response.json()
-        console.log("Logo upload successful:", data)
-        setFormData(prev => ({ ...prev, logo_url: data.url }))
+        setFormData({ ...formData, logo_url: data.url })
+        console.log('Logo uploaded successfully:', data.url)
       } else {
-        console.error('Logo upload failed:', response.status, response.statusText)
-        alert('Logo upload failed. Please try again.')
+        throw new Error('Failed to upload logo')
       }
     } catch (error) {
-      console.error('Upload error:', error)
-      alert('Logo upload failed. Please try again.')
+      console.error('Error uploading logo:', error)
+      alert('Failed to upload logo. Please try again.')
     }
   }
 
@@ -119,7 +99,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     const file = e.target.files?.[0]
     if (!file) return
 
-    // Validate file type (PDF only)
+    // Validate file type
     if (file.type !== 'application/pdf') {
       alert('Please select a PDF file')
       return
@@ -135,7 +115,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
 
     // Upload to server
     const uploadFormData = new FormData()
-    uploadFormData.append('document', file)
+    uploadFormData.append('file', file)
     
     try {
       const response = await fetch('/api/upload/document', {
@@ -145,49 +125,22 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
       
       if (response.ok) {
         const data = await response.json()
-        console.log('✅ Document upload successful:', data)
-        setFormData(prev => ({ ...prev, attachment_url: data.url }))
+        setFormData({ ...formData, attachment_url: data.url })
+        console.log('Document uploaded successfully:', data.url)
       } else {
-        const errorData = await response.json()
-        console.error('❌ Document upload failed:', errorData)
-        alert(`Upload failed: ${errorData.error || 'Unknown error'}`)
+        throw new Error('Failed to upload document')
       }
     } catch (error) {
-      console.error('❌ Upload error:', error)
-      alert(`Upload error: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      console.error('Error uploading document:', error)
+      alert('Failed to upload document. Please try again.')
     }
-  }
-
-  // Simple HTML sanitization to prevent SQL issues
-  const sanitizeHTML = (html: string | null): string | null => {
-    if (!html) return null
-    
-    // Remove potentially problematic HTML attributes and content
-    return html
-      .replace(/class="[^"]*"/g, '') // Remove class attributes
-      .replace(/style="[^"]*"/g, '') // Remove style attributes
-      .replace(/data-[^=]*="[^"]*"/g, '') // Remove data attributes
-      .replace(/on\w+="[^"]*"/g, '') // Remove event handlers
-      .replace(/javascript:/gi, '') // Remove javascript: URLs
-      .replace(/<script[^>]*>.*?<\/script>/gi, '') // Remove script tags
-      .replace(/<iframe[^>]*>.*?<\/iframe>/gi, '') // Remove iframe tags
-      .replace(/<object[^>]*>.*?<\/object>/gi, '') // Remove object tags
-      .replace(/<embed[^>]*>/gi, '') // Remove embed tags
-      .trim()
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
-    // Validation
-    console.log("Form validation check:", {
-      job_title: formData.job_title,
-      company_name: formData.company_name,
-      logo_url: formData.logo_url,
-      logo_url_length: formData.logo_url?.length
-    })
-
+    // Validation for required fields (matching Admin form)
     if (!formData.job_title.trim()) {
       alert("Please enter job title")
       setLoading(false)
@@ -201,188 +154,74 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
     }
 
     if (!formData.logo_url || formData.logo_url?.trim() === "") {
-      console.error("Logo validation failed:", formData.logo_url)
       alert("Company logo is required")
       setLoading(false)
       return
     }
 
     try {
-      // Check if we already have a company_id from existing companies or job data
-      let companyId = null
-      
-      // First, try to find existing company by name
-      const existingCompany = companies.find(c => 
-        c.name.toLowerCase() === formData.company_name.trim().toLowerCase()
-      );
-      
-      if (existingCompany) {
-        companyId = existingCompany.id;
-        console.log('Found existing company:', companyId);
-      } else {
-        // Check if this is an edit scenario with existing company_id
-        // This shouldn't happen with AddJobForm, but let's handle it gracefully
-        if (formData.company_id && typeof formData.company_id === 'string' && formData.company_id.length > 10) {
-          companyId = formData.company_id;
-          console.log('Using existing company_id from form data:', companyId);
-        } else {
-          // Create new company only if no existing one found
-          try {
-            const createCompanyResponse = await fetch('/api/companies', {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                name: formData.company_name,
-                logo: formData.logo_url || null
-              })
-            })
-            
-            if (createCompanyResponse.ok) {
-              const newCompanyData = await createCompanyResponse.json()
-              console.log('Company API response:', newCompanyData)
-              
-              // Handle new response format: { success: true, company: { id: ... }, message: ..., database: ... }
-              // Handle old response format: { company: { id: ... } } or { id: ... }
-              if (newCompanyData.success && newCompanyData.company) {
-                companyId = newCompanyData.company.id
-                console.log('Created new companyId (new format):', companyId)
-                
-                // Show success message if in simulation mode
-                if (!newCompanyData.database) {
-                  console.log('⚠️ Company created in simulation mode:', newCompanyData.message)
-                }
-              } else {
-                // Fallback to old format
-                companyId = newCompanyData.company?.id || newCompanyData.id
-                console.log('Created new companyId (old format):', companyId)
-              }
-            } else {
-              const errorData = await createCompanyResponse.json().catch(() => ({}))
-              console.error('Company creation failed:', errorData)
-              
-              // Check if it's a database error with simulation fallback
-              if (errorData.success && !errorData.database) {
-                console.log('⚠️ Company created in simulation mode:', errorData.message)
-                // Use simulated company ID
-                companyId = errorData.company?.id || `sim_${Date.now()}`
-                console.log('Using simulated companyId:', companyId)
-              } else {
-                alert('Failed to create company: ' + (errorData.error || 'Unknown error'))
-                setLoading(false)
-                return
-              }
-            }
-          } catch (companyError) {
-            console.error('Error handling company:', companyError)
-            alert('Failed to create company. Please try again.')
-            setLoading(false)
-            return
-          }
-        }
-      }
-
-      // Validate we have a companyId
-      if (!companyId) {
-        console.error('❌ No companyId obtained after company lookup/creation')
-        console.error('🔍 Debug info:', { 
-          existingCompany: companies.find(c => c.name.toLowerCase() === formData.company_name.trim().toLowerCase()),
-          formDataCompanyId: formData.company_id,
-          companiesLength: companies.length,
-          companyName: formData.company_name.trim()
+      // Use the same API as admin for consistency
+      const response = await fetch('/api/jobs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: formData.job_title.trim() || null,
+          company_name: formData.company_name.trim() || null,
+          logo_url: formData.logo_url || null,
+          opportunity_type: formData.offer_type || null,
+          category: formData.category || null,
+          location: formData.location || null,
+          location_type: formData.location_type || null,
+          description: formData.description || null,
+          application_link: formData.external_link || null,
+          deadline: formData.deadline || null,
+          experience_level: formData.experience_level || null,
+          job_type: formData.contract_type || null,
+          attachment_url: formData.attachment_url || null,
+          plan_id: 1,
+          employerName: formData.company_name.trim() || employerData?.companyName || user?.email,
         })
-        alert('Failed to create or find company. Please try again.')
-        setLoading(false)
-        return
-      }
-
-      // Additional validation for companyId format
-      if (typeof companyId !== 'string' || companyId.trim() === '') {
-        console.error('❌ Invalid companyId format:', { companyId, type: typeof companyId })
-        alert('Invalid company ID format. Please try again.')
-        setLoading(false)
-        return
-      }
-
-      // Prepare job data
-      console.log('🔍 Preparing job data with companyId:', companyId)
-      const jobData = {
-        title: formData.job_title.trim(),
-        company_id: companyId,
-        employerName: formData.company_name.trim(),
-        companyLogo: formData.logo_url || null,
-        description: sanitizeHTML(formData.description?.trim() || null),
-        location: formData.location?.trim() || null,
-        job_type: formData.contract_type || null, // Add contract type field
-        opportunity_type: formData.offer_type,
-        deadline: formData.deadline || null,
-        application_link: formData.external_link?.trim() || null,
-        attachment_url: formData.attachment_url?.trim() || null,
-        featured: false,
-        plan_id: formData.plan_id,
-        application_method: "link",
-        primary_email: null,
-        cc_emails: null,
-        experience_level: formData.experience_level || null,
-        category: formData.category || null,
-        contact_name: null,
-        contact_phone: null,
-        status: 'active', // Set default status as active
-        userEmail: user?.email || null,
-      }
-
-      // Log the data for debugging
-      console.log("🔍 Job data being sent:", {
-        title: jobData.title,
-        description: jobData.description,
-        description_length: jobData.description?.length,
-        opportunity_type: jobData.opportunity_type,
-        application_method: jobData.application_method,
-        company_id: jobData.company_id,
-        company_id_type: typeof jobData.company_id
       })
 
-      console.log("Final job data for submission:", jobData)
-
-      try {
-        await addJob(jobData)
-        console.log("Job submitted successfully!")
+      if (response.ok) {
+        const result = await response.json()
+        console.log('✅ Job created successfully:', result)
+        
+        // Show success message
+        alert('Job posted successfully! Your job will be visible on the home page.')
         
         // Reset form
         setFormData({
           job_title: "",
-          company_name: "",
+          company_name: employerData?.companyName || "",
           logo_url: "",
           offer_type: "Job",
           category: "",
           location: "",
+          location_type: "",
           description: "",
           external_link: "",
           deadline: "",
           experience_level: "",
-          contract_type: "", // Reset contract type
-          plan_id: 1,
+          contract_type: "",
           attachment_url: "",
-          company_id: "", // Reset company_id
         })
         setImagePreview("")
         setSelectedFile(null)
         setSelectedDocument(null)
-
-        setLoading(false)
-        onSuccess?.()
-      } catch (jobError) {
-        console.error('Error submitting job:', jobError)
-        console.error('Error details:', {
-          message: jobError instanceof Error ? jobError.message : 'Unknown error',
-          stack: jobError instanceof Error ? jobError.stack : undefined,
-          jobData: jobData
-        })
-        alert('Failed to submit job: ' + (jobError instanceof Error ? jobError.message : 'Unknown error'))
-        setLoading(false)
+        
+        if (onSuccess) {
+          onSuccess()
+        }
+      } else {
+        const errorData = await response.json().catch(() => ({}))
+        console.error('Failed to create job:', errorData)
+        alert('Failed to post job: ' + (errorData.error || 'Unknown error'))
       }
     } catch (error) {
-      console.error('Error submitting job:', error)
-      alert('Failed to submit job. Please try again.')
+      console.error('Error posting job:', error)
+      alert('Failed to post job. Please try again.')
+    } finally {
       setLoading(false)
     }
   }
@@ -415,7 +254,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                 required
                 value={formData.company_name}
                 onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
-                placeholder="e.g. Tech Company"
+                placeholder="e.g. Rwanda Tech Solutions"
                 className="h-11 text-base"
               />
             </div>
@@ -481,6 +320,7 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                     onChange={handleLogoChange}
                     className="hidden"
                     id="logo-upload"
+                    required
                   />
                   <Label
                     htmlFor="logo-upload"
@@ -524,6 +364,18 @@ export function AddJobForm({ onSuccess }: AddJobFormProps) {
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                 placeholder="e.g. Kigali, Rwanda"
+                className="h-11 text-base"
+              />
+            </div>
+
+            {/* Location Type */}
+            <div className="space-y-2">
+              <Label htmlFor="location_type">Location Type (Optional)</Label>
+              <Input
+                id="location_type"
+                placeholder="e.g., Remote, On-site, Hybrid"
+                value={formData.location_type}
+                onChange={(e) => setFormData({ ...formData, location_type: e.target.value })}
                 className="h-11 text-base"
               />
             </div>

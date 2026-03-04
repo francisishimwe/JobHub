@@ -50,8 +50,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const newUser: User = {
           email,
           isAuthenticated: true,
-          planType: employer.selectedPlan || 'free',
-          role: 'employer' // Set role as employer
+          planType: employer.selectedPlan?.name || 'free',
+          role: 'employer',
+          firstName: employer.firstName,
+          lastName: employer.lastName,
+          company: employer.company
+        }
+        
+        setUser(newUser)
+        localStorage.setItem("RwandaJobHub-auth-user", JSON.stringify(newUser))
+        console.log("Employer logged in successfully:", email)
+        return true
+      }
+    }
+
+    // Also check the newer 'employer' storage format
+    const storedEmployer = localStorage.getItem("employer")
+    if (storedEmployer) {
+      const employer = JSON.parse(storedEmployer)
+      
+      // Validate against stored employer data
+      if (employer.email === email && employer.status === 'approved') {
+        const newUser: User = {
+          email,
+          isAuthenticated: true,
+          planType: employer.plan?.name || 'free',
+          role: 'employer',
+          company: employer.companyName
         }
         
         setUser(newUser)
@@ -72,7 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email,
         isAuthenticated: true,
         planType: 'admin',
-        role: 'admin' // Set role as admin
+        role: 'admin'
       }
       
       setUser(adminUser)

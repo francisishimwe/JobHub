@@ -9,16 +9,16 @@ import { JobList } from "@/components/job-list"
 import { ExamList } from "@/components/exam-list"
 import { InquiryList } from "@/components/inquiry-list"
 import { AnalyticsDashboard } from "@/components/analytics-dashboard"
-import { PendingApprovals } from "@/components/pending-approvals"
+import { EmployerApprovals } from "@/components/employer-approvals"
 import { LoginForm } from "@/components/login-form"
 import { Button } from "@/components/ui/button"
-import { Plus, BriefcaseBusiness, GraduationCap, BarChart3, MessageSquare, CheckCircle2 } from "lucide-react"
+import { Plus, BriefcaseBusiness, GraduationCap, BarChart3, MessageSquare, Users } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function DashboardPage() {
   const { user, isAuthenticated } = useAuth()
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState("pending")
+  const [activeTab, setActiveTab] = useState("jobs")
 
   // Show login form if not authenticated
   if (!isAuthenticated) {
@@ -52,9 +52,9 @@ export default function DashboardPage() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <TabsList>
-              <TabsTrigger value="pending" className="gap-2">
-                <CheckCircle2 className="h-4 w-4" />
-                Pending Approvals
+              <TabsTrigger value="employers" className="gap-2">
+                <Users className="h-4 w-4" />
+                Employer Approvals
               </TabsTrigger>
               <TabsTrigger value="jobs" className="gap-2">
                 <BriefcaseBusiness className="h-4 w-4" />
@@ -97,8 +97,8 @@ export default function DashboardPage() {
             )}
           </div>
 
-          <TabsContent value="pending" className="space-y-6">
-            <PendingApprovals />
+          <TabsContent value="employers" className="space-y-6">
+            <EmployerApprovals />
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-6">

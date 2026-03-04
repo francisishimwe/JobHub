@@ -269,10 +269,6 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
                     <span>{job.location}</span>
                   </div>
                 )}
-                <div className="hidden sm:flex items-center gap-1">
-                  <UserCheck className="h-4 w-4" />
-                  <span>{job.applicants} applicants</span>
-                </div>
                 {daysRemaining !== null && (
                   <div className={`flex items-center gap-1 ${daysRemaining <= 3 ? 'text-red-600 font-bold' : daysRemaining <= 7 ? 'text-orange-600 font-semibold' : 'font-medium'}`}>
                     <Clock className="h-3 w-3 md:h-4 md:w-4" />

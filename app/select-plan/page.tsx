@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { EmployerDashboard } from "@/components/employer-dashboard"
+import { EmployerDashboardSimple } from "@/components/employer-dashboard-simple"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { useAuth } from "@/lib/auth-context"
@@ -87,7 +87,7 @@ export default function EmployerHubPage() {
   const [showSignUp, setShowSignUp] = useState(false)
   const [chosenPlan, setChosenPlan] = useState<any>(null)
   const [showJobForm, setShowJobForm] = useState(false)
-  const [showHub, setShowHub] = useState(false)
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [activeTab, setActiveTab] = useState('compose')
   const [applications, setApplications] = useState([
     {
@@ -150,20 +150,89 @@ export default function EmployerHubPage() {
     // Check for employer data regardless of authentication status
     // Only run on client side
     if (typeof window !== 'undefined') {
+      const storedEmployerData = localStorage.getItem('employerData')
       const storedEmployer = localStorage.getItem('employer')
-      if (storedEmployer) {
-        const employer = JSON.parse(storedEmployer)
-        if (employer.status === 'approved') {
-          setSelectedPlan(employer.plan)
-          setChosenPlan(employer.plan)
-          setShowJobForm(true) // Show job form for approved employers
-        } else if (employer.status === 'pending') {
-          // Show waiting page - will be handled by the conditional render
-          setShowSignUp(false)
+      
+      // Check both storage formats and prioritize approved status
+      let employer = null
+      
+      if (storedEmployerData && storedEmployer) {
+        // Both exist - check which one is approved
+        const data1 = JSON.parse(storedEmployerData)
+        const data2 = JSON.parse(storedEmployer)
+        
+        // Prioritize the one with approved status
+        if (data1.status === 'approved' || data2.status === 'approved') {
+          employer = data1.status === 'approved' ? data1 : data2
+        } else {
+          // Neither approved, use employerData (newer format)
+          employer = data1
+        }
+      } else if (storedEmployerData) {
+        employer = JSON.parse(storedEmployerData)
+      } else if (storedEmployer) {
+        employer = JSON.parse(storedEmployer)
+      }
+      
+      // Debug logging
+      console.log('🔍 Employer Status Check:', {
+        employerData: storedEmployerData,
+        employer: storedEmployer,
+        parsedEmployer: employer,
+        status: employer?.status,
+        refreshTrigger
+      })
+      
+      // Clean up duplicate entries - remove pending if approved exists
+      if (employer && employer.status === 'approved') {
+        if (storedEmployerData && storedEmployer) {
+          const data1 = JSON.parse(storedEmployerData)
+          const data2 = JSON.parse(storedEmployer)
+          
+          // If both exist and one is approved, remove the pending one
+          if (data1.status === 'pending' && data2.status === 'approved') {
+            localStorage.removeItem('employerData')
+            console.log('🧹 Removed duplicate pending employerData entry')
+          } else if (data2.status === 'pending' && data1.status === 'approved') {
+            localStorage.removeItem('employer')
+            console.log('🧹 Removed duplicate pending employer entry')
+          }
         }
       }
+      
+      // Only show waiting page if employer is pending
+      if (employer && employer.status === 'pending') {
+        // Show waiting page for pending accounts
+        setShowSignUp(false)
+      }
+      // Remove the auto-redirect for approved employers to always show plan selection
     }
-  }, [isAuthenticated, user])
+  }, [isAuthenticated, user, refreshTrigger]) // Add refreshTrigger to force re-check
+
+  // Add page visibility and window focus listeners to refresh when user returns to tab
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleVisibilityChange = () => {
+        if (!document.hidden) {
+          // Page became visible, refresh employer data
+          setRefreshTrigger(prev => prev + 1)
+        }
+      }
+
+      const handleFocus = () => {
+        // Window gained focus, refresh employer data
+        setRefreshTrigger(prev => prev + 1)
+      }
+
+      document.addEventListener('visibilitychange', handleVisibilityChange)
+      window.addEventListener('focus', handleFocus)
+      
+      return () => {
+        document.removeEventListener('visibilitychange', handleVisibilityChange)
+        window.removeEventListener('focus', handleFocus)
+      }
+    }
+  }, [])
 
   const handleChoosePlan = (plan: any) => {
     setChosenPlan(plan)
@@ -263,12 +332,13 @@ export default function EmployerHubPage() {
           const employerData = {
             companyName: formData.companyName,
             email: formData.email,
+            password: formData.password, // Store password for authentication
             plan: chosenPlan,
             status: 'pending',
             createdAt: new Date().toISOString()
           }
           
-          localStorage.setItem('employer', JSON.stringify(employerData))
+          localStorage.setItem('employerData', JSON.stringify(employerData))
           
           // Add to admin approval list
           const pendingEmployers = JSON.parse(localStorage.getItem('pendingEmployers') || '[]')
@@ -299,31 +369,79 @@ export default function EmployerHubPage() {
       await new Promise(resolve => setTimeout(resolve, 2000))
       
       // Check if employer exists and is approved
+      const storedEmployerData = typeof window !== 'undefined' ? localStorage.getItem('employerData') : null
       const storedEmployer = typeof window !== 'undefined' ? localStorage.getItem('employer') : null
-      if (storedEmployer) {
-        const employer = JSON.parse(storedEmployer)
-        if (employer.email === formData.email) {
-          if (employer.status === 'pending') {
-            // Redirect to waiting page for pending accounts
-            setShowSignUp(false)
-            setFormData({...formData, isLoading: false, error: ''})
-            return
-          }
-          if (employer.status === 'approved') {
-            setSelectedPlan(employer.plan)
-            setChosenPlan(employer.plan) // Set chosenPlan for job form
-            setShowSignUp(false)
-            setShowJobForm(true) // Show job form directly for approved employers
-            setFormData({...formData, isLoading: false})
-            return
-          }
-          if (employer.status === 'rejected') {
-            setFormData({...formData, error: 'Your account has been rejected', isLoading: false})
-            return
-          }
+      
+      // Check both storage formats and prioritize approved status (same logic as useEffect)
+      let employer = null
+      let isEmployerDataFormat = false
+      
+      if (storedEmployerData && storedEmployer) {
+        // Both exist - check which one is approved
+        const data1 = JSON.parse(storedEmployerData)
+        const data2 = JSON.parse(storedEmployer)
+        
+        // Prioritize the one with approved status
+        if (data1.status === 'approved' || data2.status === 'approved') {
+          employer = data1.status === 'approved' ? data1 : data2
+          isEmployerDataFormat = data1.status === 'approved'
+        } else {
+          // Neither approved, use employerData (newer format)
+          employer = data1
+          isEmployerDataFormat = true
+        }
+      } else if (storedEmployerData) {
+        employer = JSON.parse(storedEmployerData)
+        isEmployerDataFormat = true
+      } else if (storedEmployer) {
+        employer = JSON.parse(storedEmployer)
+        isEmployerDataFormat = false
+      }
+      
+      console.log('🔐 Login attempt:', {
+        email: formData.email,
+        foundEmployer: employer,
+        isEmployerDataFormat,
+        employerStatus: employer?.status
+      })
+      
+      if (employer && employer.email === formData.email) {
+        // For employerData format, check password
+        if (isEmployerDataFormat && employer.password !== formData.password) {
+          console.log('❌ Password mismatch for employerData format')
+          setFormData({...formData, error: 'Invalid email or password', isLoading: false})
+          return
+        }
+        
+        // For employer format (without password), just check email and status
+        if (!isEmployerDataFormat) {
+          console.log('✅ Using employer format (no password check)')
+        }
+        
+        if (employer.status === 'pending') {
+          console.log('⏳ Employer account is pending')
+          // Redirect to waiting page for pending accounts
+          setShowSignUp(false)
+          setFormData({...formData, isLoading: false, error: ''})
+          return
+        }
+        if (employer.status === 'approved') {
+          console.log('✅ Employer approved, showing dashboard')
+          setSelectedPlan(employer.plan)
+          setChosenPlan(employer.plan) // Set chosenPlan for job form
+          setShowSignUp(false)
+          setShowJobForm(true) // Show job form directly for approved employers
+          setFormData({...formData, isLoading: false})
+          return
+        }
+        if (employer.status === 'rejected') {
+          console.log('❌ Employer account rejected')
+          setFormData({...formData, error: 'Your account has been rejected', isLoading: false})
+          return
         }
       }
       
+      console.log('❌ Employer not found or email mismatch')
       setFormData({...formData, error: 'Invalid email or password', isLoading: false})
       
     } catch (error) {
@@ -347,10 +465,31 @@ export default function EmployerHubPage() {
   }
 
   // Show waiting page for pending approval
+  const storedEmployerData = typeof window !== 'undefined' ? localStorage.getItem('employerData') : null
   const storedEmployer = typeof window !== 'undefined' ? localStorage.getItem('employer') : null
-  if (storedEmployer) {
-    const employer = JSON.parse(storedEmployer)
+  
+  // Check both storage formats and prioritize approved status (same logic as useEffect and login)
+  let employer = null
+  
+  if (storedEmployerData && storedEmployer) {
+    // Both exist - check which one is approved
+    const data1 = JSON.parse(storedEmployerData)
+    const data2 = JSON.parse(storedEmployer)
     
+    // Prioritize the one with approved status
+    if (data1.status === 'approved' || data2.status === 'approved') {
+      employer = data1.status === 'approved' ? data1 : data2
+    } else {
+      // Neither approved, use employerData (newer format)
+      employer = data1
+    }
+  } else if (storedEmployerData) {
+    employer = JSON.parse(storedEmployerData)
+  } else if (storedEmployer) {
+    employer = JSON.parse(storedEmployer)
+  }
+  
+  if (employer) {
     if (employer.status === 'pending') {
       return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center px-4">
@@ -395,10 +534,26 @@ export default function EmployerHubPage() {
                 </div>
                 <div className="space-y-2">
                   <Button 
-                    onClick={() => window.location.reload()} 
+                    onClick={() => setRefreshTrigger(prev => prev + 1)} 
                     className="w-full bg-blue-600 hover:bg-blue-700"
                   >
                     Check Status
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      // Debug: Force check current localStorage
+                      const storedEmployerData = localStorage.getItem('employerData')
+                      const storedEmployer = localStorage.getItem('employer')
+                      console.log('🔍 Debug - Current localStorage:', {
+                        employerData: storedEmployerData ? JSON.parse(storedEmployerData) : null,
+                        employer: storedEmployer ? JSON.parse(storedEmployer) : null
+                      })
+                      setRefreshTrigger(prev => prev + 1)
+                    }}
+                    className="w-full"
+                  >
+                    Debug Status
                   </Button>
                   <Button 
                     variant="outline" 
@@ -414,30 +569,49 @@ export default function EmployerHubPage() {
         </div>
       )
     } else if (employer.status === 'approved') {
-      // For approved employers, set the plan and show job form immediately
-      if (!showJobForm || !chosenPlan) {
-        setSelectedPlan(employer.plan)
-        setChosenPlan(employer.plan)
-        setShowJobForm(true)
-      }
+      // For approved employers, show plan selection page
+      // Don't auto-redirect to dashboard - let them choose plans or upgrade
+      // They can access dashboard by logging in
     }
     // If employer is approved, continue to show job form or dashboard
   }
 
   // Show employer dashboard for approved employers
   if (showJobForm && chosenPlan) {
-    // Get the actual stored employer data
+    // Get the actual stored employer data using same prioritized logic
+    const storedEmployerData = typeof window !== 'undefined' ? localStorage.getItem('employerData') : null
     const storedEmployer = typeof window !== 'undefined' ? localStorage.getItem('employer') : null
+    
     let employerData
     
-    if (storedEmployer) {
-      const parsedEmployer = JSON.parse(storedEmployer)
+    // Use same prioritized logic as other parts of the app
+    let employer = null
+    
+    if (storedEmployerData && storedEmployer) {
+      // Both exist - check which one is approved
+      const data1 = JSON.parse(storedEmployerData)
+      const data2 = JSON.parse(storedEmployer)
+      
+      // Prioritize the one with approved status
+      if (data1.status === 'approved' || data2.status === 'approved') {
+        employer = data1.status === 'approved' ? data1 : data2
+      } else {
+        // Neither approved, use employerData (newer format)
+        employer = data1
+      }
+    } else if (storedEmployerData) {
+      employer = JSON.parse(storedEmployerData)
+    } else if (storedEmployer) {
+      employer = JSON.parse(storedEmployer)
+    }
+    
+    if (employer) {
       employerData = {
-        companyName: parsedEmployer.companyName || 'Company',
-        email: parsedEmployer.email || user?.email || '',
-        plan: parsedEmployer.plan || chosenPlan,
-        status: parsedEmployer.status || 'approved',
-        createdAt: parsedEmployer.createdAt || new Date().toISOString()
+        companyName: employer.companyName || 'Company',
+        email: employer.email || user?.email || '',
+        plan: employer.plan || chosenPlan,
+        status: employer.status || 'approved',
+        createdAt: employer.createdAt || new Date().toISOString()
       }
     } else {
       // Fallback for testing
@@ -450,7 +624,7 @@ export default function EmployerHubPage() {
       }
     }
     
-    return <EmployerDashboard employerData={employerData} />
+    return <EmployerDashboardSimple employerData={employerData} />
   }
 
   // Show login/sign-up form when plan is chosen
@@ -775,6 +949,49 @@ export default function EmployerHubPage() {
       <Header />
       
       <div className="container mx-auto px-6 py-12">
+        {/* Show approved employer info and quick actions */}
+        {employer && employer.status === 'approved' && (
+          <div className="mb-8">
+            <Card className="bg-green-50 border-green-200">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-lg font-semibold text-green-800 mb-2">
+                      Welcome back, {employer.companyName || employer.company || 'Employer'}!
+                    </h2>
+                    <p className="text-green-700">
+                      Current Plan: <span className="font-bold">{employer.plan?.name || 'Basic'}</span>
+                    </p>
+                  </div>
+                  <div className="flex gap-3">
+                    <Button 
+                      onClick={() => {
+                        setSelectedPlan(employer.plan)
+                        setChosenPlan(employer.plan)
+                        setShowJobForm(true)
+                      }}
+                      className="bg-green-600 hover:bg-green-700"
+                    >
+                      Go to Dashboard
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      onClick={() => {
+                        // Clear any existing selection to show plan options
+                        setSelectedPlan(null)
+                        setChosenPlan(null)
+                        setShowJobForm(false)
+                      }}
+                    >
+                      Upgrade Plan
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">
             Choose Your <span className="text-blue-600">Employer Plan</span>

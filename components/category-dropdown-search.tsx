@@ -7,7 +7,7 @@ import { useJobs } from "@/lib/job-context"
 import { JOB_CATEGORIES } from "@/lib/constants/categories"
 
 export function CategoryDropdownSearch() {
-  const { jobs, setFilters } = useJobs()
+  const { jobs, setFilters, filters } = useJobs()
   const [selectedCategory, setSelectedCategory] = useState("All Categories")
   const [isOpen, setIsOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
@@ -84,124 +84,33 @@ console.log("📋 Categories in dropdown:", categories.length, categories)
 
 
   const handleSelect = (category: string) => {
+    console.log('🎯 Category selected:', category)
     setSelectedCategory(category)
     setIsOpen(false)
     
     // Update filter based on category
     if (category === "All Categories") {
-      setFilters({ opportunityTypes: [] })
+      console.log('🔄 Clearing category filter')
+      setFilters({ category: "" })
     } else {
-      // Map category names to opportunity types
-      const opportunityTypeMap: { [key: string]: string } = {
-        "Academic": "education",
-        "Accounting": "job",
-        "Administration": "job",
-        "Agriculture": "job",
-        "Architecture": "job",
-        "Arts and Design": "job",
-        "Automotive": "job",
-        "Aviation": "job",
-        "Banking": "job",
-        "Business": "job",
-        "Community and Social Services": "job",
-        "Computer and IT": "job",
-        "Construction": "job",
-        "Consultancy": "job",
-        "Customer Service": "job",
-        "Education": "education",
-        "Energy and Utilities": "job",
-        "Engineering": "job",
-        "Environmental": "job",
-        "Finance": "job",
-        "Food Sciences": "job",
-        "Geology": "job",
-        "Healthcare": "job",
-        "Hospitality and Tourism": "job",
-        "Human Resource": "job",
-        "Journalism and Media": "blog",
-        "Law": "job",
-        "Logistics": "job",
-        "Management": "job",
-        "Manufacturing and Industrial": "job",
-        "Marketing and Sales": "job",
-        "Mechanical Engineering": "job",
-        "Medicine": "job",
-        "Mining": "job",
-        "NGO and International Development": "job",
-        "Pharmacy": "job",
-        "Procurement": "job",
-        "Project Management": "job",
-        "Psychology": "job",
-        "Public Health": "job",
-        "Real Estate": "job",
-        "Research": "job",
-        "Security": "job",
-        "Statistics": "job",
-        "Telecommunications": "job",
-        "Other": "job"
-      }
-      
-      const opportunityType = opportunityTypeMap[category] || "job"
-      setFilters({ opportunityTypes: [opportunityType] })
+      console.log('🔄 Setting category filter to:', category)
+      console.log('🔍 Current filters before update:', filters)
+      setFilters({ category: category })
+      console.log('🔍 Filters should be updated to:', { category })
     }
   }
 
   const handleSearch = () => {
+    console.log('🔍 Search triggered:', {
+      searchQuery,
+      selectedCategory
+    })
     if (selectedCategory === "All Categories") {
-      setFilters({ search: searchQuery, opportunityTypes: [] })
+      console.log('🔄 Searching with no category filter')
+      setFilters({ search: searchQuery, category: "" })
     } else {
-      // Map category names to opportunity types
-      const opportunityTypeMap: { [key: string]: string } = {
-        "Academic": "education",
-        "Accounting": "job",
-        "Administration": "job",
-        "Agriculture": "job",
-        "Architecture": "job",
-        "Arts and Design": "job",
-        "Automotive": "job",
-        "Aviation": "job",
-        "Banking": "job",
-        "Business": "job",
-        "Community and Social Services": "job",
-        "Computer and IT": "job",
-        "Construction": "job",
-        "Consultancy": "job",
-        "Customer Service": "job",
-        "Education": "education",
-        "Energy and Utilities": "job",
-        "Engineering": "job",
-        "Environmental": "job",
-        "Finance": "job",
-        "Food Sciences": "job",
-        "Geology": "job",
-        "Healthcare": "job",
-        "Hospitality and Tourism": "job",
-        "Human Resource": "job",
-        "Journalism and Media": "blog",
-        "Law": "job",
-        "Logistics": "job",
-        "Management": "job",
-        "Manufacturing and Industrial": "job",
-        "Marketing and Sales": "job",
-        "Mechanical Engineering": "job",
-        "Medicine": "job",
-        "Mining": "job",
-        "NGO and International Development": "job",
-        "Pharmacy": "job",
-        "Procurement": "job",
-        "Project Management": "job",
-        "Psychology": "job",
-        "Public Health": "job",
-        "Real Estate": "job",
-        "Research": "job",
-        "Security": "job",
-        "Statistics": "job",
-        "Telecommunications": "job",
-        "Other": "job"
-      }
-      
-      const opportunityType = opportunityTypeMap[selectedCategory] || "job"
-      setFilters({ search: searchQuery, opportunityTypes: [opportunityType] })
+      console.log('🔄 Searching with category:', selectedCategory)
+      setFilters({ search: searchQuery, category: selectedCategory })
     }
   }
 
@@ -221,7 +130,10 @@ console.log("📋 Categories in dropdown:", categories.length, categories)
         {/* Left Side - Category Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => {
+              console.log('🖱️ Dropdown button clicked, current isOpen:', isOpen)
+              setIsOpen(!isOpen)
+            }}
             className="px-6 py-4 text-slate-700 flex items-center gap-3 border-r border-slate-200 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset font-medium"
           >
             <span className="text-sm">{selectedCategory}</span>
@@ -229,13 +141,19 @@ console.log("📋 Categories in dropdown:", categories.length, categories)
           </button>
 
           {isOpen && (
-            <ul className="absolute top-full left-0 mt-2 w-80 bg-white border border-slate-200 rounded-xl shadow-2xl z-[9999] py-2 max-h-80 overflow-y-auto">
-              {categories.map((cat, index) => (
-                <li key={index} className="px-4 py-3 hover:bg-blue-600 hover:text-white cursor-pointer transition-all duration-200 text-sm border-b border-slate-100 last:border-b-0" onClick={() => handleSelect(cat)}>
-                  {cat}
-                </li>
-              ))}
-            </ul>
+            <>
+              <div className="absolute top-full left-0 w-2 h-2 bg-red-500 z-[99998]"></div>
+              <ul className="absolute top-full left-0 mt-1 w-80 bg-white border border-slate-200 rounded-xl shadow-2xl z-[99999] py-2 max-h-80 overflow-y-auto">
+                {categories.map((cat, index) => (
+                  <li key={index} className="px-4 py-3 hover:bg-blue-600 hover:text-white cursor-pointer transition-all duration-200 text-sm border-b border-slate-100 last:border-b-0" onClick={() => {
+                    console.log('🖱️ Category clicked:', cat)
+                    handleSelect(cat)
+                  }}>
+                    {cat}
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
         </div>
 
