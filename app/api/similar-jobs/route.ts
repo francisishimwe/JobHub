@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
         id != ${jobId}
         AND status = 'published'
         AND approved = true
-        AND (deadline IS NULL OR deadline >= CURRENT_DATE)
+        AND (deadline IS NULL OR deadline::date >= CURRENT_DATE)
         AND (
           opportunity_type = ${currentJob.opportunity_type}
           OR job_type = ${currentJob.job_type}

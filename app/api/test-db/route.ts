@@ -26,7 +26,7 @@ export async function GET() {
         SELECT COUNT(*) as active FROM jobs 
         WHERE status = 'published' 
         AND approved = true 
-        AND (deadline IS NULL OR deadline >= CURRENT_DATE)
+        AND (deadline IS NULL OR deadline::date >= CURRENT_DATE)
       `
       console.log('✅ Active jobs:', activeJobs[0].active)
       

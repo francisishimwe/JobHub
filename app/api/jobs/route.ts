@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
         SELECT COUNT(*) as total FROM jobs 
         WHERE (status = 'published' OR status = 'active')
         AND approved = true
-        AND (deadline IS NULL OR deadline >= CURRENT_DATE)
+        AND (deadline IS NULL OR deadline::date >= CURRENT_DATE)
       `
 
       const total = countResult[0]?.total || 0
