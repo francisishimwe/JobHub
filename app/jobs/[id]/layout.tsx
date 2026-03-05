@@ -69,15 +69,29 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
     if (!companyLogo) {
       logoUrl = `${baseUrl}/favicon.jpg`
+      console.log('🖼️ No company logo, using fallback:', logoUrl)
     } else if (companyLogo.startsWith('http://') || companyLogo.startsWith('https://')) {
       logoUrl = companyLogo
+      console.log('🖼️ Company logo is absolute URL:', logoUrl)
     } else if (companyLogo.startsWith('/')) {
       logoUrl = `${baseUrl}${companyLogo}`
+      console.log('🖼️ Company logo is relative path:', logoUrl)
+    } else if (companyLogo.startsWith('data:image/')) {
+      // For base64 images, we need to use a fallback since WhatsApp doesn't support data URLs in OG tags
+      logoUrl = `${baseUrl}/favicon.jpg`
+      console.log('🖼️ Company logo is base64, using fallback:', logoUrl)
     } else {
       logoUrl = `${baseUrl}/${companyLogo}`
+      console.log('🖼️ Company logo is relative filename:', logoUrl)
     }
 
-    console.log('🖼️ OG Image:', { company: companyName, original: companyLogo, generated: logoUrl })
+    console.log('🖼️ Final OG Image:', { 
+      company: companyName, 
+      original: companyLogo, 
+      generated: logoUrl,
+      baseUrl,
+      logoType: companyLogo?.startsWith('data:') ? 'base64' : 'url'
+    })
 
     return {
       title,
@@ -90,13 +104,23 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         title,
         description: cleanDescription,
         type: 'website',
-        images: [{ url: logoUrl }],
+        url: `${baseUrl}/jobs/${id}`,
+        siteName: 'RwandaJobHub',
+        images: [
+          {
+            url: logoUrl,
+            width: 1200,
+            height: 630,
+            alt: `${companyName} - ${jobData.title}`,
+          }
+        ],
       },
       twitter: {
         card: 'summary_large_image',
         title,
         description: cleanDescription,
         images: [logoUrl],
+        site: '@rwandajobhub',
       },
     }
   } catch (error) {
@@ -119,13 +143,22 @@ function getDefaultMetadata(baseUrl: string): Metadata {
       title: 'Job Opportunity | RwandaJobHub',
       description: 'Find your next career opportunity in Rwanda',
       type: 'website',
-      images: [{ url: defaultLogoUrl }],
+      siteName: 'RwandaJobHub',
+      images: [
+        {
+          url: defaultLogoUrl,
+          width: 1200,
+          height: 630,
+          alt: 'RwandaJobHub - Find Jobs in Rwanda',
+        }
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: 'Job Opportunity | RwandaJobHub',
       description: 'Find your next career opportunity in Rwanda',
       images: [defaultLogoUrl],
+      site: '@rwandajobhub',
     },
   }
 }
