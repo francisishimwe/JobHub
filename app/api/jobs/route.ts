@@ -100,6 +100,10 @@ export async function GET(request: NextRequest) {
         hasMore: offset + limit < total,
         featuredCount: featuredCount,
         featuredGroupCount: featuredCount,
+        DEBUG_ALL_JOBS_COUNT: allJobsDebug.length,
+        DEBUG_ALL_JOBS_SAMPLE: allJobsDebug.slice(0, 2),
+        DEBUG_FILTERED_JOBS_COUNT: jobs.length,
+        DEBUG_FILTERED_JOBS_SAMPLE: jobs.slice(0, 2),
         debug: {
           allJobsCount: allJobsDebug.length,
           allJobsSample: allJobsDebug.slice(0, 2),
@@ -108,8 +112,9 @@ export async function GET(request: NextRequest) {
         }
       })
 
-    } catch (dbError) {
+    } catch (dbError: any) {
       console.error('Database query failed:', dbError)
+      console.error('Database error details:', dbError?.message, dbError?.stack)
       
       // Return empty results when database is not available
       console.log('🔄 Database not available for jobs GET, returning empty results')
@@ -126,7 +131,8 @@ export async function GET(request: NextRequest) {
         limit,
         hasMore: false,
         database: false,
-        message: 'Database temporarily unavailable'
+        message: 'Database temporarily unavailable',
+        error: dbError?.message || 'Unknown database error'
       })
     }
   } catch (error) {
