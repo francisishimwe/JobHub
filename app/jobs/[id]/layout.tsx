@@ -33,8 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   // Get the base URL for absolute URLs
   const headersList = await headers()
   const host = headersList.get('host') || 'localhost:3000'
-  const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http'
-  const baseUrl = `${protocol}://${host}`
+  const baseUrl = process.env.NODE_ENV === 'production' ? 'https://www.rwandajobhub.rw' : 'http://localhost:3000'
 
   try {
     // Fetch job and company data in one query
