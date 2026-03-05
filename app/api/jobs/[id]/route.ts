@@ -10,6 +10,8 @@ export async function PUT(request: NextRequest, { params }: Props) {
     const { id } = await params
     const body = await request.json()
 
+    console.log('🔄 PUT /api/jobs/[id] called:', { id, bodyKeys: Object.keys(body) })
+
     // Validate required fields
     if (!body.title || !body.company_id || !body.opportunity_type) {
       return NextResponse.json(
@@ -17,6 +19,8 @@ export async function PUT(request: NextRequest, { params }: Props) {
         { status: 400 }
       )
     }
+
+    console.log('✅ Validation passed, attempting database update...')
 
     const result = await sql`
       UPDATE jobs
@@ -39,6 +43,8 @@ export async function PUT(request: NextRequest, { params }: Props) {
       WHERE id = ${id}
       RETURNING *
     `
+
+    console.log('✅ Database update completed, result length:', result?.length)
 
     if (!result || result.length === 0) {
       return NextResponse.json({ error: 'Job not found' }, { status: 404 })
@@ -67,8 +73,9 @@ export async function PUT(request: NextRequest, { params }: Props) {
       approved: updatedJob.approved,
       created_at: updatedJob.created_at
     })
-  } catch (error) {
-    console.error('Error updating job:', error)
+  } catch (error: any) {
+    console.error('❌ Error updating job:', error)
+    console.error('❌ Error details:', error?.message, error?.stack)
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to update job' },
       { status: 500 }
