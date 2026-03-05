@@ -35,13 +35,24 @@ export function JobProvider({ children }: { children: ReactNode }) {
   })
 
   const JOBS_PER_PAGE = 15
+  const limit = JOBS_PER_PAGE
 
   const fetchJobs = async (pageNumber: number, isNewSearch: boolean = false) => {
     setIsLoading(true)
     try {
       console.log("🔄 Starting job fetch...")
-      const response = await fetch(`/api/jobs?page=${pageNumber}&limit=${JOBS_PER_PAGE}`)
-      if (!response.ok) throw new Error('Failed to fetch jobs')
+      const response = await fetch(`/api/jobs?page=${pageNumber}&limit=${limit}`, {
+        cache: 'no-store'
+      })
+      
+      console.log(`📡 API Response status: ${response.status}`)
+      console.log(`📡 API Response ok: ${response.ok}`)
+      
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.log(`📡 API Error response: ${errorText}`)
+        throw new Error(`Failed to fetch jobs: ${response.status} ${errorText}`)
+      }
 
       const data = await response.json()
       console.log(`✓ API Response: ${data.jobs?.length} jobs received (page ${pageNumber})`, data)

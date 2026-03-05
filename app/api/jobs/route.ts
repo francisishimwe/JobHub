@@ -8,6 +8,9 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '15')
     const offset = page * limit
 
+    // Add client-visible debug
+    console.log('🌐 GET /api/jobs called with params:', { page, limit, offset })
+
     // Try to get jobs from database first
     try {
       console.log('� Testing database connection for jobs GET...');
@@ -15,6 +18,10 @@ export async function GET(request: NextRequest) {
       console.log('✅ Database connection successful for GET:', testConnection);
       
       console.log('🔄 Fetching jobs from database...')
+      
+      // Debug: Check all jobs first
+      const allJobsDebug = await sql`SELECT id, title, status, approved, deadline FROM jobs ORDER BY created_at DESC LIMIT 10`
+      console.log('🔍 All jobs in database (debug):', allJobsDebug)
       
       // "Active" = published + approved + active + not expired (deadline in future or null)
       // (Your schema allows status: published|draft|closed|active; we exclude expired by deadline)
@@ -47,6 +54,9 @@ export async function GET(request: NextRequest) {
         j.created_at DESC
         LIMIT ${limit} OFFSET ${offset}
       `
+      
+      console.log('✓ Database returned jobs:', jobs.length, 'jobs')
+      console.log('🔍 Raw jobs data:', jobs)
 
       const countResult = await sql`
         SELECT COUNT(*) as total FROM jobs 
@@ -75,16 +85,27 @@ export async function GET(request: NextRequest) {
 
       console.log(`✓ Database returned ${mappedJobs.length} jobs`)
       
+      const formattedJobs = mappedJobs.map((job: any) => ({
+        ...job,
+        company: job.company_name,
+        company_logo: job.company_logo,
+        company_id: job.company_id,
+      }));
+
       return NextResponse.json({
-        jobs: mappedJobs,
+        success: true,
+        jobs: formattedJobs,
         total,
-        featuredCount,
-        // Back-compat for older client code paths: keep field but ensure it matches featuredCount
-        featuredGroupCount: featuredCount,
         page,
-        limit,
         hasMore: offset + limit < total,
-        database: true // Flag to indicate this is database data
+        featuredCount: featuredCount,
+        featuredGroupCount: featuredCount,
+        debug: {
+          allJobsCount: allJobsDebug.length,
+          allJobsSample: allJobsDebug.slice(0, 2),
+          filteredJobsCount: jobs.length,
+          filteredJobsSample: jobs.slice(0, 2)
+        }
       })
 
     } catch (dbError) {
