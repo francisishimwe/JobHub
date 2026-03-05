@@ -56,20 +56,20 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       ? new Date(jobData.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
       : 'Open'
 
-    const title = `${companyName} is hiring ${jobData.title} location: ${jobData.location} opportunity type: ${jobData.opportunity_type} deadline is ${formattedDeadline}`
+    const title = `${jobData.title} at ${companyName}`
 
     // Strip HTML tags and decode entities from description
     const cleanDescription = jobData.description
       ? stripHtmlAndDecode(jobData.description).substring(0, 160)
       : 'Find your next career opportunity in Rwanda'
 
-    // Ensure logo URL is absolute and publicly accessible
+    // Ensure company logo URL is absolute and publicly accessible
     let logoUrl: string
 
     if (!companyLogo) {
-      // No fallback - if no logo exists, don't set an image
+      // No logo - don't set image
       logoUrl = ''
-      console.log('🖼️ No company logo, no image will be set')
+      console.log('🖼️ No company logo found in database')
     } else if (companyLogo.startsWith('http://') || companyLogo.startsWith('https://')) {
       logoUrl = companyLogo
       console.log('🖼️ Company logo is absolute URL:', logoUrl)
@@ -77,21 +77,19 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       logoUrl = `${baseUrl}${companyLogo}`
       console.log('🖼️ Company logo is relative path:', logoUrl)
     } else if (companyLogo.startsWith('data:image/')) {
-      // For base64 images, we cannot use them in OG tags (WhatsApp doesn't support data URLs)
+      // Base64 images are not supported by WhatsApp
       logoUrl = ''
-      console.log('🖼️ Company logo is base64, no image will be set (WhatsApp does not support data URLs)')
+      console.log('🖼️ Company logo is base64, not supported by WhatsApp')
     } else {
       logoUrl = `${baseUrl}/${companyLogo}`
       console.log('🖼️ Company logo is relative filename:', logoUrl)
     }
 
-    console.log('🖼️ Final OG Image:', { 
+    console.log('🖼️ Database Logo Info:', { 
       company: companyName, 
-      original: companyLogo, 
-      generated: logoUrl,
-      baseUrl,
-      logoType: companyLogo?.startsWith('data:') ? 'base64' : 'url',
-      hasImage: logoUrl !== ''
+      logoFromDb: companyLogo,
+      finalUrl: logoUrl,
+      jobId: id
     })
 
     // Build Open Graph metadata - only include image if logo exists
@@ -103,7 +101,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       siteName: 'RwandaJobHub',
     }
 
-    // Only add image if company logo exists and is a valid URL
+    // Only add image if company logo exists and is not base64
     if (logoUrl && logoUrl !== '') {
       openGraphMetadata.images = [
         {
