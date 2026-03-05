@@ -44,13 +44,23 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       WHERE j.id = ${id}
     `
 
+    console.log('🔍 DEBUG: Database query result:', result)
+
     if (result.length === 0) {
+      console.log('❌ DEBUG: No job found with ID:', id)
       return getDefaultMetadata(baseUrl)
     }
 
     const jobData = result[0]
     const companyName = jobData.name || 'Company'
     const companyLogo = jobData.logo
+
+    console.log('🔍 DEBUG: Raw job data:', {
+      jobTitle: jobData.title,
+      companyName: jobData.name,
+      companyLogo: jobData.logo,
+      companyId: jobData.company_id
+    })
 
     const formattedDeadline = jobData.deadline
       ? new Date(jobData.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
@@ -101,6 +111,13 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       siteName: 'RwandaJobHub',
     }
 
+    console.log('🔍 DEBUG: Before image processing:', {
+      logoUrl,
+      logoUrlType: typeof logoUrl,
+      logoUrlLength: logoUrl?.length,
+      logoUrlStartsWith: logoUrl?.substring(0, 20)
+    })
+
     // Only add image if company logo exists and is not base64
     if (logoUrl && logoUrl !== '') {
       openGraphMetadata.images = [
@@ -111,7 +128,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
           alt: `${companyName} - ${jobData.title}`,
         }
       ]
+      console.log('✅ DEBUG: Image added to OG metadata:', openGraphMetadata.images[0])
+    } else {
+      console.log('⚠️ DEBUG: No image added to OG metadata - logoUrl:', logoUrl)
     }
+
+    console.log('🔍 DEBUG: Final Open Graph metadata:', JSON.stringify(openGraphMetadata, null, 2))
 
     return {
       title,
