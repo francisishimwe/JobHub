@@ -12,6 +12,22 @@ export async function PUT(request: NextRequest, { params }: Props) {
 
     console.log('🔄 PUT /api/jobs/[id] called:', { id, bodyKeys: Object.keys(body) })
 
+    // Test database connection first
+    try {
+      const testConnection = await sql`SELECT 1 as test`
+      console.log('✅ Database connection test passed:', testConnection)
+    } catch (dbTestError: any) {
+      console.error('❌ Database connection test failed:', dbTestError)
+      return NextResponse.json(
+        { 
+          error: 'Database connection failed',
+          details: dbTestError?.message,
+          debug: 'Database connection issue'
+        },
+        { status: 500 }
+      )
+    }
+
     // Validate required fields
     if (!body.title || !body.company_id || !body.opportunity_type) {
       return NextResponse.json(
@@ -77,7 +93,12 @@ export async function PUT(request: NextRequest, { params }: Props) {
     console.error('❌ Error updating job:', error)
     console.error('❌ Error details:', error?.message, error?.stack)
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to update job' },
+      { 
+        error: error instanceof Error ? error.message : 'Failed to update job',
+        details: error?.message,
+        stack: error?.stack,
+        debug: 'PUT endpoint error'
+      },
       { status: 500 }
     )
   }
