@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
         LEFT JOIN companies c ON j.company_id = c.id
         WHERE (j.status = 'published' OR j.status = 'active')
         AND j.approved = true
-        AND (j.deadline IS NULL OR j.deadline >= CURRENT_DATE)
+        AND (j.deadline IS NULL OR j.deadline::date >= CURRENT_DATE)
         ORDER BY 
         CASE 
           WHEN j.description IS NULL OR j.description = '' THEN 2
