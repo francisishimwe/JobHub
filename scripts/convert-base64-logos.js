@@ -1,4 +1,4 @@
-import { sql } from '@/lib/db';
+import { sql } from '../lib/db.js';
 import fs from 'fs';
 import path from 'path';
 
