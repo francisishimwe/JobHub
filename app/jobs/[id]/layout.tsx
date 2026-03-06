@@ -66,12 +66,27 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       ? new Date(jobData.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
       : 'Open'
 
-    const title = `${jobData.title} at ${companyName}`
+    // Bold title formatting for WhatsApp
+    const title = `*${jobData.title} at ${companyName}*`
 
-    // Strip HTML tags and decode entities from description
-    const cleanDescription = jobData.description
-      ? stripHtmlAndDecode(jobData.description).substring(0, 160)
-      : 'Find your next career opportunity in Rwanda'
+    // Professional description with bold formatting and clear spacing
+    const locationLine = jobData.location || 'Kigali, Rwanda'
+    const opportunityType = jobData.opportunity_type || 'Job'
+  
+    const description = `*Location:* ${locationLine}
+
+*Opportunity Type:* ${opportunityType}
+
+*Deadline:* ${formattedDeadline}
+
+🚀 *Apply here:* https://www.rwandajobhub.rw/jobs/${id}
+
+💬 *Join our WhatsApp group:* https://chat.whatsapp.com/YourGroup
+
+📢 *Follow our WhatsApp channel:* https://whatsapp.com/channel/YourChannel`
+
+    // Strip HTML tags and decode entities from description (keep the formatted version)
+    const cleanDescription = description.substring(0, 300)
 
     // Ensure company logo URL is absolute and publicly accessible
     let logoUrl: string
@@ -132,6 +147,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
           alt: `${companyName} - ${jobData.title}`,
         }
       ]
+      
+      // Add explicit dimension tags for large-card display
+      openGraphMetadata['image:width'] = 1200
+      openGraphMetadata['image:height'] = 630
+      
       console.log('✅ DEBUG: Image added to OG metadata with cache buster:', openGraphMetadata.images[0])
     } else {
       console.log('⚠️ DEBUG: No image added to OG metadata - logoUrl:', logoUrl)
@@ -152,7 +172,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         title,
         description: cleanDescription,
         site: '@rwandajobhub',
-        ...(logoUrl && logoUrl !== '' && { images: [logoUrl] }),
+        images: logoUrl && logoUrl !== '' ? [`${logoUrl}?t=${Date.now()}`] : [],
+      },
+      // Ensure functional click-through to job details page
+      metadataBase: new URL(baseUrl),
+      alternates: {
+        canonical: `${baseUrl}/jobs/${id}`,
       },
     }
   } catch (error) {
