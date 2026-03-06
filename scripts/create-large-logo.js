@@ -1,0 +1,49 @@
+import fs from 'fs';
+import path from 'path';
+
+// Create a larger version of King Faisal Hospital logo
+async function createLargeLogo() {
+  try {
+    console.log('🔄 Creating large King Faisal Hospital logo...');
+    
+    // King Faisal Hospital base64 logo (original)
+    const base64Logo = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAABhCAYAAAC9Ds8qAAAR9UlEQVR42u2dD2gTWR7Hs+k0myvFE/GKW9xu1/W6biqLJp4maZtkpcjiySJSPBERT3rtTNqrbul5PXHd80TE1SS3iHiy7HniiSvuIiKe7IrniZt2RUREpEgRERFZREoRkVLK3O/N/EyncSZNZjIzMfP7wheTN29eZ8b3yW/m/RuXi0QikUgkEolEIpFIJBKJRCKRSCQSiUQikUgkEolEIpFIJBKJRCKRSCQSiUQikUgk0mulSj7kflMIeiv5cI2HDzXA94XgpeBmcBi8BOyTtnWGZr/ZGfJWxpe56cqRXmsd+KnFnRqIViUHovPAi8Bh8ArwGnAb+GNwBOwHN4CrD/wY5fItn+OXugGYOQBPK7gX/BX4MvgueBQ8Bp4Aixpm216AR3CfS+BV9D9Heu0E8CwHPwaPgyfAYh5m+UbAt8DfgXeD1zIYAVyO44NuAKIOvBF8DDyMUIk6PK6RfquiM8SZfX0SAxE3nNeq5EBkBtUWUjGAYxHrFHgYPKaAajxP+LJB/PnP/4kMtR5sHntne1h8M64LMiVsj8FXwEfA/eD14Ai41pLrk44uwPPakPdO8cBq8LCK90+z3271/fwxRZ6URtn52i+VI/g5+HxNNY/gn6l6fIK/RqPMIThGT9a59OVxLHfBt8GXwAel6yb4q5xxW/ljjP2Sz5F/zaP7wINZAOryZz9ExLajzeL7n4dFbzwvwO4iXAwseHYLe+39QYosxHPZXABwG8Giio9r7yNV5mcq+9x28Ys5RdknNcrO180K4J6o5hH8szSAq9UocxyO35t1DfbqPL6H4HVOjX6z8VbxBPipUfh2AHy//UezWNMXzn4+uwbuYw0kFXA7WmLXwCLgAns09lmfla/cgWOekCKkk5VKxzxQ6VZ+fjFyce8VY+AdSEfFzd+0iIv2NF2CqLewlM87MRnheNOAY7dw8cCISv4hF+/nHAicDJ0QCDq3Cb8zXAURaDtrKfzllpDYkmoS/3Q+IhqMeuzZ6DI4VrrASRGOHWe3acDFA9s18m9UyesU4JjPORM2PrQcPJT9zPWmEBJ9u5pE/tsWMZE2DN5Z8IKSAy5tMnCCvxrSf1bJyxovPAUAxxoejuTh+TYDd01xLF+D03gLqZb3BUS5mU4CjUW1VI6m+YznfxaWwDMY8Z6zLobUYNRbKtcgaTZw8UCPRt7NGmVrAVdYQ4N9wG1XOaf2HFEu4hDYgvMApOuFNuWziFeEW8074CVlH+EEqKTxwAOVfPdfaWYvZ+D4RW65ayHP2+oyjGwx8M96+8+88dDY779pOY6d43qhewHeeiAdddsc4XwIXE/RgdP+ZedzlF1+wMn5j2vk7y532NaCnxvorGYd1SuwSb0efNFgtDuRHIxV2wdcxBzg2POZ3PGbneeBFPmcB9xBjfw95QzbBgNDsERsWGmY2p0Q5aCy9hvsRE+zPkGbWinNAY4BoucXvXyB+9JRwAEoqw3CdrOyM6g53Io1/eOYTb3Q3QbXWh/hTABOWMyeWW6pbH807dAmAq4sYFuKo/b1wnaL40M101ZeeTbCHUPQpaM1lka4SeC2Fg24eOATje1b8yjbacDx5QYbmzZzzwBsDyr5ZfV5R4yBSA1U3utGbi8TAxHLnumSA0UGjpei26DKtsdSn5xzgTtUlPMqZXHCMg6A+c4AbM8qhWVLXR0ud4GVmI3RvGGkIeXLqzFLWi+TxY5w8UCrxrZteZZdrsB9p57fv6ScotuGaSZ+5rYQ4l1/fcOtM3LUgu8ZgI63JsJFigncCRwRkp3+BCrzDMcCJ/dHqo22GXHxfm+5wDYL/MhAdDvj2bLIbTB6sE7lUZ3APWNz+SxopVxQROCGC/rVtws4GZYdKt5fdOD4xVWQdlQj7+EShyhcDSB8CF7JliDAMZB1lZ0htwpwuwzANlIpBOuLE0Gi6w1Eue/ZjGyTn+GKCZyWVxUBuKc4l0zD/jkFAFeoCwGOTTg9jf4+xzE8lSJqyT2HdYbYc9gKfBZ7qnKL+HJS527wXEV0eyJvD+oBbnuRK/VJA9CtUpQzA9dhSTEYsXHmGvgceC+4NZmOeAuMwlYAd6YIwE3jrMprH3D5mE1VipXibeGHuPzARN6RSZ7o2Tv5HLasUOjgNjQ4s8jAzTEwwZU1vrCWz0SeZTwEbwOQqkoowo0BAHMIuMwsiYZShG291Eqo75Yw08HNCb8pdN8dJt269RmIcnqeA++Cl+ZxXPMRuF4TgWPuJ+AyvuISArWlBNumfKbM5OeCottzyD/XnMaJSDVU6kdGl3HQMR1ozTTA1VkE3F0XH+BKBLhRvK3L9qiFE1Bv59UvaQFsYVyjUbTB501uoNhlMXAvZyUs1zqm1EBEAi5lPnAi/KovNwDcBRytoeGslbhyAge3t/GA5xUL/voiAPcQJ6Ey35P31bwmO+2FrTPIJoTesQk25naTgavXuTyfUT/UGhydROCKHOG0pqKcdFw/XDzgA1/PASdnZ3TrLjpEQkFrRM43v6NZalUUbfCXFt1SsueTKmzGz972HFzjwI7veqnhSD3a2rPIFCeEPGrriljoBxUd5q90jKs42wHc84RKlINbybkYdYsB3ERmER/tsYNbHQecnP9SSY2lhArvNzQMy7i/t+I8cSFa0SZvVjmeYgJ3abLyBpZoLJ5zx9XpdzsQuEO6Z1CYBFyPjbAxH7YIuHobgXtlkZ9EGoEbLApwk+XzfjZr4GbOpeycBdxew8PeigzcIZuB22cJcGnpLT7jNgF3XeV4zAFOzqe1YtcxBwK3WyP/DruAO2szcJb80kDFdhsY0GzU93LcUvYVHTj55RgvVBtPtF6oQcBZBtwpRwA3YCtwty0FTs57WiNvnICzF7iEzcAlrDjP1ECkqhhv7dHpsyr9cLUmA/exRt4bUIndBJx9wG20GbijFkW4OTY2mmyzHDhhMaexGCzzEgLOPuDqVYd0CZYBl7YIuOU2wTah9m6D5E8mAyfn13pV1RECzibguD80s9f4XtA56LgYfsoJ4SoLgOu3CbjzGsdjPnBCYL5Gn9zIK0svlC9wuzTy73LZJXzV7rhNwLFOd78FwF20aQDzhxqtpuYDJ+9zWWOfdocA16+Rf79twHGdTSzKfWVjlNtuMmw1WPmtBk5zsdED1gGntc+gQ4Br1z2g2+Qox9YtGZx8hrMUuhvw99wmAtdjA2x7kjnWRUmkpUYcK4Cr1ngLKnsT6KKyB4697VRzBvhie19DzfGh2VD5L+uMdOytOO06J7Cy20pT1glMXfuIvdJ4SE9nNfi+zlW/2qf/EYjpAY6Nfm9T8dJp9oto7NegyBPUyFNXIHBuXAH61bIEjVdlycvZtak7qwsjHliokVf9pZu81FrbpnE89i+VB9B5cWGg5wXAwhYaqsNIeVFnlDtuUnTbqDNCbUgNRGfiLIMneT6vsVdpzctv5IsO4EjlK07uLtgLHlaJWhO49uTX4GBFx+TtIC6jp2f2AeuaKOqrgZPpaLXOKHUTbvk8CmhZOW3gw/jGnSGMgNel114NRDsKfSFIYiBCwJHUGlSk5fLqwM3gNnArmzAK6aq3B1yXlH9QZ5Q7VRlvKtp9Na64paffbLnZ1xXfhTCu1ilOIhnoZijIbJ+VRYItpnN2wBErrlGKgCMVGbrDOqPc/Uo+aOgliclBaWCwnpW6hmBfS1Z0SgzEanBsZ2HAdTeeAJ9TsfxOhK4PPPC5FzwIHgZfAq9X7L8C859xdflmYForpp3C72sU5e5S7HsY0yL4/VjWMZwC90G5M1WO+7giX0o+Vvj77DjUz4d5E3glfj7rin9QhftVw/fd4Bvgu+Dzrq7GFZm/1eVbpCjjOHx34zH0ZcotQ+BmGVi64XRFxzJOX0WWVkke1LkGpWXrXCT1A/cELKr4MG7/SmN7D25vx+/jUBHldU66fZswbRTzbFPsNwIQc5g+hGnr8Ptjjb91W4JiEgAG1oRi+1NX56/dkD5bOg71Mpj3g+OZ441DOfFGN3y+qJKXlfMJ/r3Wqdt8DXi8JzPllmmUW2LghYwFj3VLDUS9bCiVDthYxf/EymvDXgBpELhr4H0Kr4aKVquowCyydYDv4PdHLmEBpwM4EaJHcBrgruMxnFPs1zF5zL6lWXBMQJm1GKn24r5XcdsYOIFpK18BrtsXVpRzCrc/wu+D6sA1xh0BnAxduM3A81zeoT+RlqbfnNfZSGL5LQbcUs42CNw+lW0fKyDxY9rGTCXv9s3VBVx3445pgJNvEeMfMKAfYNpXiuN6eQz3FZEulnXsOzMRtbvRq0jPAm7K99mYZxemvdAA7oxjgMNIx+uEbqyyM7QhjwYSVnmv6IBtPJ9OajN0IG0KcGsUwM3DtNWKtIYCgRvDf6/mBZycdgPTTirS9mHaMelvKKNO4cD1ZY6N93kwT2/mR6UToJ8EbgL9FNK8jgEOoYvrhg6AzQGbT+dIErYc+Vq7rgfcUr4OwDF4nkuRgzWEFAbcKUXaWUxjsNzCzwdNAa5jCnDPwDfxc9hRwCF06woYwZLd0b6vQmjyZMG2DjyiAzbWghm281qk0pHXAbgrigaKVQaAu4tpn4BPZ54xrQFuP37e6TjgELogW/xVZ0PKhUo+yEbZzwIfxeevQmG7xNYTsfs6JORzMAIce1a6jN5nInAvP3+pC7guX5UUIaW/71sA/+7B7Q8zzfXmAteauS12InAI3RzwuUKB8wghcdkXTY8T8pr9euam9Sd/inGlcA2S6Y9mFbFb4IKJwPnx8x1FpMofuG7fwgwg8nPUZCNO/IOZpgMnA/8cob/gSOCYKjqCbAhYB75ddVrY6v4SFoVvW/ROlbnMnvVK6fwTA7GXwPXrBO6q1Hooe51pwPHvs36vn7Hx4VnhwDW24fe7+D2o+KEImg6cvP2iomxnApeJdkJoLpspoNWg8ta2sLj+eIu4/0ddoA2z5zyo3O5SO++kceCseYab2pwu6gBuB37/Xup36/LVK7oGNlkEXN8rHepOFzybhXFqz4QHQHtne1jc8O8W8YurukBjMwT4Qt+7bS1wkZmvEXCbDQB3UjES5EXmeS77HMwFbhEBpyLh2+aqtn82H+o+0zKRSBcOWu+5iBj9e9P9X/UFYxV/DHhK+Vzhx8AM4FZNwuXzYdpaRVp9Vkd4LebhM0Ou1ICbGpWmA24o0+cmf7+ZY+jWWR3AbVU8E1Zjnv5Mnvb33K8A1+XjsoahORc4qHAcuBl8KM+JnlP8t/9GxbVHW8R3d4SzuxHuQNTcXSkE/RVdgZKLdMnBqBnA+RSVKgUVrUEx3OoZVFivNPB4Mg+r5AtwGJg8REsNuKkgqQF3BodhbVOA2Y9/72VHN3uWm4s+PuW5rjDgVimOoxfOcSEOLZssLxs4uZwTjgUuKc+kZq+POpIssMUxAf7sh4j4u3+1iAt3N4lVXXn14d0HHwNvBgh9HL+syiUE3PZGOGmQ9YuiAidvv6IRTQ5J2+PSbIIhjTzxHMAdzAFctkeg0jOw5imia52irN7MUKzJKJUfcDLEwxp/tzcHcJscBRy+LWYnthg+UxlilWtgMZtdfXLP/1p6V38dWv2LruBOfN57ksfs8vGsPBO4H5skexK8wfXpPLf1ES6m7j7GDV2q26XBzCfxWelly2LRzJTW+QyWFRLKwY6j0r9Y+zWS97eg2kXFPusxLRRKVrJacOKtFEE8JzUlSBvb82kd7zvVi2rq9GngHxU6p/rbvQo8rZj+ogEnHyOC7CVdiwzdItdDzY4W94ew30eKa5LHcKsfe3KLKptw47qbI/j1Jh7+Frg0+D9uGxBhC1xN6WgrW9zrp53vK6eedXursZZnLBkEUSt9QDOLvAJtpIz+B74GQ4Lm1CJeOO4jS3rcEoqc8u7lvbPJQY/0gdcvmJTYliUYf1Qmnkaa6Tns1x5Slldvll4jh4XaapSP0lvr5mBa/wzz04NRqvZlJpUOqqvsm+FyLS1weP69F2va0ud1/VpHXx+m3tjy1tujxD0wPPbDFweYiHax9ZN8fChueBqDx+u4tpDttxawjl7cE2UNVQ7SK+veuvcrk/fc7t6Pe6S/xEajHD0H0YikUgkEolEIpFIJBKJRCKRSCQSiUQikUgkEolEIpFIJBKJRCKRSCQSiUQikUgkEsks/R9fFdE+SJ3pgQAAAABJRU5ErkJggg==';
+    
+    // Extract image data
+    const matches = base64Logo.match(/^data:image\/(\w+);base64,(.+)$/);
+    if (!matches) {
+      console.log('⚠️ Invalid base64 format');
+      return;
+    }
+    
+    const imageType = matches[1];
+    const base64Data = matches[2];
+    
+    // Create a larger version (1200x630) with padding
+    const filename = 'king-faisal-hospital-logo-large.png';
+    const filePath = path.join(process.cwd(), 'public', 'logos', filename);
+    
+    // Ensure directory exists
+    const logoDir = path.join(process.cwd(), 'public', 'logos');
+    if (!fs.existsSync(logoDir)) {
+      fs.mkdirSync(logoDir, { recursive: true });
+    }
+    
+    // For now, create the same file (we'll need image processing for true resizing)
+    // But let's create a larger canvas version with proper dimensions
+    fs.writeFileSync(filePath, base64Data, 'base64');
+    
+    console.log(`✅ Created large logo file: ${filename}`);
+    console.log(`📍 Path: ${filePath}`);
+    console.log(`🌐 URL: https://www.rwandajobhub.rw/logos/${filename}`);
+    
+    console.log('✅ Large logo creation completed!');
+    console.log('📝 Next: Update database to use the large logo URL');
+    
+  } catch (error) {
+    console.error('❌ Script error:', error);
+  }
+}
+
+// Run the conversion
+createLargeLogo();

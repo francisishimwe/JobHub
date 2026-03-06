@@ -120,15 +120,19 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
     // Only add image if company logo exists and is not base64
     if (logoUrl && logoUrl !== '') {
+      // Add cache buster to prevent WhatsApp caching
+      const cacheBuster = Date.now()
+      const imageUrlWithCache = `${logoUrl}?t=${cacheBuster}`
+      
       openGraphMetadata.images = [
         {
-          url: logoUrl,
+          url: imageUrlWithCache,
           width: 1200,
           height: 630,
           alt: `${companyName} - ${jobData.title}`,
         }
       ]
-      console.log('✅ DEBUG: Image added to OG metadata:', openGraphMetadata.images[0])
+      console.log('✅ DEBUG: Image added to OG metadata with cache buster:', openGraphMetadata.images[0])
     } else {
       console.log('⚠️ DEBUG: No image added to OG metadata - logoUrl:', logoUrl)
     }
