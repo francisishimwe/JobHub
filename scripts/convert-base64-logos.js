@@ -1,6 +1,10 @@
 import { sql } from '../lib/db.js';
 import fs from 'fs';
 import path from 'path';
+import { config } from 'dotenv';
+
+// Load environment variables
+config({ path: '.env.local' });
 
 async function convertBase64Logos() {
   try {
