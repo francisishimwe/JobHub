@@ -6,7 +6,8 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start",
+    "convert-logos": "node scripts/convert-base64-logos.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
