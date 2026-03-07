@@ -140,8 +140,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
             {/* Content Section */}
             <div className="px-4 md:px-6 py-3 md:py-4 space-y-6" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                {/* Job Overview - Hidden for Tender and Blog */}
-                {job.opportunityType !== "Scholarship" && job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && (
+                {/* Job Overview - Hidden for Tender, Blog, Internship, Scholarship, and Education */}
+                {job.opportunityType !== "Scholarship" && job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && job.opportunityType !== "Internship" && job.opportunityType !== "Education" && (
                     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
                         <h3 className="text-lg font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Overview</h3>
                         <div className="grid gap-3 grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>
