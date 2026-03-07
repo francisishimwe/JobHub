@@ -72,9 +72,18 @@ export default function PrivacyPolicy() {
 
             <section>
               <h2 className="text-2xl font-semibold text-foreground mb-3">Cookies</h2>
-              <p>
+              <p className="mb-3">
                 Our website uses cookies to enhance your browsing experience. Cookies are small text files that are placed 
                 on your device to collect standard internet log information and visitor behavior information.
+              </p>
+              <p className="mb-3">
+                <strong>Third-Party Advertising:</strong> We use third-party advertising companies to serve ads when you visit our website. 
+                These companies may use cookies to provide advertisements about goods and services of interest to you. 
+                This helps us maintain and improve our free job board services.
+              </p>
+              <p>
+                You can choose to accept or reject cookies through your browser settings. However, disabling cookies may 
+                affect the functionality of our website and your user experience.
               </p>
             </section>
 
