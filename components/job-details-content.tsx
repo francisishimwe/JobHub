@@ -215,9 +215,12 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
                 )}
 
                 {/* Description */}
-                {job.description && job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && job.opportunityType !== "Internship" && job.opportunityType !== "Scholarship" && job.opportunityType !== "Education" && (
+                {job.description && (
                     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden', minWidth: '0', maxWidth: '100%' }}>
-                        <h3 className="text-xl font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Description</h3>
+                        {/* Only show "Job Description" heading for actual jobs */}
+                        {job.opportunityType !== "Tender" && job.opportunityType !== "Blog" && job.opportunityType !== "Internship" && job.opportunityType !== "Scholarship" && job.opportunityType !== "Education" && (
+                            <h3 className="text-xl font-bold italic uppercase tracking-wide text-gray-900 mt-4 mb-3 block border-b border-gray-100 pb-2" style={{ wordBreak: 'normal', overflowWrap: 'break-word', overflowX: 'hidden' }}>Job Description</h3>
+                        )}
                         <div
                             className="prose prose-lg max-w-none text-slate-800 font-normal leading-relaxed
                                 [&_p]:mb-4 [&_p]:leading-relaxed [&_p]:break-words [&_p]:overflow-wrap-break-word [&_p]:whitespace-pre-wrap [&_p]:text-justify [&_p]:text-align-justify
