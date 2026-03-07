@@ -2,18 +2,41 @@
 
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+import { useJobs } from '@/lib/job-context'
 
 export function InfolinksAds() {
   const pathname = usePathname()
+  const { filters } = useJobs()
 
   useEffect(() => {
     // Only run on client side
     if (typeof window !== 'undefined') {
-      // Check if we're on Employer Dashboard or Admin Dashboard
+      // Check if we're on pages where ads should be disabled
       const isDashboard = pathname?.includes('/dashboard') || pathname?.includes('/employer-dashboard')
+      const isScholarship = pathname?.includes('/scholarship') || pathname?.includes('/scholarships')
+      const isInternship = pathname?.includes('/internship') || pathname?.includes('/internships')
       
-      // Don't load on dashboard pages to avoid interference
-      if (!isDashboard) {
+      // Check URL parameters for scholarship/internship filters
+      const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+      const hasScholarshipFilter = urlParams?.has('opportunityType') && urlParams?.get('opportunityType')?.toLowerCase().includes('scholarship')
+      const hasInternshipFilter = urlParams?.has('opportunityType') && urlParams?.get('opportunityType')?.toLowerCase().includes('internship')
+      
+      // Check current filter state from job context
+      const hasScholarshipFilterState = filters.opportunityTypes?.some((type: string) => 
+        typeof type === 'string' && type.toLowerCase().includes('scholarship')
+      )
+      const hasInternshipFilterState = filters.opportunityTypes?.some((type: string) => 
+        typeof type === 'string' && type.toLowerCase().includes('internship')
+      )
+      
+      // Don't load ads on dashboard, scholarship, or internship pages
+      if (!isDashboard && 
+          !isScholarship && 
+          !isInternship && 
+          !hasScholarshipFilter && 
+          !hasInternshipFilter &&
+          !hasScholarshipFilterState &&
+          !hasInternshipFilterState) {
         // Add Infolinks script
         const script1 = document.createElement('script')
         script1.type = 'text/javascript'
@@ -42,7 +65,7 @@ export function InfolinksAds() {
         }
       }
     }
-  }, [pathname])
+  }, [pathname, filters])
 
   return null // This component doesn't render anything
 }

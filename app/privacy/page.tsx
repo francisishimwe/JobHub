@@ -81,11 +81,6 @@ export default function PrivacyPolicy() {
                 These companies may use cookies to provide advertisements about goods and services of interest to you. 
                 This helps us maintain and improve our free job board services.
               </p>
-              <p className="mb-3">
-                <strong>Advertising Partners:</strong> We work with reputable advertising networks including Infolinks and Monetag 
-                to display relevant advertisements. These ads may appear in various formats such as in-page push notifications, 
-                banner ads, and push notifications on supported pages.
-              </p>
               <p>
                 You can choose to accept or reject cookies through your browser settings. However, disabling cookies may 
                 affect the functionality of our website and your user experience.
