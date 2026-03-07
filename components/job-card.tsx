@@ -192,7 +192,7 @@ https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
   // Use company data from job if available, otherwise use fallback info
   const displayCompany = {
     name: job.companyName || job.company?.name || "RwandaJobHub Partner",
-    logo: job.companyLogo || job.company?.logo || "/full logo.jpg"
+    logo: job.companyLogo || job.company?.logo || "/logo.png"
   }
 
 

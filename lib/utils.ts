@@ -67,7 +67,7 @@ export function mapDatabaseJobToUIJob(dbJob: any): Job {
 
       // Component format fields (camelCase - for component usage)
       companyId: dbJob.company_id || null,
-      companyLogo: dbJob.company_logo || "/full logo.jpg",
+      companyLogo: dbJob.company_logo || "/logo.png",
       companyName: dbJob.company_name || "RwandaJobHub Partner",
       jobType: dbJob.job_type || '',
       opportunityType: dbJob.opportunity_type || '',
@@ -84,10 +84,10 @@ export function mapDatabaseJobToUIJob(dbJob: any): Job {
       // Relational data with safe fallbacks - only use if dbJob.company exists
       company: dbJob.company && typeof dbJob.company === 'object' && dbJob.company !== null ? { 
         name: dbJob.company.name || dbJob.company_name || "RwandaJobHub Partner", 
-        logo: dbJob.company.logo || dbJob.company_logo || "/full logo.jpg" 
+        logo: dbJob.company.logo || dbJob.company_logo || "/logo.png" 
       } : { 
         name: dbJob.company_name || "RwandaJobHub Partner", 
-        logo: dbJob.company_logo || "/full logo.jpg" 
+        logo: dbJob.company_logo || "/logo.png" 
       },
     }
   } catch (error) {
@@ -97,7 +97,7 @@ export function mapDatabaseJobToUIJob(dbJob: any): Job {
       title: 'Error Loading Job',
       location: '',
       description: undefined,
-      company: { name: "Error Loading Company", logo: "/full logo.jpg" }
+      company: { name: "Error Loading Company", logo: "/logo.png" }
     } as Job
   }
 }
