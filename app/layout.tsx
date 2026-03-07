@@ -13,6 +13,7 @@ import { GoogleAnalytics } from "@/components/google-analytics"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { ErrorBoundary } from "@/components/error-boundary"
 import { InfolinksAds } from "@/components/infolinks-ads"
+import { MonetagAds } from "@/components/monetag-ads"
 
 export const metadata: Metadata = {
   title: "RwandaJobHub - The #1 job board for Rwandan jobs",
@@ -58,6 +59,7 @@ export default function RootLayout({
         <SpeedInsights />
         <GoogleAnalytics />
         <InfolinksAds />
+        <MonetagAds />
       </body>
     </html>
   )
