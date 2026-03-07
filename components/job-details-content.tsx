@@ -62,10 +62,26 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
             ? new Date(job.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
             : 'Open'
 
-        let shareText = `${company?.name || 'Company'} is hiring ${job.title}\nLocation: ${job.location}\nOpportunity Type: ${job.opportunityType}\nDeadline: ${formattedDeadline}\n\nApply here: ${window.location.href}\n\n📢 Join our WhatsApp group:\nhttps://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI\n\n📲 Follow our WhatsApp channel:\nhttps://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
+        let shareText = `*${job.title} at ${company?.name || 'Company'}*
+
+*Location:* ${job.location}
+*Opportunity Type:* ${job.opportunityType}
+*Deadline:* ${formattedDeadline}
+
+🚀 *Apply here:* ${window.location.href}
+� *Join our WhatsApp group:* https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI
+� *Follow our WhatsApp channel:* https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
         if (job.opportunityType === 'Scholarship') {
-            shareText = `🎓 Scholarship Opportunity!\n\n${company?.name || 'Company'} is offering: ${job.title}\nDeadline: ${formattedDeadline}\n\nApply here: ${window.location.href}\n\n📢 Join our WhatsApp group:\nhttps://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI\n\n📲 Follow our WhatsApp channel:\nhttps://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
+            shareText = `🎓 *${job.title} at ${company?.name || 'Company'}*
+
+*Location:* ${job.location}
+*Opportunity Type:* ${job.opportunityType}
+*Deadline:* ${formattedDeadline}
+
+🚀 *Apply here:* ${window.location.href}
+� *Join our WhatsApp group:* https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI
+� *Follow our WhatsApp channel:* https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
         }
 
         // Share to WhatsApp number 0783074056

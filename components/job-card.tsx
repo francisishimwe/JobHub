@@ -80,29 +80,19 @@ const JobCardComponent = ({ job }: JobCardProps) => {
 
 
 
-    const message = `${job.title} at ${displayCompany.name || 'Unknown Company'}
+    const formattedDeadline = job.deadline
+        ? new Date(job.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        : 'Open'
 
+    const message = `*${job.title} at ${displayCompany.name || 'Unknown Company'}*
 
+*Location:* ${job.location}
+*Opportunity Type:* ${job.opportunityType}
+*Deadline:* ${formattedDeadline}
 
-Location: ${job.location}
-
-Opportunity type: ${job.opportunityType}
-
-
-
-Read more and Apply now: ${job.applicationLink || `https://rwandajobhub.rw/jobs/${job.id}`}
-
-
-
-Join our WhatsApp group:
-
-https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI
-
-
-
-Follow our WhatsApp channel:
-
-https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
+🚀 *Apply here:* ${job.applicationLink || `https://rwandajobhub.rw/jobs/${job.id}`}
+💬 *Join our WhatsApp group:* https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI
+📢 *Follow our WhatsApp channel:* https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
 
