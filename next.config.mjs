@@ -26,6 +26,30 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: [],
   },
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self';",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://nap5k.com https://gizokraijaw.net https://5gvci.com;",
+              "style-src 'self' 'unsafe-inline';",
+              "img-src 'self' data: https:;",
+              "font-src 'self';",
+              "connect-src 'self' https://nap5k.com https://gizokraijaw.net https://5gvci.com;",
+              "frame-src 'self';",
+              "object-src 'none';",
+              "base-uri 'self';",
+              "form-action 'self';"
+            ].join(' ')
+          }
+        ]
+      }
+    ]
+  },
 }
 
 export default nextConfig
