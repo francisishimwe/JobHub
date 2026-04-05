@@ -2,7 +2,7 @@
 
 import Script from "next/script"
 
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID || "G-36H1L40GBH"
+const GA_MEASUREMENT_ID = "G-36H1L40GBH"
 
 export function GoogleAnalytics() {
     // Only load in production environment
@@ -14,7 +14,7 @@ export function GoogleAnalytics() {
         <>
             <Script
                 src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-                strategy="afterInteractive"
+                strategy="beforeInteractive"
                 onLoad={() => {
                     console.log("Google Analytics script loaded successfully")
                 }}
@@ -24,7 +24,7 @@ export function GoogleAnalytics() {
             />
             <Script 
                 id="google-analytics" 
-                strategy="afterInteractive"
+                strategy="beforeInteractive"
                 onError={(e) => {
                     console.error("Google Analytics initialization failed:", e)
                 }}

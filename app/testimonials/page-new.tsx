@@ -6,7 +6,7 @@ import { AdInjector } from "@/components/ad-injector"
 import { Star, Quote, Users, Building2, Award, MessageSquare } from "lucide-react"
 
 export default function TestimonialsPage() {
-  // Mock testimonials data - this will be managed through admin dashboard
+  // Mock testimonials data - this will be managed through admin dashboardI
   const testimonials = [
     {
       id: 1,

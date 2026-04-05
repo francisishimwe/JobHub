@@ -34,6 +34,7 @@ export default function RootLayout({
     <html lang="en" dir="ltr" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.jpg" type="image/jpeg" />
+        <GoogleAnalytics />
       </head>
       {/* The suppressHydrationWarning on <body> ignores extra tags added by extensions like Grammarly.
       */}
@@ -58,7 +59,6 @@ export default function RootLayout({
         {/* Analytics Scripts - Load First */}
         <Analytics />
         <SpeedInsights />
-        <GoogleAnalytics />
         
         {/* Ad Scripts - Load Last */}
         <InfolinksAds />
