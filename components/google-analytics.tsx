@@ -15,6 +15,9 @@ export function GoogleAnalytics() {
             <Script
                 src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
                 strategy="afterInteractive"
+                onLoad={() => {
+                    console.log("Google Analytics script loaded successfully")
+                }}
                 onError={(e) => {
                     console.error("Google Analytics script failed to load:", e)
                 }}
@@ -29,20 +32,26 @@ export function GoogleAnalytics() {
                 {`
           (function() {
             try {
+              console.log('Initializing Google Analytics with ID: ${GA_MEASUREMENT_ID}');
+              
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', '${GA_MEASUREMENT_ID}', {
                 page_title: document.title,
                 page_location: window.location.href,
-                send_page_view: true
+                send_page_view: true,
+                debug_mode: false // Set to true for debugging
               });
+
+              console.log('Google Analytics configured successfully');
 
               // -----------------------------
               // Custom Event Tracking Functions
               // -----------------------------
               window.trackJobApplied = function(jobTitle, category) {
                 if(jobTitle && category && typeof gtag === 'function') {
+                  console.log('Tracking job application:', jobTitle, category);
                   gtag('event', 'job_applied', { 
                     job_title: jobTitle, 
                     category: category,
@@ -53,6 +62,7 @@ export function GoogleAnalytics() {
 
               window.trackCVUploaded = function(fileName, userId) {
                 if(fileName && userId && typeof gtag === 'function') {
+                  console.log('Tracking CV upload:', fileName);
                   gtag('event', 'cv_uploaded', { 
                     file_name: fileName, 
                     user_id: userId,
@@ -63,6 +73,7 @@ export function GoogleAnalytics() {
 
               window.trackSearchPerformed = function(searchTerm) {
                 if(searchTerm && typeof gtag === 'function') {
+                  console.log('Tracking search:', searchTerm);
                   gtag('event', 'search_performed', { 
                     search_term: searchTerm,
                     custom_parameter: 'job_search'
@@ -116,10 +127,16 @@ export function GoogleAnalytics() {
               // Initial binding with proper DOM ready check
               if (typeof window !== 'undefined' && typeof gtag === 'function') {
                  if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', () => bindEvents());
+                    document.addEventListener('DOMContentLoaded', () => {
+                      console.log('DOM loaded, binding GA events');
+                      bindEvents();
+                    });
                  } else {
                     // Use setTimeout to ensure DOM is fully ready
-                    setTimeout(() => bindEvents(), 0);
+                    setTimeout(() => {
+                      console.log('Binding GA events immediately');
+                      bindEvents();
+                    }, 100);
                  }
 
                  // -----------------------------
@@ -136,6 +153,7 @@ export function GoogleAnalytics() {
                  });
 
                  observer.observe(document.body, { childList: true, subtree: true });
+                 console.log('GA MutationObserver started');
               }
             } catch (error) {
               console.error('Google Analytics initialization error:', error);

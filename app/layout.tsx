@@ -54,9 +54,13 @@ export default function RootLayout({
             </CompanyProvider>
           </AuthProvider>
         </ReactQueryProvider>
+        
+        {/* Analytics Scripts - Load First */}
         <Analytics />
         <SpeedInsights />
         <GoogleAnalytics />
+        
+        {/* Ad Scripts - Load Last */}
         <InfolinksAds />
       </body>
     </html>
