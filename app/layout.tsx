@@ -9,7 +9,6 @@ import { CompanyProvider } from "@/lib/company-context"
 import { AuthProvider } from "@/lib/auth-context"
 import { ExamProvider } from "@/lib/exam-context"
 import { InquiryProvider } from "@/lib/inquiry-context"
-import { GoogleAnalytics } from "@/components/google-analytics"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { ErrorBoundary } from "@/components/error-boundary"
 
@@ -32,7 +31,17 @@ export default function RootLayout({
     /* suppressHydrationWarning added here to handle browser extension mismatches */
     <html lang="en" dir="ltr" suppressHydrationWarning>
       <head>
-        <GoogleAnalytics />
+        {/* Google Analytics - Direct HTML Script Tags */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-36H1L40GBH"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            console.log("GA Script Loaded");
+            gtag('config', 'G-36H1L40GBH');
+          `
+        }} />
         <link rel="icon" href="/favicon.jpg" type="image/jpeg" />
       </head>
       {/* The suppressHydrationWarning on <body> ignores extra tags added by extensions like Grammarly.
