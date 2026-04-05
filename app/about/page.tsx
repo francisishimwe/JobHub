@@ -1,6 +1,5 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { TargetedMonetagAds } from "@/components/targeted-monetag-ads"
 
 export default function AboutPage() {
   return (
@@ -88,7 +87,6 @@ export default function AboutPage() {
         </div>
       </main>
 
-      <TargetedMonetagAds />
       <Footer />
     </div>
   )

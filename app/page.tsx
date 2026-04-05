@@ -5,7 +5,6 @@ export const dynamic = 'force-dynamic'
 import { useState } from "react"
 import { Footer } from "@/components/footer"
 import { JobCard } from "@/components/job-card"
-import { AdContainer } from "@/components/ad-container"
 import { useJobs } from "@/lib/job-context"
 import { Button } from "@/components/ui/button"
 import {
@@ -284,14 +283,8 @@ export default function HomePage() {
       </div>
 
       <div className="container mx-auto px-2 py-1">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 max-w-7xl mx-auto">
-          <aside className="hidden lg:block lg:col-span-2">
-            <div className="sticky top-4">
-               <AdContainer />
-            </div>
-          </aside>
-
-          <main className="lg:col-span-8">
+        <div className="max-w-7xl mx-auto">
+          <main>
             <div className="w-full lg:max-w-6xl mx-auto">
               <div className="mb-1 flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">Showing results ({filteredJobs.length})</p>
@@ -352,13 +345,6 @@ export default function HomePage() {
               )}
             </div>
           </main>
-
-          <aside className="hidden lg:block lg:col-span-2">
-            <div className="sticky top-4">
-               <AdContainer />
-            </div>
-          </aside>
-
         </div>
       </div>
 

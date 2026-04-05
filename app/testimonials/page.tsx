@@ -2,24 +2,12 @@
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { AdInjector } from '@/components/ad-injector'
-import { MonetagAd } from '@/components/monetag-ads'
 import { Star, Quote, Users, Building2, Award, MessageSquare } from 'lucide-react'
 
 export default function TestimonialsPage() {
   return (
-    <AdInjector>
-      <div className='min-h-screen bg-slate-50'>
+    <div className='min-h-screen bg-slate-50'>
         <Header />
-
-        {/* Zone 10694086 - In-Page Push */}
-        <MonetagAd zone='10694086' className='mb-8' />
-
-        {/* Zone 10694087 - Vignette Banner */}
-        <MonetagAd zone='10694087' className='mb-8' />
-
-        {/* Zone 10694066 - Push Notifications */}
-        <MonetagAd zone='10694066' className='mb-8' />
 
         <main className='container mx-auto px-4 py-12'>
           {/* Hero Section */}
@@ -133,6 +121,5 @@ export default function TestimonialsPage() {
 
         <Footer />
       </div>
-    </AdInjector>
   )
 }

@@ -12,7 +12,6 @@ import { InquiryProvider } from "@/lib/inquiry-context"
 import { GoogleAnalytics } from "@/components/google-analytics"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { ErrorBoundary } from "@/components/error-boundary"
-import { InfolinksAds } from "@/components/infolinks-ads"
 
 export const metadata: Metadata = {
   title: "RwandaJobHub - The #1 job board for Rwandan jobs",
@@ -33,8 +32,8 @@ export default function RootLayout({
     /* suppressHydrationWarning added here to handle browser extension mismatches */
     <html lang="en" dir="ltr" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.jpg" type="image/jpeg" />
         <GoogleAnalytics />
+        <link rel="icon" href="/favicon.jpg" type="image/jpeg" />
       </head>
       {/* The suppressHydrationWarning on <body> ignores extra tags added by extensions like Grammarly.
       */}
@@ -59,9 +58,6 @@ export default function RootLayout({
         {/* Analytics Scripts - Load First */}
         <Analytics />
         <SpeedInsights />
-        
-        {/* Ad Scripts - Load Last */}
-        <InfolinksAds />
       </body>
     </html>
   )

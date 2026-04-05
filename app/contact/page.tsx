@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { TargetedMonetagAds } from "@/components/targeted-monetag-ads"
 import { MapPinned, Mail, Phone, Clock, SendHorizontal } from "lucide-react"
 import { FaWhatsapp } from "react-icons/fa6"
 import { Button } from "@/components/ui/button"
@@ -260,7 +259,6 @@ export default function ContactPage() {
         </div>
       </main>
       
-      <TargetedMonetagAds />
       <Footer />
     </div>
   )

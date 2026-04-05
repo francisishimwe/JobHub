@@ -2,7 +2,6 @@
 
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { AdInjector } from "@/components/ad-injector"
 import { Star, Quote, Users, Building2, Award, MessageSquare } from "lucide-react"
 
 export default function TestimonialsPage() {
@@ -44,8 +43,7 @@ export default function TestimonialsPage() {
   }
 
   return (
-    <AdInjector>
-      <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50">
         <Header />
       
       <main className="container mx-auto px-4 py-12">
@@ -128,6 +126,5 @@ export default function TestimonialsPage() {
 
       <Footer />
     </div>
-    </AdInjector>
   )
 }

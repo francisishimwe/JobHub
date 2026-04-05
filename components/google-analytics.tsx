@@ -1,166 +1,94 @@
-"use client"
-
-import Script from "next/script"
-
 const GA_MEASUREMENT_ID = "G-36H1L40GBH"
 
 export function GoogleAnalytics() {
-    // Only load in production environment
-    if (process.env.NODE_ENV !== "production") {
-        return null
-    }
-
     return (
         <>
-            <Script
+            {/* Google Analytics Script - Load Immediately */}
+            <script
+                async
                 src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-                strategy="beforeInteractive"
-                onLoad={() => {
-                    console.log("Google Analytics script loaded successfully")
-                }}
-                onError={(e) => {
-                    console.error("Google Analytics script failed to load:", e)
+            />
+            <script
+                dangerouslySetInnerHTML={{
+                    __html: `
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag(){dataLayer.push(arguments);}
+                        gtag('js', new Date());
+                        gtag('config', '${GA_MEASUREMENT_ID}', {
+                            page_title: document.title,
+                            page_location: window.location.href,
+                            send_page_view: true
+                        });
+                        
+                        // Custom Event Tracking Functions
+                        window.trackJobApplied = function(jobTitle, category) {
+                            if(jobTitle && category && typeof gtag === 'function') {
+                                gtag('event', 'job_applied', { 
+                                    job_title: jobTitle, 
+                                    category: category,
+                                    custom_parameter: 'job_application'
+                                });
+                            }
+                        };
+
+                        window.trackCVUploaded = function(fileName, userId) {
+                            if(fileName && userId && typeof gtag === 'function') {
+                                gtag('event', 'cv_uploaded', { 
+                                    file_name: fileName, 
+                                    user_id: userId,
+                                    custom_parameter: 'cv_upload'
+                                });
+                            }
+                        };
+
+                        window.trackSearchPerformed = function(searchTerm) {
+                            if(searchTerm && typeof gtag === 'function') {
+                                gtag('event', 'search_performed', { 
+                                    search_term: searchTerm,
+                                    custom_parameter: 'job_search'
+                                });
+                            }
+                        };
+
+                        // Automatic Event Binding
+                        document.addEventListener('DOMContentLoaded', function() {
+                            // Track Job Applications
+                            document.querySelectorAll('[data-job-title][data-category]').forEach(btn => {
+                                if(!btn.dataset.gaBound) {
+                                    btn.addEventListener('click', () => {
+                                        window.trackJobApplied(btn.dataset.jobTitle, btn.dataset.category);
+                                    });
+                                    btn.dataset.gaBound = 'true';
+                                }
+                            });
+
+                            // Track CV Uploads
+                            document.querySelectorAll('input[type="file"][data-user-id]').forEach(input => {
+                                if(!input.dataset.gaBound) {
+                                    input.addEventListener('change', () => {
+                                        if(input.files.length > 0) {
+                                            window.trackCVUploaded(input.files[0].name, input.dataset.userId);
+                                        }
+                                    });
+                                    input.dataset.gaBound = 'true';
+                                }
+                            });
+
+                            // Track Searches
+                            document.querySelectorAll('form').forEach(form => {
+                                const searchInput = form.querySelector('input[name="q"], input[name="search"], input[type="search"]');
+                                if(searchInput && !form.dataset.gaBound) {
+                                    form.addEventListener('submit', () => {
+                                        const term = searchInput.value.trim();
+                                        if(term) window.trackSearchPerformed(term);
+                                    });
+                                    form.dataset.gaBound = 'true';
+                                }
+                            });
+                        });
+                    `
                 }}
             />
-            <Script 
-                id="google-analytics" 
-                strategy="beforeInteractive"
-                onError={(e) => {
-                    console.error("Google Analytics initialization failed:", e)
-                }}
-            >
-                {`
-          (function() {
-            try {
-              console.log('Initializing Google Analytics with ID: ${GA_MEASUREMENT_ID}');
-              
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${GA_MEASUREMENT_ID}', {
-                page_title: document.title,
-                page_location: window.location.href,
-                send_page_view: true,
-                debug_mode: false // Set to true for debugging
-              });
-
-              console.log('Google Analytics configured successfully');
-
-              // -----------------------------
-              // Custom Event Tracking Functions
-              // -----------------------------
-              window.trackJobApplied = function(jobTitle, category) {
-                if(jobTitle && category && typeof gtag === 'function') {
-                  console.log('Tracking job application:', jobTitle, category);
-                  gtag('event', 'job_applied', { 
-                    job_title: jobTitle, 
-                    category: category,
-                    custom_parameter: 'job_application'
-                  });
-                }
-              }
-
-              window.trackCVUploaded = function(fileName, userId) {
-                if(fileName && userId && typeof gtag === 'function') {
-                  console.log('Tracking CV upload:', fileName);
-                  gtag('event', 'cv_uploaded', { 
-                    file_name: fileName, 
-                    user_id: userId,
-                    custom_parameter: 'cv_upload'
-                  });
-                }
-              }
-
-              window.trackSearchPerformed = function(searchTerm) {
-                if(searchTerm && typeof gtag === 'function') {
-                  console.log('Tracking search:', searchTerm);
-                  gtag('event', 'search_performed', { 
-                    search_term: searchTerm,
-                    custom_parameter: 'job_search'
-                  });
-                }
-              }
-
-              // -----------------------------
-              // Automatic Event Binding
-              // -----------------------------
-              function bindEvents(root = document) {
-                try {
-                  // 1️⃣ Track Job Applications (button click)
-                  root.querySelectorAll('[data-job-title][data-category]').forEach(btn => {
-                    if(!btn.dataset.gaBound) {
-                      btn.addEventListener('click', () => {
-                        window.trackJobApplied(btn.dataset.jobTitle, btn.dataset.category);
-                      });
-                      btn.dataset.gaBound = 'true';
-                    }
-                  });
-
-                  // 2️⃣ Track CV Uploads
-                  root.querySelectorAll('input[type="file"][data-user-id]').forEach(input => {
-                    if(!input.dataset.gaBound) {
-                      input.addEventListener('change', () => {
-                        if(input.files.length > 0) {
-                          window.trackCVUploaded(input.files[0].name, input.dataset.userId);
-                        }
-                      });
-                      input.dataset.gaBound = 'true';
-                    }
-                  });
-
-                  // 3️⃣ Track Searches
-                  root.querySelectorAll('form').forEach(form => {
-                    const searchInput = form.querySelector('input[name="q"], input[name="search"], input[type="search"]');
-                    if(searchInput && !form.dataset.gaBound) {
-                      form.addEventListener('submit', () => {
-                        const term = searchInput.value.trim();
-                        if(term) window.trackSearchPerformed(term);
-                      });
-                      form.dataset.gaBound = 'true';
-                    }
-                  });
-                } catch (error) {
-                  console.error('Error binding GA events:', error);
-                }
-              }
-
-              // Initial binding with proper DOM ready check
-              if (typeof window !== 'undefined' && typeof gtag === 'function') {
-                 if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', () => {
-                      console.log('DOM loaded, binding GA events');
-                      bindEvents();
-                    });
-                 } else {
-                    // Use setTimeout to ensure DOM is fully ready
-                    setTimeout(() => {
-                      console.log('Binding GA events immediately');
-                      bindEvents();
-                    }, 100);
-                 }
-
-                 // -----------------------------
-                 // Dynamic Content Detection
-                 // -----------------------------
-                 const observer = new MutationObserver(mutations => {
-                    mutations.forEach(mutation => {
-                      mutation.addedNodes.forEach(node => {
-                        if(node.nodeType === 1) {
-                          bindEvents(node);
-                        }
-                      });
-                    });
-                 });
-
-                 observer.observe(document.body, { childList: true, subtree: true });
-                 console.log('GA MutationObserver started');
-              }
-            } catch (error) {
-              console.error('Google Analytics initialization error:', error);
-            }
-          })();
-        `}
-            </Script>
         </>
     )
 }

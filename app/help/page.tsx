@@ -2,7 +2,6 @@
 
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { TargetedMonetagAds } from "@/components/targeted-monetag-ads"
 import { HelpCircle, Users, Building2, Phone, Mail, MessageSquare, ExternalLink, Book, FileText, Shield, ChevronRight, Clock, CheckCircle, Star } from "lucide-react"
 
 export default function HelpPage() {
@@ -283,7 +282,6 @@ export default function HelpPage() {
         </div>
       </main>
 
-      <TargetedMonetagAds />
       <Footer />
     </div>
   )
