@@ -21,11 +21,6 @@ export default function HomePage() {
   const { jobs, filteredJobs, isLoading, hasMore, loadMore, filters, setFilters } = useJobs()
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "deadline">("newest")
 
-  // Debug: Log job loading status
-  console.log("🏠 Home Page - Jobs:", jobs?.length || 0, "Filtered:", filteredJobs?.length || 0, "Loading:", isLoading)
-  console.log("🏠 Home Page - Raw jobs:", jobs)
-  console.log("🏠 Home Page - Filtered jobs:", filteredJobs)
-  console.log("🏠 Home Page - Filters:", filters)
 
   // Sort jobs based on columns that actually exist in your Supabase table
   const sortedJobs = [...filteredJobs].sort((a, b) => {
@@ -66,23 +61,11 @@ export default function HomePage() {
       blogs: 0
     }
 
-    // Debug: log jobs data
-    console.log('🔍 Jobs data for counting:', jobs?.length || 0, 'jobs found')
     
     // Use the full jobs array for counting, not filteredJobs
     if (jobs && jobs.length > 0) {
       jobs.forEach((job, index) => {
         const opportunityType = job.opportunityType?.toLowerCase() || job.opportunity_type?.toLowerCase() || ''
-        
-        // Debug: log first few jobs
-        if (index < 3) {
-          console.log(`📋 Job ${index}:`, {
-            title: job.title,
-            opportunityType: job.opportunityType || job.opportunity_type || 'N/A',
-            jobType: job.jobType || 'N/A',
-            featured: job.featured
-          })
-        }
         
         // Count by opportunity type - MATCH FILTERING LOGIC EXACTLY
         if (opportunityType.includes('job') || opportunityType.includes('full') || opportunityType.includes('permanent')) {
@@ -109,7 +92,6 @@ export default function HomePage() {
       })
     }
 
-    console.log('📊 Final counts:', counts)
     return counts
   }
 

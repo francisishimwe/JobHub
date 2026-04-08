@@ -35,11 +35,11 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self';",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://nap5k.com https://gizokraijaw.net https://5gvci.com https://www.googletagmanager.com https://www.google-analytics.com;",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com;",
               "style-src 'self' 'unsafe-inline';",
               "img-src 'self' data: https:;",
               "font-src 'self';",
-              "connect-src 'self' https://nap5k.com https://gizokraijaw.net https://5gvci.com https://www.googletagmanager.com https://www.google-analytics.com;",
+              "connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com;",
               "frame-src 'self';",
               "object-src 'none';",
               "base-uri 'self';",

@@ -14,9 +14,6 @@ export function CategoryDropdownSearch() {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Test: Log component render
-  console.log("🔍 CategoryDropdownSearch component rendered!")
-
   const categories = [
   "All Categories",
   "Academic",
@@ -67,9 +64,6 @@ export function CategoryDropdownSearch() {
   "Other"
 ]
 
-// Debug: Log categories
-console.log("📋 Categories in dropdown:", categories.length, categories)
-
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -84,32 +78,21 @@ console.log("📋 Categories in dropdown:", categories.length, categories)
 
 
   const handleSelect = (category: string) => {
-    console.log('🎯 Category selected:', category)
     setSelectedCategory(category)
     setIsOpen(false)
     
     // Update filter based on category
     if (category === "All Categories") {
-      console.log('🔄 Clearing category filter')
       setFilters({ category: "" })
     } else {
-      console.log('🔄 Setting category filter to:', category)
-      console.log('🔍 Current filters before update:', filters)
       setFilters({ category: category })
-      console.log('🔍 Filters should be updated to:', { category })
     }
   }
 
   const handleSearch = () => {
-    console.log('🔍 Search triggered:', {
-      searchQuery,
-      selectedCategory
-    })
     if (selectedCategory === "All Categories") {
-      console.log('🔄 Searching with no category filter')
       setFilters({ search: searchQuery, category: "" })
     } else {
-      console.log('🔄 Searching with category:', selectedCategory)
       setFilters({ search: searchQuery, category: selectedCategory })
     }
   }
@@ -131,7 +114,6 @@ console.log("📋 Categories in dropdown:", categories.length, categories)
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => {
-              console.log('🖱️ Dropdown button clicked, current isOpen:', isOpen)
               setIsOpen(!isOpen)
             }}
             className="px-6 py-4 text-slate-700 flex items-center gap-3 border-r border-slate-200 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset font-medium"
@@ -146,7 +128,6 @@ console.log("📋 Categories in dropdown:", categories.length, categories)
               <ul className="absolute top-full left-0 mt-1 w-80 bg-white border border-slate-200 rounded-xl shadow-2xl z-[99999] py-2 max-h-80 overflow-y-auto">
                 {categories.map((cat, index) => (
                   <li key={index} className="px-4 py-3 hover:bg-blue-600 hover:text-white cursor-pointer transition-all duration-200 text-sm border-b border-slate-100 last:border-b-0" onClick={() => {
-                    console.log('🖱️ Category clicked:', cat)
                     handleSelect(cat)
                   }}>
                     {cat}
