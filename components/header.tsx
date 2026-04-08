@@ -50,7 +50,7 @@ export function Header() {
     <>
       {/* Gorgeous Single-Line Header */}
       <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
-        <div className="flex items-center justify-between px-4 py-3 md:justify-center md:gap-10 md:max-w-6xl md:mx-auto">
+        <div className="flex items-center justify-between px-4 py-3">
           {/* Logo - Far Left */}
           <div className="bg-white rounded-lg shadow-lg px-3 py-2 pointer-events-none z-50 w-fit lg:px-4 lg:py-2 lg:w-32">
             <Link href="/" className="flex items-center gap-3 pointer-events-auto">
@@ -67,7 +67,7 @@ export function Header() {
           </div>
 
           {/* Navigation Links - Center (Large Desktop Only) */}
-          <nav className="hidden lg:flex items-center justify-center gap-8">
+          <nav className="hidden lg:flex items-center gap-x-12">
             {navigationLinks.map((link) => (
               <Link
                 key={link.href}
