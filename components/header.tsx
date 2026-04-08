@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image" // Added Next.js Image component
 import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
-import { LogOut, UserCircle2, Menu, X, MessageCircle, ChevronDown } from "lucide-react"
+import { LogOut, UserCircle2, Menu, X, ChevronDown } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,7 +50,7 @@ export function Header() {
     <>
       {/* Gorgeous Single-Line Header */}
       <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
-        <div className="flex items-center justify-between px-4 py-3">
+        <div className="flex items-center justify-between px-4 py-3 md:justify-center md:gap-10 md:max-w-6xl md:mx-auto">
           {/* Logo - Far Left */}
           <div className="bg-white rounded-lg shadow-lg px-3 py-2 pointer-events-none z-50 w-fit lg:px-4 lg:py-2 lg:w-32">
             <Link href="/" className="flex items-center gap-3 pointer-events-auto">
