@@ -34,7 +34,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
     opportunityTypes: [] as string[],
   })
 
-  const JOBS_PER_PAGE = 15
+  const JOBS_PER_PAGE = 1000
   const limit = JOBS_PER_PAGE
 
   const fetchJobs = async (pageNumber: number, isNewSearch: boolean = false) => {

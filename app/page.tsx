@@ -18,7 +18,7 @@ import { Header } from "@/components/header"
 import { CategoryDropdownSearch } from "@/components/category-dropdown-search"
 
 export default function HomePage() {
-  const { jobs, filteredJobs, isLoading, hasMore, loadMore, filters, setFilters } = useJobs()
+  const { jobs, filteredJobs, isLoading, filters, setFilters } = useJobs()
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "deadline">("newest")
 
 
@@ -312,25 +312,10 @@ export default function HomePage() {
                   </div>
                 )}
               </div>
-
-              {/* Load More - Adaptive */}
-              {hasMore && (
-                <div className="flex justify-center mt-8 pb-10">
-                  <Button 
-                    onClick={loadMore} 
-                    disabled={isLoading}
-                    className="bg-[#003566] hover:bg-[#002850] text-white px-10 py-3 rounded-lg font-bold shadow-md transition-all"
-                  >
-                    {isLoading ? "Loading..." : "Load More Opportunities"}
-                  </Button>
-                </div>
-              )}
             </div>
           </main>
         </div>
       </div>
-
-      <Footer />
     </div>
   )
 }
