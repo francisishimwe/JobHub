@@ -67,7 +67,7 @@ export function Header() {
           </div>
 
           {/* Navigation Links - Center (Large Desktop Only) */}
-          <nav className="hidden lg:flex items-center gap-x-12">
+          <nav className="hidden lg:flex items-center justify-center gap-8">
             {navigationLinks.map((link) => (
               <Link
                 key={link.href}
