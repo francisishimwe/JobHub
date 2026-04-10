@@ -33,7 +33,7 @@ export function Header() {
   }
 
   const handleJoinWhatsApp = () => {
-    window.open('https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI?mode=wwt', '_blank')
+    window.open('https://chat.whatsapp.com/250783074056?mode=wwt', '_blank')
   }
 
   const navigationLinks = [

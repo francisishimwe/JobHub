@@ -91,8 +91,8 @@ const JobCardComponent = ({ job }: JobCardProps) => {
 *Deadline:* ${formattedDeadline}
 
 🚀 *Apply here:* ${job.applicationLink || `https://rwandajobhub.rw/jobs/${job.id}`}
-💬 *Join our WhatsApp group:* https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI
-📢 *Follow our WhatsApp channel:* https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
+💬 *Join our WhatsApp group:* https://chat.whatsapp.com/250783074056
+📢 *Follow our WhatsApp channel:* https://chat.whatsapp.com/250783074056`
 
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
 

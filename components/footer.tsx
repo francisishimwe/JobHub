@@ -133,7 +133,7 @@ export function Footer() {
         {/* Social Icons Section - Classic Horizontal Row */}
         <div className="flex items-center justify-center gap-3 py-2">
           <a
-            href="https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r"
+            href="https://chat.whatsapp.com/250783074056?mode=wwt"
             target="_blank"
             rel="noopener noreferrer"
             className="w-8 h-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
