@@ -525,11 +525,11 @@ export default function EmployerHubPage() {
                     Contact us directly on WhatsApp:
                   </p>
                   <a 
-                    href="https://wa.me/250788123456" 
+                    href="https://wa.me/250783074056" 
                     className="inline-flex items-center gap-2 text-green-600 font-semibold hover:text-green-700 mt-2"
                   >
                     <MessageSquare className="w-4 h-4" />
-                    +250 788 123 456
+                    +250 783 074 056
                   </a>
                 </div>
                 <div className="space-y-2">
