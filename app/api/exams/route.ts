@@ -55,8 +55,19 @@ export async function GET(request: NextRequest) {
           duration,
           difficulty,
           description,
+          category,
+          institution,
+          exam_type,
+          pdf_url,
+          is_active,
+          participants,
+          rating,
+          total_questions,
+          duration_minutes,
+          difficulty_level,
           created_at
         FROM exams
+        WHERE is_active = true
         ORDER BY created_at DESC
       `
 
@@ -96,6 +107,16 @@ export async function POST(request: NextRequest) {
         duration,
         difficulty,
         description,
+        category,
+        institution,
+        exam_type,
+        pdf_url,
+        is_active,
+        participants,
+        rating,
+        total_questions,
+        duration_minutes,
+        difficulty_level,
         created_at
       ) VALUES (
         ${id},
@@ -103,9 +124,19 @@ export async function POST(request: NextRequest) {
         ${body.duration || null},
         ${body.difficulty || null},
         ${body.description || null},
+        ${body.category || 'General'},
+        ${body.institution || 'RwandaJobHub'},
+        ${body.exam_type || 'Online Test'},
+        ${body.pdf_url || null},
+        ${body.is_active !== undefined ? body.is_active : true},
+        ${body.participants || 0},
+        ${body.rating || 0},
+        ${body.total_questions || 0},
+        ${body.duration_minutes || null},
+        ${body.difficulty_level || 'Intermediate'},
         ${now}
       )
-      RETURNING id, title, duration, difficulty, description, created_at
+      RETURNING id, title, duration, difficulty, description, category, institution, exam_type, pdf_url, is_active, participants, rating, total_questions, duration_minutes, difficulty_level, created_at
     `
 
     if (!examResult || examResult.length === 0) {

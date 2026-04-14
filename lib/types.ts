@@ -71,6 +71,18 @@ export interface Exam {
   difficulty?: string;
   description?: string;
   created_at: string;
+  postedDate?: Date;
+  category?: string;
+  institution?: string;
+  exam_type?: string;
+  pdf_url?: string;
+  is_active?: boolean;
+  participants?: number;
+  rating?: number;
+  total_questions?: number;
+  duration_minutes?: number;
+  difficulty_level?: string;
+  topics?: string[];
 }
 
 export interface ExamQuestion {
