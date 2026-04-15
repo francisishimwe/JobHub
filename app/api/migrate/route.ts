@@ -30,9 +30,34 @@ export async function POST() {
     // Insert sample data
     await sql`
       INSERT INTO resources (title, description, category, icon, icon_color, button_text, button_color, button_link, sort_order) VALUES
-      ('Job Prep Questions & Answers', 'Master technical exams for Rwanda''s top institutions with our curated database of past paper solutions and correct answers.', 'Q&A', 'FileText', 'blue', 'Browse Q&A', 'blue', '/resources/qa', 1),
-      ('Interview Questions & Answers', 'From ''Tell me about yourself'' to salary negotiations, learn how to answer common interview questions used by Rwandan HR managers.', 'Interview', 'MessagesSquare', 'orange', 'Start Prep', 'orange', '/resources/interview', 2)
+      ('Job Prep Questions & Answers', 'Master technical exams for Rwanda''s top institutions with our curated database of past paper solutions and correct answers.', 'Q&A', 'FileText', 'blue', 'View Exams', 'blue', '/exams', 1),
+      ('Interview Questions & Answers', 'From ''Tell me about yourself'' to salary negotiations, learn how to answer common interview questions used by Rwandan HR managers.', 'Interview', 'MessagesSquare', 'orange', 'Start Interview Prep', 'orange', '/resources', 2)
       ON CONFLICT DO NOTHING
+    `
+
+    // Fix existing button links if they exist
+    await sql`
+      UPDATE resources 
+      SET button_link = '/resources' 
+      WHERE button_link = '/resources/interview'
+    `
+
+    await sql`
+      UPDATE resources 
+      SET button_link = '/exams' 
+      WHERE button_link = '/resources/qa'
+    `
+
+    await sql`
+      UPDATE resources 
+      SET button_text = 'Start Interview Prep' 
+      WHERE button_text = 'Start Prep'
+    `
+
+    await sql`
+      UPDATE resources 
+      SET button_text = 'View Exams' 
+      WHERE button_text = 'Browse Q&A'
     `
 
     return NextResponse.json({ 
