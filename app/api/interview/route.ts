@@ -36,10 +36,20 @@ export async function POST(request: Request) {
     if (endInterview) {
       // Generate final performance summary
       console.log('Creating end interview model...')
-      const model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash",
-        systemInstruction: systemInstruction + " Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement."
-      })
+      let model;
+      try {
+        // Try the latest model first
+        model = genAI.getGenerativeModel({ 
+          model: "gemini-1.5-flash-latest",
+          systemInstruction: systemInstruction + " Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement."
+        })
+      } catch (error) {
+        console.log('gemini-1.5-flash-latest failed, trying gemini-1.5-flash')
+        model = genAI.getGenerativeModel({ 
+          model: "gemini-1.5-flash",
+          systemInstruction: systemInstruction + " Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement."
+        })
+      }
       
       console.log('Model created successfully')
       
@@ -65,10 +75,20 @@ export async function POST(request: Request) {
     }
 
     console.log('Creating regular interview model...')
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
-      systemInstruction: systemInstruction
-    })
+    let model;
+    try {
+      // Try the latest model first
+      model = genAI.getGenerativeModel({ 
+        model: "gemini-1.5-flash-latest",
+        systemInstruction: systemInstruction
+      })
+    } catch (error) {
+      console.log('gemini-1.5-flash-latest failed, trying gemini-1.5-flash')
+      model = genAI.getGenerativeModel({ 
+        model: "gemini-1.5-flash",
+        systemInstruction: systemInstruction
+      })
+    }
 
     console.log('Model created successfully')
 
