@@ -16,24 +16,33 @@ async function handleTrackView(request: NextRequest) {
 
         // Track based on content type
         if (content_type === 'job') {
-            const jobResult = await sql`
-                SELECT views FROM jobs WHERE id = ${content_id}
-            `
+            try {
+                const jobResult = await sql`
+                    SELECT views FROM jobs WHERE id = ${content_id}
+                `
 
-            if (jobResult.length === 0) {
-                console.error('[TRACK-VIEW] Job not found:', content_id)
-                return NextResponse.json({ error: 'Job not found' }, { status: 404 })
+                if (jobResult.length === 0) {
+                    console.error('[TRACK-VIEW] Job not found:', content_id)
+                    return NextResponse.json({ error: 'Job not found' }, { status: 404 })
+                }
+
+                const job = jobResult[0]
+                const newCount = (job.views || 0) + 1
+
+                await sql`
+                    UPDATE jobs SET views = ${newCount} WHERE id = ${content_id}
+                `
+
+                console.log('[TRACK-VIEW] Successfully updated job views to:', newCount)
+                return NextResponse.json({ success: true, views: newCount })
+            } catch (dbError: any) {
+                // Handle case where views column doesn't exist
+                if (dbError.message && dbError.message.includes('column "views" does not exist')) {
+                    console.log('[TRACK-VIEW] Views column missing, skipping view count update')
+                    return NextResponse.json({ success: true, views: 'not_tracked' })
+                }
+                throw dbError
             }
-
-            const job = jobResult[0]
-            const newCount = (job.views || 0) + 1
-
-            await sql`
-                UPDATE jobs SET views = ${newCount} WHERE id = ${content_id}
-            `
-
-            console.log('[TRACK-VIEW] Successfully updated job views to:', newCount)
-            return NextResponse.json({ success: true, views: newCount })
         }
 
         return NextResponse.json({ error: 'Invalid content_type' }, { status: 400 })
