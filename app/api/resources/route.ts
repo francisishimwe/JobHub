@@ -6,34 +6,49 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const category = searchParams.get('category')
 
-    let query = `
-      SELECT 
-        id,
-        title,
-        description,
-        category,
-        icon,
-        icon_color,
-        button_text,
-        button_color,
-        button_link,
-        is_active,
-        sort_order,
-        created_at,
-        updated_at
-      FROM resources
-      WHERE is_active = true
-    `
-
-    const params = []
+    let resources
 
     if (category && category !== 'all') {
-      query += ` AND category = ${category}`
+      resources = await sql`
+        SELECT 
+          id,
+          title,
+          description,
+          category,
+          icon,
+          icon_color,
+          button_text,
+          button_color,
+          button_link,
+          is_active,
+          sort_order,
+          created_at,
+          updated_at
+        FROM resources
+        WHERE is_active = true AND category = ${category}
+        ORDER BY sort_order ASC, created_at DESC
+      `
+    } else {
+      resources = await sql`
+        SELECT 
+          id,
+          title,
+          description,
+          category,
+          icon,
+          icon_color,
+          button_text,
+          button_color,
+          button_link,
+          is_active,
+          sort_order,
+          created_at,
+          updated_at
+        FROM resources
+        WHERE is_active = true
+        ORDER BY sort_order ASC, created_at DESC
+      `
     }
-
-    query += ` ORDER BY sort_order ASC, created_at DESC`
-
-    const resources = await sql`${query}`
 
     return NextResponse.json({
       resources: resources || []

@@ -51,6 +51,10 @@ function ResourcesPageContent() {
         body: JSON.stringify({ messages: [] })
       })
       
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
       
       if (data.success) {
@@ -61,9 +65,26 @@ function ResourcesPageContent() {
           timestamp: new Date()
         }
         setMessages([aiMessage])
+      } else {
+        // Show error message to user
+        const errorMessage: Message = {
+          id: Date.now().toString(),
+          role: 'assistant',
+          content: `Sorry, I encountered an error: ${data.error || 'Unknown error'}. Please try again or contact support if the issue persists.`,
+          timestamp: new Date()
+        }
+        setMessages([errorMessage])
       }
     } catch (error) {
       console.error('Error starting interview:', error)
+      // Show error message to user
+      const errorMessage: Message = {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: `Sorry, I'm having trouble connecting. Please check your internet connection and try again.`,
+        timestamp: new Date()
+      }
+      setMessages([errorMessage])
     } finally {
       setIsLoading(false)
     }
@@ -90,6 +111,10 @@ function ResourcesPageContent() {
         body: JSON.stringify({ messages: [...messages, userMessage] })
       })
       
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
       
       if (data.success) {
@@ -100,9 +125,26 @@ function ResourcesPageContent() {
           timestamp: new Date()
         }
         setMessages(prev => [...prev, aiMessage])
+      } else {
+        // Show error message to user
+        const errorMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: `Sorry, I encountered an error: ${data.error || 'Unknown error'}. Please try again or contact support if the issue persists.`,
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, errorMessage])
       }
     } catch (error) {
       console.error('Error sending message:', error)
+      // Show error message to user
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: `Sorry, I'm having trouble connecting. Please check your internet connection and try again.`,
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, errorMessage])
     } finally {
       setIsLoading(false)
     }
