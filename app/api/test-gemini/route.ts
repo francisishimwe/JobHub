@@ -1,8 +1,13 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
+    // Debug environment variables
+    console.log('Key starts with:', process.env.GEMINI_API_KEY?.substring(0, 10))
+    
     // Check if API key is available
     const apiKey = process.env.GEMINI_API_KEY
     console.log('API Key check:', apiKey ? `Present (${apiKey.substring(0, 10)}...)` : 'MISSING')
