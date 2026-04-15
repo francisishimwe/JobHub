@@ -1,66 +1,82 @@
 "use client"
 
-import { useExams } from "@/lib/exam-context"
+import { useState, useEffect } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { ExamCard } from "@/components/exam-card"
-import { GraduationCap, Star, UserCheck, Filter } from "lucide-react"
+import { FileText, MessagesSquare, GraduationCap, Star, UserCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+
+interface Resource {
+  id: string
+  title: string
+  description: string
+  category: string
+  icon: string
+  icon_color: string
+  button_text: string
+  button_color: string
+  button_link: string
+  is_active: boolean
+  sort_order: number
+  created_at: string
+  updated_at: string
+}
 
 export default function ExamsPage() {
-  const { exams } = useExams()
-  const [selectedCategory, setSelectedCategory] = useState<string>("all")
-  const [selectedInstitution, setSelectedInstitution] = useState<string>("all")
+  const [resources, setResources] = useState<Resource[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  // Get unique categories and institutions
-  const categories = Array.from(new Set(exams.map(exam => exam.category || 'General')))
-  const institutions = Array.from(new Set(exams.map(exam => exam.institution || 'RwandaJobHub')))
+  useEffect(() => {
+    fetchResources()
+  }, [])
 
-  // Filter exams
-  const filteredExams = exams.filter(exam => {
-    const categoryMatch = selectedCategory === "all" || exam.category === selectedCategory
-    const institutionMatch = selectedInstitution === "all" || exam.institution === selectedInstitution
-    return categoryMatch && institutionMatch
-  })
-
-  const trackExamView = async (examId: string) => {
+  const fetchResources = async () => {
     try {
-      await fetch('/api/track-exam-view', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ examId }),
-      })
+      const response = await fetch('/api/resources')
+      const data = await response.json()
+      setResources(data.resources || [])
     } catch (error) {
-      console.error('Error tracking exam view:', error)
+      console.error('Error fetching resources:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  const handleTakeExam = (examId: string) => {
-    trackExamView(examId)
+  const getIconComponent = (iconName: string, color: string) => {
+    const iconClass = `h-16 w-16 ${color === 'blue' ? 'text-blue-600' : 'text-orange-600'}`
+    
+    switch (iconName) {
+      case 'FileText':
+        return <FileText className={iconClass} />
+      case 'MessagesSquare':
+        return <MessagesSquare className={iconClass} />
+      default:
+        return <FileText className={iconClass} />
+    }
   }
 
-  const handleDownloadPDF = (pdfUrl: string) => {
-    window.open(pdfUrl, '_blank')
+  const getButtonClass = (color: string) => {
+    const baseClass = "w-full px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:shadow-xl transform hover:scale-105"
+    return color === 'blue' 
+      ? `${baseClass} bg-blue-600 hover:bg-blue-700 text-white`
+      : `${baseClass} bg-orange-600 hover:bg-orange-700 text-white`
   }
 
-  const shareToWhatsApp = async (exam: any) => {
-    await trackExamView(exam.id)
-
-    const message = `*${exam.title}*
-
-${exam.description ? exam.description + '\n\n' : ''}Category: ${exam.category}
-Institution: ${exam.institution}
-Difficulty: ${exam.difficulty_level || 'Not specified'}
-Duration: ${exam.duration || 'Not specified'}
-
-Check out this exam and more!
-
-Join our WhatsApp group:
-https://chat.whatsapp.com/250783074056`
-
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, '_blank')
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <main className="container mx-auto px-4 py-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center py-16">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading resources...</p>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    )
   }
 
   return (
@@ -68,145 +84,84 @@ https://chat.whatsapp.com/250783074056`
       <Header />
 
       <main className="container mx-auto px-4 py-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           {/* Header Section */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Job Preparation Exams
+          <div className="text-center mb-16">
+            <h1 className="text-5xl font-bold text-gray-900 mb-6">
+              Exam Preparation Resources
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Test your skills and prepare for your dream job with our comprehensive assessments
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Access comprehensive study materials, interview preparation guides, and past exam solutions to advance your career in Rwanda
             </p>
           </div>
 
-          {/* Filters Section */}
-          <div className="mb-8 bg-white rounded-lg shadow-sm border p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Filter className="h-5 w-5 text-gray-600" />
-              <h2 className="text-lg font-semibold text-gray-900">Filter Exams</h2>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Category
-                </label>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="all">All Categories</option>
-                  {categories.map(category => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Institution
-                </label>
-                <select
-                  value={selectedInstitution}
-                  onChange={(e) => setSelectedInstitution(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="all">All Institutions</option>
-                  {institutions.map(institution => (
-                    <option key={institution} value={institution}>
-                      {institution}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
+          {/* Resources Cards - 2 Column Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            {resources.map((resource) => (
+              <div 
+                key={resource.id}
+                className="bg-white rounded-3xl border border-slate-100 p-10 hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center group"
+              >
+                {/* Icon */}
+                <div className="mb-8 p-6 bg-slate-50 rounded-2xl group-hover:bg-slate-100 transition-colors duration-300">
+                  {getIconComponent(resource.icon, resource.icon_color)}
+                </div>
 
-          {/* Results Count */}
-          <div className="mb-6">
-            <p className="text-gray-600">
-              Showing <span className="font-semibold">{filteredExams.length}</span> exam{filteredExams.length !== 1 ? 's' : ''}
-              {selectedCategory !== "all" && (
-                <span> in <span className="font-semibold">{selectedCategory}</span></span>
-              )}
-              {selectedInstitution !== "all" && (
-                <span> from <span className="font-semibold">{selectedInstitution}</span></span>
-              )}
-            </p>
-          </div>
+                {/* Title */}
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 leading-tight">
+                  {resource.title}
+                </h2>
 
-          {/* Exams Grid */}
-          {filteredExams.length === 0 ? (
-            <div className="text-center py-16 bg-white rounded-lg border">
-              <GraduationCap className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                No exams available
-              </h3>
-              <p className="text-gray-600 mb-6">
-                {exams.length === 0 
-                  ? "Check back soon for new exams"
-                  : "Try adjusting your filters to see more exams"
-                }
-              </p>
-              {exams.length > 0 && (
-                <Button
-                  onClick={() => {
-                    setSelectedCategory("all")
-                    setSelectedInstitution("all")
-                  }}
-                  variant="outline"
+                {/* Description */}
+                <p className="text-gray-600 text-lg leading-relaxed mb-8 flex-1">
+                  {resource.description}
+                </p>
+
+                {/* Button */}
+                <Button 
+                  className={getButtonClass(resource.button_color)}
+                  size="lg"
+                  asChild
                 >
-                  Clear Filters
+                  <a href={resource.button_link}>
+                    {resource.button_text}
+                  </a>
                 </Button>
-              )}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {filteredExams.map((exam) => (
-                <ExamCard
-                  key={exam.id}
-                  exam={exam}
-                  onTakeExam={handleTakeExam}
-                  onDownloadPDF={handleDownloadPDF}
-                />
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
 
           {/* Features Section */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-8">
-            <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">
-              Why Take Our Exams?
+          <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-3xl p-12">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
+              Why Choose Our Resources?
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center">
-                <div className="bg-white rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <GraduationCap className="h-8 w-8 text-blue-600" />
+                <div className="bg-white rounded-full p-6 w-20 h-20 mx-auto mb-6 flex items-center justify-center shadow-lg">
+                  <GraduationCap className="h-10 w-10 text-blue-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Skill Validation</h3>
-                <p className="text-gray-600 text-sm">
-                  Prove your expertise to potential employers with recognized certifications
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Expert Content</h3>
+                <p className="text-gray-600 text-base leading-relaxed">
+                  Curated by industry professionals with deep knowledge of Rwandan job markets
                 </p>
               </div>
               <div className="text-center">
-                <div className="bg-white rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <Star className="h-8 w-8 text-yellow-500" />
+                <div className="bg-white rounded-full p-6 w-20 h-20 mx-auto mb-6 flex items-center justify-center shadow-lg">
+                  <Star className="h-10 w-10 text-yellow-500" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Industry Recognition</h3>
-                <p className="text-gray-600 text-sm">
-                  Certificates recognized by top companies and institutions in Rwanda
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Proven Results</h3>
+                <p className="text-gray-600 text-base leading-relaxed">
+                  Thousands of successful candidates who landed their dream jobs using our materials
                 </p>
               </div>
               <div className="text-center">
-                <div className="bg-white rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <UserCheck className="h-8 w-8 text-green-600" />
+                <div className="bg-white rounded-full p-6 w-20 h-20 mx-auto mb-6 flex items-center justify-center shadow-lg">
+                  <UserCheck className="h-10 w-10 text-green-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Career Growth</h3>
-                <p className="text-gray-600 text-sm">
-                  Stand out in the competitive job market and advance your career
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Career Growth</h3>
+                <p className="text-gray-600 text-base leading-relaxed">
+                  Comprehensive preparation that gives you confidence to excel in interviews and exams
                 </p>
               </div>
             </div>
