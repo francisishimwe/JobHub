@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, Suspense } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Send, Bot, User, Loader2, Square, MessageCircle } from "lucide-react"
@@ -14,7 +14,7 @@ interface Message {
   timestamp: Date
 }
 
-export default function ResourcesPage() {
+function ResourcesPageContent() {
   const searchParams = useSearchParams()
   const category = searchParams.get('category')
   
@@ -384,5 +384,17 @@ export default function ResourcesPage() {
       
       <Footer />
     </div>
+  )
+}
+
+export default function ResourcesPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <ResourcesPageContent />
+    </Suspense>
   )
 }
