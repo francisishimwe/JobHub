@@ -39,7 +39,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline';",
               "img-src 'self' data: https:;",
               "font-src 'self';",
-              "connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com;",
+              "connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://generativelanguage.googleapis.com;",
               "frame-src 'self';",
               "object-src 'none';",
               "base-uri 'self';",
