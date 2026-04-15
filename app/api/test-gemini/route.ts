@@ -20,19 +20,37 @@ export async function GET() {
     }
     
     const genAI = new GoogleGenerativeAI(apiKey)
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
     
-    const result = await model.generateContent("Hello, can you respond with 'API test successful'?")
-    const response = await result.response
-    const text = response.text()
+    // Try different model names to find the correct one
+    const modelNames = ['gemini-1.5-flash', 'gemini-flash', 'gemini-1.5-flash-latest', 'gemini-1.5-flash-8b']
     
-    console.log('Gemini API test response:', text)
+    for (const modelName of modelNames) {
+      try {
+        console.log(`Testing model: ${modelName}`)
+        const model = genAI.getGenerativeModel({ model: modelName })
+        const result = await model.generateContent("Hello, respond with 'API test successful'")
+        const response = await result.response
+        const text = response.text()
+        
+        console.log(`Model ${modelName} works! Response:`, text)
+        
+        return NextResponse.json({ 
+          success: true, 
+          message: `Gemini API is working with model: ${modelName}`,
+          response: text,
+          workingModel: modelName
+        })
+      } catch (error: any) {
+        console.log(`Model ${modelName} failed:`, error.message)
+        continue
+      }
+    }
     
+    // If no model works, return error
     return NextResponse.json({ 
-      success: true, 
-      message: 'Gemini API is working correctly',
-      response: text
-    })
+      success: false, 
+      error: 'No working Gemini model found. Tried: ' + modelNames.join(', ')
+    }, { status: 500 })
     
   } catch (error) {
     console.error('Gemini API test error:', error)

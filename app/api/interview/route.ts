@@ -37,7 +37,7 @@ export async function POST(request: Request) {
       // Generate final performance summary
       console.log('Creating end interview model...')
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-flash",
+        model: "gemini-1.5-flash",
         systemInstruction: systemInstruction + " Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement."
       })
       
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
 
     console.log('Creating regular interview model...')
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-flash",
+      model: "gemini-1.5-flash",
       systemInstruction: systemInstruction
     })
 
