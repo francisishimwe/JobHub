@@ -22,40 +22,45 @@ export async function GET() {
     const genAI = new GoogleGenerativeAI(apiKey)
     
     // Try the latest model first, then fallback
-    let model;
-    let modelName = 'gemini-1.5-flash-latest';
+    let text = '';
+    let modelName = '';
     
     try {
-      console.log(`Testing model: ${modelName}`)
-      model = genAI.getGenerativeModel({ model: modelName })
-    } catch (error: any) {
-      console.log(`${modelName} failed, trying gemini-1.5-flash`)
-      modelName = 'gemini-1.5-flash'
-      model = genAI.getGenerativeModel({ model: modelName })
-    }
-    
-    try {
+      console.log('Testing gemini-1.5-flash-latest...')
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' })
       const result = await model.generateContent("Hello, respond with 'API test successful'")
       const response = await result.response
-      const text = response.text()
-      
-      console.log(`Model ${modelName} works! Response:`, text)
-      
-      return NextResponse.json({ 
-        success: true, 
-        message: `Gemini API is working with model: ${modelName}`,
-        response: text,
-        workingModel: modelName
-      })
+      text = response.text()
+      modelName = 'gemini-1.5-flash-latest'
     } catch (error: any) {
-      console.log(`Model ${modelName} failed:`, error.message)
+      console.log('gemini-1.5-flash-latest failed, trying gemini-1.5-flash')
+      console.log('Error:', error.message)
       
-      return NextResponse.json({ 
-        success: false, 
-        error: `Gemini API failed with model ${modelName}: ${error.message}`,
-        details: error.stack
-      }, { status: 500 })
+      try {
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+        const result = await model.generateContent("Hello, respond with 'API test successful'")
+        const response = await result.response
+        text = response.text()
+        modelName = 'gemini-1.5-flash'
+      } catch (fallbackError: any) {
+        console.log('Both models failed:', fallbackError.message)
+        
+        return NextResponse.json({ 
+          success: false, 
+          error: `Both Gemini models failed. Latest: ${error.message}, Fallback: ${fallbackError.message}`,
+          details: { latestError: error.stack, fallbackError: fallbackError.stack }
+        }, { status: 500 })
+      }
     }
+    
+    console.log(`Model ${modelName} works! Response:`, text)
+    
+    return NextResponse.json({ 
+      success: true, 
+      message: `Gemini API is working with model: ${modelName}`,
+      response: text,
+      workingModel: modelName
+    })
     
   } catch (error) {
     console.error('Gemini API test error:', error)

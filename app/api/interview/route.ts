@@ -36,61 +36,63 @@ export async function POST(request: Request) {
     if (endInterview) {
       // Generate final performance summary
       console.log('Creating end interview model...')
-      let model;
-      try {
-        // Try the latest model first
-        model = genAI.getGenerativeModel({ 
-          model: "gemini-1.5-flash-latest",
-          systemInstruction: systemInstruction + " Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement."
-        })
-      } catch (error) {
-        console.log('gemini-1.5-flash-latest failed, trying gemini-1.5-flash')
-        model = genAI.getGenerativeModel({ 
-          model: "gemini-1.5-flash",
-          systemInstruction: systemInstruction + " Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement."
-        })
-      }
-      
-      console.log('Model created successfully')
       
       const conversation = messages.map((msg: any) => `${msg.role}: ${msg.content}`).join('\n')
       const prompt = `Based on this interview conversation, provide a detailed performance summary:\n\n${conversation}\n\nPlease include:\n1. Overall performance rating\n2. Specific strengths demonstrated\n3. Areas for improvement\n4. Recommendations for future interviews\n5. Encouraging closing remarks`
       
       console.log('End interview prompt:', prompt)
-      console.log('Calling Gemini API for summary...')
       
-      const result = await model.generateContent(prompt)
-      console.log('Got result from Gemini')
-      const response = await result.response
-      console.log('Got response from result')
-      const summary = response.text()
+      // Try the latest model first, then fallback
+      let summary = '';
+      let modelUsed = '';
+      
+      try {
+        console.log('Trying gemini-1.5-flash-latest...')
+        const model = genAI.getGenerativeModel({ 
+          model: "gemini-1.5-flash-latest",
+          systemInstruction: systemInstruction + " Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement."
+        })
+        console.log('Calling Gemini API for summary with latest model...')
+        const result = await model.generateContent(prompt)
+        console.log('Got result from Gemini')
+        const response = await result.response
+        console.log('Got response from result')
+        summary = response.text()
+        modelUsed = 'gemini-1.5-flash-latest'
+      } catch (error: any) {
+        console.log('gemini-1.5-flash-latest failed, trying gemini-1.5-flash')
+        console.log('Error:', error.message)
+        
+        try {
+          const model = genAI.getGenerativeModel({ 
+            model: "gemini-1.5-flash",
+            systemInstruction: systemInstruction + " Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement."
+          })
+          console.log('Calling Gemini API for summary with fallback model...')
+          const result = await model.generateContent(prompt)
+          console.log('Got result from Gemini')
+          const response = await result.response
+          console.log('Got response from result')
+          summary = response.text()
+          modelUsed = 'gemini-1.5-flash'
+        } catch (fallbackError: any) {
+          console.log('Both models failed:', fallbackError.message)
+          throw fallbackError
+        }
+      }
 
-      console.log('Generated summary:', summary)
+      console.log('Generated summary with model:', modelUsed)
+      console.log('Summary:', summary)
 
       return NextResponse.json({ 
         success: true, 
         message: summary,
-        isEndSummary: true 
+        isEndSummary: true,
+        modelUsed: modelUsed
       })
     }
 
-    console.log('Creating regular interview model...')
-    let model;
-    try {
-      // Try the latest model first
-      model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash-latest",
-        systemInstruction: systemInstruction
-      })
-    } catch (error) {
-      console.log('gemini-1.5-flash-latest failed, trying gemini-1.5-flash')
-      model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash",
-        systemInstruction: systemInstruction
-      })
-    }
-
-    console.log('Model created successfully')
+    console.log('Creating regular interview flow...')
 
     // Format conversation history
     let conversationHistory = ''
@@ -110,19 +112,53 @@ export async function POST(request: Request) {
     }
 
     console.log('Generated prompt:', prompt)
-    console.log('Calling Gemini API with model: gemini-1.5-flash...')
+    
+    // Try the latest model first, then fallback
+    let aiResponse = '';
+    let modelUsed = '';
+    
+    try {
+      console.log('Trying gemini-1.5-flash-latest...')
+      const model = genAI.getGenerativeModel({ 
+        model: "gemini-1.5-flash-latest",
+        systemInstruction: systemInstruction
+      })
+      console.log('Calling Gemini API with latest model...')
+      const result = await model.generateContent(prompt)
+      console.log('Got result from Gemini')
+      const response = await result.response
+      console.log('Got response from result')
+      aiResponse = response.text()
+      modelUsed = 'gemini-1.5-flash-latest'
+    } catch (error: any) {
+      console.log('gemini-1.5-flash-latest failed, trying gemini-1.5-flash')
+      console.log('Error:', error.message)
+      
+      try {
+        const model = genAI.getGenerativeModel({ 
+          model: "gemini-1.5-flash",
+          systemInstruction: systemInstruction
+        })
+        console.log('Calling Gemini API with fallback model...')
+        const result = await model.generateContent(prompt)
+        console.log('Got result from Gemini')
+        const response = await result.response
+        console.log('Got response from result')
+        aiResponse = response.text()
+        modelUsed = 'gemini-1.5-flash'
+      } catch (fallbackError: any) {
+        console.log('Both models failed:', fallbackError.message)
+        throw fallbackError
+      }
+    }
 
-    const result = await model.generateContent(prompt)
-    console.log('Got result from Gemini')
-    const response = await result.response
-    console.log('Got response from result')
-    const aiResponse = response.text()
-
+    console.log('Generated response with model:', modelUsed)
     console.log('Gemini response:', aiResponse)
 
     return NextResponse.json({ 
       success: true, 
-      message: aiResponse 
+      message: aiResponse,
+      modelUsed: modelUsed
     })
 
   } catch (error) {
