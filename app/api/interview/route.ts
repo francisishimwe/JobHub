@@ -44,12 +44,16 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
       try {
         console.log('Trying gemini-1.5-flash with stable v1 API...')
         const model = genAI.getGenerativeModel({ 
-          model: "gemini-1.5-flash",
-          systemInstruction: "You are the Rwanda Job Hub AI Coach. Assist Rwandan job seekers using the STAR method. Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement."
+          model: "gemini-1.5-flash"
         }, { apiVersion: 'v1' })
         
+        // Prepend system instruction to prompt
+        const promptWithInstruction = `System: You are the Rwanda Job Hub AI Coach. Assist Rwandan job seekers using the STAR method. Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement.
+
+User: ${prompt}`
+        
         console.log('Calling Gemini API for summary with gemini-1.5-flash model...')
-        const result = await model.generateContent(prompt)
+        const result = await model.generateContent(promptWithInstruction)
         console.log('Got result from Gemini')
         const response = await result.response
         console.log('Got response from result')
@@ -100,12 +104,16 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
     try {
       console.log('Trying gemini-1.5-flash with stable v1 API...')
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash",
-        systemInstruction: "You are the Rwanda Job Hub AI Coach. Assist Rwandan job seekers using the STAR method."
+        model: "gemini-1.5-flash"
       }, { apiVersion: 'v1' })
       
+      // Prepend system instruction to prompt
+      const promptWithInstruction = `System: You are the Rwanda Job Hub AI Coach. Assist Rwandan job seekers using the STAR method.
+
+User: ${prompt}`
+      
       console.log('Calling Gemini API with gemini-1.5-flash model...')
-      const result = await model.generateContent(prompt)
+      const result = await model.generateContent(promptWithInstruction)
       console.log('Got result from Gemini')
       const response = await result.response
       console.log('Got response from result')
