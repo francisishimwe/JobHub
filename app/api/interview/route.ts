@@ -47,32 +47,20 @@ export async function POST(request: Request) {
       let modelUsed = '';
       
       try {
-        console.log('Trying gemini-3-flash with stable v1 API...')
+        console.log('Trying gemini-3-flash-preview with v1beta API...')
         const model = genAI.getGenerativeModel({ 
-          model: "gemini-3-flash"
-        }, { apiVersion: "v1" })
-        
-        const chat = model.startChat({
-          history: [
-            {
-              role: "user",
-              parts: [{ text: `System: ${systemInstruction} Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement.` }],
-            },
-            {
-              role: "model",
-              parts: [{ text: "Understood. I am ready to provide interview performance summaries for Rwandan job seekers." }],
-            },
-          ],
+          model: "gemini-3-flash-preview",
+          systemInstruction: "You are the Rwanda Job Hub AI Coach. Assist Rwandan job seekers using the STAR method. Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement."
         })
         
-        console.log('Calling Gemini API for summary with gemini-3-flash model...')
-        const result = await chat.sendMessage(prompt)
+        console.log('Calling Gemini API for summary with gemini-3-flash-preview model...')
+        const result = await model.generateContent(prompt)
         const response = await result.response
         console.log('Got response from Gemini')
         summary = response.text()
-        modelUsed = 'gemini-3-flash'
+        modelUsed = 'gemini-3-flash-preview'
       } catch (error: any) {
-        console.log('gemini-3-flash failed, no fallback available')
+        console.log('gemini-3-flash-preview failed, no fallback available')
         console.log('Error:', error.message)
         throw error
       }
@@ -114,32 +102,20 @@ export async function POST(request: Request) {
     let modelUsed = '';
     
     try {
-      console.log('Trying gemini-3-flash with stable v1 API...')
+      console.log('Trying gemini-3-flash-preview with v1beta API...')
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-3-flash"
-      }, { apiVersion: "v1" })
-      
-      const chat = model.startChat({
-        history: [
-          {
-            role: "user",
-            parts: [{ text: `System: ${systemInstruction}` }],
-          },
-          {
-            role: "model",
-            parts: [{ text: "Understood. I am ready to coach Rwandan job seekers using the STAR method." }],
-          },
-        ],
+        model: "gemini-3-flash-preview",
+        systemInstruction: "You are the Rwanda Job Hub AI Coach. Assist Rwandan job seekers using the STAR method."
       })
       
-      console.log('Calling Gemini API with gemini-3-flash model...')
-      const result = await chat.sendMessage(prompt)
+      console.log('Calling Gemini API with gemini-3-flash-preview model...')
+      const result = await model.generateContent(prompt)
       const response = await result.response
       console.log('Got response from Gemini')
       aiResponse = response.text()
-      modelUsed = 'gemini-3-flash'
+      modelUsed = 'gemini-3-flash-preview'
     } catch (error: any) {
-      console.log('gemini-3-flash failed, no fallback available')
+      console.log('gemini-3-flash-preview failed, no fallback available')
       console.log('Error:', error.message)
       throw error
     }
