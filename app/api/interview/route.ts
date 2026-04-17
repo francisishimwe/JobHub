@@ -12,17 +12,12 @@ export async function POST(request: Request) {
     console.log('Key starts with:', process.env.GEMINI_API_KEY?.substring(0, 10))
     console.log('Env type:', typeof process.env.GEMINI_API_KEY)
     
-    // Verify API key is being read correctly
-    const apiKey = process.env.GEMINI_API_KEY
-    console.log('API Key check:', apiKey ? `Present (${apiKey.substring(0, 10)}...)` : 'MISSING')
-    
-    if (!apiKey) {
-      console.log('RETURNING: API key missing error')
-      return NextResponse.json({ error: 'GEMINI_API_KEY is not set in environment variables' }, { status: 500 })
-    }
+    if (!process.env.GEMINI_API_KEY) {
+    throw new Error('GEMINI_API_KEY is missing')
+}
 
-    console.log('Creating GoogleGenerativeAI instance...')
-    const genAI = new GoogleGenerativeAI(apiKey)
+console.log('Creating GoogleGenerativeAI instance...')
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
     
     const systemInstruction = `You are the Rwanda Job Hub AI Coach. Your goal is to conduct mock interviews for Rwandan job seekers. Ask one question at a time, wait for their answer, and then provide constructive feedback using the STAR method. Focus on common employers like Bank of Kigali, MTN Rwanda, and RRA. Maintain a professional, encouraging tone.`
 
@@ -47,20 +42,21 @@ export async function POST(request: Request) {
       let modelUsed = '';
       
       try {
-        console.log('Trying gemini-3-flash-preview with v1beta API...')
+        console.log('Trying gemini-1.5-flash with stable v1 API...')
         const model = genAI.getGenerativeModel({ 
-          model: "gemini-3-flash-preview",
+          model: "gemini-1.5-flash",
           systemInstruction: "You are the Rwanda Job Hub AI Coach. Assist Rwandan job seekers using the STAR method. Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement."
-        })
+        }, { apiVersion: 'v1' })
         
-        console.log('Calling Gemini API for summary with gemini-3-flash-preview model...')
+        console.log('Calling Gemini API for summary with gemini-1.5-flash model...')
         const result = await model.generateContent(prompt)
+        console.log('Got result from Gemini')
         const response = await result.response
-        console.log('Got response from Gemini')
+        console.log('Got response from result')
         summary = response.text()
-        modelUsed = 'gemini-3-flash-preview'
+        modelUsed = 'gemini-1.5-flash'
       } catch (error: any) {
-        console.log('gemini-3-flash-preview failed, no fallback available')
+        console.log('gemini-1.5-flash failed, no fallback available')
         console.log('Error:', error.message)
         throw error
       }
@@ -102,20 +98,21 @@ export async function POST(request: Request) {
     let modelUsed = '';
     
     try {
-      console.log('Trying gemini-3-flash-preview with v1beta API...')
+      console.log('Trying gemini-1.5-flash with stable v1 API...')
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-3-flash-preview",
+        model: "gemini-1.5-flash",
         systemInstruction: "You are the Rwanda Job Hub AI Coach. Assist Rwandan job seekers using the STAR method."
-      })
+      }, { apiVersion: 'v1' })
       
-      console.log('Calling Gemini API with gemini-3-flash-preview model...')
+      console.log('Calling Gemini API with gemini-1.5-flash model...')
       const result = await model.generateContent(prompt)
+      console.log('Got result from Gemini')
       const response = await result.response
-      console.log('Got response from Gemini')
+      console.log('Got response from result')
       aiResponse = response.text()
-      modelUsed = 'gemini-3-flash-preview'
+      modelUsed = 'gemini-1.5-flash'
     } catch (error: any) {
-      console.log('gemini-3-flash-preview failed, no fallback available')
+      console.log('gemini-1.5-flash failed, no fallback available')
       console.log('Error:', error.message)
       throw error
     }
