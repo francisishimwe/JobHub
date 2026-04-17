@@ -47,20 +47,20 @@ export async function POST(request: Request) {
       let modelUsed = '';
       
       try {
-        console.log('Trying gemini-1.5-flash...')
+        console.log('Trying gemini-3-flash with stable v1 API...')
         const model = genAI.getGenerativeModel({ 
-          model: "gemini-1.5-flash",
+          model: "gemini-3-flash",
           systemInstruction: systemInstruction + " Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement."
-        })
-        console.log('Calling Gemini API for summary with flash model...')
+        }, { apiVersion: "v1" })
+        console.log('Calling Gemini API for summary with gemini-3-flash model...')
         const result = await model.generateContent(prompt)
         console.log('Got result from Gemini')
         const response = await result.response
         console.log('Got response from result')
         summary = response.text()
-        modelUsed = 'gemini-1.5-flash'
+        modelUsed = 'gemini-3-flash'
       } catch (error: any) {
-        console.log('gemini-1.5-flash failed, no fallback available')
+        console.log('gemini-3-flash failed, no fallback available')
         console.log('Error:', error.message)
         throw error
       }
@@ -102,20 +102,20 @@ export async function POST(request: Request) {
     let modelUsed = '';
     
     try {
-      console.log('Trying gemini-1.5-flash...')
+      console.log('Trying gemini-3-flash with stable v1 API...')
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash",
+        model: "gemini-3-flash",
         systemInstruction: systemInstruction
-      })
-      console.log('Calling Gemini API with flash model...')
+      }, { apiVersion: "v1" })
+      console.log('Calling Gemini API with gemini-3-flash model...')
       const result = await model.generateContent(prompt)
       console.log('Got result from Gemini')
       const response = await result.response
       console.log('Got response from result')
       aiResponse = response.text()
-      modelUsed = 'gemini-1.5-flash'
+      modelUsed = 'gemini-3-flash'
     } catch (error: any) {
-      console.log('gemini-1.5-flash failed, no fallback available')
+      console.log('gemini-3-flash failed, no fallback available')
       console.log('Error:', error.message)
       throw error
     }
