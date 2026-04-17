@@ -27,12 +27,14 @@ export async function POST() {
     await sql`CREATE INDEX IF NOT EXISTS idx_resources_is_active ON resources(is_active)`
     await sql`CREATE INDEX IF NOT EXISTS idx_resources_sort_order ON resources(sort_order ASC, created_at DESC)`
 
+    // Clean up existing duplicates first
+    await sql`DELETE FROM resources WHERE title IN ('Job Prep Questions & Answers', 'Interview Questions & Answers')`
+
     // Insert sample data
     await sql`
       INSERT INTO resources (title, description, category, icon, icon_color, button_text, button_color, button_link, sort_order) VALUES
       ('Job Prep Questions & Answers', 'Master technical exams for Rwanda''s top institutions with our curated database of past paper solutions and correct answers.', 'Q&A', 'FileText', 'blue', 'View Exams', 'blue', '/exams', 1),
       ('Interview Questions & Answers', 'From ''Tell me about yourself'' to salary negotiations, learn how to answer common interview questions used by Rwandan HR managers.', 'Interview', 'MessagesSquare', 'orange', 'Start Interview Prep', 'orange', '/resources', 2)
-      ON CONFLICT DO NOTHING
     `
 
     // Fix existing button links if they exist
