@@ -47,20 +47,20 @@ export async function POST(request: Request) {
       let modelUsed = '';
       
       try {
-        console.log('Trying gemini-1.5-flash-8b...')
+        console.log('Trying gemini-1.5-flash-001...')
         const model = genAI.getGenerativeModel({ 
-          model: "gemini-1.5-flash-8b",
+          model: "gemini-1.5-flash-001",
           systemInstruction: systemInstruction + " Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement."
         })
-        console.log('Calling Gemini API for summary with flash-8b model...')
+        console.log('Calling Gemini API for summary with flash-001 model...')
         const result = await model.generateContent(prompt)
         console.log('Got result from Gemini')
         const response = await result.response
         console.log('Got response from result')
         summary = response.text()
-        modelUsed = 'gemini-1.5-flash-8b'
+        modelUsed = 'gemini-1.5-flash-001'
       } catch (error: any) {
-        console.log('gemini-1.5-flash-8b failed, no fallback available')
+        console.log('gemini-1.5-flash-001 failed, no fallback available')
         console.log('Error:', error.message)
         throw error
       }
@@ -102,20 +102,20 @@ export async function POST(request: Request) {
     let modelUsed = '';
     
     try {
-      console.log('Trying gemini-1.5-flash-8b...')
+      console.log('Trying gemini-1.5-flash-001...')
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash-8b",
+        model: "gemini-1.5-flash-001",
         systemInstruction: systemInstruction
       })
-      console.log('Calling Gemini API with flash-8b model...')
+      console.log('Calling Gemini API with flash-001 model...')
       const result = await model.generateContent(prompt)
       console.log('Got result from Gemini')
       const response = await result.response
       console.log('Got response from result')
       aiResponse = response.text()
-      modelUsed = 'gemini-1.5-flash-8b'
+      modelUsed = 'gemini-1.5-flash-001'
     } catch (error: any) {
-      console.log('gemini-1.5-flash-8b failed, no fallback available')
+      console.log('gemini-1.5-flash-001 failed, no fallback available')
       console.log('Error:', error.message)
       throw error
     }
