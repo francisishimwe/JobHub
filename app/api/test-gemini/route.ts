@@ -26,14 +26,14 @@ export async function GET() {
     let modelName = '';
     
     try {
-      console.log('Testing gemini-1.5-flash-latest...')
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' })
+      console.log('Testing gemini-1.5-flash-8b...')
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-8b' })
       const result = await model.generateContent("Hello, respond with 'API test successful'")
       const response = await result.response
       text = response.text()
-      modelName = 'gemini-1.5-flash-latest'
+      modelName = 'gemini-1.5-flash-8b'
     } catch (error: any) {
-      console.log('gemini-1.5-flash-latest failed, trying gemini-1.5-flash')
+      console.log('gemini-1.5-flash-8b failed, trying gemini-1.5-flash')
       console.log('Error:', error.message)
       
       try {
@@ -47,8 +47,8 @@ export async function GET() {
         
         return NextResponse.json({ 
           success: false, 
-          error: `Both Gemini models failed. Latest: ${error.message}, Fallback: ${fallbackError.message}`,
-          details: { latestError: error.stack, fallbackError: fallbackError.stack }
+          error: `Both Gemini models failed. Flash-8b: ${error.message}, Flash: ${fallbackError.message}`,
+          details: { flash8bError: error.stack, flashError: fallbackError.stack }
         }, { status: 500 })
       }
     }
