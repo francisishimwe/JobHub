@@ -7,12 +7,11 @@ export async function POST(request: Request) {
   console.log('=== INTERVIEW API CALLED ===')
   
   try {
-    // Debug environment variables
-    console.log('Raw env check:', process.env.GEMINI_API_KEY)
+    // Debug: Check if environment variable is loaded
+    console.log('Key detected:', !!process.env.GEMINI_API_KEY)
     console.log('Key starts with:', process.env.GEMINI_API_KEY?.substring(0, 10))
-    console.log('Env type:', typeof process.env.GEMINI_API_KEY)
-    
-    if (!process.env.GEMINI_API_KEY) {
+
+if (!process.env.GEMINI_API_KEY) {
     throw new Error('GEMINI_API_KEY is missing')
 }
 
