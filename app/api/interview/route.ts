@@ -49,14 +49,26 @@ export async function POST(request: Request) {
       try {
         console.log('Trying gemini-3-flash with stable v1 API...')
         const model = genAI.getGenerativeModel({ 
-          model: "gemini-3-flash",
-          systemInstruction: systemInstruction + " Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement."
+          model: "gemini-3-flash"
         }, { apiVersion: "v1" })
+        
+        const chat = model.startChat({
+          history: [
+            {
+              role: "user",
+              parts: [{ text: `System: ${systemInstruction} Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement.` }],
+            },
+            {
+              role: "model",
+              parts: [{ text: "Understood. I am ready to provide interview performance summaries for Rwandan job seekers." }],
+            },
+          ],
+        })
+        
         console.log('Calling Gemini API for summary with gemini-3-flash model...')
-        const result = await model.generateContent(prompt)
-        console.log('Got result from Gemini')
+        const result = await chat.sendMessage(prompt)
         const response = await result.response
-        console.log('Got response from result')
+        console.log('Got response from Gemini')
         summary = response.text()
         modelUsed = 'gemini-3-flash'
       } catch (error: any) {
@@ -104,14 +116,26 @@ export async function POST(request: Request) {
     try {
       console.log('Trying gemini-3-flash with stable v1 API...')
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-3-flash",
-        systemInstruction: systemInstruction
+        model: "gemini-3-flash"
       }, { apiVersion: "v1" })
+      
+      const chat = model.startChat({
+        history: [
+          {
+            role: "user",
+            parts: [{ text: `System: ${systemInstruction}` }],
+          },
+          {
+            role: "model",
+            parts: [{ text: "Understood. I am ready to coach Rwandan job seekers using the STAR method." }],
+          },
+        ],
+      })
+      
       console.log('Calling Gemini API with gemini-3-flash model...')
-      const result = await model.generateContent(prompt)
-      console.log('Got result from Gemini')
+      const result = await chat.sendMessage(prompt)
       const response = await result.response
-      console.log('Got response from result')
+      console.log('Got response from Gemini')
       aiResponse = response.text()
       modelUsed = 'gemini-3-flash'
     } catch (error: any) {
