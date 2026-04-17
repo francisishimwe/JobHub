@@ -33,24 +33,14 @@ export async function GET() {
       text = response.text()
       modelName = 'gemini-1.5-flash-8b'
     } catch (error: any) {
-      console.log('gemini-1.5-flash-8b failed, trying gemini-1.5-flash')
+      console.log('gemini-1.5-flash-8b failed, no fallback available')
       console.log('Error:', error.message)
       
-      try {
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
-        const result = await model.generateContent("Hello, respond with 'API test successful'")
-        const response = await result.response
-        text = response.text()
-        modelName = 'gemini-1.5-flash'
-      } catch (fallbackError: any) {
-        console.log('Both models failed:', fallbackError.message)
-        
-        return NextResponse.json({ 
-          success: false, 
-          error: `Both Gemini models failed. Flash-8b: ${error.message}, Flash: ${fallbackError.message}`,
-          details: { flash8bError: error.stack, flashError: fallbackError.stack }
-        }, { status: 500 })
-      }
+      return NextResponse.json({ 
+        success: false, 
+        error: `Gemini model gemini-1.5-flash-8b failed: ${error.message}`,
+        details: error.stack
+      }, { status: 500 })
     }
     
     console.log(`Model ${modelName} works! Response:`, text)

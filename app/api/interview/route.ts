@@ -60,25 +60,9 @@ export async function POST(request: Request) {
         summary = response.text()
         modelUsed = 'gemini-1.5-flash-8b'
       } catch (error: any) {
-        console.log('gemini-1.5-flash-8b failed, trying gemini-1.5-flash')
+        console.log('gemini-1.5-flash-8b failed, no fallback available')
         console.log('Error:', error.message)
-        
-        try {
-          const model = genAI.getGenerativeModel({ 
-            model: "gemini-1.5-flash",
-            systemInstruction: systemInstruction + " Provide a comprehensive performance summary of the interview, highlighting strengths and areas for improvement."
-          })
-          console.log('Calling Gemini API for summary with fallback model...')
-          const result = await model.generateContent(prompt)
-          console.log('Got result from Gemini')
-          const response = await result.response
-          console.log('Got response from result')
-          summary = response.text()
-          modelUsed = 'gemini-1.5-flash'
-        } catch (fallbackError: any) {
-          console.log('Both models failed:', fallbackError.message)
-          throw fallbackError
-        }
+        throw error
       }
 
       console.log('Generated summary with model:', modelUsed)
@@ -131,25 +115,9 @@ export async function POST(request: Request) {
       aiResponse = response.text()
       modelUsed = 'gemini-1.5-flash-8b'
     } catch (error: any) {
-      console.log('gemini-1.5-flash-8b failed, trying gemini-1.5-flash')
+      console.log('gemini-1.5-flash-8b failed, no fallback available')
       console.log('Error:', error.message)
-      
-      try {
-        const model = genAI.getGenerativeModel({ 
-          model: "gemini-1.5-flash",
-          systemInstruction: systemInstruction
-        })
-        console.log('Calling Gemini API with fallback model...')
-        const result = await model.generateContent(prompt)
-        console.log('Got result from Gemini')
-        const response = await result.response
-        console.log('Got response from result')
-        aiResponse = response.text()
-        modelUsed = 'gemini-1.5-flash'
-      } catch (fallbackError: any) {
-        console.log('Both models failed:', fallbackError.message)
-        throw fallbackError
-      }
+      throw error
     }
 
     console.log('Generated response with model:', modelUsed)
