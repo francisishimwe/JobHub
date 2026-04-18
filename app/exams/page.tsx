@@ -62,6 +62,17 @@ export default function ExamsPage() {
       : `${baseClass} bg-orange-600 hover:bg-orange-700 text-white`
   }
 
+  const getCorrectLink = (buttonLink: string) => {
+    // Map old links to new secure system
+    if (buttonLink === '/resources/qa') {
+      return '/view-exams'
+    }
+    if (buttonLink === '/resources/interview') {
+      return '/interview-prep'
+    }
+    return buttonLink
+  }
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -123,7 +134,7 @@ export default function ExamsPage() {
                   size="lg"
                   asChild
                 >
-                  <a href={resource.button_link}>
+                  <a href={getCorrectLink(resource.button_link)}>
                     {resource.button_text}
                   </a>
                 </Button>
