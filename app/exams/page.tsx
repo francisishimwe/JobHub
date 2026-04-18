@@ -64,13 +64,18 @@ export default function ExamsPage() {
 
   const getCorrectLink = (buttonLink: string) => {
     // Map old links to new secure system
+    console.log('Original button link:', buttonLink)
+    let newLink = buttonLink
+    
     if (buttonLink === '/resources/qa') {
-      return '/view-exams'
+      newLink = '/view-exams'
     }
     if (buttonLink === '/resources/interview') {
-      return '/interview-prep'
+      newLink = '/interview-prep'
     }
-    return buttonLink
+    
+    console.log('Mapped to:', newLink)
+    return newLink
   }
 
   if (isLoading) {
