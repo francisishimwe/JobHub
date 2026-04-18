@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { neon } from '@neondatabase/serverless'
 
-const sql = neon(process.env.DATABASE_URL!)
+// Debug: Log the DATABASE_URL to see what's being passed
+const dbUrl = process.env.DATABASE_URL
+console.log('DATABASE_URL value:', dbUrl)
+
+if (!dbUrl) {
+  throw new Error('DATABASE_URL is not defined in environment variables')
+}
+
+const sql = neon(dbUrl)
 
 export async function GET(request: NextRequest) {
   try {
