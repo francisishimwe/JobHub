@@ -22,8 +22,8 @@ export async function GET(request: NextRequest) {
     
     const sql = getDatabase()
     
-    // Build the base query
-    let query = `
+    // Build the query using proper Neon template literals
+    let baseQuery = sql`
       SELECT id, title, category, content_type, institution, featured, 
              estimated_reading_time, COALESCE(view_count, 0) as view_count,
              created_at, updated_at
@@ -32,28 +32,19 @@ export async function GET(request: NextRequest) {
     `
     
     // Apply filters conditionally
-    const conditions = []
-    
     if (category) {
-      conditions.push(`category = ${category}`)
+      baseQuery = sql`${baseQuery} AND category = ${category}`
     }
     
     if (institution) {
-      conditions.push(`institution ILIKE ${`%${institution}%`}`)
+      baseQuery = sql`${baseQuery} AND institution ILIKE ${`%${institution}%`}`
     }
     
     if (featured === 'true') {
-      conditions.push(`featured = true`)
+      baseQuery = sql`${baseQuery} AND featured = true`
     }
     
-    // Combine conditions
-    if (conditions.length > 0) {
-      query += ` AND ${conditions.join(' AND ')}`
-    }
-    
-    query += ` ORDER BY featured DESC, created_at DESC`
-    
-    const resources = await sql.unsafe(query)
+    const resources = await sql`${baseQuery} ORDER BY featured DESC, created_at DESC`
     
     // Cache for 5 minutes (300 seconds)
     const response = NextResponse.json({ resources })
