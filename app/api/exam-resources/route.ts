@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { neon } from '@neondatabase/serverless'
 
-// Debug: Log the DATABASE_URL to see what's being passed
-const dbUrl = process.env.DATABASE_URL
-console.log('DATABASE_URL value:', dbUrl)
-
-if (!dbUrl) {
-  throw new Error('DATABASE_URL is not defined in environment variables')
+// Lazy database connection - only created when needed
+const getDatabase = () => {
+  const dbUrl = process.env.DATABASE_URL
+  if (!dbUrl) {
+    throw new Error('DATABASE_URL is not defined in environment variables')
+  }
+  return neon(dbUrl)
 }
-
-const sql = neon(dbUrl)
 
 export async function GET(request: NextRequest) {
   try {
@@ -21,34 +20,39 @@ export async function GET(request: NextRequest) {
     // Create cache key based on search params
     const cacheKey = `exam-resources-${category || 'all'}-${institution || 'all'}-${featured || 'false'}`
     
+    const sql = getDatabase()
+    
+    // Build the base query
     let query = `
       SELECT id, title, category, content_type, institution, featured, 
              estimated_reading_time, created_at, updated_at
       FROM exam_resources
       WHERE 1=1
     `
-    const params: any[] = []
-    let paramIndex = 1
+    
+    // Apply filters conditionally
+    const conditions = []
     
     if (category) {
-      query += ` AND category = $${paramIndex}`
-      params.push(category)
-      paramIndex++
+      conditions.push(`category = ${category}`)
     }
     
     if (institution) {
-      query += ` AND institution ILIKE $${paramIndex}`
-      params.push(`%${institution}%`)
-      paramIndex++
+      conditions.push(`institution ILIKE ${`%${institution}%`}`)
     }
     
     if (featured === 'true') {
-      query += ` AND featured = true`
+      conditions.push(`featured = true`)
+    }
+    
+    // Combine conditions
+    if (conditions.length > 0) {
+      query += ` AND ${conditions.join(' AND ')}`
     }
     
     query += ` ORDER BY featured DESC, created_at DESC`
     
-    const resources = await sql(query, params)
+    const resources = await sql`${query}`
     
     // Cache for 5 minutes (300 seconds)
     const response = NextResponse.json({ resources })
@@ -114,17 +118,16 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    const result = await sql(`
+    const sql = getDatabase()
+    const result = await sql`
       INSERT INTO exam_resources (
         title, category, content_type, text_content, file_url, 
         institution, featured, estimated_reading_time
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      VALUES (${title}, ${category}, ${content_type}, ${text_content}, ${file_url}, 
+              ${institution}, ${featured}, ${estimated_reading_time})
       RETURNING *
-    `, [
-      title, category, content_type, text_content, file_url,
-      institution, featured, estimated_reading_time
-    ])
+    `
     
     return NextResponse.json({ resource: result[0] }, { status: 201 })
   } catch (error) {

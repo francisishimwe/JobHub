@@ -12,7 +12,6 @@
     "convert-king-faisal": "node scripts/simple-convert-logos.js"
   },
   "dependencies": {
-    "@google/generative-ai": "latest",
     "@hookform/resolvers": "^3.10.0",
     "@neondatabase/serverless": "^1.0.2",
     "@radix-ui/react-accordion": "1.2.2",
