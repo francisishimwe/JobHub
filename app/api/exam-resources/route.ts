@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
     
     query += ` ORDER BY featured DESC, created_at DESC`
     
-    const resources = await sql`${query}`
+    const resources = await sql.unsafe(query)
     
     // Cache for 5 minutes (300 seconds)
     const response = NextResponse.json({ resources })
