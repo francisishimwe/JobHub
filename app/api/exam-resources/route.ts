@@ -1,14 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { neon } from '@neondatabase/serverless'
-
-// Lazy database connection - only created when needed
-const getDatabase = () => {
-  const dbUrl = process.env.DATABASE_URL
-  if (!dbUrl) {
-    throw new Error('DATABASE_URL is not defined in environment variables')
-  }
-  return neon(dbUrl)
-}
+import { sql, getSql } from '@/lib/db'
 
 export async function GET(request: NextRequest) {
   try {
@@ -19,8 +10,6 @@ export async function GET(request: NextRequest) {
     
     // Create cache key based on search params
     const cacheKey = `exam-resources-${category || 'all'}-${institution || 'all'}-${featured || 'false'}`
-    
-    const sql = getDatabase()
     
     // Simple query without dynamic parts for now
     const resources = await sql`
@@ -95,7 +84,6 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    const sql = getDatabase()
     const result = await sql`
       INSERT INTO exam_resources (
         title, category, content_type, text_content, file_url, 
