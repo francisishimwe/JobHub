@@ -415,7 +415,7 @@ export default function AdminPage() {
                 <CardHeader>
                   <CardTitle>All Resources ({resources.length})</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-0">
                   {isLoading ? (
                     <div className="text-center py-8">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -428,76 +428,53 @@ export default function AdminPage() {
                       <p className="text-gray-600">Create your first resource to get started</p>
                     </div>
                   ) : (
-                    <div className="space-y-4">
-                      {resources.map((resource) => (
-                        <div
-                          key={resource.id}
-                          className="border rounded-lg p-4 hover:bg-gray-50 transition-colors"
-                        >
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
-                                <h3 className="font-semibold text-gray-900">{resource.title}</h3>
-                                {resource.featured && (
-                                  <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
-                                    <Star className="w-3 h-3 mr-1" />
-                                    Featured
-                                  </Badge>
-                                )}
-                              </div>
-                              <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
-                                <span className="flex items-center gap-1">
-                                  <Building2 className="w-4 h-4" />
-                                  {resource.institution}
-                                </span>
-                                <span className="flex items-center gap-1">
-                                  <BookOpen className="w-4 h-4" />
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse">
+                        <thead>
+                          <tr className="bg-gray-50">
+                            <th className="border border-gray-200 px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                              Title
+                            </th>
+                            <th className="border border-gray-200 px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                              Date
+                            </th>
+                            <th className="border border-gray-200 px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                              Category
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {resources.map((resource) => (
+                            <tr key={resource.id} className="border-b hover:bg-gray-50">
+                              <td className="border border-gray-200 px-4 py-3">
+                                <div className="flex items-center gap-2">
+                                  {resource.featured && (
+                                    <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 text-xs">
+                                      <Star className="w-3 h-3 mr-1" />
+                                      Featured
+                                    </Badge>
+                                  )}
+                                  <span className="font-medium text-gray-900 truncate max-w-xs">
+                                    {resource.title}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="border border-gray-200 px-4 py-3 text-sm text-gray-600">
+                                {new Date(resource.created_at).toLocaleDateString()}
+                              </td>
+                              <td className="border border-gray-200 px-4 py-3">
+                                <Badge className={
+                                  resource.category === 'WRITTEN_EXAM' 
+                                    ? 'bg-blue-100 text-blue-800 text-xs' 
+                                    : 'bg-orange-100 text-orange-800 text-xs'
+                                }>
                                   {resource.category.replace('_', ' ')}
-                                </span>
-                                <span className="flex items-center gap-1">
-                                  <FileText className="w-4 h-4" />
-                                  {resource.content_type}
-                                </span>
-                                {resource.estimated_reading_time && (
-                                  <span className="flex items-center gap-1">
-                                    <Clock className="w-4 h-4" />
-                                    {resource.estimated_reading_time} min
-                                  </span>
-                                )}
-                                {resource.view_count !== undefined && (
-                                  <span className="flex items-center gap-1">
-                                    <Eye className="w-4 h-4" />
-                                    {resource.view_count} views
-                                  </span>
-                                )}
-                              </div>
-                              <p className="text-xs text-gray-500">
-                                Created: {new Date(resource.created_at).toLocaleDateString()}
-                                {resource.updated_at !== resource.created_at && (
-                                  <> | Updated: {new Date(resource.updated_at).toLocaleDateString()}</>
-                                )}
-                              </p>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleEdit(resource)}
-                              >
-                                <Edit className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleDelete(resource.id)}
-                                className="text-red-600 hover:text-red-700"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                                </Badge>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   )}
                 </CardContent>

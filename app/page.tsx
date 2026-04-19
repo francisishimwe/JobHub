@@ -16,9 +16,13 @@ import {
 import { ChevronDown } from "lucide-react"
 import { Header } from "@/components/header"
 import { CategoryDropdownSearch } from "@/components/category-dropdown-search"
+import { useExamResources, ExamResourcesProvider } from "@/lib/exam-resources-context"
+import { ExamResourceCard } from "@/components/exam-resource-card"
+import { BookOpen, FileText, GraduationCap } from "lucide-react"
 
 export default function HomePage() {
   const { jobs, filteredJobs, isLoading, filters, setFilters } = useJobs()
+  const { writtenExams, interviewPrep, isLoading: examLoading } = useExamResources()
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "deadline">("newest")
 
 
@@ -109,8 +113,9 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <Header />
+    <ExamResourcesProvider>
+      <div className="min-h-screen bg-slate-50">
+        <Header />
 
       {/* Modern Category Bar - Desktop Only */}
       <div className="bg-slate-800 border-b border-slate-700/30 mb-4">
@@ -257,6 +262,70 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* Exam Resources Sections */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200">
+        <div className="container mx-auto px-6 py-8">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Exam Preparation Resources</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Access comprehensive study materials, interview preparation guides, and past exam solutions to advance your career
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8 mb-12">
+            {/* Written Exams Section */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <BookOpen className="h-8 w-8 text-blue-600" />
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900">Written Exams</h3>
+                  <p className="text-gray-600">Past papers and study materials</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {writtenExams.slice(0, 6).map((resource) => (
+                  <ExamResourceCard key={resource.id} resource={resource} compact={true} />
+                ))}
+              </div>
+              
+              {writtenExams.length > 6 && (
+                <div className="text-center mt-4">
+                  <Button variant="outline" onClick={() => window.location.href = '/exams'}>
+                    View All Written Exams
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            {/* Interview Prep Section */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <FileText className="h-8 w-8 text-orange-600" />
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900">Interview Preparation</h3>
+                  <p className="text-gray-600">Interview guides and preparation materials</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {interviewPrep.slice(0, 6).map((resource) => (
+                  <ExamResourceCard key={resource.id} resource={resource} compact={true} />
+                ))}
+              </div>
+              
+              {interviewPrep.length > 6 && (
+                <div className="text-center mt-4">
+                  <Button variant="outline" onClick={() => window.location.href = '/exams'}>
+                    View All Interview Prep
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* The Search Zone - Category Dropdown Search */}
       <div className="bg-slate-50">
         <div className="container mx-auto px-6">
@@ -317,5 +386,5 @@ export default function HomePage() {
         </div>
       </div>
     </div>
-  )
-}
+  </ExamResourcesProvider>
+)

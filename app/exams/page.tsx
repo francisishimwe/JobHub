@@ -102,74 +102,43 @@ export default function ExamsPage() {
             </p>
           </div>
 
-          {/* Resources Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {/* Resources Grid - Horizontal Layout */}
+          <div className="flex flex-row gap-4 overflow-x-auto pb-4 mb-16 min-h-96">
             {resources.map((resource) => (
-              <Card key={resource.id} className="hover:shadow-lg transition-all duration-300 group">
-                <CardHeader className="pb-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
+              <Card key={resource.id} className="hover:shadow-md transition-all duration-200 group flex-shrink-0 w-80">
+                <CardHeader className="pb-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
                       {getCategoryIcon(resource.category)}
-                      <div>
-                        <CardTitle className="text-xl font-semibold text-gray-900">
+                      <div className="min-w-0 flex-1">
+                        <CardTitle className="text-sm font-semibold text-gray-900 truncate">
                           {resource.title}
                         </CardTitle>
-                        <p className="text-sm text-gray-600 mt-1">
-                          {resource.institution}
-                        </p>
+                        <p className="text-xs text-gray-600 truncate">{resource.institution}</p>
                       </div>
                     </div>
-                    <div className="flex flex-col items-end gap-2">
+                    <div className="flex flex-col items-end gap-1 flex-shrink-0">
                       {getCategoryBadge(resource.category)}
                       {resource.featured && (
-                        <Badge className="bg-yellow-100 text-yellow-800">
-                          <Star className="h-3 w-3 mr-1" />
-                          Featured
-                        </Badge>
+                        <Badge className="bg-yellow-100 text-yellow-800 text-xs">Featured</Badge>
                       )}
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="space-y-4">
-                    {/* Content Type Indicator */}
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      {resource.content_type === 'TEXT' ? (
-                        <>
-                          <FileText className="h-4 w-4" />
-                          <span>Text Content</span>
-                        </>
-                      ) : (
-                        <>
-                          <BookOpen className="h-4 w-4" />
-                          <span>PDF Document</span>
-                        </>
+                <CardContent className="pt-0">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3 text-xs text-gray-500">
+                      {resource.estimated_reading_time && (
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          <span>{resource.estimated_reading_time} min</span>
+                        </div>
                       )}
-                    </div>
-
-                    {/* Reading Time */}
-                    {resource.estimated_reading_time && (
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Clock className="h-4 w-4" />
-                        <span>{resource.estimated_reading_time} min read</span>
-                      </div>
-                    )}
-
-                    {/* View Count */}
-                    {resource.view_count && (
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Eye className="h-4 w-4" />
-                        <span>{resource.view_count} views</span>
-                      </div>
-                    )}
-
-                    {/* Description */}
-                    <div className="text-gray-700 line-clamp-3">
-                      {resource.text_content ? (
-                        <div 
-                          dangerouslySetInnerHTML={{ 
-                            __html: resource.text_content.length > 150 
-                              ? resource.text_content.substring(0, 150) + '...' 
+                      {resource.view_count && (
+                        <div className="flex items-center gap-1">
+                          <Eye className="h-3 w-3" />
+                          <span>{resource.view_count}</span>
+                        </div>
                               : resource.text_content 
                           }} 
                         />
