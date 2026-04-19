@@ -68,7 +68,6 @@ export default function ExamsPage() {
   }
 
   const handleViewResource = (resource: Resource) => {
-    // Navigate to the secure viewer page
     router.push(`/prep/${resource.id}`)
   }
 
@@ -206,11 +205,37 @@ export default function ExamsPage() {
               <p className="text-gray-600 max-w-md mx-auto">
                 Exam preparation resources will be available soon. Check back later for study materials and interview guides.
               </p>
+            </div>
+          )}
+
+          {/* Features Section */}
+          <div className="bg-blue-50 rounded-3xl p-8 mb-16">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">
+                Why Choose Our Resources?
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div className="space-y-4">
+                  <BookOpen className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-blue-900">Comprehensive Coverage</h3>
+                  <p className="text-gray-600">
+                    Written exams and interview prep for major institutions
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Career Growth</h3>
-                <p className="text-gray-600 text-base leading-relaxed">
-                  Comprehensive preparation that gives you confidence to excel in interviews and exams
-                </p>
+                <div className="space-y-4">
+                  <GraduationCap className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-blue-900">Expert-Verified Content</h3>
+                  <p className="text-gray-600">
+                    All resources reviewed by industry professionals
+                  </p>
+                </div>
+                <div className="space-y-4">
+                  <Star className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-blue-900">Regular Updates</h3>
+                  <p className="text-gray-600">
+                    New materials added frequently
+                  </p>
+                </div>
               </div>
             </div>
           </div>
