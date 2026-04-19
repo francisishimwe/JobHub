@@ -385,6 +385,7 @@ export default function HomePage() {
           </main>
         </div>
       </div>
-    </div>
-  </ExamResourcesProvider>
-)
+      </div>
+    </ExamResourcesProvider>
+  )
+}

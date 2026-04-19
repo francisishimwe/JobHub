@@ -139,12 +139,21 @@ export default function ExamsPage() {
                           <Eye className="h-3 w-3" />
                           <span>{resource.view_count}</span>
                         </div>
-                              : resource.text_content 
-                          }} 
-                        />
-                      ) : (
-                        <p>Click to View this {resource.category.toLowerCase().replace('_', ' ')} resource</p>
                       )}
+                    
+                    {resource.text_content && (
+                      <div className="text-xs text-gray-700 line-clamp-2">
+                        <div dangerouslySetInnerHTML={{ 
+                          __html: resource.text_content.length > 80 
+                            ? resource.text_content.substring(0, 80) + '...' 
+                            : resource.text_content 
+                        }} />
+                      </div>
+                    )}
+                    
+                    {!resource.text_content && (
+                      <p className="text-xs text-gray-500">Click to View this {resource.category.toLowerCase().replace('_', ' ')} resource</p>
+                    )}
                     </div>
                   </div>
 
