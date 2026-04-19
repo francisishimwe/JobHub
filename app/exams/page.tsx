@@ -35,7 +35,7 @@ export default function ExamsPage() {
 
   const fetchResources = async () => {
     try {
-      const response = await fetch('/api/exam-resources')
+      const response = await fetch('/api/exam-resources-simple')
       const data = await response.json()
       setResources(data.resources || [])
     } catch (error) {

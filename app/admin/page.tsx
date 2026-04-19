@@ -77,7 +77,7 @@ export default function AdminPage() {
 
   const fetchResources = async () => {
     try {
-      const response = await fetch('/api/exam-resources')
+      const response = await fetch('/api/exam-resources-simple')
       const data = await response.json()
       setResources(data.resources || [])
     } catch (error) {
@@ -149,8 +149,8 @@ export default function AdminPage() {
     setIsSaving(true)
     try {
       const url = editingId 
-        ? `/api/exam-resources/${editingId}`
-        : '/api/exam-resources'
+        ? `/api/exam-resources-simple/${editingId}`
+        : '/api/exam-resources-simple'
       
       const method = editingId ? 'PUT' : 'POST'
       
@@ -200,7 +200,7 @@ export default function AdminPage() {
     }
 
     try {
-      const response = await fetch(`/api/exam-resources/${id}`, {
+      const response = await fetch(`/api/exam-resources-simple/${id}`, {
         method: 'DELETE'
       })
 
