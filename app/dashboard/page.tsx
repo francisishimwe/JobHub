@@ -10,9 +10,10 @@ import { ExamList } from "@/components/exam-list"
 import { InquiryList } from "@/components/inquiry-list"
 import { AnalyticsDashboard } from "@/components/analytics-dashboard"
 import { EmployerApprovals } from "@/components/employer-approvals"
+import { UserManagement } from "@/components/user-management"
 import { LoginForm } from "@/components/login-form"
 import { Button } from "@/components/ui/button"
-import { Plus, BriefcaseBusiness, GraduationCap, BarChart3, MessageSquare, Users } from "lucide-react"
+import { Plus, BriefcaseBusiness, GraduationCap, BarChart3, MessageSquare, Users, UserCheck } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function DashboardPage() {
@@ -55,6 +56,10 @@ export default function DashboardPage() {
               <TabsTrigger value="employers" className="gap-2">
                 <Users className="h-4 w-4" />
                 Employer Approvals
+              </TabsTrigger>
+              <TabsTrigger value="users" className="gap-2">
+                <UserCheck className="h-4 w-4" />
+                User Management
               </TabsTrigger>
               <TabsTrigger value="jobs" className="gap-2">
                 <BriefcaseBusiness className="h-4 w-4" />
@@ -99,6 +104,10 @@ export default function DashboardPage() {
 
           <TabsContent value="employers" className="space-y-6">
             <EmployerApprovals />
+          </TabsContent>
+
+          <TabsContent value="users" className="space-y-6">
+            <UserManagement />
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-6">

@@ -19,6 +19,7 @@ import { CategoryDropdownSearch } from "@/components/category-dropdown-search"
 import { useExamResources, ExamResourcesProvider } from "@/lib/exam-resources-context"
 import { ExamResourceCard } from "@/components/exam-resource-card"
 import { BookOpen, FileText, GraduationCap } from "lucide-react"
+import { RoadRulesBanner } from "@/components/road-rules-banner"
 
 export default function HomePage() {
   return (
@@ -284,50 +285,60 @@ function HomePageContent() {
       <div className="container mx-auto px-2 py-1">
         <div className="max-w-7xl mx-auto">
           <main>
-            <div className="w-full lg:max-w-6xl mx-auto">
-              <div className="mb-1 flex items-center justify-between">
-                <p className="text-sm text-muted-foreground">Showing results ({filteredJobs.length})</p>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="gap-2 bg-transparent">
-                      Sort: {getSortLabel()}
-                      <ChevronDown className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => setSortBy("newest")}>Newest First</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setSortBy("oldest")}>Oldest First</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setSortBy("deadline")}>Deadline (Soonest)</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+            <div className="flex flex-col lg:flex-row gap-6">
+              {/* Main Content */}
+              <div className="flex-1">
+                <div className="mb-1 flex items-center justify-between">
+                  <p className="text-sm text-muted-foreground">Showing results ({filteredJobs.length})</p>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm" className="gap-2 bg-transparent">
+                        Sort: {getSortLabel()}
+                        <ChevronDown className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => setSortBy("newest")}>Newest First</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setSortBy("oldest")}>Oldest First</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setSortBy("deadline")}>Deadline (Soonest)</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+
+                <div className="space-y-4">
+                  {isLoading && filteredJobs.length === 0 ? (
+                    <div className="rounded-lg border bg-card p-12 text-center">
+                      <p className="text-muted-foreground">Loading opportunities...</p>
+                    </div>
+                  ) : sortedJobs.length > 0 ? (
+                    <>
+                      {/* Desktop: Single Wide Column */}
+                      <div className="hidden lg:grid lg:grid-cols-1 gap-4">
+                        {sortedJobs.map((job) => (
+                          <JobCard key={job.id} job={job} />
+                        ))}
+                      </div>
+
+                      {/* Mobile: Single Column Full Width */}
+                      <div className="lg:hidden space-y-4">
+                        {sortedJobs.map((job) => (
+                          <JobCard key={job.id} job={job} />
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="rounded-lg border bg-card p-12 text-center">
+                      <p className="text-muted-foreground">No jobs found matching your criteria.</p>
+                    </div>
+                  )}
+                </div>
               </div>
 
-              <div className="space-y-4">
-                {isLoading && filteredJobs.length === 0 ? (
-                  <div className="rounded-lg border bg-card p-12 text-center">
-                    <p className="text-muted-foreground">Loading opportunities...</p>
-                  </div>
-                ) : sortedJobs.length > 0 ? (
-                  <>
-                    {/* Desktop: Single Wide Column */}
-                    <div className="hidden lg:grid lg:grid-cols-1 gap-4">
-                      {sortedJobs.map((job) => (
-                        <JobCard key={job.id} job={job} />
-                      ))}
-                    </div>
-
-                    {/* Mobile: Single Column Full Width */}
-                    <div className="lg:hidden space-y-4">
-                      {sortedJobs.map((job) => (
-                        <JobCard key={job.id} job={job} />
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <div className="rounded-lg border bg-card p-12 text-center">
-                    <p className="text-muted-foreground">No jobs found matching your criteria.</p>
-                  </div>
-                )}
+              {/* Right Sidebar - Road Rules Banner */}
+              <div className="lg:w-80 flex-shrink-0">
+                <div className="lg:sticky lg:top-4 space-y-4">
+                  <RoadRulesBanner />
+                </div>
               </div>
             </div>
           </main>
