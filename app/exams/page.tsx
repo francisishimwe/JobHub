@@ -4,21 +4,22 @@ import { useState, useEffect } from "react"
 import { useRouter } from 'next/navigation'
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { FileText, MessagesSquare, GraduationCap, Star, UserCheck } from "lucide-react"
+import { BookOpen, FileText, GraduationCap, Star, UserCheck, Clock, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface Resource {
   id: string
   title: string
-  description: string
-  category: string
-  icon: string
-  icon_color: string
-  button_text: string
-  button_color: string
-  button_link: string
-  is_active: boolean
-  sort_order: number
+  category: 'WRITTEN_EXAM' | 'INTERVIEW_PREP'
+  content_type: 'TEXT' | 'PDF_URL'
+  text_content?: string
+  file_url?: string
+  institution: string
+  featured: boolean
+  estimated_reading_time?: number
+  view_count?: number
   created_at: string
   updated_at: string
 }
@@ -34,7 +35,7 @@ export default function ExamsPage() {
 
   const fetchResources = async () => {
     try {
-      const response = await fetch('/api/resources')
+      const response = await fetch('/api/exam-resources')
       const data = await response.json()
       setResources(data.resources || [])
     } catch (error) {
@@ -44,54 +45,43 @@ export default function ExamsPage() {
     }
   }
 
-  const getIconComponent = (iconName: string, color: string) => {
-    const iconClass = `h-16 w-16 ${color === 'blue' ? 'text-blue-600' : 'text-orange-600'}`
-    
-    switch (iconName) {
-      case 'FileText':
-        return <FileText className={iconClass} />
-      case 'MessagesSquare':
-        return <MessagesSquare className={iconClass} />
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'WRITTEN_EXAM':
+        return <GraduationCap className="h-8 w-8 text-blue-600" />
+      case 'INTERVIEW_PREP':
+        return <UserCheck className="h-8 w-8 text-orange-600" />
       default:
-        return <FileText className={iconClass} />
+        return <BookOpen className="h-8 w-8 text-gray-600" />
     }
   }
 
-  const getButtonClass = (color: string) => {
-    const baseClass = "w-full px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:shadow-xl transform hover:scale-105"
-    return color === 'blue' 
-      ? `${baseClass} bg-blue-600 hover:bg-blue-700 text-white`
-      : `${baseClass} bg-orange-600 hover:bg-orange-700 text-white`
+  const getCategoryBadge = (category: string) => {
+    switch (category) {
+      case 'WRITTEN_EXAM':
+        return <Badge className="bg-blue-100 text-blue-800">Written Exam</Badge>
+      case 'INTERVIEW_PREP':
+        return <Badge className="bg-orange-100 text-orange-800">Interview Prep</Badge>
+      default:
+        return <Badge className="bg-gray-100 text-gray-800">General</Badge>
+    }
   }
 
-  const handleButtonClick = (buttonLink: string) => {
-    // Map old links to new secure system
-    console.log('Original button link:', buttonLink)
-    let newLink = buttonLink
-    
-    if (buttonLink === '/resources/qa') {
-      newLink = '/view-exams'
-    }
-    if (buttonLink === '/resources/interview') {
-      newLink = '/interview-prep'
-    }
-    
-    console.log('Navigating to:', newLink)
-    router.push(newLink)
+  const handleViewResource = (resource: Resource) => {
+    // Navigate to the secure viewer page
+    router.push(`/prep/${resource.id}`)
   }
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header />
-        <main className="container mx-auto px-4 py-8">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center py-16">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading resources...</p>
-            </div>
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading exam resources...</p>
           </div>
-        </main>
+        </div>
         <Footer />
       </div>
     )
@@ -113,67 +103,109 @@ export default function ExamsPage() {
             </p>
           </div>
 
-          {/* Resources Cards - 2 Column Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+          {/* Resources Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {resources.map((resource) => (
-              <div 
-                key={resource.id}
-                className="bg-white rounded-3xl border border-slate-100 p-10 hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center group"
-              >
-                {/* Icon */}
-                <div className="mb-8 p-6 bg-slate-50 rounded-2xl group-hover:bg-slate-100 transition-colors duration-300">
-                  {getIconComponent(resource.icon, resource.icon_color)}
-                </div>
+              <Card key={resource.id} className="hover:shadow-lg transition-all duration-300 group">
+                <CardHeader className="pb-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      {getCategoryIcon(resource.category)}
+                      <div>
+                        <CardTitle className="text-xl font-semibold text-gray-900">
+                          {resource.title}
+                        </CardTitle>
+                        <p className="text-sm text-gray-600 mt-1">
+                          {resource.institution}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end gap-2">
+                      {getCategoryBadge(resource.category)}
+                      {resource.featured && (
+                        <Badge className="bg-yellow-100 text-yellow-800">
+                          <Star className="h-3 w-3 mr-1" />
+                          Featured
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="space-y-4">
+                    {/* Content Type Indicator */}
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      {resource.content_type === 'TEXT' ? (
+                        <>
+                          <FileText className="h-4 w-4" />
+                          <span>Text Content</span>
+                        </>
+                      ) : (
+                        <>
+                          <BookOpen className="h-4 w-4" />
+                          <span>PDF Document</span>
+                        </>
+                      )}
+                    </div>
 
-                {/* Title */}
-                <h2 className="text-2xl font-bold text-gray-900 mb-6 leading-tight">
-                  {resource.title}
-                </h2>
+                    {/* Reading Time */}
+                    {resource.estimated_reading_time && (
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Clock className="h-4 w-4" />
+                        <span>{resource.estimated_reading_time} min read</span>
+                      </div>
+                    )}
 
-                {/* Description */}
-                <p className="text-gray-600 text-lg leading-relaxed mb-8 flex-1">
-                  {resource.description}
-                </p>
+                    {/* View Count */}
+                    {resource.view_count && (
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Eye className="h-4 w-4" />
+                        <span>{resource.view_count} views</span>
+                      </div>
+                    )}
 
-                {/* Button */}
-                <Button 
-                  className={getButtonClass(resource.button_color)}
-                  size="lg"
-                  onClick={() => handleButtonClick(resource.button_link)}
-                >
-                  {resource.button_text}
-                </Button>
-              </div>
+                    {/* Description */}
+                    <div className="text-gray-700 line-clamp-3">
+                      {resource.text_content ? (
+                        <div 
+                          dangerouslySetInnerHTML={{ 
+                            __html: resource.text_content.length > 150 
+                              ? resource.text_content.substring(0, 150) + '...' 
+                              : resource.text_content 
+                          }} 
+                        />
+                      ) : (
+                        <p>Click to View this {resource.category.toLowerCase().replace('_', ' ')} resource</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Action Button */}
+                  <div className="mt-6 pt-4 border-t">
+                    <Button 
+                      className="w-full"
+                      size="lg"
+                      onClick={() => handleViewResource(resource)}
+                    >
+                      <Eye className="h-4 w-4 mr-2" />
+                      View Resource
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
 
-          {/* Features Section */}
-          <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-3xl p-12">
-            <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-              Why Choose Our Resources?
-            </h2>
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="bg-white rounded-full p-6 w-20 h-20 mx-auto mb-6 flex items-center justify-center shadow-lg">
-                  <GraduationCap className="h-10 w-10 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Expert Content</h3>
-                <p className="text-gray-600 text-base leading-relaxed">
-                  Curated by industry professionals with deep knowledge of Rwandan job markets
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="bg-white rounded-full p-6 w-20 h-20 mx-auto mb-6 flex items-center justify-center shadow-lg">
-                  <Star className="h-10 w-10 text-yellow-500" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Proven Results</h3>
-                <p className="text-gray-600 text-base leading-relaxed">
-                  Thousands of successful candidates who landed their dream jobs using our materials
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="bg-white rounded-full p-6 w-20 h-20 mx-auto mb-6 flex items-center justify-center shadow-lg">
-                  <UserCheck className="h-10 w-10 text-green-600" />
+          {/* Empty State */}
+          {resources.length === 0 && (
+            <div className="text-center py-16">
+              <BookOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                No Exam Resources Available
+              </h3>
+              <p className="text-gray-600 max-w-md mx-auto">
+                Exam preparation resources will be available soon. Check back later for study materials and interview guides.
+              </p>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Career Growth</h3>
                 <p className="text-gray-600 text-base leading-relaxed">
