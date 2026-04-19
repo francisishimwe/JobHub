@@ -22,32 +22,12 @@ export async function GET(request: NextRequest) {
     
     const sql = getDatabase()
     
-    // Build the query with filters
-    let whereConditions = []
-    let queryParams = []
-    
-    if (category) {
-      whereConditions.push('category = ?')
-      queryParams.push(category)
-    }
-    
-    if (institution) {
-      whereConditions.push('institution ILIKE ?')
-      queryParams.push(`%${institution}%`)
-    }
-    
-    if (featured === 'true') {
-      whereConditions.push('featured = true')
-    }
-    
-    const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : 'WHERE 1=1'
-    
+    // Simple query without dynamic parts for now
     const resources = await sql`
       SELECT id, title, category, content_type, institution, featured, 
              estimated_reading_time, COALESCE(view_count, 0) as view_count,
              created_at, updated_at
       FROM exam_resources
-      ${whereClause}
       ORDER BY featured DESC, created_at DESC
     `
     
