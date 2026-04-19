@@ -25,7 +25,8 @@ export async function GET(request: NextRequest) {
     // Build the base query
     let query = `
       SELECT id, title, category, content_type, institution, featured, 
-             estimated_reading_time, created_at, updated_at
+             estimated_reading_time, COALESCE(view_count, 0) as view_count,
+             created_at, updated_at
       FROM exam_resources
       WHERE 1=1
     `

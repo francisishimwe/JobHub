@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { SecureViewer } from '@/components/secure-viewer'
+import { useRouter } from 'next/navigation'
 import { Breadcrumb } from '@/components/breadcrumb'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -19,15 +19,15 @@ interface ExamResource {
   institution: string
   featured: boolean
   estimated_reading_time?: number
+  view_count?: number
   created_at: string
 }
 
 export default function ViewExamsPage() {
+  const router = useRouter()
   const [resources, setResources] = useState<ExamResource[]>([])
   const [filteredResources, setFilteredResources] = useState<ExamResource[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [selectedResource, setSelectedResource] = useState<ExamResource | null>(null)
-  const [isViewerOpen, setIsViewerOpen] = useState(false)
   
   // Filter states
   const [searchQuery, setSearchQuery] = useState('')
@@ -81,13 +81,7 @@ export default function ViewExamsPage() {
   }
 
   const openResource = (resource: ExamResource) => {
-    setSelectedResource(resource)
-    setIsViewerOpen(true)
-  }
-
-  const closeViewer = () => {
-    setIsViewerOpen(false)
-    setSelectedResource(null)
+    router.push(`/prep/${resource.id}`)
   }
 
   const clearFilters = () => {
@@ -257,6 +251,12 @@ export default function ViewExamsPage() {
                         <span>{resource.estimated_reading_time} min</span>
                       </div>
                     )}
+                    {resource.view_count !== undefined && (
+                      <div className="flex items-center gap-1">
+                        <Search className="w-4 h-4" />
+                        <span>{resource.view_count} views</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* View Button */}
@@ -293,15 +293,6 @@ export default function ViewExamsPage() {
       </main>
 
       <Footer />
-
-      {/* Secure Viewer Modal */}
-      {selectedResource && (
-        <SecureViewer
-          resource={selectedResource}
-          isOpen={isViewerOpen}
-          onClose={closeViewer}
-        />
-      )}
     </div>
   )
 }
