@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from 'next/navigation'
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { FileText, MessagesSquare, GraduationCap, Star, UserCheck } from "lucide-react"
@@ -23,6 +24,7 @@ interface Resource {
 }
 
 export default function ExamsPage() {
+  const router = useRouter()
   const [resources, setResources] = useState<Resource[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -62,7 +64,7 @@ export default function ExamsPage() {
       : `${baseClass} bg-orange-600 hover:bg-orange-700 text-white`
   }
 
-  const getCorrectLink = (buttonLink: string) => {
+  const handleButtonClick = (buttonLink: string) => {
     // Map old links to new secure system
     console.log('Original button link:', buttonLink)
     let newLink = buttonLink
@@ -74,8 +76,8 @@ export default function ExamsPage() {
       newLink = '/interview-prep'
     }
     
-    console.log('Mapped to:', newLink)
-    return newLink
+    console.log('Navigating to:', newLink)
+    router.push(newLink)
   }
 
   if (isLoading) {
@@ -137,11 +139,9 @@ export default function ExamsPage() {
                 <Button 
                   className={getButtonClass(resource.button_color)}
                   size="lg"
-                  asChild
+                  onClick={() => handleButtonClick(resource.button_link)}
                 >
-                  <a href={getCorrectLink(resource.button_link)}>
-                    {resource.button_text}
-                  </a>
+                  {resource.button_text}
                 </Button>
               </div>
             ))}
