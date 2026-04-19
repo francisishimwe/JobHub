@@ -8,12 +8,14 @@ import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { BookOpen, Play, AlertCircle, User, CreditCard, Phone } from "lucide-react"
+import { BookOpen, Play, AlertCircle, User, CreditCard, Phone, CheckCircle } from "lucide-react"
 
 export default function RoadRulesPage() {
   const { user, isAuthenticated } = useAuth()
   const router = useRouter()
   const [showPaymentInfo, setShowPaymentInfo] = useState(false)
+  const [showNotification, setShowNotification] = useState(false)
+  const [notificationMessage, setNotificationMessage] = useState("")
 
   const handleTakeQuiz = () => {
     if (!isAuthenticated) {
@@ -29,8 +31,37 @@ export default function RoadRulesPage() {
     }
   }
 
+  const handleOpenPDF = () => {
+    try {
+      window.open('/road-rules.pdf', '_blank')
+      setNotificationMessage("PDF y'amategeko y'umuhanda ifunzwe neza!")
+      setShowNotification(true)
+      setTimeout(() => setShowNotification(false), 3000)
+    } catch (error) {
+      setNotificationMessage("Ikibazo cyo gufungura PDF. Mugerageze mukanya.")
+      setShowNotification(true)
+      setTimeout(() => setShowNotification(false), 5000)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-slate-50">
+      {/* Notification Toast */}
+      {showNotification && (
+        <div className="fixed top-4 right-4 z-50 max-w-sm">
+          <Alert className={notificationMessage.includes("ifunzwe") ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}>
+            {notificationMessage.includes("ifunzwe") ? (
+              <CheckCircle className="h-4 w-4 text-green-600" />
+            ) : (
+              <AlertCircle className="h-4 w-4 text-red-600" />
+            )}
+            <AlertDescription className={notificationMessage.includes("ifunzwe") ? "text-green-800" : "text-red-800"}>
+              {notificationMessage}
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
+      
       <Header />
 
       <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -67,7 +98,10 @@ export default function RoadRulesPage() {
                     <p className="text-slate-500 mb-4">
                       Iyi PDF igufasha kumenya amategeko y'umuhanda mu Rwanda
                     </p>
-                    <Button className="bg-blue-600 hover:bg-blue-700">
+                    <Button 
+                      className="bg-blue-600 hover:bg-blue-700"
+                      onClick={handleOpenPDF}
+                    >
                       <BookOpen className="mr-2 h-4 w-4" />
                       Vura PDF Hano
                     </Button>
@@ -87,7 +121,12 @@ export default function RoadRulesPage() {
                 >
                   <p className="text-slate-600">
                     Ikibazo gikomeye: Ntago browser yawe ikora iyi iframe. 
-                    <a href="/road-rules.pdf" className="text-blue-600 underline ml-2">
+                    <a 
+                      href="/road-rules.pdf" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline ml-2"
+                    >
                       Kanda hano wakande PDF
                     </a>
                   </p>
