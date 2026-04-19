@@ -89,10 +89,10 @@ export default function DashboardPage() {
               <Button
                 className="gap-2 text-black hover:opacity-90"
                 style={{ backgroundColor: '#76c893' }}
-                onClick={() => router.push("/dashboard/add-exam")}
+                onClick={() => router.push("/admin")}
               >
                 <Plus className="h-4 w-4" />
-                Add New Exam
+                Manage Resources
               </Button>
             )}
           </div>
@@ -110,7 +110,21 @@ export default function DashboardPage() {
           </TabsContent>
 
           <TabsContent value="exams" className="space-y-6">
-            <ExamList />
+            <div className="text-center py-12">
+              <GraduationCap className="h-16 w-16 text-blue-600 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold mb-4">Resource Command Center</h2>
+              <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                Manage exam resources, interview preparation materials, and study guides in your comprehensive admin dashboard.
+              </p>
+              <Button
+                className="gap-2 text-black hover:opacity-90"
+                style={{ backgroundColor: '#76c893' }}
+                onClick={() => router.push("/admin")}
+              >
+                <GraduationCap className="h-4 w-4" />
+                Open Resource Command Center
+              </Button>
+            </div>
           </TabsContent>
 
           <TabsContent value="inquiries" className="space-y-6">
