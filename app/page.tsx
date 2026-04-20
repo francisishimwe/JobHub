@@ -133,7 +133,7 @@ function HomePageContent() {
 
       {/* Modern Category Bar - Desktop Only */}
       <div className="bg-slate-800 border-b border-slate-700/30 mb-4">
-        <div className="max-w-[95%] mx-auto py-3 px-2">
+        <div className="max-w-[98%] mx-auto py-3 px-2">
           {/* Desktop: Single Horizontal Line - All 7 Categories */}
           <div className="hidden lg:flex items-center justify-center gap-x-10">
             <Button 
@@ -278,25 +278,18 @@ function HomePageContent() {
 
       {/* The Search Zone - Category Dropdown Search */}
       <div className="bg-slate-50">
-        <div className="max-w-[95%] mx-auto px-2">
+        <div className="max-w-[98%] mx-auto px-2">
           <CategoryDropdownSearch />
         </div>
       </div>
 
-      <div className="max-w-[95%] mx-auto px-2 py-1">
+      <div className="max-w-[98%] mx-auto px-2 py-1">
           <main>
-            {/* 3-Column Grid Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            {/* 2-Column Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
               
-              {/* Far Left Column - Road Rules Banner */}
+              {/* Left Column (75%) - Job and Exam Cards */}
               <div className="lg:col-span-3">
-                <div className="lg:sticky lg:top-4">
-                  <RoadRulesBanner />
-                </div>
-              </div>
-
-              {/* Center Column - Job and Exam Cards */}
-              <div className="lg:col-span-6">
                 <div className="mb-1 flex items-center justify-between">
                   <p className="text-sm text-muted-foreground">Showing results ({filteredJobs.length})</p>
                   <DropdownMenu>
@@ -343,9 +336,10 @@ function HomePageContent() {
                 </div>
               </div>
 
-              {/* Far Right Column - Ads/Banners */}
-              <div className="lg:col-span-3">
+              {/* Right Column (25%) - All Banners */}
+              <div className="lg:col-span-1">
                 <div className="lg:sticky lg:top-4 space-y-4">
+                  <RoadRulesBanner />
                   <AppDownloadCard />
                   {/* Additional ads/banners can be added here */}
                 </div>
