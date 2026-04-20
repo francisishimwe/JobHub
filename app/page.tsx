@@ -20,6 +20,7 @@ import { useExamResources, ExamResourcesProvider } from "@/lib/exam-resources-co
 import { ExamResourceCard } from "@/components/exam-resource-card"
 import { BookOpen, FileText, GraduationCap } from "lucide-react"
 import { RoadRulesBanner } from "@/components/road-rules-banner"
+import { AppDownloadCard } from "@/components/app-download-card"
 
 export default function HomePage() {
   return (
@@ -282,12 +283,20 @@ function HomePageContent() {
         </div>
       </div>
 
-      <div className="container mx-auto px-2 py-1">
-        <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 py-1">
           <main>
-            <div className="flex flex-col lg:flex-row gap-6">
-              {/* Main Content */}
-              <div className="flex-1">
+            {/* 3-Column Grid Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              
+              {/* Far Left Column - Road Rules Banner */}
+              <div className="lg:col-span-3">
+                <div className="lg:sticky lg:top-4">
+                  <RoadRulesBanner />
+                </div>
+              </div>
+
+              {/* Center Column - Job and Exam Cards */}
+              <div className="lg:col-span-6">
                 <div className="mb-1 flex items-center justify-between">
                   <p className="text-sm text-muted-foreground">Showing results ({filteredJobs.length})</p>
                   <DropdownMenu>
@@ -334,16 +343,17 @@ function HomePageContent() {
                 </div>
               </div>
 
-              {/* Right Sidebar - Road Rules Banner */}
-              <div className="lg:w-80 flex-shrink-0">
+              {/* Far Right Column - Ads/Banners */}
+              <div className="lg:col-span-3">
                 <div className="lg:sticky lg:top-4 space-y-4">
-                  <RoadRulesBanner />
+                  <AppDownloadCard />
+                  {/* Additional ads/banners can be added here */}
                 </div>
               </div>
+
             </div>
           </main>
         </div>
-      </div>
       </div>
   )
 }
