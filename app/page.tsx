@@ -133,7 +133,7 @@ function HomePageContent() {
 
       {/* Modern Category Bar - Desktop Only */}
       <div className="bg-slate-800 border-b border-slate-700/30 mb-4">
-        <div className="max-w-7xl mx-auto py-3 px-8">
+        <div className="max-w-[95%] mx-auto py-3 px-2">
           {/* Desktop: Single Horizontal Line - All 7 Categories */}
           <div className="hidden lg:flex items-center justify-center gap-x-10">
             <Button 
@@ -278,15 +278,15 @@ function HomePageContent() {
 
       {/* The Search Zone - Category Dropdown Search */}
       <div className="bg-slate-50">
-        <div className="container mx-auto px-6">
+        <div className="max-w-[95%] mx-auto px-2">
           <CategoryDropdownSearch />
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-1">
+      <div className="max-w-[95%] mx-auto px-2 py-1">
           <main>
             {/* 3-Column Grid Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
               
               {/* Far Left Column - Road Rules Banner */}
               <div className="lg:col-span-3">
