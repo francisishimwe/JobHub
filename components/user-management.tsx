@@ -42,6 +42,7 @@ export function UserManagement() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   // Fetch users from API
   const fetchUsers = async () => {
@@ -50,10 +51,22 @@ export function UserManagement() {
       const response = await fetch('/api/admin/users')
       if (!response.ok) throw new Error('Failed to fetch users')
       const data = await response.json()
-      setUsers(data)
+      
+      // Handle different response formats
+      if (data.success && data.users) {
+        setUsers(data.users)
+      } else if (Array.isArray(data)) {
+        setUsers(data)
+      } else {
+        setUsers([])
+        setMessage({ type: 'error', text: 'Invalid response format' })
+      }
     } catch (error) {
       console.error('Error fetching users:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
       setMessage({ type: 'error', text: 'Failed to load users' })
+      setError(errorMessage)
+      setUsers([]) // Set empty array on error to prevent undefined issues
     } finally {
       setLoading(false)
     }
@@ -140,6 +153,46 @@ export function UserManagement() {
     )
   }
 
+  // Show error boundary if critical error occurred
+  if (error && !loading && users.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Users className="h-6 w-6 text-red-600" />
+            <div>
+              <h2 className="text-2xl font-bold">User Management</h2>
+              <p className="text-muted-foreground">Manage user quiz access and permissions</p>
+            </div>
+          </div>
+          <Button onClick={fetchUsers} variant="outline">
+            Retry
+          </Button>
+        </div>
+
+        <Alert className="border-red-200 bg-red-50">
+          <AlertCircle className="h-4 w-4 text-red-600" />
+          <AlertDescription className="text-red-800">
+            <div className="space-y-2">
+              <p className="font-semibold">Unable to load user data</p>
+              <p className="text-sm">There was an error connecting to the database. This might be due to:</p>
+              <ul className="text-sm list-disc list-inside space-y-1">
+                <li>Database connection issues</li>
+                <li>Missing database tables</li>
+                <li>Network connectivity problems</li>
+              </ul>
+              <div className="mt-3">
+                <Button onClick={fetchUsers} size="sm" variant="outline">
+                  Try Again
+                </Button>
+              </div>
+            </div>
+          </AlertDescription>
+        </Alert>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -203,8 +256,25 @@ export function UserManagement() {
                 </TableRow>
               ) : filteredUsers.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                    {searchTerm ? 'No users found matching your search.' : 'No users found.'}
+                  <TableCell colSpan={5} className="text-center py-8">
+                    <div className="space-y-4">
+                      <Users className="h-12 w-12 text-muted-foreground mx-auto" />
+                      <div>
+                        <p className="text-muted-foreground">
+                          {searchTerm ? 'No users found matching your search.' : 'No users found in the system.'}
+                        </p>
+                        {!searchTerm && (
+                          <p className="text-sm text-muted-foreground mt-2">
+                            Users will appear here when they sign up for accounts.
+                          </p>
+                        )}
+                      </div>
+                      {!searchTerm && (
+                        <Button onClick={fetchUsers} variant="outline" size="sm">
+                          Refresh
+                        </Button>
+                      )}
+                    </div>
                   </TableCell>
                 </TableRow>
               ) : (
