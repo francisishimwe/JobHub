@@ -33,7 +33,7 @@ export default function RoadRulesPage() {
 
   const handleOpenPDF = () => {
     try {
-      window.open('/road-rules.pdf', '_blank')
+      window.open('/documents/Amategeko y\'umuhanda.pdf', '_blank')
       setNotificationMessage("PDF y'amategeko y'umuhanda ifunzwe neza!")
       setShowNotification(true)
       setTimeout(() => setShowNotification(false), 3000)
@@ -82,56 +82,41 @@ export default function RoadRulesPage() {
               <h2 className="text-2xl font-semibold">Amategeko y'Umuhanada - PDF</h2>
             </div>
             
-            <div className="bg-slate-100 rounded-lg p-4 text-center">
-              <p className="text-slate-600 mb-4">
-                Kugira ngo urebe PDF y'amategeko y'umuhanda, nyamuneka wakandeyo hano hepfo:
-              </p>
-              
-              {/* Embed PDF - Replace with actual PDF URL */}
-              <div className="bg-white rounded-lg border-2 border-dashed border-slate-300 p-8">
-                <div className="space-y-4">
-                  <BookOpen className="h-16 w-16 text-slate-400 mx-auto" />
-                  <div>
-                    <h3 className="text-lg font-medium text-slate-700 mb-2">
-                      Amategeko y'Umuhanada PDF
-                    </h3>
-                    <p className="text-slate-500 mb-4">
-                      Iyi PDF igufasha kumenya amategeko y'umuhanda mu Rwanda
-                    </p>
-                    <Button 
-                      className="bg-blue-600 hover:bg-blue-700"
-                      onClick={handleOpenPDF}
-                    >
-                      <BookOpen className="mr-2 h-4 w-4" />
-                      Vura PDF Hano
-                    </Button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Alternative: Direct PDF embed */}
-              <div className="mt-6">
-                <iframe
-                  src="/road-rules.pdf" // Replace with actual PDF path
-                  className="w-full h-96 border rounded-lg"
-                  title="Road Rules PDF"
-                  onError={() => {
-                    console.log("PDF failed to load")
-                  }}
+            <div className="bg-white rounded-lg p-4">
+              <div className="mb-4 flex items-center justify-between">
+                <p className="text-slate-600">
+                  Amategeko y'umuhanda - PDF
+                </p>
+                <Button 
+                  className="bg-blue-600 hover:bg-blue-700"
+                  onClick={handleOpenPDF}
                 >
-                  <p className="text-slate-600">
-                    Ikibazo gikomeye: Ntago browser yawe ikora iyi iframe. 
-                    <a 
-                      href="/road-rules.pdf" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline ml-2"
-                    >
-                      Kanda hano wakande PDF
-                    </a>
-                  </p>
-                </iframe>
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Fungura PDF mu Idirishya Rishasha
+                </Button>
               </div>
+              
+              {/* PDF iframe */}
+              <iframe
+                src="/documents/Amategeko y'umuhanda.pdf"
+                className="w-full h-[600px] border rounded-lg"
+                title="Amategeko y'umuhanda PDF"
+                onError={() => {
+                  console.log("PDF failed to load")
+                }}
+              >
+                <p className="text-slate-600 p-4">
+                  Ikibazo gikomeye: Ntago browser yawe ikora iyi iframe. 
+                  <a 
+                    href="/documents/Amategeko y'umuhanda.pdf" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline ml-2"
+                  >
+                    Kanda hano wakande PDF
+                  </a>
+                </p>
+              </iframe>
             </div>
           </Card>
         </div>
