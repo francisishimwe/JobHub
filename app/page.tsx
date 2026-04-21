@@ -286,7 +286,7 @@ function HomePageContent() {
       <div className="max-w-[94%] mx-auto px-6 py-1">
           <main>
             {/* 2-Column Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
               
               {/* Left Column (75%) - Job and Exam Cards */}
               <div className="lg:col-span-3">
@@ -338,7 +338,7 @@ function HomePageContent() {
 
               {/* Right Column (25%) - All Banners */}
               <div className="lg:col-span-1">
-                <div className="lg:sticky lg:top-4 space-y-4">
+                <div className="lg:sticky lg:top-4 space-y-4 mt-[32px]">
                   <RoadRulesBanner />
                   <AppDownloadCard />
                   {/* Additional ads/banners can be added here */}
