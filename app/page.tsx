@@ -133,7 +133,7 @@ function HomePageContent() {
 
       {/* Modern Category Bar - Desktop Only */}
       <div className="bg-slate-800 border-b border-slate-700/30 mb-4">
-        <div className="max-w-[94%] mx-auto py-3 px-6">
+        <div className="max-w-7xl mx-auto py-3 px-4">
           {/* Desktop: Single Horizontal Line - All 7 Categories */}
           <div className="hidden lg:flex items-center justify-center gap-x-10">
             <Button 
@@ -278,12 +278,12 @@ function HomePageContent() {
 
       {/* The Search Zone - Category Dropdown Search */}
       <div className="bg-slate-50">
-        <div className="max-w-[94%] mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-4">
           <CategoryDropdownSearch />
         </div>
       </div>
 
-      <div className="max-w-[94%] mx-auto px-6 py-1">
+      <div className="max-w-7xl mx-auto px-4 py-1">
           <main>
             {/* 2-Column Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
@@ -338,7 +338,7 @@ function HomePageContent() {
 
               {/* Right Column (25%) - All Banners */}
               <div className="lg:col-span-1">
-                <div className="lg:sticky lg:top-4 space-y-4 mt-[32px]">
+                <div className="lg:sticky lg:top-4 space-y-4">
                   <RoadRulesBanner />
                   <AppDownloadCard />
                   {/* Additional ads/banners can be added here */}
