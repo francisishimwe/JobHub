@@ -133,7 +133,7 @@ function HomePageContent() {
 
       {/* Modern Category Bar - Desktop Only */}
       <div className="bg-slate-800 border-b border-slate-700/30 mb-4">
-        <div className="max-w-[98%] mx-auto py-3 px-2">
+        <div className="max-w-[94%] mx-auto py-3 px-6">
           {/* Desktop: Single Horizontal Line - All 7 Categories */}
           <div className="hidden lg:flex items-center justify-center gap-x-10">
             <Button 
@@ -278,15 +278,15 @@ function HomePageContent() {
 
       {/* The Search Zone - Category Dropdown Search */}
       <div className="bg-slate-50">
-        <div className="max-w-[98%] mx-auto px-2">
+        <div className="max-w-[94%] mx-auto px-6">
           <CategoryDropdownSearch />
         </div>
       </div>
 
-      <div className="max-w-[98%] mx-auto px-2 py-1">
+      <div className="max-w-[94%] mx-auto px-6 py-1">
           <main>
             {/* 2-Column Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               
               {/* Left Column (75%) - Job and Exam Cards */}
               <div className="lg:col-span-3">
