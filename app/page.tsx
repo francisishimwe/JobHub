@@ -138,15 +138,15 @@ function HomePageContent() {
         <div className="bg-gradient-to-br from-blue-50 via-white to-slate-50">
           <div className="max-w-[95%] mx-auto px-4 py-10">
             <div className="flex justify-between items-center">
-              {/* Far Left - Mega-Square Logo Card */}
-              <div className="h-64 w-64 rounded-3xl bg-white shadow-xl flex items-center justify-center p-4">
-                <Link href="/" className="flex items-center justify-center">
+              {/* Far Left - Integrated Logo */}
+              <div className="h-12 flex items-center">
+                <Link href="/" className="flex items-center">
                   <Image
                     src="/full logo.jpg"
                     alt="RwandaJobHub"
-                    width={224}
-                    height={224}
-                    className="w-full h-full object-contain"
+                    width={192}
+                    height={48}
+                    className="h-12 w-auto object-contain"
                   />
                 </Link>
               </div>
