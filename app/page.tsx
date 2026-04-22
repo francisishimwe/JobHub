@@ -138,25 +138,23 @@ function HomePageContent() {
         <div className="relative bg-gradient-to-b from-blue-50 to-white pt-16 pb-12">
           <div className="max-w-7xl mx-auto px-6">
             {/* Hero Header with Integrated Logo & Actions */}
-            <div className="flex items-center justify-between mb-6">
-              {/* Logo Card - Far Left */}
-              <div className="h-24 w-24 rounded-2xl bg-white shadow-xl flex items-center justify-center p-4">
+            <div className="flex items-center justify-between mb-8">
+              {/* Square Logo Box - Far Left */}
+              <div className="h-32 w-32 rounded-3xl bg-white shadow-2xl flex items-center justify-center p-4">
                 <Link href="/" className="flex items-center justify-center">
-                  <div className="relative h-full w-full">
-                    <Image
-                      src="/full logo.jpg"
-                      alt="RwandaJobHub"
-                      fill
-                      priority
-                      className="object-contain"
-                    />
-                  </div>
+                  <Image
+                    src="/full logo.jpg"
+                    alt="RwandaJobHub"
+                    width={96}
+                    height={96}
+                    className="w-full h-auto object-contain"
+                  />
                 </Link>
               </div>
 
               {/* Hero Content - Center */}
               <div className="flex-1 text-center mx-8">
-                <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-4 animate-fade-in">
+                <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 mb-4 animate-fade-in">
                   Discover Opportunities Across Rwanda
                 </h1>
                 <p className="text-lg text-slate-600 max-w-2xl mx-auto">
@@ -165,7 +163,7 @@ function HomePageContent() {
               </div>
 
               {/* Actions - Far Right */}
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-8">
                 <Button 
                   asChild
                   className="bg-blue-600 hover:bg-blue-700 text-white h-11 py-4 px-10 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
@@ -178,7 +176,7 @@ function HomePageContent() {
                 </Button>
                 <Link 
                   href="/dashboard" 
-                  className="text-base font-medium text-slate-500 hover:text-blue-600 transition-colors"
+                  className="text-base font-semibold text-slate-500 hover:text-blue-600 transition-colors"
                 >
                   Admin Login
                 </Link>
