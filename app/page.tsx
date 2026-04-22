@@ -132,30 +132,31 @@ function HomePageContent() {
         {/* Subtle radial gradient in top-right corner */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-50/50 to-transparent pointer-events-none"></div>
         
-        <Header />
-
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8 mb-2">
-        <div className="max-w-[95%] mx-auto px-4 py-12 pb-6">
-          <div className="text-center mb-4">
-            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-4 animate-fade-in">
-              Connecting Rwanda's Best Talent
-            </h1>
-            <p className="text-lg text-slate-600 mb-4 max-w-2xl mx-auto">
-              Discover opportunities, advance your career, and connect with top employers across Rwanda
-            </p>
-            {/* Hero Search Box */}
-            <div className="max-w-2xl mx-auto">
-              <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl shadow-slate-200/60 p-2 border border-slate-200/50">
-                <CategoryDropdownSearch />
+        {/* Hero Section - Now at Top */}
+        <div className="relative bg-gradient-to-b from-blue-50 to-white py-8 mb-2">
+          <div className="max-w-[95%] mx-auto px-4 py-12 pb-6">
+            <div className="text-center mb-4">
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-4 animate-fade-in">
+                Connecting Rwanda's Best Talent
+              </h1>
+              <p className="text-lg text-slate-600 mb-4 max-w-2xl mx-auto">
+                Discover opportunities, advance your career, and connect with top employers across Rwanda
+              </p>
+              {/* Hero Search Box */}
+              <div className="max-w-2xl mx-auto">
+                <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl shadow-slate-200/60 p-2 border border-slate-200/50">
+                  <CategoryDropdownSearch />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+
+        {/* Sticky Header Navigation */}
+        <Header />
 
       {/* Modern Filter Bar - Desktop Only */}
-      <div className="bg-slate-50 border-b border-slate-200/50 mb-2 mt-2">
+      <div className="bg-slate-50 border-b border-slate-200/50 mb-2">
         <div className="max-w-[95%] mx-auto py-3 px-4">
           {/* Desktop: Clean Tab-style Categories */}
           <div className="hidden lg:flex items-center justify-center gap-x-8">
