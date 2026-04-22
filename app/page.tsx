@@ -134,59 +134,56 @@ function HomePageContent() {
         {/* Subtle radial gradient in top-right corner */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-50/50 to-transparent pointer-events-none"></div>
         
-        {/* Grand Hero Section */}
-        <div className="relative bg-gradient-to-b from-blue-50 to-white pt-16 pb-12">
-          <div className="max-w-7xl mx-auto px-6">
-            {/* Hero Header with Integrated Logo & Actions */}
-            <div className="flex items-center justify-between mb-8">
-              {/* Square Logo Box - Far Left */}
-              <div className="h-32 w-32 rounded-3xl bg-white shadow-2xl flex items-center justify-center p-4">
-                <Link href="/" className="flex items-center justify-center">
-                  <Image
-                    src="/full logo.jpg"
-                    alt="RwandaJobHub"
-                    width={96}
-                    height={96}
-                    className="w-full h-auto object-contain"
-                  />
-                </Link>
-              </div>
+        {/* Grand Hero Section - Magazine Style */}
+        <div className="relative bg-gradient-to-br from-blue-50 via-white to-slate-50">
+          <div className="flex items-start justify-between px-16 py-12">
+            {/* Left Column - Mega-Square Logo Card */}
+            <div className="h-64 w-64 rounded-[2rem] bg-white shadow-2xl flex items-center justify-center p-8">
+              <Link href="/" className="flex items-center justify-center">
+                <Image
+                  src="/full logo.jpg"
+                  alt="RwandaJobHub"
+                  width={192}
+                  height={192}
+                  className="w-full h-full object-contain"
+                />
+              </Link>
+            </div>
 
-              {/* Hero Content - Center */}
-              <div className="flex-1 text-center mx-8">
-                <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 mb-4 animate-fade-in">
-                  Discover Opportunities Across Rwanda
-                </h1>
-                <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                  Find the latest job openings, explore opportunities from top employers, and take the next step in your career.
-                </p>
-              </div>
+            {/* Center Column - Hero Content */}
+            <div className="flex-1 text-center mx-12 flex flex-col justify-center">
+              <h1 className="text-6xl font-black tracking-tight text-slate-900 mb-6 animate-fade-in">
+                Discover Opportunities Across Rwanda
+              </h1>
+              <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+                Find the latest job openings, explore opportunities from top employers, and take the next step in your career.
+              </p>
+            </div>
 
-              {/* Actions - Far Right */}
-              <div className="flex items-center gap-8">
-                <Button 
-                  asChild
-                  className="bg-blue-600 hover:bg-blue-700 text-white h-11 py-4 px-10 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
-                >
-                  <Link href="/select-plan">
-                    <span className="text-lg sm:text-xl">+</span>
-                    <span className="hidden sm:inline">Post a Job</span>
-                    <span className="sm:hidden">Post a Job</span>
-                  </Link>
-                </Button>
-                <Link 
-                  href="/dashboard" 
-                  className="text-base font-semibold text-slate-500 hover:text-blue-600 transition-colors"
-                >
-                  Admin Login
+            {/* Right Column - Actions */}
+            <div className="flex flex-col items-end gap-4">
+              <Button 
+                asChild
+                className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
+              >
+                <Link href="/select-plan">
+                  <span className="text-lg sm:text-xl">+</span>
+                  <span className="hidden sm:inline">Post a Job</span>
+                  <span className="sm:hidden">Post a Job</span>
                 </Link>
-              </div>
+              </Button>
+              <Link 
+                href="/dashboard" 
+                className="text-base font-semibold text-slate-500 hover:text-blue-600 transition-colors"
+              >
+                Admin Login
+              </Link>
             </div>
           </div>
         </div>
 
         {/* Primary Navigation Menu */}
-        <div className="bg-white border-b border-slate-100">
+        <div className="bg-white border-b border-slate-100 mt-12">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <nav className="flex items-center justify-center gap-10">
               <Link href="/" className="text-slate-800 hover:text-blue-600 text-lg font-semibold transition-colors px-2 py-1 whitespace-nowrap">Home</Link>
