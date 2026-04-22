@@ -12,7 +12,7 @@ export function AppDownloadCard({ className = "" }: AppDownloadCardProps) {
   const playStoreUrl = "https://play.google.com/store/apps/details?id=com.rwandajobhub.app"
 
   return (
-    <div className={`bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-300 ${className}`}>
+    <div className={`bg-white rounded-lg shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-shadow duration-300 ${className}`}>
       <div className="text-center space-y-4">
         <div>
           <h3 className="text-xl font-bold text-gray-900 mb-2">

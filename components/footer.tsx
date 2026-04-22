@@ -22,7 +22,7 @@ export function Footer() {
         3. Paste it here inside a <div>
       */}
       
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-[95%] mx-auto px-4">
         <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 gap-4">
           
           {/* Box 1: Get in Touch */}
