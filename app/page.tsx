@@ -154,72 +154,72 @@ function HomePageContent() {
         </div>
       </div>
 
-      {/* Modern Category Bar - Desktop Only */}
-      <div className="bg-slate-800 border-b border-slate-700/30 mb-4">
+      {/* Modern Filter Bar - Desktop Only */}
+      <div className="bg-slate-50 border-b border-slate-200/50 mb-4">
         <div className="max-w-[95%] mx-auto py-3 px-4">
-          {/* Desktop: Single Horizontal Line - All 7 Categories */}
-          <div className="hidden lg:flex items-center justify-center gap-x-10">
+          {/* Desktop: Clean Tab-style Categories */}
+          <div className="hidden lg:flex items-center justify-center gap-x-8">
             <Button 
               variant="ghost" 
-              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
+              className={`text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('featured') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('featured')}
             >
               Featured
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.featured}</span>
+              {opportunityCounts.featured > 0 && (
+                <span className="ml-2 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.featured}</span>
+              )}
             </Button>
-            
             <Button 
               variant="ghost" 
-              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
-              onClick={() => handleOpportunityClick('job')}
+              className={`text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('jobs') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
+              onClick={() => handleOpportunityClick('jobs')}
             >
               Jobs
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.jobs}</span>
+              {opportunityCounts.jobs > 0 && (
+                <span className="ml-2 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.jobs}</span>
+              )}
             </Button>
-            
             <Button 
               variant="ghost" 
-              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
-              onClick={() => handleOpportunityClick('tender')}
+              className={`text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('tenders') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
+              onClick={() => handleOpportunityClick('tenders')}
             >
               Tenders
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.tenders}</span>
+              {opportunityCounts.tenders > 0 && (
+                <span className="ml-2 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.tenders}</span>
+              )}
             </Button>
-            
             <Button 
               variant="ghost" 
-              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
-              onClick={() => handleOpportunityClick('blog')}
-            >
-              Blogs
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.blogs}</span>
-            </Button>
-            
-            <Button 
-              variant="ghost" 
-              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
-              onClick={() => handleOpportunityClick('internship')}
+              className={`text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('internships') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
+              onClick={() => handleOpportunityClick('internships')}
             >
               Internships
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.internships}</span>
+              {opportunityCounts.internships > 0 && (
+                <span className="ml-2 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.internships}</span>
+              )}
             </Button>
             
             <Button 
               variant="ghost" 
-              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
-              onClick={() => handleOpportunityClick('scholarship')}
+              className={`text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('scholarships') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
+              onClick={() => handleOpportunityClick('scholarships')}
             >
               Scholarships
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.scholarships}</span>
+              {opportunityCounts.scholarships > 0 && (
+                <span className="ml-2 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.scholarships}</span>
+              )}
             </Button>
             
             <Button 
               variant="ghost" 
-              className="text-white border-white/20 hover:bg-white/10 hover:border-white/30 hover:text-white transition-all px-4 py-2 rounded-lg font-medium hover:scale-105"
+              className={`text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('education') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('education')}
             >
               Education
-              <span className="ml-2 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{opportunityCounts.education}</span>
+              {opportunityCounts.education > 0 && (
+                <span className="ml-2 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.education}</span>
+              )}
             </Button>
           </div>
 
@@ -229,38 +229,46 @@ function HomePageContent() {
             <div className="grid grid-cols-4 items-center justify-items-center gap-x-2 mb-2 text-[10px]">
               <Button 
                 variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                className="text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
                 onClick={() => handleOpportunityClick('featured')}
               >
                 Featured
-                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.featured}</span>
+                {opportunityCounts.featured > 0 && (
+                  <span className="ml-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-3 h-3 flex items-center justify-center text-[8px]">{opportunityCounts.featured}</span>
+                )}
               </Button>
               
               <Button 
                 variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                onClick={() => handleOpportunityClick('job')}
+                className="text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                onClick={() => handleOpportunityClick('jobs')}
               >
                 Jobs
-                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.jobs}</span>
+                {opportunityCounts.jobs > 0 && (
+                  <span className="ml-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-3 h-3 flex items-center justify-center text-[8px]">{opportunityCounts.jobs}</span>
+                )}
               </Button>
               
               <Button 
                 variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                onClick={() => handleOpportunityClick('tender')}
+                className="text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                onClick={() => handleOpportunityClick('tenders')}
               >
                 Tenders
-                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.tenders}</span>
+                {opportunityCounts.tenders > 0 && (
+                  <span className="ml-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-3 h-3 flex items-center justify-center text-[8px]">{opportunityCounts.tenders}</span>
+                )}
               </Button>
               
               <Button 
                 variant="ghost" 
-                className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                onClick={() => handleOpportunityClick('blog')}
+                className="text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                onClick={() => handleOpportunityClick('scholarships')}
               >
-                Blogs
-                <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.blogs}</span>
+                Scholarships
+                {opportunityCounts.scholarships > 0 && (
+                  <span className="ml-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-3 h-3 flex items-center justify-center text-[8px]">{opportunityCounts.scholarships}</span>
+                )}
               </Button>
             </div>
             
@@ -269,29 +277,24 @@ function HomePageContent() {
               <div className="flex justify-center gap-2 w-full max-w-md mx-auto">
                 <Button 
                   variant="ghost" 
-                  className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                  onClick={() => handleOpportunityClick('scholarship')}
-                >
-                  Scholarships
-                  <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.scholarships}</span>
-                </Button>
-                
-                <Button 
-                  variant="ghost" 
-                  className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                  className="text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
                   onClick={() => handleOpportunityClick('education')}
                 >
                   Education
-                  <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.education}</span>
+                  {opportunityCounts.education > 0 && (
+                    <span className="ml-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-3 h-3 flex items-center justify-center text-[8px]">{opportunityCounts.education}</span>
+                  )}
                 </Button>
                 
                 <Button 
                   variant="ghost" 
-                  className="text-white border-[#E2E8F0] hover:bg-[#10B981] hover:border-[#10B981] hover:text-white transition-all px-2 py-2 rounded-lg font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                  onClick={() => handleOpportunityClick('internship')}
+                  className="text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                  onClick={() => handleOpportunityClick('internships')}
                 >
                   Internships
-                  <span className="ml-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px]">{opportunityCounts.internships}</span>
+                  {opportunityCounts.internships > 0 && (
+                    <span className="ml-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-3 h-3 flex items-center justify-center text-[8px]">{opportunityCounts.internships}</span>
+                  )}
                 </Button>
               </div>
             </div>
