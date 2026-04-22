@@ -3,6 +3,8 @@
 export const dynamic = 'force-dynamic'
 
 import { useState } from "react"
+import Link from "next/link"
+import Image from "next/image"
 import { Footer } from "@/components/footer"
 import { JobCard } from "@/components/job-card"
 import { useJobs } from "@/lib/job-context"
