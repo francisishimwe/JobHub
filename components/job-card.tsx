@@ -216,7 +216,7 @@ const JobCardComponent = ({ job }: JobCardProps) => {
 
   return (
     <div className="block">
-      <div className={`rounded-2xl border bg-white pt-6 p-4 md:p-6 shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-105 border-l-4 ${getJobTypeBorderColor()} animate-fade-in`}>
+      <div className={`rounded-2xl border bg-white border-slate-100 pt-6 p-4 md:p-6 shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-105 border-l-4 ${getJobTypeBorderColor()} animate-fade-in`}>
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 lg:gap-4">
           <div className="flex gap-3 md:gap-4 flex-1 min-w-0">
             <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted transition-transform duration-300 hover:scale-110">

@@ -161,28 +161,28 @@ function HomePageContent() {
           <div className="hidden lg:flex items-center justify-center gap-x-8">
             <Button 
               variant="ghost" 
-              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('featured') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('featured') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('featured')}
             >
               Featured{opportunityCounts.featured > 0 && ` (${opportunityCounts.featured})`}
             </Button>
             <Button 
               variant="ghost" 
-              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('jobs') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('jobs') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('jobs')}
             >
               Jobs{opportunityCounts.jobs > 0 && ` (${opportunityCounts.jobs})`}
             </Button>
             <Button 
               variant="ghost" 
-              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('tenders') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('tenders') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('tenders')}
             >
               Tenders{opportunityCounts.tenders > 0 && ` (${opportunityCounts.tenders})`}
             </Button>
             <Button 
               variant="ghost" 
-              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('internships') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('internships') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('internships')}
             >
               Internships{opportunityCounts.internships > 0 && ` (${opportunityCounts.internships})`}
@@ -190,7 +190,7 @@ function HomePageContent() {
             
             <Button 
               variant="ghost" 
-              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('scholarships') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('scholarships') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('scholarships')}
             >
               Scholarships{opportunityCounts.scholarships > 0 && ` (${opportunityCounts.scholarships})`}
@@ -198,7 +198,7 @@ function HomePageContent() {
             
             <Button 
               variant="ghost" 
-              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('education') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('education') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('education')}
             >
               Education{opportunityCounts.education > 0 && ` (${opportunityCounts.education})`}
@@ -211,7 +211,7 @@ function HomePageContent() {
             <div className="grid grid-cols-4 items-center justify-items-center gap-x-2 mb-2 text-[10px]">
               <Button 
                 variant="ghost" 
-                className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
                 onClick={() => handleOpportunityClick('featured')}
               >
                 Featured{opportunityCounts.featured > 0 && ` (${opportunityCounts.featured})`}
@@ -219,7 +219,7 @@ function HomePageContent() {
               
               <Button 
                 variant="ghost" 
-                className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
                 onClick={() => handleOpportunityClick('jobs')}
               >
                 Jobs{opportunityCounts.jobs > 0 && ` (${opportunityCounts.jobs})`}
@@ -227,7 +227,7 @@ function HomePageContent() {
               
               <Button 
                 variant="ghost" 
-                className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
                 onClick={() => handleOpportunityClick('tenders')}
               >
                 Tenders{opportunityCounts.tenders > 0 && ` (${opportunityCounts.tenders})`}
@@ -235,7 +235,7 @@ function HomePageContent() {
               
               <Button 
                 variant="ghost" 
-                className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
                 onClick={() => handleOpportunityClick('scholarships')}
               >
                 Scholarships{opportunityCounts.scholarships > 0 && ` (${opportunityCounts.scholarships})`}
@@ -247,7 +247,7 @@ function HomePageContent() {
               <div className="flex justify-center gap-2 w-full max-w-md mx-auto">
                 <Button 
                   variant="ghost" 
-                  className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                  className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
                   onClick={() => handleOpportunityClick('education')}
                 >
                   Education{opportunityCounts.education > 0 && ` (${opportunityCounts.education})`}
@@ -255,7 +255,7 @@ function HomePageContent() {
                 
                 <Button 
                   variant="ghost" 
-                  className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                  className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
                   onClick={() => handleOpportunityClick('internships')}
                 >
                   Internships{opportunityCounts.internships > 0 && ` (${opportunityCounts.internships})`}
