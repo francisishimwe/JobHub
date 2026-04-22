@@ -135,13 +135,13 @@ function HomePageContent() {
         <Header />
 
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8 mb-4">
-        <div className="max-w-[95%] mx-auto px-4 py-12">
-          <div className="text-center mb-6">
+      <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8 mb-2">
+        <div className="max-w-[95%] mx-auto px-4 py-12 pb-6">
+          <div className="text-center mb-4">
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-4 animate-fade-in">
               Connecting Rwanda's Best Talent
             </h1>
-            <p className="text-lg text-slate-600 mb-6 max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 mb-4 max-w-2xl mx-auto">
               Discover opportunities, advance your career, and connect with top employers across Rwanda
             </p>
             {/* Hero Search Box */}
@@ -155,7 +155,7 @@ function HomePageContent() {
       </div>
 
       {/* Modern Filter Bar - Desktop Only */}
-      <div className="bg-slate-50 border-b border-slate-200/50 mb-4">
+      <div className="bg-slate-50 border-b border-slate-200/50 mb-2 mt-2">
         <div className="max-w-[95%] mx-auto py-3 px-4">
           {/* Desktop: Clean Tab-style Categories */}
           <div className="hidden lg:flex items-center justify-center gap-x-8">
