@@ -13,7 +13,7 @@ export function Footer() {
   }, []);
 
   return (
-    <footer className="bg-slate-900 border-t border-slate-800/50 text-white py-4">
+    <footer className="bg-slate-100 text-slate-800 py-4 w-full mx-0 mb-0">
       {/* 
         Space for Google AdSense Ad Unit (Footer)
         To place a manual ad here:
@@ -22,7 +22,7 @@ export function Footer() {
         3. Paste it here inside a <div>
       */}
       
-      <div className="max-w-[95%] mx-auto px-4">
+      <div className="max-w-screen-2xl mx-auto px-6">
         <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 gap-4">
           
           {/* Box 1: Get in Touch */}
@@ -136,53 +136,53 @@ export function Footer() {
             href="https://chat.whatsapp.com/250783074056?mode=wwt"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-8 h-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+            className="w-8 h-8 bg-slate-200 border border-slate-300 rounded-full flex items-center justify-center hover:bg-slate-300 hover:border-slate-400 transition-all duration-300"
             aria-label="WhatsApp"
           >
-            <FaWhatsapp className="h-3 w-3 text-green-400" />
+            <FaWhatsapp className="h-3 w-3 text-green-600" />
           </a>
           
           <a
             href="https://www.facebook.com/profile.php?id=61584589785023"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-8 h-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+            className="w-8 h-8 bg-slate-200 border border-slate-300 rounded-full flex items-center justify-center hover:bg-slate-300 hover:border-slate-400 transition-all duration-300"
             aria-label="Facebook"
           >
-            <FaFacebook className="h-3 w-3 text-blue-400" />
+            <FaFacebook className="h-3 w-3 text-blue-600" />
           </a>
           
           <a
             href="https://x.com/Rwanda_Job_Hub"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-8 h-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+            className="w-8 h-8 bg-slate-200 border border-slate-300 rounded-full flex items-center justify-center hover:bg-slate-300 hover:border-slate-400 transition-all duration-300"
             aria-label="X (Twitter)"
           >
-            <FaXTwitter className="h-3 w-3 text-gray-300" />
+            <FaXTwitter className="h-3 w-3 text-slate-600" />
           </a>
           
           <a
             href="https://t.me/RwandaJobHub"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-8 h-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/30 transition-all duration-300"
+            className="w-8 h-8 bg-slate-200 border border-slate-300 rounded-full flex items-center justify-center hover:bg-slate-300 hover:border-slate-400 transition-all duration-300"
             aria-label="Telegram"
           >
-            <FaTelegram className="h-3 w-3 text-blue-400" />
+            <FaTelegram className="h-3 w-3 text-blue-600" />
           </a>
         </div>
 
         {/* Minimalist Bottom Bar */}
-        <div className="border-t border-slate-800/50 pt-2 text-center">
+        <div className="pt-2 text-center">
           <div className="flex flex-wrap items-center justify-center gap-2 text-[8px]">
-            <a href="/privacy" className="text-gray-400 hover:text-white transition-colors py-1 px-2">Privacy Policy</a>
-            <span className="text-gray-600">|</span>
-            <a href="/terms" className="text-gray-400 hover:text-white transition-colors py-1 px-2">Terms & Conditions</a>
-            <span className="text-gray-600">|</span>
-            <a href="/disclaimer" className="text-gray-400 hover:text-white transition-colors py-1 px-2">Disclaimer</a>
+            <a href="/privacy" className="text-slate-500 hover:text-slate-700 transition-colors py-1 px-2">Privacy Policy</a>
+            <span className="text-slate-400">|</span>
+            <a href="/terms" className="text-slate-500 hover:text-slate-700 transition-colors py-1 px-2">Terms & Conditions</a>
+            <span className="text-slate-400">|</span>
+            <a href="/disclaimer" className="text-slate-500 hover:text-slate-700 transition-colors py-1 px-2">Disclaimer</a>
           </div>
-          <p className="text-gray-500 text-[8px] mt-2">
+          <p className="text-slate-400 text-[8px] mt-2">
             2026 RwandaJobHub. All rights reserved.
           </p>
         </div>
