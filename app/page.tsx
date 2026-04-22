@@ -135,13 +135,13 @@ function HomePageContent() {
         <Header />
 
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-12 mb-8">
-        <div className="max-w-[95%] mx-auto px-4 py-20">
-          <div className="text-center mb-8">
-            <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 mb-4 animate-fade-in">
+      <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8 mb-4">
+        <div className="max-w-[95%] mx-auto px-4 py-10">
+          <div className="text-center mb-6">
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-4 animate-fade-in">
               Connecting Rwanda's Best Talent
             </h1>
-            <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 mb-6 max-w-2xl mx-auto">
               Discover opportunities, advance your career, and connect with top employers across Rwanda
             </p>
             {/* Hero Search Box */}
