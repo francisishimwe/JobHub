@@ -150,12 +150,12 @@ function HomePageContent() {
 
         {/* Sticky Primary Navigation Bar */}
         <div className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-slate-100 z-40">
-          <div className="max-w-7xl mx-auto px-6 pt-10 pb-6">
+          <div className="max-w-7xl mx-auto px-6 pt-16 pb-8">
             <div className="flex items-center justify-between">
               {/* Logo - Left */}
-              <div className="bg-white rounded-lg shadow-lg px-3 py-2 pointer-events-none z-50 w-fit lg:px-4 lg:py-2 lg:w-32">
-                <Link href="/" className="flex items-center gap-3 pointer-events-auto">
-                  <div className="relative h-14 w-32">
+              <div className="bg-white rounded-lg shadow-lg px-4 py-3 pointer-events-none z-50 w-fit lg:px-6 lg:py-4 lg:w-48">
+                <Link href="/" className="flex items-center gap-4 pointer-events-auto">
+                  <div className="relative h-20 w-40">
                     <Image
                       src="/full logo.jpg"
                       alt="RwandaJobHub"
@@ -168,31 +168,31 @@ function HomePageContent() {
               </div>
 
               {/* Navigation Links - Center */}
-              <nav className="hidden lg:flex items-center gap-x-10">
-                <Link href="/" className="text-slate-800 hover:text-blue-600 text-[18px] font-semibold transition-colors px-2 py-1 whitespace-nowrap">Home</Link>
-                <Link href="/exams" className="text-slate-800 hover:text-blue-600 text-[18px] font-semibold transition-colors px-2 py-1 whitespace-nowrap">View Exams</Link>
-                <Link href="/employers" className="text-slate-800 hover:text-blue-600 text-[18px] font-semibold transition-colors px-2 py-1 whitespace-nowrap">Partners</Link>
-                <Link href="/testimonials" className="text-slate-800 hover:text-blue-600 text-[18px] font-semibold transition-colors px-2 py-1 whitespace-nowrap">Testimonials</Link>
-                <Link href="/help" className="text-slate-800 hover:text-blue-600 text-[18px] font-semibold transition-colors px-2 py-1 whitespace-nowrap">Help</Link>
-                <Link href="/about" className="text-slate-800 hover:text-blue-600 text-[18px] font-semibold transition-colors px-2 py-1 whitespace-nowrap">About Us</Link>
-                <Link href="/contact" className="text-slate-800 hover:text-blue-600 text-[18px] font-semibold transition-colors px-2 py-1 whitespace-nowrap">Contact Us</Link>
+              <nav className="hidden lg:flex items-center gap-x-12">
+                <Link href="/" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Home</Link>
+                <Link href="/exams" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">View Exams</Link>
+                <Link href="/employers" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Partners</Link>
+                <Link href="/testimonials" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Testimonials</Link>
+                <Link href="/help" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Help</Link>
+                <Link href="/about" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">About Us</Link>
+                <Link href="/contact" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Contact Us</Link>
               </nav>
 
               {/* Post a Job Button & Admin Login - Right */}
               <div className="flex items-center gap-4">
                 <Button 
                   asChild
-                  className="bg-blue-600 hover:bg-blue-700 text-white h-11 px-8 text-sm font-semibold rounded-full transition-all active:scale-105 shadow-md shadow-blue-500/10 flex items-center gap-2"
+                  className="bg-blue-600 hover:bg-blue-700 text-white py-4 px-10 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
                 >
                   <Link href="/select-plan">
-                    <span className="text-sm sm:text-lg">+</span>
+                    <span className="text-lg sm:text-xl">+</span>
                     <span className="hidden sm:inline">Post a Job</span>
                     <span className="sm:hidden">Post a Job</span>
                   </Link>
                 </Button>
                 <Link 
                   href="/dashboard" 
-                  className="text-xs font-medium text-slate-500 hover:text-blue-600 transition-colors"
+                  className="text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors"
                 >
                   Admin Login
                 </Link>
