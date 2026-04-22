@@ -14,7 +14,7 @@ export function RoadRulesBanner() {
 
   return (
     <Card 
-      className="bg-gradient-to-br from-blue-600 to-blue-800 text-white cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 border-0 shadow-lg"
+      className="bg-gradient-to-br from-blue-600 to-blue-800 text-white cursor-pointer hover:shadow-2xl transition-all duration-300 hover:scale-105 border-0 rounded-3xl shadow-xl animate-fade-in"
       onClick={handleClick}
     >
       <div className="p-6 space-y-4">

@@ -134,6 +134,26 @@ function HomePageContent() {
         
         <Header />
 
+      {/* Hero Section */}
+      <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-12 mb-8">
+        <div className="max-w-[95%] mx-auto px-4">
+          <div className="text-center mb-8">
+            <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-4 animate-fade-in">
+              Connecting Rwanda's Best Talent
+            </h1>
+            <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
+              Discover opportunities, advance your career, and connect with top employers across Rwanda
+            </p>
+            {/* Hero Search Box */}
+            <div className="max-w-2xl mx-auto">
+              <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl p-2 border border-slate-200/50">
+                <CategoryDropdownSearch />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Modern Category Bar - Desktop Only */}
       <div className="bg-slate-800 border-b border-slate-700/30 mb-4">
         <div className="max-w-[95%] mx-auto py-3 px-4">
@@ -279,14 +299,13 @@ function HomePageContent() {
         </div>
       </div>
 
-      {/* The Search Zone - Category Dropdown Search */}
-      <div className="bg-slate-50">
-        <div className="max-w-[95%] mx-auto px-4">
-          <CategoryDropdownSearch />
-        </div>
-      </div>
-
-      <div className="max-w-[95%] mx-auto px-4 py-1">
+      <div className="bg-slate-50 relative">
+        {/* Modern mesh gradient background with radial glows */}
+        <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-blue-100/30 to-transparent rounded-full blur-3xl"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-indigo-100/20 to-transparent rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-gradient-to-tr from-blue-50/20 to-transparent rounded-full blur-3xl"></div>
+        
+        <div className="max-w-[95%] mx-auto px-4 py-1">
           <main>
             {/* 2-Column Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
@@ -351,6 +370,7 @@ function HomePageContent() {
             </div>
           </main>
         </div>
+      </div>
       </div>
   )
 }
