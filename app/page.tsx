@@ -136,7 +136,7 @@ function HomePageContent() {
         
         {/* Grand Hero Section - Magazine Style */}
         <div className="relative bg-gradient-to-br from-blue-50 via-white to-slate-50">
-          <div className="flex items-start justify-between px-16 py-12">
+          <div className="flex items-start justify-between px-16 pt-12 pb-2">
             {/* Left Column - Mega-Square Logo Card */}
             <div className="h-64 w-64 rounded-[2rem] bg-white shadow-2xl flex items-center justify-center p-8">
               <Link href="/" className="flex items-center justify-center">
@@ -161,7 +161,7 @@ function HomePageContent() {
             </div>
 
             {/* Right Column - Actions */}
-            <div className="flex flex-col items-end gap-4">
+            <div className="flex flex-row items-center gap-6">
               <Button 
                 asChild
                 className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
@@ -183,7 +183,7 @@ function HomePageContent() {
         </div>
 
         {/* Primary Navigation Menu */}
-        <div className="bg-white border-b border-slate-100 mt-4">
+        <div className="bg-white border-b border-slate-100 mt-2">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <nav className="flex items-center justify-center gap-10">
               <Link href="/" className="text-slate-800 hover:text-blue-600 text-lg font-semibold transition-colors px-2 py-1 whitespace-nowrap">Home</Link>
@@ -198,7 +198,7 @@ function HomePageContent() {
         </div>
 
         {/* Filter Tabs */}
-        <div className="bg-slate-50 border-b border-slate-200/50">
+        <div className="bg-slate-50 border-b border-slate-200/50 mt-4">
           <div className="max-w-7xl mx-auto px-6 py-3">
             {/* Desktop: Clean Tab-style Categories */}
             <div className="hidden lg:flex items-center justify-center gap-x-8">
