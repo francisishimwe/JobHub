@@ -134,74 +134,77 @@ function HomePageContent() {
         {/* Subtle radial gradient in top-right corner */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-50/50 to-transparent pointer-events-none"></div>
         
-        {/* Hero Section - Headline and Subtext Only */}
-        <div className="relative bg-gradient-to-b from-blue-50 to-white pt-12 pb-6">
-          <div className="max-w-[95%] mx-auto px-4">
-            <div className="text-center mb-6">
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-4 animate-fade-in">
-                Discover Opportunities Across Rwanda
-              </h1>
-              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                Find the latest job openings, explore opportunities from top employers, and take the next step in your career.
-              </p>
+        {/* Grand Hero Section */}
+        <div className="relative bg-gradient-to-b from-blue-50 to-white pt-16 pb-12">
+          <div className="max-w-7xl mx-auto px-6">
+            {/* Hero Header with Integrated Logo & Actions */}
+            <div className="flex items-center justify-between mb-6">
+              {/* Logo Card - Far Left */}
+              <div className="h-24 w-24 rounded-2xl bg-white shadow-xl flex items-center justify-center p-4">
+                <Link href="/" className="flex items-center justify-center">
+                  <div className="relative h-full w-full">
+                    <Image
+                      src="/full logo.jpg"
+                      alt="RwandaJobHub"
+                      fill
+                      priority
+                      className="object-contain"
+                    />
+                  </div>
+                </Link>
+              </div>
+
+              {/* Hero Content - Center */}
+              <div className="flex-1 text-center mx-8">
+                <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-4 animate-fade-in">
+                  Discover Opportunities Across Rwanda
+                </h1>
+                <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+                  Find the latest job openings, explore opportunities from top employers, and take the next step in your career.
+                </p>
+              </div>
+
+              {/* Actions - Far Right */}
+              <div className="flex items-center gap-6">
+                <Button 
+                  asChild
+                  className="bg-blue-600 hover:bg-blue-700 text-white h-11 py-4 px-10 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
+                >
+                  <Link href="/select-plan">
+                    <span className="text-lg sm:text-xl">+</span>
+                    <span className="hidden sm:inline">Post a Job</span>
+                    <span className="sm:hidden">Post a Job</span>
+                  </Link>
+                </Button>
+                <Link 
+                  href="/dashboard" 
+                  className="text-base font-medium text-slate-500 hover:text-blue-600 transition-colors"
+                >
+                  Admin Login
+                </Link>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Sticky Primary Navigation Bar */}
-        <div className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-slate-100 z-40">
-          <div className="flex justify-between items-center w-full px-12 pt-16 pb-8">
-            {/* Logo - Far Left */}
-            <div className="bg-white rounded-lg shadow-lg px-4 py-3 pointer-events-none z-50 w-fit">
-              <Link href="/" className="flex items-center gap-4 pointer-events-auto">
-                <div className="relative h-24 w-48">
-                  <Image
-                    src="/full logo.jpg"
-                    alt="RwandaJobHub"
-                    fill
-                    priority
-                    className="object-contain"
-                  />
-                </div>
-              </Link>
-            </div>
-
-            {/* Navigation Links - Center */}
-            <nav className="hidden lg:flex items-center gap-x-12">
-              <Link href="/" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Home</Link>
-              <Link href="/exams" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">View Exams</Link>
-              <Link href="/employers" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Partners</Link>
-              <Link href="/testimonials" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Testimonials</Link>
-              <Link href="/help" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Help</Link>
-              <Link href="/about" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">About Us</Link>
-              <Link href="/contact" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Contact Us</Link>
+        {/* Primary Navigation Menu */}
+        <div className="bg-white border-b border-slate-100">
+          <div className="max-w-7xl mx-auto px-6 py-4">
+            <nav className="flex items-center justify-center gap-10">
+              <Link href="/" className="text-slate-800 hover:text-blue-600 text-lg font-semibold transition-colors px-2 py-1 whitespace-nowrap">Home</Link>
+              <Link href="/exams" className="text-slate-800 hover:text-blue-600 text-lg font-semibold transition-colors px-2 py-1 whitespace-nowrap">View Exams</Link>
+              <Link href="/employers" className="text-slate-800 hover:text-blue-600 text-lg font-semibold transition-colors px-2 py-1 whitespace-nowrap">Partners</Link>
+              <Link href="/testimonials" className="text-slate-800 hover:text-blue-600 text-lg font-semibold transition-colors px-2 py-1 whitespace-nowrap">Testimonials</Link>
+              <Link href="/help" className="text-slate-800 hover:text-blue-600 text-lg font-semibold transition-colors px-2 py-1 whitespace-nowrap">Help</Link>
+              <Link href="/about" className="text-slate-800 hover:text-blue-600 text-lg font-semibold transition-colors px-2 py-1 whitespace-nowrap">About Us</Link>
+              <Link href="/contact" className="text-slate-800 hover:text-blue-600 text-lg font-semibold transition-colors px-2 py-1 whitespace-nowrap">Contact Us</Link>
             </nav>
-
-            {/* Post a Job Button & Admin Login - Far Right */}
-            <div className="flex items-center gap-6">
-              <Button 
-                asChild
-                className="bg-blue-600 hover:bg-blue-700 text-white py-4 px-10 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
-              >
-                <Link href="/select-plan">
-                  <span className="text-lg sm:text-xl">+</span>
-                  <span className="hidden sm:inline">Post a Job</span>
-                  <span className="sm:hidden">Post a Job</span>
-                </Link>
-              </Button>
-              <Link 
-                href="/dashboard" 
-                className="text-base font-medium text-slate-500 hover:text-blue-600 transition-colors"
-              >
-                Admin Login
-              </Link>
-            </div>
           </div>
         </div>
 
         {/* Filter Tabs */}
         <div className="bg-slate-50 border-b border-slate-200/50">
-          <div className="max-w-[95%] mx-auto px-4 py-3">
+          <div className="max-w-7xl mx-auto px-6 py-3">
             {/* Desktop: Clean Tab-style Categories */}
             <div className="hidden lg:flex items-center justify-center gap-x-8">
               <Button 
@@ -313,7 +316,7 @@ function HomePageContent() {
 
         {/* Search Bar */}
         <div className="bg-slate-50 pb-6">
-          <div className="max-w-4xl mx-auto px-4">
+          <div className="max-w-4xl mx-auto px-6">
             <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl shadow-slate-200/60 p-2 border border-slate-200/50">
               <CategoryDropdownSearch />
             </div>
