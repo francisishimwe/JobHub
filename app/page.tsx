@@ -134,8 +134,9 @@ function HomePageContent() {
         {/* Subtle radial gradient in top-right corner */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-50/50 to-transparent pointer-events-none"></div>
         
-        {/* Sticky Header Container */}
-        <div className="sticky top-0 z-50 bg-slate-100 shadow-sm">
+        <div className="max-w-7xl mx-auto px-8">
+          {/* Sticky Header Container */}
+          <div className="sticky top-0 z-50 bg-slate-100 shadow-sm">
           {/* Hero Header */}
           <div className="bg-transparent">
             <div className="max-w-[95%] mx-auto px-4 py-10">
@@ -394,6 +395,7 @@ function HomePageContent() {
 
             </div>
           </main>
+        </div>
         </div>
       </div>
       </div>

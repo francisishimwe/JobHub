@@ -30,8 +30,7 @@ export function RoadRulesBanner() {
             IGA AMATEGEKO<br/>Y'UMUHANDA
           </h3>
           <p className="text-sm text-white/90 leading-relaxed">
-            Yiga kandi wige amategeko y'umuhanda<br/>
-            Ukore ikizamini cya gicuti
+            Iga amategeko y'umuhanda unakore isuzumabumenyi.
           </p>
         </div>
 

@@ -16,11 +16,10 @@ export function AppDownloadCard({ className = "" }: AppDownloadCardProps) {
       <div className="text-center space-y-4">
         <div>
           <h3 className="text-xl font-bold text-gray-900 mb-2">
-            Search & Apply on the Go
+            Download App Yacu
           </h3>
           <p className="text-sm text-gray-600 leading-relaxed">
-            Get the RwandaJobHub mobile app and never miss a job opportunity. 
-            Apply instantly, track applications, and receive job alerts on your phone.
+            Kora download ya App yacu uyu munsi
           </p>
         </div>
         
