@@ -150,53 +150,51 @@ function HomePageContent() {
 
         {/* Sticky Primary Navigation Bar */}
         <div className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-slate-100 z-40">
-          <div className="max-w-7xl mx-auto px-6 pt-16 pb-8">
-            <div className="flex items-center justify-between">
-              {/* Logo - Left */}
-              <div className="bg-white rounded-lg shadow-lg px-4 py-3 pointer-events-none z-50 w-fit lg:px-6 lg:py-4 lg:w-48">
-                <Link href="/" className="flex items-center gap-4 pointer-events-auto">
-                  <div className="relative h-20 w-40">
-                    <Image
-                      src="/full logo.jpg"
-                      alt="RwandaJobHub"
-                      fill
-                      priority
-                      className="object-contain"
-                    />
-                  </div>
-                </Link>
-              </div>
+          <div className="flex justify-between items-center w-full px-12 pt-16 pb-8">
+            {/* Logo - Far Left */}
+            <div className="bg-white rounded-lg shadow-lg px-4 py-3 pointer-events-none z-50 w-fit">
+              <Link href="/" className="flex items-center gap-4 pointer-events-auto">
+                <div className="relative h-24 w-48">
+                  <Image
+                    src="/full logo.jpg"
+                    alt="RwandaJobHub"
+                    fill
+                    priority
+                    className="object-contain"
+                  />
+                </div>
+              </Link>
+            </div>
 
-              {/* Navigation Links - Center */}
-              <nav className="hidden lg:flex items-center gap-x-12">
-                <Link href="/" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Home</Link>
-                <Link href="/exams" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">View Exams</Link>
-                <Link href="/employers" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Partners</Link>
-                <Link href="/testimonials" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Testimonials</Link>
-                <Link href="/help" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Help</Link>
-                <Link href="/about" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">About Us</Link>
-                <Link href="/contact" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Contact Us</Link>
-              </nav>
+            {/* Navigation Links - Center */}
+            <nav className="hidden lg:flex items-center gap-x-12">
+              <Link href="/" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Home</Link>
+              <Link href="/exams" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">View Exams</Link>
+              <Link href="/employers" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Partners</Link>
+              <Link href="/testimonials" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Testimonials</Link>
+              <Link href="/help" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Help</Link>
+              <Link href="/about" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">About Us</Link>
+              <Link href="/contact" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-3 py-2 whitespace-nowrap">Contact Us</Link>
+            </nav>
 
-              {/* Post a Job Button & Admin Login - Right */}
-              <div className="flex items-center gap-4">
-                <Button 
-                  asChild
-                  className="bg-blue-600 hover:bg-blue-700 text-white py-4 px-10 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
-                >
-                  <Link href="/select-plan">
-                    <span className="text-lg sm:text-xl">+</span>
-                    <span className="hidden sm:inline">Post a Job</span>
-                    <span className="sm:hidden">Post a Job</span>
-                  </Link>
-                </Button>
-                <Link 
-                  href="/dashboard" 
-                  className="text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors"
-                >
-                  Admin Login
+            {/* Post a Job Button & Admin Login - Far Right */}
+            <div className="flex items-center gap-6">
+              <Button 
+                asChild
+                className="bg-blue-600 hover:bg-blue-700 text-white py-4 px-10 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
+              >
+                <Link href="/select-plan">
+                  <span className="text-lg sm:text-xl">+</span>
+                  <span className="hidden sm:inline">Post a Job</span>
+                  <span className="sm:hidden">Post a Job</span>
                 </Link>
-              </div>
+              </Button>
+              <Link 
+                href="/dashboard" 
+                className="text-base font-medium text-slate-500 hover:text-blue-600 transition-colors"
+              >
+                Admin Login
+              </Link>
             </div>
           </div>
         </div>
