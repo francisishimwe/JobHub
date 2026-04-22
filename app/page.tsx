@@ -139,13 +139,13 @@ function HomePageContent() {
           <div className="max-w-7xl mx-auto px-12 py-10">
             <div className="flex justify-between items-center">
               {/* Far Left - Mega-Square Logo Card */}
-              <div className="h-64 w-64 rounded-3xl bg-white shadow-xl flex items-center justify-center p-8">
+              <div className="h-64 w-64 rounded-3xl bg-white shadow-xl flex items-center justify-center p-4">
                 <Link href="/" className="flex items-center justify-center">
                   <Image
                     src="/full logo.jpg"
                     alt="RwandaJobHub"
-                    width={192}
-                    height={192}
+                    width={224}
+                    height={224}
                     className="w-full h-full object-contain"
                   />
                 </Link>
@@ -165,7 +165,7 @@ function HomePageContent() {
               <div className="flex items-center gap-6">
                 <Button 
                   asChild
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-12 py-5 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
                 >
                   <Link href="/select-plan">
                     <span className="text-lg sm:text-xl">+</span>
@@ -188,7 +188,7 @@ function HomePageContent() {
         <div className="bg-white">
           <div className="max-w-7xl mx-auto">
             {/* Top - Primary Links */}
-            <nav className="flex items-center justify-center gap-10 py-4 mt-6">
+            <nav className="flex items-center justify-center gap-10 py-4 mt-4">
               <Link href="/" className="text-slate-900 hover:text-blue-600 text-lg font-semibold transition-colors px-2 py-1 whitespace-nowrap">Home</Link>
               <Link href="/exams" className="text-slate-900 hover:text-blue-600 text-lg font-semibold transition-colors px-2 py-1 whitespace-nowrap">View Exams</Link>
               <Link href="/employers" className="text-slate-900 hover:text-blue-600 text-lg font-semibold transition-colors px-2 py-1 whitespace-nowrap">Partners</Link>
