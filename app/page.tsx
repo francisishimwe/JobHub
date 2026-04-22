@@ -130,23 +130,23 @@ function HomePageContent() {
   return (
 
 
-      <div className="min-h-screen bg-slate-50 relative overflow-hidden">
+      <div className="min-h-screen bg-slate-100 relative overflow-hidden">
         {/* Subtle radial gradient in top-right corner */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-50/50 to-transparent pointer-events-none"></div>
         
         {/* Hero Header */}
-        <div className="bg-gradient-to-br from-blue-50 via-white to-slate-50">
+        <div className="bg-transparent">
           <div className="max-w-[95%] mx-auto px-4 py-10">
             <div className="flex justify-between items-center">
               {/* Far Left - Integrated Logo */}
-              <div className="h-12 flex items-center">
+              <div className="h-20 flex items-center">
                 <Link href="/" className="flex items-center">
                   <Image
                     src="/full logo.jpg"
                     alt="RwandaJobHub"
-                    width={192}
-                    height={48}
-                    className="h-12 w-auto object-contain"
+                    width={320}
+                    height={80}
+                    className="h-20 w-auto object-contain"
                   />
                 </Link>
               </div>
@@ -156,7 +156,7 @@ function HomePageContent() {
                 <h1 className="text-4xl font-black tracking-tight text-slate-900 mb-1 animate-fade-in">
                   Discover Opportunities Across Rwanda
                 </h1>
-                <p className="text-xl italic text-slate-500 max-w-3xl mx-auto">
+                <p className="text-xl italic text-slate-700 max-w-3xl mx-auto">
                   "Your Guide to Job Opportunities in Rwanda"
                 </p>
               </div>
