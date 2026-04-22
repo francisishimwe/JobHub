@@ -86,7 +86,7 @@ export function Header() {
               {/* Royal Blue Post a Job Pill - Mobile Optimized - NOW ON LEFT */}
               <Button 
                 asChild
-                className="bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-6 py-2 text-xs sm:text-sm font-semibold rounded-full transition-all active:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center gap-2"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-6 py-2 text-xs sm:text-sm font-semibold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200 hover:bg-blue-700 flex items-center gap-2"
               >
                 <Link href="/select-plan">
                   <span className="text-sm sm:text-lg">+</span>

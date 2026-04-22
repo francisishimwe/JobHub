@@ -136,9 +136,9 @@ function HomePageContent() {
 
       {/* Hero Section */}
       <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-12 mb-8">
-        <div className="max-w-[95%] mx-auto px-4">
+        <div className="max-w-[95%] mx-auto px-4 py-20">
           <div className="text-center mb-8">
-            <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-4 animate-fade-in">
+            <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 mb-4 animate-fade-in">
               Connecting Rwanda's Best Talent
             </h1>
             <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
@@ -146,7 +146,7 @@ function HomePageContent() {
             </p>
             {/* Hero Search Box */}
             <div className="max-w-2xl mx-auto">
-              <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl p-2 border border-slate-200/50">
+              <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl shadow-slate-200/50 p-2 border border-slate-200/50">
                 <CategoryDropdownSearch />
               </div>
             </div>
@@ -161,65 +161,47 @@ function HomePageContent() {
           <div className="hidden lg:flex items-center justify-center gap-x-8">
             <Button 
               variant="ghost" 
-              className={`text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('featured') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('featured') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('featured')}
             >
-              Featured
-              {opportunityCounts.featured > 0 && (
-                <span className="ml-2 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.featured}</span>
-              )}
+              Featured{opportunityCounts.featured > 0 && ` (${opportunityCounts.featured})`}
             </Button>
             <Button 
               variant="ghost" 
-              className={`text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('jobs') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('jobs') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('jobs')}
             >
-              Jobs
-              {opportunityCounts.jobs > 0 && (
-                <span className="ml-2 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.jobs}</span>
-              )}
+              Jobs{opportunityCounts.jobs > 0 && ` (${opportunityCounts.jobs})`}
             </Button>
             <Button 
               variant="ghost" 
-              className={`text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('tenders') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('tenders') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('tenders')}
             >
-              Tenders
-              {opportunityCounts.tenders > 0 && (
-                <span className="ml-2 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.tenders}</span>
-              )}
+              Tenders{opportunityCounts.tenders > 0 && ` (${opportunityCounts.tenders})`}
             </Button>
             <Button 
               variant="ghost" 
-              className={`text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('internships') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('internships') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('internships')}
             >
-              Internships
-              {opportunityCounts.internships > 0 && (
-                <span className="ml-2 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.internships}</span>
-              )}
+              Internships{opportunityCounts.internships > 0 && ` (${opportunityCounts.internships})`}
             </Button>
             
             <Button 
               variant="ghost" 
-              className={`text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('scholarships') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('scholarships') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('scholarships')}
             >
-              Scholarships
-              {opportunityCounts.scholarships > 0 && (
-                <span className="ml-2 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.scholarships}</span>
-              )}
+              Scholarships{opportunityCounts.scholarships > 0 && ` (${opportunityCounts.scholarships})`}
             </Button>
             
             <Button 
               variant="ghost" 
-              className={`text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('education') ? 'text-blue-600 border-blue-600 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('education') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('education')}
             >
-              Education
-              {opportunityCounts.education > 0 && (
-                <span className="ml-2 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-4 h-4 flex items-center justify-center text-[10px]">{opportunityCounts.education}</span>
-              )}
+              Education{opportunityCounts.education > 0 && ` (${opportunityCounts.education})`}
             </Button>
           </div>
 
@@ -229,46 +211,34 @@ function HomePageContent() {
             <div className="grid grid-cols-4 items-center justify-items-center gap-x-2 mb-2 text-[10px]">
               <Button 
                 variant="ghost" 
-                className="text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
                 onClick={() => handleOpportunityClick('featured')}
               >
-                Featured
-                {opportunityCounts.featured > 0 && (
-                  <span className="ml-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-3 h-3 flex items-center justify-center text-[8px]">{opportunityCounts.featured}</span>
-                )}
+                Featured{opportunityCounts.featured > 0 && ` (${opportunityCounts.featured})`}
               </Button>
               
               <Button 
                 variant="ghost" 
-                className="text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
                 onClick={() => handleOpportunityClick('jobs')}
               >
-                Jobs
-                {opportunityCounts.jobs > 0 && (
-                  <span className="ml-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-3 h-3 flex items-center justify-center text-[8px]">{opportunityCounts.jobs}</span>
-                )}
+                Jobs{opportunityCounts.jobs > 0 && ` (${opportunityCounts.jobs})`}
               </Button>
               
               <Button 
                 variant="ghost" 
-                className="text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
                 onClick={() => handleOpportunityClick('tenders')}
               >
-                Tenders
-                {opportunityCounts.tenders > 0 && (
-                  <span className="ml-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-3 h-3 flex items-center justify-center text-[8px]">{opportunityCounts.tenders}</span>
-                )}
+                Tenders{opportunityCounts.tenders > 0 && ` (${opportunityCounts.tenders})`}
               </Button>
               
               <Button 
                 variant="ghost" 
-                className="text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
                 onClick={() => handleOpportunityClick('scholarships')}
               >
-                Scholarships
-                {opportunityCounts.scholarships > 0 && (
-                  <span className="ml-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-3 h-3 flex items-center justify-center text-[8px]">{opportunityCounts.scholarships}</span>
-                )}
+                Scholarships{opportunityCounts.scholarships > 0 && ` (${opportunityCounts.scholarships})`}
               </Button>
             </div>
             
@@ -277,24 +247,18 @@ function HomePageContent() {
               <div className="flex justify-center gap-2 w-full max-w-md mx-auto">
                 <Button 
                   variant="ghost" 
-                  className="text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                  className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
                   onClick={() => handleOpportunityClick('education')}
                 >
-                  Education
-                  {opportunityCounts.education > 0 && (
-                    <span className="ml-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-3 h-3 flex items-center justify-center text-[8px]">{opportunityCounts.education}</span>
-                  )}
+                  Education{opportunityCounts.education > 0 && ` (${opportunityCounts.education})`}
                 </Button>
                 
                 <Button 
                   variant="ghost" 
-                  className="text-slate-600 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                  className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none font-medium text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
                   onClick={() => handleOpportunityClick('internships')}
                 >
-                  Internships
-                  {opportunityCounts.internships > 0 && (
-                    <span className="ml-1 bg-slate-200 text-slate-700 text-xs font-medium rounded-full w-3 h-3 flex items-center justify-center text-[8px]">{opportunityCounts.internships}</span>
-                  )}
+                  Internships{opportunityCounts.internships > 0 && ` (${opportunityCounts.internships})`}
                 </Button>
               </div>
             </div>
