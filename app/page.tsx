@@ -134,7 +134,7 @@ function HomePageContent() {
         {/* Subtle radial gradient in top-right corner */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-50/50 to-transparent pointer-events-none"></div>
         
-        <div className="max-w-7xl mx-auto px-8">
+        <div className="max-w-6xl mx-auto px-8">
           {/* Sticky Header Container */}
           <div className="sticky top-0 z-50 bg-slate-100 shadow-sm">
           {/* Hero Header */}
@@ -154,35 +154,31 @@ function HomePageContent() {
                   </Link>
                 </div>
 
-                {/* Center - Headline and Subtext */}
-                <div className="flex-1 text-center mx-12">
-                  <h1 className="text-4xl font-black tracking-tight text-slate-900 mb-1 animate-fade-in">
-                    Discover Opportunities Across Rwanda
-                  </h1>
-                  <p className="text-xl italic text-slate-700 max-w-3xl mx-auto">
-                    "Your Guide to Job Opportunities in Rwanda"
-                  </p>
-                </div>
+                {/* Center - Empty space for balance */}
+              <div className="flex-1"></div>
 
-                {/* Far Right - Actions */}
-                <div className="flex items-center gap-6">
-                  <Button 
-                    asChild
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-12 py-5 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
-                  >
-                    <Link href="/select-plan">
-                      <span className="text-lg sm:text-xl">+</span>
-                      <span className="hidden sm:inline">Post a Job</span>
-                      <span className="sm:hidden">Post a Job</span>
-                    </Link>
-                  </Button>
-                  <Link 
-                    href="/dashboard" 
-                    className="text-base font-semibold text-slate-500 hover:text-blue-600 transition-colors"
-                  >
-                    Admin Login
+              {/* Far Right - Actions with Subtext */}
+              <div className="flex items-center gap-6">
+                <p className="text-xl italic text-slate-700 whitespace-nowrap">
+                  "Your Guide to Job Opportunities in Rwanda"
+                </p>
+                <Button 
+                  asChild
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-12 py-5 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
+                >
+                  <Link href="/select-plan">
+                    <span className="text-lg sm:text-xl">+</span>
+                    <span className="hidden sm:inline">Post a Job</span>
+                    <span className="sm:hidden">Post a Job</span>
                   </Link>
-                </div>
+                </Button>
+                <Link 
+                  href="/dashboard" 
+                  className="text-base font-semibold text-slate-500 hover:text-blue-600 transition-colors"
+                >
+                  Admin Login
+                </Link>
+              </div>
               </div>
             </div>
           </div>
