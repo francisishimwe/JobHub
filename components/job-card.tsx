@@ -216,7 +216,7 @@ const JobCardComponent = ({ job }: JobCardProps) => {
 
   return (
     <div className="block">
-      <div className={`rounded-2xl border bg-white border-blue-200 pt-6 p-4 md:p-6 shadow-sm transition-all duration-300 hover:bg-blue-50/50 hover:-translate-y-0.5 hover:shadow-md active:scale-105 border-l-4 ${getJobTypeBorderColor()} animate-fade-in`}>
+      <div className={`rounded-2xl border bg-white border-blue-100 pt-6 p-4 md:p-6 shadow-sm transition-all duration-300 hover:bg-blue-50/40 hover:-translate-y-0.5 hover:shadow-md active:scale-105 border-l-4 ${getJobTypeBorderColor()} animate-fade-in`}>
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 lg:gap-4">
           <div className="flex gap-3 md:gap-4 flex-1 min-w-0">
             <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted transition-transform duration-300 hover:scale-110">
@@ -233,7 +233,7 @@ const JobCardComponent = ({ job }: JobCardProps) => {
             <div className="flex-1 min-w-0">
               <div className="flex flex-col gap-y-1 mb-2">
                 <h3 
-                  className="text-lg md:text-xl font-bold leading-tight transition-all duration-200 cursor-pointer hover:text-blue-700 lg:hover:text-blue-800" 
+                  className="text-lg md:text-xl font-bold leading-tight transition-colors duration-200 cursor-pointer hover:text-blue-600 no-underline" 
                   style={{ color: '#1E40AF' }}
                   onClick={handleTitleClick}
                 >
