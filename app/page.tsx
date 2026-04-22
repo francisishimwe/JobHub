@@ -154,14 +154,21 @@ function HomePageContent() {
                   </Link>
                 </div>
 
-                {/* Center - Empty space for balance */}
-              <div className="flex-1"></div>
-
-              {/* Far Right - Actions with Subtext */}
-              <div className="flex items-center gap-6">
-                <p className="text-xl italic text-slate-700 whitespace-nowrap">
+                {/* Center - Brand Message */}
+              <div className="flex-1 text-center">
+                <p className="text-xl italic text-slate-600 whitespace-nowrap">
                   "Your Guide to Job Opportunities in Rwanda"
                 </p>
+              </div>
+
+              {/* Far Right - Actions with Admin first, then Button */}
+              <div className="flex items-center gap-6">
+                <Link 
+                  href="/dashboard" 
+                  className="text-base font-semibold text-slate-500 hover:text-blue-600 transition-colors"
+                >
+                  Admin
+                </Link>
                 <Button 
                   asChild
                   className="bg-blue-600 hover:bg-blue-700 text-white px-12 py-5 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
@@ -172,12 +179,6 @@ function HomePageContent() {
                     <span className="sm:hidden">Post a Job</span>
                   </Link>
                 </Button>
-                <Link 
-                  href="/dashboard" 
-                  className="text-base font-semibold text-slate-500 hover:text-blue-600 transition-colors"
-                >
-                  Admin Login
-                </Link>
               </div>
               </div>
             </div>
@@ -392,6 +393,11 @@ function HomePageContent() {
             </div>
           </main>
         </div>
+        </div>
+        
+        {/* Footer */}
+        <div className="mt-20">
+          <Footer />
         </div>
       </div>
       </div>
