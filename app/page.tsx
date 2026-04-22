@@ -136,7 +136,7 @@ function HomePageContent() {
         
         {/* Hero Header */}
         <div className="bg-gradient-to-br from-blue-50 via-white to-slate-50">
-          <div className="max-w-7xl mx-auto px-12 py-10">
+          <div className="max-w-[95%] mx-auto px-4 py-10">
             <div className="flex justify-between items-center">
               {/* Far Left - Mega-Square Logo Card */}
               <div className="h-64 w-64 rounded-3xl bg-white shadow-xl flex items-center justify-center p-4">
@@ -153,11 +153,11 @@ function HomePageContent() {
 
               {/* Center - Headline and Subtext */}
               <div className="flex-1 text-center mx-12">
-                <h1 className="text-5xl font-black tracking-tight text-slate-900 mb-1 animate-fade-in">
+                <h1 className="text-4xl font-black tracking-tight text-slate-900 mb-1 animate-fade-in">
                   Discover Opportunities Across Rwanda
                 </h1>
-                <p className="text-xl font-medium text-slate-500 max-w-3xl mx-auto">
-                  Your Guide to Job Opportunities in Rwanda
+                <p className="text-xl italic text-slate-500 max-w-3xl mx-auto">
+                  "Your Guide to Job Opportunities in Rwanda"
                 </p>
               </div>
 
