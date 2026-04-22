@@ -134,187 +134,190 @@ function HomePageContent() {
         {/* Subtle radial gradient in top-right corner */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-50/50 to-transparent pointer-events-none"></div>
         
-        {/* Hero Header */}
-        <div className="bg-transparent">
-          <div className="max-w-[95%] mx-auto px-4 py-10">
-            <div className="flex justify-between items-center">
-              {/* Far Left - Integrated Logo */}
-              <div className="h-20 flex items-center">
-                <Link href="/" className="flex items-center">
-                  <Image
-                    src="/full logo.jpg"
-                    alt="RwandaJobHub"
-                    width={320}
-                    height={80}
-                    className="h-20 w-auto object-contain"
-                  />
-                </Link>
-              </div>
-
-              {/* Center - Headline and Subtext */}
-              <div className="flex-1 text-center mx-12">
-                <h1 className="text-4xl font-black tracking-tight text-slate-900 mb-1 animate-fade-in">
-                  Discover Opportunities Across Rwanda
-                </h1>
-                <p className="text-xl italic text-slate-700 max-w-3xl mx-auto">
-                  "Your Guide to Job Opportunities in Rwanda"
-                </p>
-              </div>
-
-              {/* Far Right - Actions */}
-              <div className="flex items-center gap-6">
-                <Button 
-                  asChild
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-12 py-5 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
-                >
-                  <Link href="/select-plan">
-                    <span className="text-lg sm:text-xl">+</span>
-                    <span className="hidden sm:inline">Post a Job</span>
-                    <span className="sm:hidden">Post a Job</span>
+        {/* Sticky Header Container */}
+        <div className="sticky top-0 z-50 bg-slate-100 shadow-sm">
+          {/* Hero Header */}
+          <div className="bg-transparent">
+            <div className="max-w-[95%] mx-auto px-4 py-10">
+              <div className="flex justify-between items-center">
+                {/* Far Left - Integrated Logo */}
+                <div className="h-20 flex items-center">
+                  <Link href="/" className="flex items-center">
+                    <Image
+                      src="/full logo.jpg"
+                      alt="RwandaJobHub"
+                      width={320}
+                      height={80}
+                      className="h-20 w-auto object-contain"
+                    />
                   </Link>
-                </Button>
-                <Link 
-                  href="/dashboard" 
-                  className="text-base font-semibold text-slate-500 hover:text-blue-600 transition-colors"
-                >
-                  Admin Login
-                </Link>
+                </div>
+
+                {/* Center - Headline and Subtext */}
+                <div className="flex-1 text-center mx-12">
+                  <h1 className="text-4xl font-black tracking-tight text-slate-900 mb-1 animate-fade-in">
+                    Discover Opportunities Across Rwanda
+                  </h1>
+                  <p className="text-xl italic text-slate-700 max-w-3xl mx-auto">
+                    "Your Guide to Job Opportunities in Rwanda"
+                  </p>
+                </div>
+
+                {/* Far Right - Actions */}
+                <div className="flex items-center gap-6">
+                  <Button 
+                    asChild
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-12 py-5 text-lg font-bold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-3"
+                  >
+                    <Link href="/select-plan">
+                      <span className="text-lg sm:text-xl">+</span>
+                      <span className="hidden sm:inline">Post a Job</span>
+                      <span className="sm:hidden">Post a Job</span>
+                    </Link>
+                  </Button>
+                  <Link 
+                    href="/dashboard" 
+                    className="text-base font-semibold text-slate-500 hover:text-blue-600 transition-colors"
+                  >
+                    Admin Login
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Navigation & Filter Funnel - The Stack */}
-        <div className="bg-white">
-          <div className="max-w-7xl mx-auto">
-            {/* Top - Primary Links */}
-            <nav className="flex items-center justify-center gap-12 py-4 mt-4">
-              <Link href="/" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">Home</Link>
-              <Link href="/exams" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">View Exams</Link>
-              <Link href="/employers" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">Partners</Link>
-              <Link href="/testimonials" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">Testimonials</Link>
-              <Link href="/help" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">Help</Link>
-              <Link href="/about" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">About Us</Link>
-              <Link href="/contact" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">Contact Us</Link>
-            </nav>
+          {/* Navigation & Filter Funnel - The Stack */}
+          <div className="bg-white">
+            <div className="max-w-7xl mx-auto">
+              {/* Top - Primary Links */}
+              <nav className="flex items-center justify-center gap-12 py-4 mt-4">
+                <Link href="/" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">Home</Link>
+                <Link href="/exams" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">View Exams</Link>
+                <Link href="/employers" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">Partners</Link>
+                <Link href="/testimonials" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">Testimonials</Link>
+                <Link href="/help" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">Help</Link>
+                <Link href="/about" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">About Us</Link>
+                <Link href="/contact" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">Contact Us</Link>
+              </nav>
 
-            {/* Middle - Filter Tabs */}
-            <div className="bg-slate-50 border-b border-slate-200/50 mt-6">
-              <div className="px-6 py-4">
-                {/* Desktop: Clean Tab-style Categories */}
-                <div className="hidden lg:flex items-center justify-center gap-x-8">
-                  <Button 
-                    variant="ghost" 
-                    className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-lg font-medium ${filters.opportunityTypes?.includes('featured') ? 'text-blue-600 border-blue-600 font-bold' : ''}`}
-                    onClick={() => handleOpportunityClick('featured')}
-                  >
-                    Featured{opportunityCounts.featured > 0 && ` (${opportunityCounts.featured})`}
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-lg font-medium ${filters.opportunityTypes?.includes('jobs') ? 'text-blue-600 border-blue-600 font-bold' : ''}`}
-                    onClick={() => handleOpportunityClick('jobs')}
-                  >
-                    Jobs{opportunityCounts.jobs > 0 && ` (${opportunityCounts.jobs})`}
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-lg font-medium ${filters.opportunityTypes?.includes('tenders') ? 'text-blue-600 border-blue-600 font-bold' : ''}`}
-                    onClick={() => handleOpportunityClick('tenders')}
-                  >
-                    Tenders{opportunityCounts.tenders > 0 && ` (${opportunityCounts.tenders})`}
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-lg font-medium ${filters.opportunityTypes?.includes('internships') ? 'text-blue-600 border-blue-600 font-bold' : ''}`}
-                    onClick={() => handleOpportunityClick('internships')}
-                  >
-                    Internships{opportunityCounts.internships > 0 && ` (${opportunityCounts.internships})`}
-                  </Button>
-                  
-                  <Button 
-                    variant="ghost" 
-                    className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-lg font-medium ${filters.opportunityTypes?.includes('scholarships') ? 'text-blue-600 border-blue-600 font-bold' : ''}`}
-                    onClick={() => handleOpportunityClick('scholarships')}
-                  >
-                    Scholarships{opportunityCounts.scholarships > 0 && ` (${opportunityCounts.scholarships})`}
-                  </Button>
-                  
-                  <Button 
-                    variant="ghost" 
-                    className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-lg font-medium ${filters.opportunityTypes?.includes('education') ? 'text-blue-600 border-blue-600 font-bold' : ''}`}
-                    onClick={() => handleOpportunityClick('education')}
-                  >
-                    Education{opportunityCounts.education > 0 && ` (${opportunityCounts.education})`}
-                  </Button>
-                </div>
-
-                {/* Mobile: Grid Layout */}
-                <div className="lg:hidden">
-                  {/* First Row - 4 items */}
-                  <div className="grid grid-cols-4 items-center justify-items-center gap-x-2 mb-2 text-[10px]">
+              {/* Middle - Filter Tabs */}
+              <div className="bg-slate-50 border-b border-slate-200/50 mt-6">
+                <div className="px-6 py-4">
+                  {/* Desktop: Clean Tab-style Categories */}
+                  <div className="hidden lg:flex items-center justify-center gap-x-8">
                     <Button 
                       variant="ghost" 
-                      className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                      className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-lg font-medium ${filters.opportunityTypes?.includes('featured') ? 'text-blue-600 border-blue-600 font-bold' : ''}`}
                       onClick={() => handleOpportunityClick('featured')}
                     >
                       Featured{opportunityCounts.featured > 0 && ` (${opportunityCounts.featured})`}
                     </Button>
-                    
                     <Button 
                       variant="ghost" 
-                      className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                      className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-lg font-medium ${filters.opportunityTypes?.includes('jobs') ? 'text-blue-600 border-blue-600 font-bold' : ''}`}
                       onClick={() => handleOpportunityClick('jobs')}
                     >
                       Jobs{opportunityCounts.jobs > 0 && ` (${opportunityCounts.jobs})`}
                     </Button>
-                    
                     <Button 
                       variant="ghost" 
-                      className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                      className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-lg font-medium ${filters.opportunityTypes?.includes('tenders') ? 'text-blue-600 border-blue-600 font-bold' : ''}`}
                       onClick={() => handleOpportunityClick('tenders')}
                     >
                       Tenders{opportunityCounts.tenders > 0 && ` (${opportunityCounts.tenders})`}
                     </Button>
+                    <Button 
+                      variant="ghost" 
+                      className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-lg font-medium ${filters.opportunityTypes?.includes('internships') ? 'text-blue-600 border-blue-600 font-bold' : ''}`}
+                      onClick={() => handleOpportunityClick('internships')}
+                    >
+                      Internships{opportunityCounts.internships > 0 && ` (${opportunityCounts.internships})`}
+                    </Button>
                     
                     <Button 
                       variant="ghost" 
-                      className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                      className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-lg font-medium ${filters.opportunityTypes?.includes('scholarships') ? 'text-blue-600 border-blue-600 font-bold' : ''}`}
                       onClick={() => handleOpportunityClick('scholarships')}
                     >
                       Scholarships{opportunityCounts.scholarships > 0 && ` (${opportunityCounts.scholarships})`}
                     </Button>
+                    
+                    <Button 
+                      variant="ghost" 
+                      className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-lg font-medium ${filters.opportunityTypes?.includes('education') ? 'text-blue-600 border-blue-600 font-bold' : ''}`}
+                      onClick={() => handleOpportunityClick('education')}
+                    >
+                      Education{opportunityCounts.education > 0 && ` (${opportunityCounts.education})`}
+                    </Button>
                   </div>
-                  
-                  {/* Second Row - 3 items, centered */}
-                  <div className="flex justify-center gap-2 text-[10px]">
-                    <div className="flex justify-center gap-2 w-full max-w-md mx-auto">
+
+                  {/* Mobile: Grid Layout */}
+                  <div className="lg:hidden">
+                    {/* First Row - 4 items */}
+                    <div className="grid grid-cols-4 items-center justify-items-center gap-x-2 mb-2 text-[10px]">
                       <Button 
                         variant="ghost" 
                         className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                        onClick={() => handleOpportunityClick('education')}
+                        onClick={() => handleOpportunityClick('featured')}
                       >
-                        Education{opportunityCounts.education > 0 && ` (${opportunityCounts.education})`}
+                        Featured{opportunityCounts.featured > 0 && ` (${opportunityCounts.featured})`}
                       </Button>
                       
                       <Button 
                         variant="ghost" 
                         className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
-                        onClick={() => handleOpportunityClick('internships')}
+                        onClick={() => handleOpportunityClick('jobs')}
                       >
-                        Internships{opportunityCounts.internships > 0 && ` (${opportunityCounts.internships})`}
+                        Jobs{opportunityCounts.jobs > 0 && ` (${opportunityCounts.jobs})`}
                       </Button>
+                      
+                      <Button 
+                        variant="ghost" 
+                        className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                        onClick={() => handleOpportunityClick('tenders')}
+                      >
+                        Tenders{opportunityCounts.tenders > 0 && ` (${opportunityCounts.tenders})`}
+                      </Button>
+                      
+                      <Button 
+                        variant="ghost" 
+                        className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                        onClick={() => handleOpportunityClick('scholarships')}
+                      >
+                        Scholarships{opportunityCounts.scholarships > 0 && ` (${opportunityCounts.scholarships})`}
+                      </Button>
+                    </div>
+                    
+                    {/* Second Row - 3 items, centered */}
+                    <div className="flex justify-center gap-2 text-[10px]">
+                      <div className="flex justify-center gap-2 w-full max-w-md mx-auto">
+                        <Button 
+                          variant="ghost" 
+                          className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                          onClick={() => handleOpportunityClick('education')}
+                        >
+                          Education{opportunityCounts.education > 0 && ` (${opportunityCounts.education})`}
+                        </Button>
+                        
+                        <Button 
+                          variant="ghost" 
+                          className="text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-2 border-transparent hover:border-blue-600 transition-all px-2 py-2 rounded-none text-sm whitespace-nowrap flex-shrink-0 touch-manipulation"
+                          onClick={() => handleOpportunityClick('internships')}
+                        >
+                          Internships{opportunityCounts.internships > 0 && ` (${opportunityCounts.internships})`}
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Bottom - Search Bar */}
-            <div className="bg-slate-50 pb-6 mt-4">
-              <div className="max-w-4xl mx-auto px-6">
-                <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl shadow-slate-200/60 p-2 border border-slate-200/50">
-                  <CategoryDropdownSearch />
+              {/* Bottom - Search Bar */}
+              <div className="bg-slate-50 pb-6 mt-4">
+                <div className="max-w-4xl mx-auto px-6">
+                  <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl shadow-slate-200/60 p-2 border border-slate-200/50">
+                    <CategoryDropdownSearch />
+                  </div>
                 </div>
               </div>
             </div>
@@ -327,7 +330,7 @@ function HomePageContent() {
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-indigo-100/20 to-transparent rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-gradient-to-tr from-blue-50/20 to-transparent rounded-full blur-3xl"></div>
         
-        <div className="max-w-[95%] mx-auto px-4 py-1 mt-12">
+        <div className="max-w-[95%] mx-auto px-4 py-1 pt-10 mt-12">
           <main>
             {/* 2-Column Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
