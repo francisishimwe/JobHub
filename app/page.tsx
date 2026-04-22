@@ -136,7 +136,7 @@ function HomePageContent() {
 
       {/* Hero Section */}
       <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8 mb-4">
-        <div className="max-w-[95%] mx-auto px-4 py-10">
+        <div className="max-w-[95%] mx-auto px-4 py-12">
           <div className="text-center mb-6">
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-4 animate-fade-in">
               Connecting Rwanda's Best Talent
@@ -146,7 +146,7 @@ function HomePageContent() {
             </p>
             {/* Hero Search Box */}
             <div className="max-w-2xl mx-auto">
-              <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl shadow-slate-200/50 p-2 border border-slate-200/50">
+              <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl shadow-slate-200/60 p-2 border border-slate-200/50">
                 <CategoryDropdownSearch />
               </div>
             </div>
@@ -161,28 +161,28 @@ function HomePageContent() {
           <div className="hidden lg:flex items-center justify-center gap-x-8">
             <Button 
               variant="ghost" 
-              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('featured') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('featured') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('featured')}
             >
               Featured{opportunityCounts.featured > 0 && ` (${opportunityCounts.featured})`}
             </Button>
             <Button 
               variant="ghost" 
-              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('jobs') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('jobs') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('jobs')}
             >
               Jobs{opportunityCounts.jobs > 0 && ` (${opportunityCounts.jobs})`}
             </Button>
             <Button 
               variant="ghost" 
-              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('tenders') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('tenders') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('tenders')}
             >
               Tenders{opportunityCounts.tenders > 0 && ` (${opportunityCounts.tenders})`}
             </Button>
             <Button 
               variant="ghost" 
-              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('internships') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('internships') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('internships')}
             >
               Internships{opportunityCounts.internships > 0 && ` (${opportunityCounts.internships})`}
@@ -190,7 +190,7 @@ function HomePageContent() {
             
             <Button 
               variant="ghost" 
-              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('scholarships') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('scholarships') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('scholarships')}
             >
               Scholarships{opportunityCounts.scholarships > 0 && ` (${opportunityCounts.scholarships})`}
@@ -198,7 +198,7 @@ function HomePageContent() {
             
             <Button 
               variant="ghost" 
-              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none font-medium ${filters.opportunityTypes?.includes('education') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
+              className={`text-slate-500 hover:text-blue-600 hover:bg-transparent border-b-3 border-transparent hover:border-blue-600 transition-all px-4 py-2 rounded-none text-sm ${filters.opportunityTypes?.includes('education') ? 'text-blue-700 border-blue-700 font-semibold' : ''}`}
               onClick={() => handleOpportunityClick('education')}
             >
               Education{opportunityCounts.education > 0 && ` (${opportunityCounts.education})`}
@@ -327,7 +327,7 @@ function HomePageContent() {
 
               {/* Right Column (25%) - All Banners */}
               <div className="lg:col-span-1">
-                <div className="lg:sticky lg:top-4 space-y-4 pt-0 mt-0">
+                <div className="lg:sticky lg:top-4 space-y-4">
                   <RoadRulesBanner />
                   <AppDownloadCard />
                   {/* Additional ads/banners can be added here */}

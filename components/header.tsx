@@ -49,7 +49,7 @@ export function Header() {
   return (
     <>
       {/* Gorgeous Single-Line Header */}
-      <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
+      <header className="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50">
         <div className="max-w-[95%] mx-auto flex items-center justify-between px-4 py-3">
           {/* Logo - Far Left */}
           <div className="bg-white rounded-lg shadow-lg px-3 py-2 pointer-events-none z-50 w-fit lg:px-4 lg:py-2 lg:w-32">
@@ -67,12 +67,12 @@ export function Header() {
           </div>
 
           {/* Navigation Links - Center (Large Desktop Only) */}
-          <nav className="hidden lg:flex items-center gap-x-12">
+          <nav className="hidden lg:flex items-center gap-x-10">
             {navigationLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-slate-700 font-semibold hover:text-blue-600 transition-all"
+                className="text-slate-800 hover:text-blue-600 text-lg font-semibold transition-colors px-2 py-1 whitespace-nowrap"
               >
                 {link.label}
               </Link>
@@ -86,7 +86,7 @@ export function Header() {
               {/* Royal Blue Post a Job Pill - Mobile Optimized - NOW ON LEFT */}
               <Button 
                 asChild
-                className="bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-6 py-2 text-xs sm:text-sm font-semibold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200 hover:bg-blue-700 flex items-center gap-2"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-6 py-2 text-xs sm:text-sm font-semibold rounded-full transition-all active:scale-105 shadow-lg shadow-blue-200/50 flex items-center gap-2"
               >
                 <Link href="/select-plan">
                   <span className="text-sm sm:text-lg">+</span>
@@ -114,7 +114,7 @@ export function Header() {
               ) : (
                 <Link 
                   href="/dashboard" 
-                  className="text-slate-600 hover:text-slate-800 font-medium transition-colors px-2 whitespace-nowrap text-xs"
+                  className="text-slate-500 hover:text-slate-700 transition-colors px-2 whitespace-nowrap text-xs"
                 >
                   Admin Login
                 </Link>
