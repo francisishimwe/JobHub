@@ -152,11 +152,11 @@ function HomePageContent() {
 
             {/* Center Column - Hero Content */}
             <div className="flex-1 text-center mx-12 flex flex-col justify-center">
-              <h1 className="text-6xl font-black tracking-tight text-slate-900 mb-6 animate-fade-in">
+              <h1 className="text-5xl font-black tracking-tight text-slate-900 mb-2 animate-fade-in">
                 Discover Opportunities Across Rwanda
               </h1>
-              <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-                Find the latest job openings, explore opportunities from top employers, and take the next step in your career.
+              <p className="text-xl font-medium text-slate-500 max-w-3xl mx-auto">
+                Your Guide to Job Opportunities in Rwanda
               </p>
             </div>
 
@@ -183,7 +183,7 @@ function HomePageContent() {
         </div>
 
         {/* Primary Navigation Menu */}
-        <div className="bg-white border-b border-slate-100 mt-12">
+        <div className="bg-white border-b border-slate-100 mt-4">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <nav className="flex items-center justify-center gap-10">
               <Link href="/" className="text-slate-800 hover:text-blue-600 text-lg font-semibold transition-colors px-2 py-1 whitespace-nowrap">Home</Link>
