@@ -8,7 +8,7 @@ import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { BookOpen, Play, AlertCircle, User, CreditCard, Phone, CheckCircle } from "lucide-react"
+import { BookOpen, Play, AlertCircle, User, CreditCard, Phone, CheckCircle, FileText } from "lucide-react"
 
 export default function RoadRulesPage() {
   const { user, isAuthenticated } = useAuth()
@@ -24,7 +24,7 @@ export default function RoadRulesPage() {
     }
     
     // Check if user has quiz access (this would be checked against the database)
-    if (user?.hasQuizAccess && user?.quizAccessExpiry && new Date(user.quizAccessExpiry) > new Date()) {
+    if ((user as any)?.hasQuizAccess && (user as any)?.quizAccessExpiry && new Date((user as any).quizAccessExpiry) > new Date()) {
       router.push("/road-rules-quiz")
     } else {
       setShowPaymentInfo(true)
@@ -64,124 +64,71 @@ export default function RoadRulesPage() {
       
       <Header />
 
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold mb-4 text-slate-900">
-            IGA Amategeko y'Umuhanada
+      <div className="container mx-auto px-4 py-16 max-w-4xl">
+        {/* Hero Header Section */}
+        <div className="text-center mb-16">
+          <h1 className="text-5xl font-black mb-6 text-slate-900">
+            IGA AMATEGEKO Y'UMUHANDA
           </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Yiga amategeko y'umuhanda kuri iyi PDF hanyuma ukore ikizamini kugira ngo wige neza.
+          <p className="text-xl italic text-slate-600 max-w-3xl mx-auto">
+            Inzira yoroshye yo kwiga no gutsinda ikizamini cy'amategeko y'umuhanda.
           </p>
         </div>
 
-        {/* PDF Viewer Section */}
-        <div className="mb-8">
-          <Card className="p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <BookOpen className="h-6 w-6 text-blue-600" />
-              <h2 className="text-2xl font-semibold">Amategeko y'Umuhanada - PDF</h2>
-            </div>
-            
-            <div className="bg-white rounded-lg p-4">
-              <div className="mb-4 flex items-center justify-between">
-                <p className="text-slate-600">
-                  Amategeko y'umuhanda - PDF
-                </p>
-                <Button 
-                  className="bg-blue-600 hover:bg-blue-700"
-                  onClick={handleOpenPDF}
-                >
-                  <BookOpen className="mr-2 h-4 w-4" />
-                  Fungura PDF mu Idirishya Rishasha
-                </Button>
-              </div>
-              
-              {/* PDF iframe */}
-              <iframe
-                src="/documents/Amategeko y'umuhanda.pdf"
-                className="w-full h-[600px] border rounded-lg"
-                title="Amategeko y'umuhanda PDF"
-                onError={() => {
-                  console.log("PDF failed to load")
-                }}
-              >
-                <p className="text-slate-600 p-4">
-                  Ikibazo gikomeye: Ntago browser yawe ikora iyi iframe. 
-                  <a 
-                    href="/documents/Amategeko y'umuhanda.pdf" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-blue-600 underline ml-2"
-                  >
-                    Kanda hano wakande PDF
-                  </a>
-                </p>
-              </iframe>
-            </div>
-          </Card>
-        </div>
+        {/* The Dual-Action Button Stack */}
+        <Card className="bg-white border border-blue-50 p-8 max-w-2xl mx-auto">
+          <div className="space-y-6">
+            {/* Button 1 (PDF Access) */}
+            <Button 
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 px-6 rounded-xl text-lg font-semibold transition-all duration-200 flex items-center justify-center gap-3"
+              onClick={handleOpenPDF}
+            >
+              <FileText className="h-5 w-5 text-white" />
+              Kanda hano ufungure PDF y'amategoko y'umuhanda
+            </Button>
 
-        {/* Quiz Section */}
-        <div className="mb-8">
-          <Card className="p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <Play className="h-6 w-6 text-green-600" />
-              <h2 className="text-2xl font-semibold">Ikizamini cya Gicuti</h2>
-            </div>
+            {/* Button 2 (Examination) */}
+            <Button 
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 px-6 rounded-xl text-lg font-semibold transition-all duration-200 flex items-center justify-center gap-3"
+              onClick={handleTakeQuiz}
+            >
+              <Play className="h-5 w-5 text-white" />
+              Kanda hano ukore isuzumabumenyi
+            </Button>
+          </div>
 
-            <div className="text-center space-y-6">
-              <p className="text-slate-600 max-w-2xl mx-auto">
-                Nyuma yo kura PDF, wakora ikizamini kugira ngo ukure impano y'ubumenyi bwawe mu mategeko y'umuhanda.
-              </p>
-
-              <Button 
-                size="lg"
-                className="bg-green-600 hover:bg-green-700 px-8 py-3 text-lg"
-                onClick={handleTakeQuiz}
-              >
-                <Play className="mr-2 h-5 w-5" />
-                Kurikiza Ikizamini
-              </Button>
-
-              {/* Payment Information */}
-              {showPaymentInfo && (
-                <Alert className="max-w-2xl mx-auto border-red-200 bg-red-50">
-                  <AlertCircle className="h-4 w-4 text-red-600" />
-                  <AlertDescription className="text-red-800">
-                    <div className="space-y-3 text-left">
-                      <p className="font-semibold">
-                        Kugira ngo ukore ibizamini bikumenyereza (Quiz) ndetse ubone amanota ugenda ugira, usabwa kwishyura 1000 Rwf kuri 0783074056 (ISHIMWE FRANCIS).
-                      </p>
-                      <p>
-                        Mugihe umaze kwishyura, Andikira Admin cg umuhamagare kuri iyo nimero aguhe uburenganzira. Murakoze.
-                      </p>
-                      <div className="flex items-center gap-2 mt-3">
-                        <Phone className="h-4 w-4" />
-                        <span className="font-mono font-bold">0783074056</span>
-                        <span className="text-sm">(ISHIMWE FRANCIS)</span>
-                      </div>
-                    </div>
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              {/* Access Status */}
-              {isAuthenticated && user?.hasQuizAccess && user?.quizAccessExpiry && (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4 max-w-2xl mx-auto">
-                  <div className="flex items-center gap-2 text-green-800">
-                    <User className="h-5 w-5" />
-                    <span className="font-medium">
-                      Ufite uburenganzira bukora ikizamini! 
-                    </span>
-                  </div>
-                  <p className="text-sm text-green-700 mt-1">
-                    Uburenganzira bwarangiye: {new Date(user.quizAccessExpiry).toLocaleDateString('rw-RW')}
+          {/* Payment Information - Simplified */}
+          {showPaymentInfo && (
+            <Alert className="mt-8 border-red-200 bg-red-50">
+              <AlertCircle className="h-4 w-4 text-red-600" />
+              <AlertDescription className="text-red-800">
+                <div className="space-y-2 text-sm">
+                  <p className="font-semibold">
+                    Kugira ngo ukore ibizamini, usabwa kwishyura 1000 Rwf kuri 0783074056 (ISHIMWE FRANCIS).
+                  </p>
+                  <p>
+                    Mugihe umaze kwishyura, umuhamagare Admin kugira ngo aguhe uburenganzira.
                   </p>
                 </div>
-              )}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {/* Access Status - Simplified */}
+          {isAuthenticated && (user as any)?.hasQuizAccess && (user as any)?.quizAccessExpiry && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-6">
+              <div className="flex items-center gap-2 text-green-800">
+                <User className="h-5 w-5" />
+                <span className="font-medium">
+                  Ufite uburenganzira bukora ikizamini! 
+                </span>
+              </div>
+              <p className="text-sm text-green-700 mt-1">
+                Uburenganzira bwarangiye: {new Date((user as any).quizAccessExpiry).toLocaleDateString('rw-RW')}
+              </p>
             </div>
-          </Card>
-        </div>
+          )}
+        </Card>
       </div>
 
       <Footer />
