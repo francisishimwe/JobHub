@@ -27,6 +27,14 @@ export function AdminRoadRulesDashboard() {
 
   useEffect(() => {
     fetchUsers()
+    
+    // Add timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      setLoading(false)
+      setError("Ikibazo gikomeye serivisi - DATABASE_URL itashizwe")
+    }, 5000) // 5 seconds timeout
+    
+    return () => clearTimeout(timeout)
   }, [])
 
   const fetchUsers = async () => {
@@ -40,7 +48,8 @@ export function AdminRoadRulesDashboard() {
         setError(data.message || "Ikibazo kubona abantu")
       }
     } catch (err) {
-      setError("Ikibazo gikomeye serivisi")
+      console.error("Fetch users error:", err)
+      setError("Ikibazo gikomeye serivisi - DATABASE_URL itashizwe")
     } finally {
       setLoading(false)
     }
