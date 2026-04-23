@@ -181,8 +181,8 @@ export function StudentExamPortal() {
                   Subira kuri Iga Amategeko
                 </Button>
               </div>
-            </Card>
-          </div>
+            </div>
+          </Card>
         </div>
       </div>
     )
