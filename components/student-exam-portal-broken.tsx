@@ -27,7 +27,7 @@ export function StudentExamPortal() {
   const [questions, setQuestions] = useState<Question[]>([])
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
-  const [timeLeft, setTimeLeft] = useState(1200)
+  const [timeLeft, setTimeLeft] = useState(1200) // 20 minutes in seconds
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [results, setResults] = useState<ExamResult[]>([])
   const [showResults, setShowResults] = useState(false)
@@ -209,6 +209,7 @@ export function StudentExamPortal() {
             </h1>
           </div>
 
+          {/* Timer */}
           <div className="text-center mb-6">
             <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full ${
               timeLeft <= 60 ? "bg-red-100 border-red-300" : "bg-blue-100 border-blue-300"
@@ -220,6 +221,7 @@ export function StudentExamPortal() {
             </div>
           </div>
 
+          {/* Progress */}
           <div className="mb-6">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-slate-600">Ikibamino {currentQuestion + 1} / {questions.length}</span>
@@ -236,6 +238,7 @@ export function StudentExamPortal() {
             </div>
           </div>
 
+          {/* Question */}
           <div className="mb-6">
             <Card className="p-6">
               <div className="flex items-start gap-3 mb-4">
@@ -273,6 +276,7 @@ export function StudentExamPortal() {
             </Card>
           </div>
 
+          {/* Navigation */}
           <div className="flex justify-between">
             <Button
               variant="outline"
