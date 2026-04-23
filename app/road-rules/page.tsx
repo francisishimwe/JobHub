@@ -8,7 +8,7 @@ import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { BookOpen, Play, AlertCircle, User, CreditCard, Phone, CheckCircle, FileText } from "lucide-react"
+import { BookOpen, Play, AlertCircle, User, CreditCard, Phone, CheckCircle } from "lucide-react"
 
 export default function RoadRulesPage() {
   const { user, isAuthenticated } = useAuth()
@@ -19,13 +19,13 @@ export default function RoadRulesPage() {
 
   const handleTakeQuiz = () => {
     if (!isAuthenticated) {
-      router.push("/login")
+      router.push("/membership-signup")
       return
     }
     
     // Check if user has quiz access (this would be checked against the database)
     if ((user as any)?.hasQuizAccess && (user as any)?.quizAccessExpiry && new Date((user as any).quizAccessExpiry) > new Date()) {
-      router.push("/road-rules-quiz")
+      router.push("/student-exam-portal")
     } else {
       setShowPaymentInfo(true)
     }
@@ -80,16 +80,16 @@ export default function RoadRulesPage() {
           <div className="space-y-6">
             {/* Button 1 (PDF Access) */}
             <Button 
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 px-6 rounded-xl text-lg font-semibold transition-all duration-200 flex items-center justify-center gap-3"
+              className="w-full bg-red-600 hover:bg-red-700 text-white py-4 px-6 rounded-xl text-lg font-semibold transition-all duration-200 flex items-center justify-center gap-3"
               onClick={handleOpenPDF}
             >
-              <FileText className="h-5 w-5 text-white" />
+              <BookOpen className="h-5 w-5 text-white" />
               Kanda hano ufungure PDF y'amategoko y'umuhanda
             </Button>
 
             {/* Button 2 (Examination) */}
             <Button 
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 px-6 rounded-xl text-lg font-semibold transition-all duration-200 flex items-center justify-center gap-3"
+              className="w-full bg-red-600 hover:bg-red-700 text-white py-4 px-6 rounded-xl text-lg font-semibold transition-all duration-200 flex items-center justify-center gap-3"
               onClick={handleTakeQuiz}
             >
               <Play className="h-5 w-5 text-white" />
