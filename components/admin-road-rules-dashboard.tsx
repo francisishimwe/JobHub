@@ -151,6 +151,18 @@ export function AdminRoadRulesDashboard() {
             <div className="text-center py-8">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             </div>
+          ) : users.length === 0 ? (
+            <div className="text-center py-8">
+              <div className="text-slate-500 mb-4">
+                <User className="h-12 w-12 mx-auto mb-4 text-slate-400" />
+                <h3 className="text-lg font-medium text-slate-900 mb-2">
+                  Nta banyamizi bari kugirango uburenganzira
+                </h3>
+                <p className="text-slate-600">
+                  Abanyamizi baza kugaragara hano nyuma yo kwiyandikisha.
+                </p>
+              </div>
+            </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
@@ -200,41 +212,20 @@ export function AdminRoadRulesDashboard() {
                             <Button
                               size="sm"
                               className="bg-green-600 hover:bg-green-700 text-white"
-                              onClick={() => setSelectedUser(user.id)}
+                              onClick={() => handleApprove(user.id, extensionDays)}
                             >
-                              <Plus className="h-3 w-3 mr-1" />
-                              Kongera
+                              <CheckCircle className="h-3 w-3 mr-1" />
+                              Yemera
                             </Button>
                           )}
-                          {selectedUser === user.id && (
-                            <div className="flex gap-2">
-                              <Input
-                                type="number"
-                                value={extensionDays}
-                                onChange={(e) => setExtensionDays(e.target.value)}
-                                placeholder="10"
-                                className="w-20 h-8"
-                                min="1"
-                                max="365"
-                              />
-                              <Button
-                                size="sm"
-                                className="bg-green-600 hover:bg-green-700 text-white"
-                                onClick={() => handleApprove(user.id, extensionDays)}
-                              >
-                                <CheckCircle className="h-3 w-3 mr-1" />
-                                Emeza
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="destructive"
-                                onClick={() => handleDelete(user.id)}
-                              >
-                                <X className="h-3 w-3" />
-                                Gusiba
-                              </Button>
-                            </div>
-                          )}
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => handleDelete(user.id)}
+                          >
+                            <X className="h-3 w-3" />
+                            Gusiba
+                          </Button>
                         </div>
                       </td>
                     </tr>
