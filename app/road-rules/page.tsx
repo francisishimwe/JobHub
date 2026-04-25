@@ -23,10 +23,14 @@ export default function RoadRulesPage() {
       return
     }
     
-    // Check if user has quiz access (this would be checked against the database)
-    if ((user as any)?.hasQuizAccess && (user as any)?.quizAccessExpiry && new Date((user as any).quizAccessExpiry) > new Date()) {
+    // Check if user is approved and has valid access
+    if ((user as any)?.is_approved && (user as any)?.expires_at && new Date((user as any).expires_at) > new Date()) {
       router.push("/student-exam-portal")
+    } else if ((user as any)?.is_approved === false) {
+      // User exists but not approved - show pending state
+      router.push("/pending-approval")
     } else {
+      // User access expired or not approved
       setShowPaymentInfo(true)
     }
   }

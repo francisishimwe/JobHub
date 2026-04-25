@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { CheckCircle, X, Clock, Play } from "lucide-react"
+import { CheckCircle, X, Clock, Play, BookOpen } from "lucide-react"
 
 interface Question {
   id: string
@@ -31,13 +31,15 @@ export function StudentExamPortal() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [results, setResults] = useState<ExamResult[]>([])
   const [showResults, setShowResults] = useState(false)
+  const [currentExam, setCurrentExam] = useState<number | null>(null)
+  const [showExamDashboard, setShowExamDashboard] = useState(true)
 
   useEffect(() => {
     fetchQuestions()
   }, [])
 
   useEffect(() => {
-    if (timeLeft > 0 && !isSubmitted) {
+    if (timeLeft > 0 && !isSubmitted && currentExam !== null) {
       const timer = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 1) {
@@ -48,16 +50,14 @@ export function StudentExamPortal() {
           return prev - 1
         })
       }, 1000)
-
       return () => clearInterval(timer)
     }
-  }, [timeLeft, isSubmitted])
+  }, [timeLeft, isSubmitted, currentExam])
 
   const fetchQuestions = async () => {
     try {
       const response = await fetch("/api/exam-questions")
       const data = await response.json()
-      
       if (data.success) {
         setQuestions(data.questions)
       }
@@ -66,27 +66,48 @@ export function StudentExamPortal() {
     }
   }
 
-  const handleAnswer = (questionId: string, answer: string) => {
-    setAnswers(prev => ({ ...prev, [questionId]: answer }))
+  const startExam = (examNumber: number) => {
+    setCurrentExam(examNumber)
+    setShowExamDashboard(false)
+    setTimeLeft(1200) // 20 minutes for each exam
+    setCurrentQuestion(0)
+    setAnswers({})
+    setIsSubmitted(false)
+    setResults([])
+    setShowResults(false)
+  }
+
+  const handleAnswer = (answer: string) => {
+    if (!questions[currentQuestion]) return
+    setAnswers(prev => ({
+      ...prev,
+      [questions[currentQuestion].id]: answer
+    }))
+  }
+
+  const handleNext = () => {
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(prev => prev + 1)
+    } else {
+      handleSubmit()
+    }
   }
 
   const handleSubmit = async () => {
+    if (isSubmitted) return
+    
     setIsSubmitted(true)
-    setTimeLeft(0)
-
+    
     try {
       const response = await fetch("/api/submit-exam", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          answers
-        }),
+        body: JSON.stringify({ answers }),
       })
 
       const data = await response.json()
-      
       if (data.success) {
         setResults(data.results)
         setShowResults(true)
@@ -107,6 +128,61 @@ export function StudentExamPortal() {
     return `${correct} / ${results.length}`
   }
 
+  // Exam Dashboard View
+  if (showExamDashboard) {
+    return (
+      <div className="min-h-screen bg-slate-50 p-6">
+        <div className="max-w-6xl mx-auto">
+          <Card className="p-8">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-slate-900 mb-4">
+                Nukora aya masuzumabumenyi yose, nta kabuza uzatsinda ikizamini cya provisoire.
+              </h1>
+              <p className="text-lg text-slate-600">
+                Kanda kuri isuzumabumenyi uri kwihangira kugirango utangire.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+              {[...Array(10)].map((_, index) => (
+                <Card 
+                  key={index + 1}
+                  className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer transition-all duration-200 transform hover:scale-105 border-0"
+                  onClick={() => startExam(index + 1)}
+                >
+                  <div className="p-6 text-center">
+                    <BookOpen className="h-12 w-12 mx-auto mb-4 text-white opacity-90" />
+                    <h3 className="text-xl font-bold mb-2">
+                      Isuzumabumenyi rya {index + 1}
+                    </h3>
+                    <p className="text-blue-100 text-sm">
+                      20 min • 10 ibibazo
+                    </p>
+                    <div className="mt-4 flex items-center justify-center">
+                      <Play className="h-5 w-5 mr-2" />
+                      <span className="font-semibold">Tangira</span>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+
+            <div className="mt-8 text-center">
+              <Button 
+                onClick={() => router.push("/road-rules")}
+                variant="outline"
+                className="px-6 py-3"
+              >
+                Subira kuri Iga Amategeko
+              </Button>
+            </div>
+          </Card>
+        </div>
+      </div>
+    )
+  }
+
+  // Results View
   if (showResults) {
     return (
       <div className="min-h-screen bg-slate-50 p-6">
@@ -139,32 +215,31 @@ export function StudentExamPortal() {
                         {question?.options.map((option, optIndex) => (
                           <div
                             key={optIndex}
-                            className={`p-3 rounded border text-sm ${
-                              result.user_answer === option
-                                ? result.is_correct
-                                  ? "bg-green-100 border-green-300 text-green-800"
-                                  : "bg-red-100 border-red-300 text-red-800"
-                                : "bg-slate-100 border-slate-300"
+                            className={`p-2 rounded border ${
+                              option === result.correct_answer
+                                ? "bg-green-50 border-green-300 text-green-800"
+                                : option === result.user_answer && !result.is_correct
+                                ? "bg-red-50 border-red-300 text-red-800"
+                                : "bg-slate-50 border-slate-200"
                             }`}
                           >
                             <div className="flex items-center gap-2">
-                              <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center text-xs font-bold ${
-                                result.is_correct && result.user_answer === option
-                                  ? "bg-green-600 text-white border-green-700"
-                                  : "bg-red-600 text-white border-red-700"
-                              }`}>
-                                {String.fromCharCode(65 + optIndex)}
-                              </div>
+                              {option === result.correct_answer && (
+                                <CheckCircle className="h-4 w-4 text-green-600" />
+                              )}
+                              {option === result.user_answer && !result.is_correct && (
+                                <X className="h-4 w-4 text-red-600" />
+                              )}
                               <span>{option}</span>
                             </div>
                           </div>
                         ))}
                       </div>
-
+                      
                       {!result.is_correct && (
-                        <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                          <p className="text-sm text-blue-800 font-medium">
-                            <strong>Igikorwa:</strong> {result.correct_answer}
+                        <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded">
+                          <p className="text-sm text-yellow-800">
+                            <strong>Igisubizo cy'ukuri:</strong> {result.correct_answer}
                           </p>
                         </div>
                       )}
@@ -173,10 +248,16 @@ export function StudentExamPortal() {
                 })}
               </div>
 
-              <div className="text-center">
+              <div className="text-center mt-6 space-y-3">
+                <Button 
+                  onClick={() => setShowExamDashboard(true)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white mr-3"
+                >
+                  Subira kuri Dashboard
+                </Button>
                 <Button 
                   onClick={() => router.push("/road-rules")}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  variant="outline"
                 >
                   Subira kuri Iga Amategeko
                 </Button>
@@ -188,6 +269,7 @@ export function StudentExamPortal() {
     )
   }
 
+  // Exam Taking View
   const question = questions[currentQuestion]
   if (!question) {
     return (
@@ -204,9 +286,12 @@ export function StudentExamPortal() {
       <div className="max-w-4xl mx-auto">
         <Card className="p-8">
           <div className="text-center mb-6">
-            <h1 className="text-3xl font-bold text-slate-900 mb-4">
-              Nukura aya masuzumabumenyi yose, nta kabuza uzatsinda ikizamini cya provisoire.
+            <h1 className="text-2xl font-bold text-slate-900 mb-2">
+              Isuzumabumenyi rya {currentExam}
             </h1>
+            <p className="text-slate-600">
+              Nukura aya masuzumabumenyi yose, nta kabuza uzatsinda ikizamini cya provisoire.
+            </p>
           </div>
 
           <div className="text-center mb-6">
@@ -221,62 +306,32 @@ export function StudentExamPortal() {
           </div>
 
           <div className="mb-6">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-slate-600">Ikibamino {currentQuestion + 1} / {questions.length}</span>
-              <div className="flex gap-1">
-                {questions.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`w-2 h-2 rounded-full ${
-                      index < currentQuestion ? "bg-blue-600" : "bg-slate-300"
-                    }`}
-                  />
-                ))}
-              </div>
+            <h2 className="text-xl font-semibold text-slate-900 mb-4">
+              {question.question_text}
+            </h2>
+
+            <div className="space-y-3">
+              {question.options.map((option, index) => (
+                <Button
+                  key={index}
+                  variant="outline"
+                  className={`w-full text-left justify-start h-auto p-4 ${
+                    answers[question.id] === option
+                      ? "bg-blue-50 border-blue-300"
+                      : "bg-white border-slate-200"
+                  }`}
+                  onClick={() => handleAnswer(option)}
+                >
+                  <span>{option}</span>
+                </Button>
+              ))}
             </div>
-          </div>
-
-          <div className="mb-6">
-            <Card className="p-6">
-              <div className="flex items-start gap-3 mb-4">
-                <Badge variant="default" className="text-sm">
-                  {currentQuestion + 1}
-                </Badge>
-                <h2 className="text-xl font-semibold flex-1">{question.question_text}</h2>
-              </div>
-
-              <div className="grid grid-cols-1 gap-3">
-                {question.options.map((option, index) => (
-                  <Button
-                    key={index}
-                    variant={answers[question.id] === option ? "default" : "outline"}
-                    className={`p-4 text-left justify-start h-auto min-h-[60px] ${
-                      answers[question.id] === option
-                        ? "bg-blue-600 text-white border-blue-700"
-                        : "bg-white text-slate-900 border-slate-300 hover:bg-slate-50"
-                    }`}
-                    onClick={() => handleAnswer(question.id, option)}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center text-xs font-bold ${
-                        answers[question.id] === option
-                          ? "bg-blue-600 text-white border-blue-700"
-                          : "bg-slate-300 text-slate-700"
-                      }`}>
-                        {String.fromCharCode(65 + index)}
-                      </div>
-                      <span>{option}</span>
-                    </div>
-                  </Button>
-                ))}
-              </div>
-            </Card>
           </div>
 
           <div className="flex justify-between">
             <Button
               variant="outline"
-              onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
+              onClick={() => setCurrentQuestion(prev => Math.max(0, prev - 1))}
               disabled={currentQuestion === 0}
             >
               Ibanjir

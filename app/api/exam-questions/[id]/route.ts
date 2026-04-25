@@ -1,67 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { neon } from '@neondatabase/serverless'
 
-export async function GET(request: NextRequest) {
-  try {
-    const sql = neon(process.env.DATABASE_URL!)
-
-    const questions = await sql`
-      SELECT * FROM exam_questions 
-      ORDER BY id ASC
-    `
-
-    return NextResponse.json({
-      success: true,
-      questions
-    })
-  } catch (error) {
-    console.error('Fetch exam questions error:', error)
-    return NextResponse.json(
-      { success: false, message: "Ikibazo gikomeye serivisi" },
-      { status: 500 }
-    )
-  }
-}
-
-export async function POST(request: NextRequest) {
+export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const sql = neon(process.env.DATABASE_URL!)
     const body = await request.json()
-
-    const { question_text, options, correct_answer, time_limit } = body
-
-    if (!question_text || !options || !correct_answer || !time_limit) {
-      return NextResponse.json(
-        { success: false, message: "Uzuza amazina yose akenewe" },
-        { status: 400 }
-      )
-    }
-
-    const result = await sql`
-      INSERT INTO exam_questions (question_text, options, correct_answer, time_limit)
-      VALUES (${question_text}, ${options}, ${correct_answer}, ${time_limit})
-      RETURNING *
-    `
-
-    return NextResponse.json({
-      success: true,
-      question: result[0]
-    })
-  } catch (error) {
-    console.error('Create exam question error:', error)
-    return NextResponse.json(
-      { success: false, message: "Ikibazo gikomeye serivisi" },
-      { status: 500 }
-    )
-  }
-}
-
-export async function PUT(request: NextRequest) {
-  try {
-    const sql = neon(process.env.DATABASE_URL!)
-    const body = await request.json()
-    const url = new URL(request.url)
-    const id = url.pathname.split('/').pop()
+    const { id } = params
 
     const { question_text, options, correct_answer, time_limit } = body
 
@@ -102,11 +46,10 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const sql = neon(process.env.DATABASE_URL!)
-    const url = new URL(request.url)
-    const id = url.pathname.split('/').pop()
+    const { id } = params
 
     const result = await sql`
       DELETE FROM exam_questions 

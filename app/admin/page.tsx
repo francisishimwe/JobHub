@@ -35,6 +35,7 @@ import {
   User
 } from 'lucide-react'
 import SecureViewer from '@/components/SecureViewer'
+import { QuestionManagement } from '@/components/question-management'
 
 interface ExamResource {
   id: string
@@ -509,10 +510,10 @@ export default function AdminPage() {
             <TabsContent value="exams" className="mt-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Exams Management</CardTitle>
+                  <CardTitle>Question Management</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">Exams management system coming soon...</p>
+                  <QuestionManagement />
                 </CardContent>
               </Card>
             </TabsContent>
