@@ -335,7 +335,7 @@ export default function AdminPage() { // Admin Dashboard with 5-tab system - Upd
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Resource Command Center
+              Resource Command Center - Updated
             </h1>
             <p className="text-lg text-gray-600">
               Manage exam resources and interview preparation materials
