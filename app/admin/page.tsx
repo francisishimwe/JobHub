@@ -343,12 +343,14 @@ export default function AdminPage() { // Admin Dashboard with 5-tab system - Upd
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-5">
+            <TabsList className="grid w-full grid-cols-6">
               <TabsTrigger value="employer-approvals">Employer Approvals</TabsTrigger>
               <TabsTrigger value="road-rules-management">Road Rules Management</TabsTrigger>
+              <TabsTrigger value="road-rules">Road Rules</TabsTrigger>
               <TabsTrigger value="jobs">Jobs</TabsTrigger>
-              <TabsTrigger value="exams">Exams</TabsTrigger>
+              <TabsTrigger value="exams">Exam&Interview</TabsTrigger>
               <TabsTrigger value="inquiries">Inquiries</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
             </TabsList>
 
             <TabsContent value="employer-approvals" className="mt-6">
@@ -508,6 +510,23 @@ export default function AdminPage() { // Admin Dashboard with 5-tab system - Upd
               </Card>
             </TabsContent>
 
+            <TabsContent value="road-rules" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Road Rules</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">
+                    Access and manage Road Rules system settings and configurations.
+                  </p>
+                  <div className="text-center py-8 text-gray-500">
+                    <p>Road Rules system settings...</p>
+                    <p className="text-sm mt-2">(System configuration and management)</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
             <TabsContent value="jobs" className="mt-6">
               <Card>
                 <CardHeader>
@@ -532,6 +551,23 @@ export default function AdminPage() { // Admin Dashboard with 5-tab system - Upd
                   <div className="text-center py-8 text-gray-500">
                     <p>Job & Interview question management system...</p>
                     <p className="text-sm mt-2">(Your existing job questions system)</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="analytics" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Analytics</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">
+                    View system analytics, user statistics, and performance metrics.
+                  </p>
+                  <div className="text-center py-8 text-gray-500">
+                    <p>Analytics dashboard coming soon...</p>
+                    <p className="text-sm mt-2">(User statistics and system metrics)</p>
                   </div>
                 </CardContent>
               </Card>
