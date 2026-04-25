@@ -341,13 +341,192 @@ export default function AdminPage() {
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="create">
-                {editingId ? 'Edit Resource' : 'Create Resource'}
-              </TabsTrigger>
-              <TabsTrigger value="list">All Resources</TabsTrigger>
-              <TabsTrigger value="road-rules">Road Rules Management</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-5">
+              <TabsTrigger value="employer-approvals">Employer Approvals</TabsTrigger>
+              <TabsTrigger value="user-management">User Management</TabsTrigger>
+              <TabsTrigger value="jobs">Jobs</TabsTrigger>
+              <TabsTrigger value="exams">Exams</TabsTrigger>
+              <TabsTrigger value="inquiries">Inquiries</TabsTrigger>
             </TabsList>
+
+            <TabsContent value="employer-approvals" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Employer Approvals</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">Employer approval system coming soon...</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="user-management" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                      Ubufatanye bwa Abanyamizi ba Iga Amategeko
+                    </h2>
+                    <p className="text-gray-600">
+                      Kugirango abanyamizi bari kugira ngo uburenganzira no kuzamura.
+                    </p>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {usersError && (
+                    <Alert className="mb-6 border-red-200 bg-red-50">
+                      <AlertDescription className="text-red-800">
+                        {usersError}
+                      </AlertDescription>
+                    </Alert>
+                  )}
+
+                  <div className="mb-6">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                      Abanyamizi Bari Kugirango Uburenganzira
+                    </h3>
+                    
+                    <div className="mb-4">
+                      <Label htmlFor="extension">Kongera iminsi (igihe)</Label>
+                      <div className="flex gap-2 items-center">
+                        <Input
+                          id="extension"
+                          type="number"
+                          value={extensionDays}
+                          onChange={(e) => setExtensionDays(e.target.value)}
+                          placeholder="10"
+                          className="w-32"
+                          min="1"
+                          max="365"
+                        />
+                        <span className="text-sm text-gray-600">iminsi</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {usersLoading ? (
+                    <div className="text-center py-8">
+                      <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                    </div>
+                  ) : users.length === 0 ? (
+                    <div className="text-center py-8">
+                      <div className="text-gray-500 mb-4">
+                        <User className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">
+                          Nta banyamizi bari kugirango uburenganzira
+                        </h3>
+                        <p className="text-gray-600">
+                          Abanyamizi baza kugaragara hano nyuma yo kwiyandikisha.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse">
+                        <thead>
+                          <tr className="bg-gray-100">
+                            <th className="text-left p-3 font-semibold text-gray-900 border-b">Amazina</th>
+                            <th className="text-left p-3 font-semibold text-gray-900 border-b">Nomero ya Telefone</th>
+                            <th className="text-left p-3 font-semibold text-gray-900 border-b">Leta</th>
+                            <th className="text-left p-3 font-semibold text-gray-900 border-b">Ubufatanye</th>
+                            <th className="text-left p-3 font-semibold text-gray-900 border-b">Imisi</th>
+                            <th className="text-left p-3 font-semibold text-gray-900 border-b">Ibikorwa</th>
+                            <th className="text-center p-3 font-semibold text-gray-900 border-b">Igikorwa</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {users.map((user) => (
+                            <tr key={user.id} className="border-b hover:bg-gray-50">
+                              <td className="p-3">{user.full_name}</td>
+                              <td className="p-3">{user.phone_number}</td>
+                              <td className="p-3">{new Date(user.created_at).toLocaleDateString('rw-RW')}</td>
+                              <td className="p-3">
+                                {isExpired(user.expires_at) ? (
+                                  <Badge variant="destructive">Yarabuze</Badge>
+                                ) : (
+                                  <Badge variant="default">Kiri</Badge>
+                                )}
+                              </td>
+                              <td className="p-3">{new Date(user.expires_at).toLocaleDateString('rw-RW')}</td>
+                              <td className="p-3">
+                                <div className="flex items-center gap-2">
+                                  {user.is_approved ? (
+                                    <Badge variant="default" className="bg-green-100 text-green-800">
+                                      <CheckCircle className="h-3 w-3 mr-1" />
+                                      Yemewe
+                                    </Badge>
+                                  ) : (
+                                    <Badge variant="destructive">
+                                      <Clock className="h-3 w-3 mr-1" />
+                                      Isubizwe
+                                    </Badge>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="p-3">
+                                <div className="flex gap-2">
+                                  {!user.is_approved && (
+                                    <Button
+                                      size="sm"
+                                      className="bg-green-600 hover:bg-green-700 text-white"
+                                      onClick={() => handleApprove(user.id, extensionDays)}
+                                    >
+                                      <CheckCircle className="h-3 w-3 mr-1" />
+                                      Yemera
+                                    </Button>
+                                  )}
+                                  <Button
+                                    size="sm"
+                                    variant="destructive"
+                                    onClick={() => handleDeleteUser(user.id)}
+                                  >
+                                    <X className="h-3 w-3" />
+                                    Gusiba
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="jobs" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Jobs Management</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">Jobs management system coming soon...</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="exams" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Exams Management</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">Exams management system coming soon...</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="inquiries" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Inquiries Management</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">Inquiries management system coming soon...</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
 
             <TabsContent value="create" className="mt-6">
               <Card>
