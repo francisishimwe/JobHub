@@ -56,13 +56,13 @@ export function StudentExamPortal() {
 
   const fetchQuestions = async () => {
     try {
-      const response = await fetch("/api/exam-questions")
+      const response = await fetch("/api/road-rules-questions")
       const data = await response.json()
       if (data.success) {
         setQuestions(data.questions)
       }
     } catch (err) {
-      console.error("Failed to fetch questions:", err)
+      console.error("Failed to fetch road rules questions:", err)
     }
   }
 

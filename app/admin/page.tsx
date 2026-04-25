@@ -36,6 +36,7 @@ import {
 } from 'lucide-react'
 import SecureViewer from '@/components/SecureViewer'
 import { QuestionManagement } from '@/components/question-management'
+import { RoadRulesQuestionManagement } from '@/components/road-rules-question-management'
 
 interface ExamResource {
   id: string
@@ -344,7 +345,7 @@ export default function AdminPage() {
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="employer-approvals">Employer Approvals</TabsTrigger>
-              <TabsTrigger value="user-management">User Management</TabsTrigger>
+              <TabsTrigger value="road-rules-management">Road Rules Management</TabsTrigger>
               <TabsTrigger value="jobs">Jobs</TabsTrigger>
               <TabsTrigger value="exams">Exams</TabsTrigger>
               <TabsTrigger value="inquiries">Inquiries</TabsTrigger>
@@ -361,7 +362,7 @@ export default function AdminPage() {
               </Card>
             </TabsContent>
 
-            <TabsContent value="user-management" className="mt-6">
+            <TabsContent value="road-rules-management" className="mt-6">
               <Card>
                 <CardHeader>
                   <CardTitle>
@@ -496,6 +497,17 @@ export default function AdminPage() {
               </Card>
             </TabsContent>
 
+            <TabsContent value="road-rules-management" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Amategeko Questions Management</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <RoadRulesQuestionManagement />
+                </CardContent>
+              </Card>
+            </TabsContent>
+
             <TabsContent value="jobs" className="mt-6">
               <Card>
                 <CardHeader>
@@ -510,10 +522,17 @@ export default function AdminPage() {
             <TabsContent value="exams" className="mt-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Question Management</CardTitle>
+                  <CardTitle>Job & Interview Questions</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <QuestionManagement />
+                  <p className="text-gray-600 mb-4">
+                    Manage job interview preparation questions and written exam materials.
+                  </p>
+                  {/* This is where your existing job/interview question management goes */}
+                  <div className="text-center py-8 text-gray-500">
+                    <p>Job & Interview question management system...</p>
+                    <p className="text-sm mt-2">(Your existing job questions system)</p>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
