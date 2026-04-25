@@ -62,7 +62,7 @@ interface MembershipUser {
   created_at: string
 }
 
-export default function AdminPage() {
+export default function AdminPage() { // Admin Dashboard with 5-tab system - Updated
   const router = useRouter()
   const [resources, setResources] = useState<ExamResource[]>([])
   const [isLoading, setIsLoading] = useState(true)
