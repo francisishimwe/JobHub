@@ -25,7 +25,7 @@ export async function POST() {
 
     await sql`
       UPDATE resources 
-      SET button_text = 'View Exams' 
+      SET button_text = 'Exam&Interview' 
       WHERE button_text = 'Browse Q&A'
     `
 

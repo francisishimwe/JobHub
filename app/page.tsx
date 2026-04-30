@@ -190,7 +190,7 @@ function HomePageContent() {
               {/* Top - Primary Links */}
               <nav className="flex items-center justify-center gap-12 py-4 mt-4">
                 <Link href="/" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">Home</Link>
-                <Link href="/exams" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">View Exams</Link>
+                <Link href="/exams" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">Exam&Interview</Link>
                 <Link href="/employers" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">Partners</Link>
                 <Link href="/testimonials" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">Testimonials</Link>
                 <Link href="/help" className="text-slate-900 hover:text-blue-600 text-xl font-bold transition-colors px-2 py-1 whitespace-nowrap">Help</Link>

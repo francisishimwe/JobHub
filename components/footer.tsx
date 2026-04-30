@@ -60,7 +60,7 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />
-                <a href="/exams" className="text-slate-900 hover:text-blue-600 text-[9px] transition-colors">View Exams</a>
+                <a href="/exams" className="text-slate-900 hover:text-blue-600 text-[9px] transition-colors">Exam&Interview</a>
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-3 w-3 text-orange-600 flex-shrink-0" style={{ fontSize: '12px' }} />

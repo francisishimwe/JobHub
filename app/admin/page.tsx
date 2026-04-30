@@ -37,6 +37,7 @@ import {
 import SecureViewer from '@/components/SecureViewer'
 import { QuestionManagement } from '@/components/question-management'
 import { RoadRulesQuestionManagement } from '@/components/road-rules-question-management'
+import { RoadRulesSettings } from '@/components/road-rules-settings'
 
 interface ExamResource {
   id: string
@@ -513,16 +514,10 @@ export default function AdminPage() { // Admin Dashboard with 5-tab system - Upd
             <TabsContent value="road-rules" className="mt-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Road Rules</CardTitle>
+                  <CardTitle>Road Rules Settings</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 mb-4">
-                    Access and manage Road Rules system settings and configurations.
-                  </p>
-                  <div className="text-center py-8 text-gray-500">
-                    <p>Road Rules system settings...</p>
-                    <p className="text-sm mt-2">(System configuration and management)</p>
-                  </div>
+                  <RoadRulesSettings />
                 </CardContent>
               </Card>
             </TabsContent>
