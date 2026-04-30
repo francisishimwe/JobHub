@@ -336,7 +336,7 @@ export default function AdminPage() { // Admin Dashboard with 5-tab system - Upd
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Resource Command Center - Latest
+              Resource Command Center - v2.0
             </h1>
             <p className="text-lg text-gray-600">
               Manage exam resources and interview preparation materials
@@ -344,7 +344,7 @@ export default function AdminPage() { // Admin Dashboard with 5-tab system - Upd
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-6">
+            <TabsList className="grid w-full grid-cols-7">
               <TabsTrigger value="employer-approvals">Employer Approvals</TabsTrigger>
               <TabsTrigger value="road-rules-management">Road Rules Management</TabsTrigger>
               <TabsTrigger value="road-rules">Road Rules</TabsTrigger>
