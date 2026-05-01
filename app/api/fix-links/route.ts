@@ -12,7 +12,7 @@ export async function POST() {
 
     await sql`
       UPDATE resources 
-      SET button_link = '/exams' 
+      SET button_link = '/exam-interview' 
       WHERE button_link = '/resources/qa'
     `
 

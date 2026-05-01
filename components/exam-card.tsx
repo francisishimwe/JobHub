@@ -150,7 +150,7 @@ export function ExamCard({ exam, onTakeExam, onDownloadPDF, className = "" }: Ex
               size="sm"
               asChild
             >
-              <Link href={`/exams/${exam.id}/take`}>
+              <Link href={`/exam-interview/${exam.id}/take`}>
                 <Play className="h-4 w-4" />
                 Take Exam
               </Link>

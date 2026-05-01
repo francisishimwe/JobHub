@@ -33,7 +33,7 @@ export async function POST() {
     // Insert sample data
     await sql`
       INSERT INTO resources (title, description, category, icon, icon_color, button_text, button_color, button_link, sort_order) VALUES
-      ('Job Prep Questions & Answers', 'Master technical exams for Rwanda''s top institutions with our curated database of past paper solutions and correct answers.', 'Q&A', 'FileText', 'blue', 'Exam&Interview', 'blue', '/exams', 1),
+      ('Job Prep Questions & Answers', 'Master technical exams for Rwanda''s top institutions with our curated database of past paper solutions and correct answers.', 'Q&A', 'FileText', 'blue', 'Exam&Interview', 'blue', '/exam-interview', 1),
       ('Interview Questions & Answers', 'From ''Tell me about yourself'' to salary negotiations, learn how to answer common interview questions used by Rwandan HR managers.', 'Interview', 'MessagesSquare', 'orange', 'Start Interview Prep', 'orange', '/resources', 2)
     `
 
@@ -46,7 +46,7 @@ export async function POST() {
 
     await sql`
       UPDATE resources 
-      SET button_link = '/exams' 
+      SET button_link = '/exam-interview' 
       WHERE button_link = '/resources/qa'
     `
 

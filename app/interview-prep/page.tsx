@@ -135,7 +135,7 @@ export default function InterviewPrepPage() {
           {/* Breadcrumb */}
           <Breadcrumb 
             items={[
-              { label: 'Exam Prep', href: '/exams' },
+              { label: 'Exam Prep', href: '/exam-interview' },
               { label: 'Interview Preparation' }
             ]} 
           />

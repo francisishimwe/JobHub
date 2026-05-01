@@ -78,7 +78,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
         // Dynamic exam routes
         const examRoutes = exams.map((exam: any) => ({
-            url: `${baseUrl}/exams/${exam.id}`,
+            url: `${baseUrl}/exam-interview/${exam.id}`,
             lastModified: new Date(exam.created_at),
             changeFrequency: 'weekly' as const,
             priority: 0.8,
@@ -99,7 +99,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 priority: 0.9,
             },
             {
-                url: `${baseUrl}/exams`,
+                url: `${baseUrl}/exam-interview`,
                 lastModified: new Date(),
                 changeFrequency: 'daily',
                 priority: 0.8,
@@ -191,7 +191,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 priority: 0.9,
             },
             {
-                url: `${baseUrl}/exams`,
+                url: `${baseUrl}/exam-interview`,
                 lastModified: new Date(),
                 changeFrequency: 'daily',
                 priority: 0.8,

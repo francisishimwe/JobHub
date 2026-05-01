@@ -283,7 +283,7 @@ export default function TakeExamPage() {
 
                 <div className="flex gap-4 mt-8">
                   <Button asChild className="flex-1">
-                    <Link href="/exams">Back to Exams</Link>
+                    <Link href="/exam-interview">Back to Exams</Link>
                   </Button>
                   <Button
                     variant="outline"
@@ -352,7 +352,7 @@ export default function TakeExamPage() {
 
               <div className="flex gap-4">
                 <Button asChild variant="outline" className="flex-1">
-                  <Link href="/exams">Back to Exams</Link>
+                  <Link href="/exam-interview">Back to Exams</Link>
                 </Button>
                 <Button
                   variant="outline"
