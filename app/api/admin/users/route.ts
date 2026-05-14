@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { neon } from '@neondatabase/serverless'
 
-const sql = neon(process.env.DATABASE_URL!)
+const getDatabase = () => {
+  if (!process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL is not configured')
+  }
+  return neon(process.env.DATABASE_URL)
+}
 
 export async function GET() {
   try {
     // Test database connection first
+    const sql = getDatabase()
     await sql`SELECT 1 as test`
     
     // Fetch all users with their quiz access status
