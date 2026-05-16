@@ -25,6 +25,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 
     // Global event listener fallback for modal opening
     React.useEffect(() => {
+        if (typeof window === 'undefined') return
+
         const handleGlobalModalOpen = (event: CustomEvent) => {
             if (event.detail?.jobId === job.id && event.detail?.action === 'openModal') {
                 console.log("Global modal open event received for job:", job.id)
@@ -33,7 +35,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
         }
 
         window.addEventListener('openApplicationModal', handleGlobalModalOpen as EventListener)
-        
+
         return () => {
             window.removeEventListener('openApplicationModal', handleGlobalModalOpen as EventListener)
         }
@@ -64,13 +66,15 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
             ? new Date(job.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
             : 'Open'
 
+        const currentUrl = window.location.href
+
         let shareText = `*${job.title} at ${company?.name || 'Company'}*
 
 *Location:* ${job.location}
 *Opportunity Type:* ${job.opportunityType}
 *Deadline:* ${formattedDeadline}
 
-🚀 *Apply here:* ${window.location.href}
+🚀 *Apply here:* ${currentUrl}
  *Join our WhatsApp group:* https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI
  *Follow our WhatsApp channel:* https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
@@ -81,7 +85,7 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 *Opportunity Type:* ${job.opportunityType}
 *Deadline:* ${formattedDeadline}
 
-🚀 *Apply here:* ${window.location.href}
+🚀 *Apply here:* ${currentUrl}
  *Join our WhatsApp group:* https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI
  *Follow our WhatsApp channel:* https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
         }

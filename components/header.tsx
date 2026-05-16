@@ -35,7 +35,9 @@ export function Header() {
   }
 
   const handleJoinWhatsApp = () => {
-    window.open('https://chat.whatsapp.com/250783074056?mode=wwt', '_blank')
+    if (typeof window !== 'undefined') {
+      window.open('https://chat.whatsapp.com/250783074056?mode=wwt', '_blank')
+    }
   }
 
   const navigationLinks = [
