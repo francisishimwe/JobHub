@@ -344,9 +344,8 @@ export default function AdminPage() { // Admin Dashboard with 5-tab system - Upd
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-7">
-              <TabsTrigger value="employer-approvals">Employer Approvals</TabsTrigger>
-              <TabsTrigger value="road-rules">Road Rules</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-6">
+              <TabsTrigger value="user-management">User Management</TabsTrigger>
               <TabsTrigger value="jobs">Jobs</TabsTrigger>
               <TabsTrigger value="exams">Exams</TabsTrigger>
               <TabsTrigger value="road-rules-management">Road Rules Management</TabsTrigger>
@@ -354,24 +353,13 @@ export default function AdminPage() { // Admin Dashboard with 5-tab system - Upd
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="employer-approvals" className="mt-6">
+            <TabsContent value="user-management" className="mt-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Employer Approvals</CardTitle>
+                  <CardTitle>User Management</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">Employer approval system coming soon...</p>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="road-rules" className="mt-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Road Rules Settings</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <RoadRulesSettings />
+                  <p className="text-gray-600">User management system coming soon...</p>
                 </CardContent>
               </Card>
             </TabsContent>
