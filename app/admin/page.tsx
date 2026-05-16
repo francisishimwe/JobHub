@@ -35,9 +35,7 @@ import {
   User
 } from 'lucide-react'
 import SecureViewer from '@/components/SecureViewer'
-import { QuestionManagement } from '@/components/question-management'
 import { RoadRulesQuestionManagement } from '@/components/road-rules-question-management'
-import { RoadRulesSettings } from '@/components/road-rules-settings'
 
 interface ExamResource {
   id: string
@@ -344,13 +342,15 @@ export default function AdminPage() { // Admin Dashboard with 5-tab system - Upd
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-6">
+            <TabsList className="grid w-full grid-cols-8">
               <TabsTrigger value="user-management">User Management</TabsTrigger>
               <TabsTrigger value="jobs">Jobs</TabsTrigger>
               <TabsTrigger value="exams">Exams</TabsTrigger>
               <TabsTrigger value="road-rules-management">Road Rules Management</TabsTrigger>
               <TabsTrigger value="inquiries">Inquiries</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="create">Create</TabsTrigger>
+              <TabsTrigger value="list">List</TabsTrigger>
             </TabsList>
 
             <TabsContent value="user-management" className="mt-6">
