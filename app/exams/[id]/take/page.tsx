@@ -288,7 +288,11 @@ export default function TakeExamPage() {
                   <Button
                     variant="outline"
                     className="flex-1"
-                    onClick={() => window.location.reload()}
+                    onClick={() => {
+                      if (typeof window !== 'undefined') {
+                        window.location.reload()
+                      }
+                    }}
                   >
                     Retake Exam
                   </Button>
@@ -357,7 +361,11 @@ export default function TakeExamPage() {
                 <Button
                   variant="outline"
                   className="flex-1"
-                  onClick={() => window.location.reload()}
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      window.location.reload()
+                    }
+                  }}
                 >
                   Retake Exam
                 </Button>

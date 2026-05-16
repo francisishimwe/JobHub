@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image" // Added Next.js Image component
 import { useAuth } from "@/lib/auth-context"
@@ -19,6 +20,7 @@ import {
 } from "@/components/ui/sheet"
 
 export function Header() {
+  const router = useRouter()
   const { isAuthenticated, user, logout } = useAuth()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -29,7 +31,7 @@ export function Header() {
 
   const handleLogout = () => {
     logout()
-    window.location.href = "/"
+    router.push("/")
   }
 
   const handleJoinWhatsApp = () => {

@@ -58,6 +58,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
     }
 
     const handleShareWhatsApp = () => {
+        if (typeof window === 'undefined') return
+
         const formattedDeadline = job.deadline
             ? new Date(job.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
             : 'Open'
@@ -69,8 +71,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 *Deadline:* ${formattedDeadline}
 
 🚀 *Apply here:* ${window.location.href}
-� *Join our WhatsApp group:* https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI
-� *Follow our WhatsApp channel:* https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
+ *Join our WhatsApp group:* https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI
+ *Follow our WhatsApp channel:* https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
 
         if (job.opportunityType === 'Scholarship') {
             shareText = `🎓 *${job.title} at ${company?.name || 'Company'}*
@@ -80,8 +82,8 @@ export function JobDetailsContent({ job, initialCompany }: JobDetailsContentProp
 *Deadline:* ${formattedDeadline}
 
 🚀 *Apply here:* ${window.location.href}
-� *Join our WhatsApp group:* https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI
-� *Follow our WhatsApp channel:* https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
+ *Join our WhatsApp group:* https://chat.whatsapp.com/Ky7m3B0M5Gd3saO58Rb1tI
+ *Follow our WhatsApp channel:* https://whatsapp.com/channel/0029Vb6oMYMCXC3SLBiRsT1r`
         }
 
         // Share to WhatsApp number 0783074056

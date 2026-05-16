@@ -23,9 +23,11 @@ function InterviewChat() {
     const resetParam = searchParams.get('reset')
     if (resetParam === 'true') {
       resetInterview()
-      const url = new URL(window.location.href)
-      url.searchParams.delete('reset')
-      window.history.replaceState({}, '', url.toString())
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href)
+        url.searchParams.delete('reset')
+        window.history.replaceState({}, '', url.toString())
+      }
     }
   }, [searchParams])
 
