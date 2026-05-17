@@ -9,11 +9,11 @@ import { JobList } from "@/components/job-list"
 import { ExamList } from "@/components/exam-list"
 import { InquiryList } from "@/components/inquiry-list"
 import { AnalyticsDashboard } from "@/components/analytics-dashboard"
-import { EmployerApprovals } from "@/components/employer-approvals"
+import { AdminRoadRulesDashboard } from "@/components/admin-road-rules-dashboard"
 import { UserManagement } from "@/components/user-management"
 import { LoginForm } from "@/components/login-form"
 import { Button } from "@/components/ui/button"
-import { Plus, BriefcaseBusiness, GraduationCap, BarChart3, MessageSquare, Users, UserCheck } from "lucide-react"
+import { Plus, BriefcaseBusiness, GraduationCap, BarChart3, MessageSquare, UserCheck, BookOpen } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function DashboardPage() {
@@ -53,10 +53,6 @@ export default function DashboardPage() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <TabsList>
-              <TabsTrigger value="employers" className="gap-2">
-                <Users className="h-4 w-4" />
-                Employer Approvals
-              </TabsTrigger>
               <TabsTrigger value="users" className="gap-2">
                 <UserCheck className="h-4 w-4" />
                 User Management
@@ -68,6 +64,10 @@ export default function DashboardPage() {
               <TabsTrigger value="exams" className="gap-2">
                 <GraduationCap className="h-4 w-4" />
                 Exams
+              </TabsTrigger>
+              <TabsTrigger value="road-rules" className="gap-2">
+                <BookOpen className="h-4 w-4" />
+                Road Rules Management
               </TabsTrigger>
               <TabsTrigger value="inquiries" className="gap-2">
                 <MessageSquare className="h-4 w-4" />
@@ -102,9 +102,6 @@ export default function DashboardPage() {
             )}
           </div>
 
-          <TabsContent value="employers" className="space-y-6">
-            <EmployerApprovals />
-          </TabsContent>
 
           <TabsContent value="users" className="space-y-6">
             <UserManagement />
@@ -134,6 +131,10 @@ export default function DashboardPage() {
                 Open Resource Command Center
               </Button>
             </div>
+          </TabsContent>
+
+          <TabsContent value="road-rules" className="space-y-6">
+            <AdminRoadRulesDashboard />
           </TabsContent>
 
           <TabsContent value="inquiries" className="space-y-6">
