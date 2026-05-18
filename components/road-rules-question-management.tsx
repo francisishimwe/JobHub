@@ -8,10 +8,11 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Plus, Edit, Trash2, Save, X, Clock } from "lucide-react"
+import { Plus, Edit, Trash2, Save, X, Clock, Upload } from "lucide-react"
 
 interface RoadRulesQuestion {
   id: string
+  assessment_number: number
   question_text: string
   options: string[]
   correct_answer: string
@@ -19,17 +20,31 @@ interface RoadRulesQuestion {
   created_at: string
 }
 
+interface QuestionFormData {
+  question_text: string
+  option_a: string
+  option_b: string
+  option_c: string
+  option_d: string
+  correct_answer: "A" | "B" | "C" | "D"
+}
+
 export function RoadRulesQuestionManagement() {
   const [questions, setQuestions] = useState<RoadRulesQuestion[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [formData, setFormData] = useState({
-    question_text: "",
-    options: ["", "", "", ""],
-    correct_answer: "",
-    time_limit: 300
-  })
+  const [selectedAssessment, setSelectedAssessment] = useState<number | null>(null)
+  const [batchQuestions, setBatchQuestions] = useState<QuestionFormData[]>(
+    Array.from({ length: 40 }, () => ({
+      question_text: "",
+      option_a: "",
+      option_b: "",
+      option_c: "",
+      option_d: "",
+      correct_answer: "A"
+    }))
+  )
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     fetchRoadRulesQuestions()
@@ -52,60 +67,82 @@ export function RoadRulesQuestionManagement() {
     }
   }
 
-  const handleInputChange = (field: string, value: any) => {
-    if (field.startsWith("option_")) {
-      const index = parseInt(field.split("_")[1])
-      const newOptions = [...formData.options]
-      newOptions[index] = value
-      setFormData(prev => ({ ...prev, options: newOptions }))
-    } else {
-      setFormData(prev => ({ ...prev, [field]: value }))
-    }
+  const handleQuestionChange = (index: number, field: keyof QuestionFormData, value: string) => {
+    const newBatchQuestions = [...batchQuestions]
+    newBatchQuestions[index] = { ...newBatchQuestions[index], [field]: value as any }
+    setBatchQuestions(newBatchQuestions)
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handlePrefillDemoData = () => {
+    const demoData = Array.from({ length: 40 }, (_, i) => ({
+      question_text: `Ikibazo cy'amategeko demo ${i + 1}`,
+      option_a: `Ihitamo A kuri ikibazo ${i + 1}`,
+      option_b: `Ihitamo B kuri ikibazo ${i + 1}`,
+      option_c: `Ihitamo C kuri ikibazo ${i + 1}`,
+      option_d: `Ihitamo D kuri ikibazo ${i + 1}`,
+      correct_answer: ["A", "B", "C", "D"][Math.floor(Math.random() * 4)] as "A" | "B" | "C" | "D"
+    }))
+    setBatchQuestions(demoData)
+  }
+
+  const handleBatchSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!formData.question_text || formData.options.some(opt => !opt) || !formData.correct_answer) {
-      setError("Uzuza amazina yose akenewe")
+    if (!selectedAssessment) {
+      setError("Hitamo Isuzuma mbere yo kubika")
       return
     }
 
-    try {
-      const url = editingId ? `/api/road-rules-questions/${editingId}` : "/api/road-rules-questions"
-      const method = editingId ? "PUT" : "POST"
+    const validQuestions = batchQuestions.filter(q => 
+      q.question_text && q.option_a && q.option_b && q.option_c && q.option_d
+    )
 
-      const response = await fetch(url, {
-        method,
+    if (validQuestions.length === 0) {
+      setError("Uzuza amazina yose akenewe ku bibazo")
+      return
+    }
+
+    setSaving(true)
+    try {
+      const response = await fetch("/api/road-rules-questions", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          assessment_number: selectedAssessment,
+          questions: validQuestions.map(q => ({
+            question_text: q.question_text,
+            options: [q.option_a, q.option_b, q.option_c, q.option_d],
+            correct_answer: q.correct_answer,
+            time_limit: 300
+          }))
+        }),
       })
 
       const data = await response.json()
       if (data.success) {
         await fetchRoadRulesQuestions()
-        resetForm()
         setError("")
-        alert(editingId ? "Ibibazo by'amategeko byahinduwe neza!" : "Ibibazo by'amategeko byongewe neza!")
+        alert(`${validQuestions.length} ibibazo byongewe neza!`)
+        // Reset form
+        setBatchQuestions(Array.from({ length: 40 }, () => ({
+          question_text: "",
+          option_a: "",
+          option_b: "",
+          option_c: "",
+          option_d: "",
+          correct_answer: "A"
+        })))
       } else {
         setError(data.message || "Ikibazo muri iki gikorwa")
       }
     } catch (err) {
-      console.error("Save road rules question error:", err)
+      console.error("Save batch questions error:", err)
       setError("Ikibazo gikomeye serivisi")
+    } finally {
+      setSaving(false)
     }
-  }
-
-  const handleEdit = (question: RoadRulesQuestion) => {
-    setEditingId(question.id)
-    setFormData({
-      question_text: question.question_text,
-      options: [...question.options],
-      correct_answer: question.correct_answer,
-      time_limit: question.time_limit
-    })
   }
 
   const handleDelete = async (id: string) => {
@@ -131,17 +168,6 @@ export function RoadRulesQuestionManagement() {
     }
   }
 
-  const resetForm = () => {
-    setEditingId(null)
-    setFormData({
-      question_text: "",
-      options: ["", "", "", ""],
-      correct_answer: "",
-      time_limit: 300
-    })
-    setError("")
-  }
-
   if (loading) {
     return (
       <div className="text-center py-8">
@@ -160,88 +186,130 @@ export function RoadRulesQuestionManagement() {
         </Alert>
       )}
 
-      {/* Road Rules Question Form */}
+      {/* Assessment Selector and Batch Form */}
       <Card className="p-6">
-        <h3 className="text-xl font-semibold text-gray-900 mb-4">
-          {editingId ? "Hindura Ibibazo by'Amategeko" : "Ohereza Ibibazo Bishya by'Amategeko"}
-        </h3>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-6">
           <div>
-            <Label htmlFor="question_text">Ikibazo cy'Amategeko</Label>
-            <Textarea
-              id="question_text"
-              value={formData.question_text}
-              onChange={(e) => handleInputChange("question_text", e.target.value)}
-              placeholder="Andika ikibazo cya trafiki hano..."
-              className="w-full"
-              required
-            />
-          </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              Ohereza Ibibazo Bishya by'Amategeko (40)
+            </h3>
+            
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="assessment_number">Hitamo Isuzuma (1-10)</Label>
+                <select
+                  id="assessment_number"
+                  value={selectedAssessment || ""}
+                  onChange={(e) => setSelectedAssessment(Number(e.target.value))}
+                  className="w-full p-2 border rounded-md"
+                  required
+                >
+                  <option value="">Hitamo isuzuma</option>
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                    <option key={num} value={num}>Isuzuma {num}</option>
+                  ))}
+                </select>
+              </div>
 
-          <div>
-            <Label>Amahitamo (4)</Label>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {formData.options.map((option, index) => (
-                <div key={index} className="space-y-2">
-                  <Label htmlFor={`option_${index}`}>
-                    Ihitamo {index + 1} {formData.correct_answer === option && "(✓ Igisubizo cy'ukuri)"}
-                  </Label>
-                  <Input
-                    id={`option_${index}`}
-                    value={option}
-                    onChange={(e) => handleInputChange(`option_${index}`, e.target.value)}
-                    placeholder={`Andika ihitamo ${index + 1}`}
-                    required
-                  />
-                </div>
-              ))}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handlePrefillDemoData}
+                className="w-full"
+              >
+                <Upload className="h-4 w-4 mr-2" />
+                Pre-fill Demo Data (Test Only)
+              </Button>
             </div>
           </div>
 
-          <div>
-            <Label htmlFor="correct_answer">Hitamo Igisubizo Cy'ukuri</Label>
-            <select
-              id="correct_answer"
-              value={formData.correct_answer}
-              onChange={(e) => handleInputChange("correct_answer", e.target.value)}
-              className="w-full p-2 border rounded-md"
-              required
-            >
-              <option value="">Hitamo igisubizo cy'ukuri</option>
-              {formData.options.map((option, index) => (
-                option && <option key={index} value={option}>Ihitamo {index + 1}: {option}</option>
-              ))}
-            </select>
-          </div>
+          {selectedAssessment && (
+            <form onSubmit={handleBatchSubmit} className="space-y-6">
+              <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+                {batchQuestions.map((question, index) => (
+                  <Card key={index} className="p-4 bg-slate-50">
+                    <div className="mb-3">
+                      <Label htmlFor={`question_${index}`}>
+                        Ikibazo {index + 1}
+                      </Label>
+                      <Textarea
+                        id={`question_${index}`}
+                        value={question.question_text}
+                        onChange={(e) => handleQuestionChange(index, "question_text", e.target.value)}
+                        placeholder={`Andika ikibazo ${index + 1} hano...`}
+                        className="w-full"
+                        rows={2}
+                      />
+                    </div>
 
-          <div>
-            <Label htmlFor="time_limit">Igihe (iminota)</Label>
-            <Input
-              id="time_limit"
-              type="number"
-              value={formData.time_limit / 60}
-              onChange={(e) => handleInputChange("time_limit", parseInt(e.target.value) * 60)}
-              placeholder="5"
-              min="1"
-              max="60"
-              required
-            />
-          </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                      <div>
+                        <Label htmlFor={`option_a_${index}`}>Ihitamo A</Label>
+                        <Input
+                          id={`option_a_${index}`}
+                          value={question.option_a}
+                          onChange={(e) => handleQuestionChange(index, "option_a", e.target.value)}
+                          placeholder="Ihitamo A"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`option_b_${index}`}>Ihitamo B</Label>
+                        <Input
+                          id={`option_b_${index}`}
+                          value={question.option_b}
+                          onChange={(e) => handleQuestionChange(index, "option_b", e.target.value)}
+                          placeholder="Ihitamo B"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`option_c_${index}`}>Ihitamo C</Label>
+                        <Input
+                          id={`option_c_${index}`}
+                          value={question.option_c}
+                          onChange={(e) => handleQuestionChange(index, "option_c", e.target.value)}
+                          placeholder="Ihitamo C"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`option_d_${index}`}>Ihitamo D</Label>
+                        <Input
+                          id={`option_d_${index}`}
+                          value={question.option_d}
+                          onChange={(e) => handleQuestionChange(index, "option_d", e.target.value)}
+                          placeholder="Ihitamo D"
+                        />
+                      </div>
+                    </div>
 
-          <div className="flex gap-3">
-            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">
-              <Save className="h-4 w-4 mr-2" />
-              {editingId ? "Hindura" : "Ohereza"}
-            </Button>
-            {editingId && (
-              <Button type="button" variant="outline" onClick={resetForm}>
-                <X className="h-4 w-4 mr-2" />
-                Bihagaraze
+                    <div>
+                      <Label htmlFor={`correct_answer_${index}`}>Igisubizo Cy'ukuri</Label>
+                      <select
+                        id={`correct_answer_${index}`}
+                        value={question.correct_answer}
+                        onChange={(e) => handleQuestionChange(index, "correct_answer", e.target.value)}
+                        className="w-full p-2 border rounded-md"
+                      >
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                      </select>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                disabled={saving}
+              >
+                <Save className="h-4 w-4 mr-2" />
+                {saving ? "Ibyakorwa..." : "Bika 40 Ibibazo"}
               </Button>
-            )}
-          </div>
-        </form>
+            </form>
+          )}
+        </div>
       </Card>
 
       {/* Road Rules Questions List */}
@@ -260,9 +328,12 @@ export function RoadRulesQuestionManagement() {
               <div key={question.id} className="border rounded-lg p-4">
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 mb-2">
-                      {question.question_text}
-                    </h4>
+                    <div className="flex items-center gap-2 mb-2">
+                      <Badge variant="outline">Isuzuma {question.assessment_number}</Badge>
+                      <h4 className="font-medium text-gray-900">
+                        {question.question_text}
+                      </h4>
+                    </div>
                     <div className="flex items-center gap-4 text-sm text-gray-600">
                       <div className="flex items-center gap-1">
                         <Clock className="h-4 w-4" />
@@ -273,26 +344,17 @@ export function RoadRulesQuestionManagement() {
                       </Badge>
                     </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleEdit(question)}
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => handleDelete(question.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => handleDelete(question.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {question.options.map((option, index) => (
+                  {question.options.map((option: string, index: number) => (
                     <div
                       key={index}
                       className={`p-2 rounded border text-sm ${

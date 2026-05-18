@@ -23,10 +23,15 @@ export default function RoadRulesPage() {
       return
     }
     
-    // Check if user is approved and has valid access
-    if ((user as any)?.is_approved && (user as any)?.expires_at && new Date((user as any).expires_at) > new Date()) {
-      router.push("/student-exam-portal")
-    } else if ((user as any)?.is_approved === false) {
+    // Check if user has quiz access
+    const userData = user as any
+    const hasQuizAccess = userData?.quiz_access === true
+    const quizAccessExpiry = userData?.quiz_access_expiry
+    
+    if (hasQuizAccess && quizAccessExpiry && new Date(quizAccessExpiry) > new Date()) {
+      // User has valid quiz access, redirect to assessments page
+      router.push("/road-rules-assessments")
+    } else if (userData?.is_approved === false) {
       // User exists but not approved - show pending state
       router.push("/pending-approval")
     } else {

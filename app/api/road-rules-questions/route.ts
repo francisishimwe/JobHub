@@ -10,6 +10,7 @@ export async function GET(request: NextRequest) {
     await sql`
       CREATE TABLE IF NOT EXISTS road_rules_questions (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+        assessment_number INTEGER NOT NULL,
         question_text TEXT NOT NULL,
         options TEXT[] NOT NULL,
         correct_answer TEXT NOT NULL,
@@ -42,19 +43,14 @@ export async function POST(request: NextRequest) {
     const sql = neon(connectionString!)
     const body = await request.json()
 
-    const { question_text, options, correct_answer, time_limit } = body
-
-    if (!question_text || !options || !correct_answer || !time_limit) {
-      return NextResponse.json(
-        { success: false, message: "Uzuza amazina yose akenewe" },
-        { status: 400 }
-      )
-    }
+    // Check if this is a bulk insert (array of questions) or single question
+    const { assessment_number, questions, question_text, options, correct_answer, time_limit } = body
 
     // Create table if it doesn't exist
     await sql`
       CREATE TABLE IF NOT EXISTS road_rules_questions (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+        assessment_number INTEGER NOT NULL,
         question_text TEXT NOT NULL,
         options TEXT[] NOT NULL,
         correct_answer TEXT NOT NULL,
@@ -63,9 +59,62 @@ export async function POST(request: NextRequest) {
       )
     `
 
+    // Handle bulk insert
+    if (questions && Array.isArray(questions) && questions.length > 0) {
+      if (!assessment_number) {
+        return NextResponse.json(
+          { success: false, message: "Uzuza amazina yose akenewe" },
+          { status: 400 }
+        )
+      }
+
+      // Validate each question
+      for (const q of questions) {
+        if (!q.question_text || !q.options || !Array.isArray(q.options) || q.options.length !== 4 || !q.correct_answer) {
+          return NextResponse.json(
+            { success: false, message: "Uzuza amazina yose akenewe ku bibazo" },
+            { status: 400 }
+          )
+        }
+      }
+
+      // Transaction: Delete existing questions for this assessment first (to avoid duplicates)
+      await sql`
+        DELETE FROM road_rules_questions 
+        WHERE assessment_number = ${assessment_number}
+      `
+
+      // Bulk insert all questions in a transaction-like manner
+      const insertPromises = questions.map(q => 
+        sql`
+          INSERT INTO road_rules_questions (assessment_number, question_text, options, correct_answer, time_limit)
+          VALUES (${assessment_number}, ${q.question_text}, ${q.options}, ${q.correct_answer}, ${q.time_limit || 300})
+          RETURNING *
+        `
+      )
+
+      const results = await Promise.all(insertPromises)
+
+      // If any insert failed, this would have thrown an error already
+      // All inserts succeeded, return success
+      return NextResponse.json({
+        success: true,
+        count: results.length,
+        questions: results.flat()
+      })
+    }
+
+    // Handle single question insert (backward compatibility)
+    if (!assessment_number || !question_text || !options || !correct_answer || !time_limit) {
+      return NextResponse.json(
+        { success: false, message: "Uzuza amazina yose akenewe" },
+        { status: 400 }
+      )
+    }
+
     const result = await sql`
-      INSERT INTO road_rules_questions (question_text, options, correct_answer, time_limit)
-      VALUES (${question_text}, ${options}, ${correct_answer}, ${time_limit})
+      INSERT INTO road_rules_questions (assessment_number, question_text, options, correct_answer, time_limit)
+      VALUES (${assessment_number}, ${question_text}, ${options}, ${correct_answer}, ${time_limit})
       RETURNING *
     `
 

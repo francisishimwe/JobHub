@@ -6,6 +6,21 @@ export async function GET(request: NextRequest) {
     const connectionString = process.env.DATABASE_URL || process.env.NEON_DATABASE_URL || process.env.POSTGRES_PRISMA_URL
     const sql = neon(connectionString!)
 
+    // Add quiz_access and quiz_access_expiry columns if they don't exist
+    try {
+      await sql`
+        ALTER TABLE membership_users 
+        ADD COLUMN IF NOT EXISTS quiz_access BOOLEAN DEFAULT FALSE
+      `
+      await sql`
+        ALTER TABLE membership_users 
+        ADD COLUMN IF NOT EXISTS quiz_access_expiry TIMESTAMP
+      `
+    } catch (alterError) {
+      // Columns might already exist, ignore error
+      console.log("Columns may already exist:", alterError)
+    }
+
     const users = await sql`
       SELECT * FROM membership_users 
       ORDER BY created_at DESC
