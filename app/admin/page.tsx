@@ -120,7 +120,7 @@ export default function AdminPage() { // Admin Dashboard with 5-tab system - Upd
       }
     } catch (err) {
       console.error("Fetch users error:", err)
-      setUsersError("Ikibazo gikomeye serivisi - DATABASE_URL itashizwe")
+      setUsersError("Ikibazo gikomeye serivisi - Ntibishoboka kubona abantu")
     } finally {
       setUsersLoading(false)
     }

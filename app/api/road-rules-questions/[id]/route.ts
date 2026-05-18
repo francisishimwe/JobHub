@@ -3,7 +3,8 @@ import { neon } from '@neondatabase/serverless'
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const sql = neon(process.env.DATABASE_URL!)
+    const connectionString = process.env.DATABASE_URL || process.env.NEON_DATABASE_URL || process.env.POSTGRES_PRISMA_URL
+    const sql = neon(connectionString!)
     const body = await request.json()
     const { id } = params
 
@@ -48,7 +49,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const sql = neon(process.env.DATABASE_URL!)
+    const connectionString = process.env.DATABASE_URL || process.env.NEON_DATABASE_URL || process.env.POSTGRES_PRISMA_URL
+    const sql = neon(connectionString!)
     const { id } = params
 
     const result = await sql`

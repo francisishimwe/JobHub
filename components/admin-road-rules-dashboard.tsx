@@ -31,7 +31,7 @@ export function AdminRoadRulesDashboard() {
     // Add timeout to prevent infinite loading
     const timeout = setTimeout(() => {
       setLoading(false)
-      setError("Ikibazo gikomeye serivisi - DATABASE_URL itashizwe")
+      setError("Ikibazo gikomeye serivisi - Ntibishoboka kubona abantu")
     }, 5000) // 5 seconds timeout
     
     return () => clearTimeout(timeout)
@@ -49,7 +49,7 @@ export function AdminRoadRulesDashboard() {
       }
     } catch (err) {
       console.error("Fetch users error:", err)
-      setError("Ikibazo gikomeye serivisi - DATABASE_URL itashizwe")
+      setError("Ikibazo gikomeye serivisi - Ntibishoboka kubona abantu")
     } finally {
       setLoading(false)
     }

@@ -3,7 +3,8 @@ import { neon } from '@neondatabase/serverless'
 
 export async function GET(request: NextRequest) {
   try {
-    const sql = neon(process.env.DATABASE_URL!)
+    const connectionString = process.env.DATABASE_URL || process.env.NEON_DATABASE_URL || process.env.POSTGRES_PRISMA_URL
+    const sql = neon(connectionString!)
 
     // Create road_rules_questions table if it doesn't exist
     await sql`
@@ -37,7 +38,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const sql = neon(process.env.DATABASE_URL!)
+    const connectionString = process.env.DATABASE_URL || process.env.NEON_DATABASE_URL || process.env.POSTGRES_PRISMA_URL
+    const sql = neon(connectionString!)
     const body = await request.json()
 
     const { question_text, options, correct_answer, time_limit } = body
