@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error('Fetch membership users error:', error)
+    console.error('Error details:', JSON.stringify(error, null, 2))
     return NextResponse.json(
       { success: false, message: "Ikibazo gikomeye serivisi" },
       { status: 500 }

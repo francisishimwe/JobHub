@@ -27,14 +27,6 @@ export function AdminRoadRulesDashboard() {
 
   useEffect(() => {
     fetchUsers()
-    
-    // Add timeout to prevent infinite loading
-    const timeout = setTimeout(() => {
-      setLoading(false)
-      setError("Ikibazo gikomeye serivisi - Ntibishoboka kubona abantu")
-    }, 5000) // 5 seconds timeout
-    
-    return () => clearTimeout(timeout)
   }, [])
 
   const fetchUsers = async () => {
@@ -165,7 +157,7 @@ export function AdminRoadRulesDashboard() {
               <div className="text-slate-500 mb-4">
                 <User className="h-12 w-12 mx-auto mb-4 text-slate-400" />
                 <h3 className="text-lg font-medium text-slate-900 mb-2">
-                  Nta banyamizi bari kugirango uburenganzira
+                  Nta banyamizi barandikishwa ubu
                 </h3>
                 <p className="text-slate-600">
                   Abanyamizi baza kugaragara hano nyuma yo kwiyandikisha.
