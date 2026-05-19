@@ -1,0 +1,63 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { neon } from '@neondatabase/serverless'
+
+export async function POST(request: NextRequest) {
+  try {
+    const { phoneNumber, password } = await request.json()
+
+    if (!phoneNumber || !password) {
+      return NextResponse.json(
+        { success: false, message: "Numero ya telefone n'ijambo ry'ibanga birabanzwa" },
+        { status: 400 }
+      )
+    }
+
+    const sql = neon(process.env.DATABASE_URL!)
+
+    // Find user by phone number
+    const user = await sql`
+      SELECT * FROM membership_users 
+      WHERE phone_number = ${phoneNumber}
+      LIMIT 1
+    `
+
+    if (user.length === 0) {
+      return NextResponse.json(
+        { success: false, message: "Numero ya telefone ntayizwi." },
+        { status: 401 }
+      )
+    }
+
+    const foundUser = user[0]
+
+    // Verify password
+    if (foundUser.password !== password) {
+      return NextResponse.json(
+        { success: false, message: "Ijambo ry'ibanga saryo." },
+        { status: 401 }
+      )
+    }
+
+    // Check approval status
+    if (!foundUser.is_approved) {
+      return NextResponse.json({
+        success: true,
+        message: "Kugirango wemererwe gukora ano masuzumabumenyi, urasabwa guhamagara cg kwandikira Admin kuri (+250 783 074 056) kugirango aguhe uburenganzira. Murakoze!",
+        redirectTo: "/pending-approval"
+      })
+    }
+
+    // User is authenticated and approved
+    return NextResponse.json({
+      success: true,
+      message: "Winjiye neza",
+      user: foundUser
+    })
+  } catch (error) {
+    console.error('Login error:', error)
+    return NextResponse.json(
+      { success: false, message: "Ikibazo gikomeye serivisi. Mugerageze mukanya." },
+      { status: 500 }
+    )
+  }
+}
