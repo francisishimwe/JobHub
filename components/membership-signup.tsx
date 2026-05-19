@@ -31,6 +31,22 @@ export function MembershipSignup() {
     setIsLoading(true)
     setError("")
 
+    // Validate phone number format (prevent email addresses)
+    const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    
+    if (emailRegex.test(formData.phoneNumber)) {
+      setError("Nimero ya telefone ntigomba kuba imeli. Andika nimero ya telefone ya Rwanda (+250 7xx xxx xxx).")
+      setIsLoading(false)
+      return
+    }
+
+    if (!phoneRegex.test(formData.phoneNumber)) {
+      setError("Nimero ya telefone saryo. Andika nimero ya telefone ya Rwanda (+250 7xx xxx xxx).")
+      setIsLoading(false)
+      return
+    }
+
     try {
       const response = await fetch("/api/membership-signup", {
         method: "POST",
