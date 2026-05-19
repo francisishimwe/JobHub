@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { CheckCircle, X, Clock, User, Plus } from "lucide-react"
+import { CheckCircle, X, Clock, User, Plus, Upload, Save } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
 
 interface MembershipUser {
@@ -20,6 +21,15 @@ interface MembershipUser {
   created_at: string
   quiz_access?: boolean
   quiz_access_expiry?: string
+}
+
+interface QuestionFormData {
+  question_text: string
+  option_a: string
+  option_b: string
+  option_c: string
+  option_d: string
+  correct_answer: "A" | "B" | "C" | "D"
 }
 
 export function AdminRoadRulesDashboard() {
@@ -34,13 +44,17 @@ export function AdminRoadRulesDashboard() {
   // Question form state
   const [showQuestionForm, setShowQuestionForm] = useState(false)
   const [submittingQuestion, setSubmittingQuestion] = useState(false)
-  const [assessmentNumber, setAssessmentNumber] = useState<string>("")
-  const [questionText, setQuestionText] = useState("")
-  const [optionA, setOptionA] = useState("")
-  const [optionB, setOptionB] = useState("")
-  const [optionC, setOptionC] = useState("")
-  const [optionD, setOptionD] = useState("")
-  const [correctAnswer, setCorrectAnswer] = useState<string>("")
+  const [assessmentNumber, setAssessmentNumber] = useState<number | null>(null)
+  const [batchQuestions, setBatchQuestions] = useState<QuestionFormData[]>(
+    Array.from({ length: 40 }, () => ({
+      question_text: "",
+      option_a: "",
+      option_b: "",
+      option_c: "",
+      option_d: "",
+      correct_answer: "A"
+    }))
+  )
 
   useEffect(() => {
     fetchUsers()
@@ -122,14 +136,45 @@ export function AdminRoadRulesDashboard() {
     return new Date(expiresAt) < new Date()
   }
 
+  const handleQuestionChange = (index: number, field: keyof QuestionFormData, value: string) => {
+    const newBatchQuestions = [...batchQuestions]
+    newBatchQuestions[index] = { ...newBatchQuestions[index], [field]: value as any }
+    setBatchQuestions(newBatchQuestions)
+  }
+
+  const handlePrefillDemoData = () => {
+    const demoData = Array.from({ length: 40 }, (_, i) => ({
+      question_text: `Ikibazo cy'amategeko demo ${i + 1}`,
+      option_a: `Ihitamo A kuri ikibazo ${i + 1}`,
+      option_b: `Ihitamo B kuri ikibazo ${i + 1}`,
+      option_c: `Ihitamo C kuri ikibazo ${i + 1}`,
+      option_d: `Ihitamo D kuri ikibazo ${i + 1}`,
+      correct_answer: ["A", "B", "C", "D"][Math.floor(Math.random() * 4)] as "A" | "B" | "C" | "D"
+    }))
+    setBatchQuestions(demoData)
+  }
+
   const handleSubmitQuestion = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!assessmentNumber || !questionText || !optionA || !optionB || !optionC || !optionD || !correctAnswer) {
+    if (!assessmentNumber) {
       toast({
         variant: "destructive",
         title: "Ikibazo",
-        description: "Uzuza amazina yose akenewe",
+        description: "Hitamo Isuzuma mbere yo kubika",
+      })
+      return
+    }
+
+    const validQuestions = batchQuestions.filter(q => 
+      q.question_text && q.option_a && q.option_b && q.option_c && q.option_d
+    )
+
+    if (validQuestions.length === 0) {
+      toast({
+        variant: "destructive",
+        title: "Ikibazo",
+        description: "Uzuza amazina yose akenewe ku bibazo",
       })
       return
     }
@@ -143,11 +188,13 @@ export function AdminRoadRulesDashboard() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          assessment_number: parseInt(assessmentNumber),
-          question_text: questionText,
-          options: [optionA, optionB, optionC, optionD],
-          correct_answer: correctAnswer,
-          time_limit: 300
+          assessment_number: assessmentNumber,
+          questions: validQuestions.map(q => ({
+            question_text: q.question_text,
+            options: [q.option_a, q.option_b, q.option_c, q.option_d],
+            correct_answer: q.correct_answer,
+            time_limit: 300
+          }))
         }),
       })
 
@@ -156,30 +203,32 @@ export function AdminRoadRulesDashboard() {
       if (data.success) {
         toast({
           title: "Byakunywe neza!",
-          description: "Ikibazo cyongerwemo mu bubiko",
+          description: `${validQuestions.length} ibibazo byongerwemo mu bubiko`,
         })
         
         // Reset form
-        setAssessmentNumber("")
-        setQuestionText("")
-        setOptionA("")
-        setOptionB("")
-        setOptionC("")
-        setOptionD("")
-        setCorrectAnswer("")
+        setAssessmentNumber(null)
+        setBatchQuestions(Array.from({ length: 40 }, () => ({
+          question_text: "",
+          option_a: "",
+          option_b: "",
+          option_c: "",
+          option_d: "",
+          correct_answer: "A"
+        })))
         setShowQuestionForm(false)
       } else {
         toast({
           variant: "destructive",
           title: "Ikibazo",
-          description: data.message || "Ntibishoboka kongera ikibazo",
+          description: data.message || "Ntibishoboka kongera ibibazo",
         })
       }
     } catch (err) {
       toast({
         variant: "destructive",
         title: "Ikibazo gikomeye serivisi",
-        description: "Ntibishoboka kongera ikibazo",
+        description: "Ntibishoboka kongera ibibazo",
       })
     } finally {
       setSubmittingQuestion(false)
@@ -209,12 +258,16 @@ export function AdminRoadRulesDashboard() {
         {showQuestionForm && (
           <Card className="p-6 mb-6">
             <h2 className="text-xl font-semibold text-slate-900 mb-4">
-              Ongera Ikibazo Kigisha
+              Ohereza Ibibazo Bishya by'Amategeko (40)
             </h2>
-            <form onSubmit={handleSubmitQuestion} className="space-y-4">
+            
+            <div className="space-y-6">
               <div>
                 <Label htmlFor="assessment">Isuzuma (1-10)</Label>
-                <Select value={assessmentNumber} onValueChange={setAssessmentNumber}>
+                <Select 
+                  value={assessmentNumber?.toString() || ""} 
+                  onValueChange={(value) => setAssessmentNumber(Number(value))}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Hitamo isuzuma" />
                   </SelectTrigger>
@@ -226,76 +279,101 @@ export function AdminRoadRulesDashboard() {
                     ))}
                   </SelectContent>
                 </Select>
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handlePrefillDemoData}
+                  className="w-full mt-4"
+                >
+                  <Upload className="h-4 w-4 mr-2" />
+                  Pre-fill Demo Data (Test Only)
+                </Button>
               </div>
 
-              <div>
-                <Label htmlFor="question">Ikibazo</Label>
-                <Input
-                  id="question"
-                  value={questionText}
-                  onChange={(e) => setQuestionText(e.target.value)}
-                  placeholder="Andika ikibazo hano"
-                />
-              </div>
+              {assessmentNumber && (
+                <form onSubmit={handleSubmitQuestion} className="space-y-6">
+                  <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+                    {batchQuestions.map((question, index) => (
+                      <Card key={index} className="p-4 bg-slate-50">
+                        <div className="mb-3">
+                          <Label htmlFor={`question_${index}`}>
+                            Ikibazo {index + 1}
+                          </Label>
+                          <Textarea
+                            id={`question_${index}`}
+                            value={question.question_text}
+                            onChange={(e) => handleQuestionChange(index, "question_text", e.target.value)}
+                            placeholder={`Andika ikibazo ${index + 1} hano...`}
+                            className="w-full"
+                            rows={2}
+                          />
+                        </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="optionA">Ikibisobanuro A</Label>
-                  <Input
-                    id="optionA"
-                    value={optionA}
-                    onChange={(e) => setOptionA(e.target.value)}
-                    placeholder="Ikibisobanuro A"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="optionB">Ikibisobanuro B</Label>
-                  <Input
-                    id="optionB"
-                    value={optionB}
-                    onChange={(e) => setOptionB(e.target.value)}
-                    placeholder="Ikibisobanuro B"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="optionC">Ikibisobanuro C</Label>
-                  <Input
-                    id="optionC"
-                    value={optionC}
-                    onChange={(e) => setOptionC(e.target.value)}
-                    placeholder="Ikibisobanuro C"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="optionD">Ikibisobanuro D</Label>
-                  <Input
-                    id="optionD"
-                    value={optionD}
-                    onChange={(e) => setOptionD(e.target.value)}
-                    placeholder="Ikibisobanuro D"
-                  />
-                </div>
-              </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                          <div>
+                            <Label htmlFor={`option_a_${index}`}>Ihitamo A</Label>
+                            <Input
+                              id={`option_a_${index}`}
+                              value={question.option_a}
+                              onChange={(e) => handleQuestionChange(index, "option_a", e.target.value)}
+                              placeholder="Ihitamo A"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor={`option_b_${index}`}>Ihitamo B</Label>
+                            <Input
+                              id={`option_b_${index}`}
+                              value={question.option_b}
+                              onChange={(e) => handleQuestionChange(index, "option_b", e.target.value)}
+                              placeholder="Ihitamo B"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor={`option_c_${index}`}>Ihitamo C</Label>
+                            <Input
+                              id={`option_c_${index}`}
+                              value={question.option_c}
+                              onChange={(e) => handleQuestionChange(index, "option_c", e.target.value)}
+                              placeholder="Ihitamo C"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor={`option_d_${index}`}>Ihitamo D</Label>
+                            <Input
+                              id={`option_d_${index}`}
+                              value={question.option_d}
+                              onChange={(e) => handleQuestionChange(index, "option_d", e.target.value)}
+                              placeholder="Ihitamo D"
+                            />
+                          </div>
+                        </div>
 
-              <div>
-                <Label htmlFor="correctAnswer">Igikikorwa Cy'ukuri</Label>
-                <Select value={correctAnswer} onValueChange={setCorrectAnswer}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Hitamo igikikorwa cy'ukuri" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="A">A</SelectItem>
-                    <SelectItem value="B">B</SelectItem>
-                    <SelectItem value="C">C</SelectItem>
-                    <SelectItem value="D">D</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+                        <div>
+                          <Label htmlFor={`correct_answer_${index}`}>Igisubizo Cy'ukuri</Label>
+                          <select
+                            id={`correct_answer_${index}`}
+                            value={question.correct_answer}
+                            onChange={(e) => handleQuestionChange(index, "correct_answer", e.target.value)}
+                            className="w-full p-2 border rounded-md"
+                          >
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                          </select>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
 
-              <Button type="submit" disabled={submittingQuestion} className="w-full">
-                {submittingQuestion ? "Ibyakorwa..." : "Ongera Ikibazo"}
-              </Button>
-            </form>
+                  <Button type="submit" disabled={submittingQuestion} className="w-full">
+                    <Save className="h-4 w-4 mr-2" />
+                    {submittingQuestion ? "Ibyakorwa..." : "Bika 40 Ibibazo"}
+                  </Button>
+                </form>
+              )}
+            </div>
           </Card>
         )}
 
