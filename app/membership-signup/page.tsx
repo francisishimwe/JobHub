@@ -1,5 +1,5 @@
-import { MembershipSignup } from "@/components/membership-signup"
+import { MembershipAuth } from "@/components/membership-auth"
 
 export default function MembershipSignupPage() {
-  return <MembershipSignup />
+  return <MembershipAuth />
 }
