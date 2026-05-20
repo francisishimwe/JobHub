@@ -132,31 +132,6 @@ export function MembershipAuth() {
             </p>
           </div>
 
-          {/* Mode Toggle Buttons */}
-          <div className="grid grid-cols-2 gap-2 mb-6 bg-gray-100 p-1 rounded-lg">
-            <button
-              type="button"
-              onClick={() => switchMode('login')}
-              className={`transition duration-150 px-4 py-2 rounded-md font-medium ${
-                mode === 'login'
-                  ? 'bg-white shadow-sm text-blue-600'
-                  : 'text-gray-600 hover:text-gray-900 bg-transparent'
-              }`}
-            >
-              Injira hano (Login)
-            </button>
-            <button
-              type="button"
-              onClick={() => switchMode('signup')}
-              className={`transition duration-150 px-4 py-2 rounded-md font-medium ${
-                mode === 'signup'
-                  ? 'bg-white shadow-sm text-blue-600'
-                  : 'text-gray-600 hover:text-gray-900 bg-transparent'
-              }`}
-            >
-              Iyandikishe hano (Signup)
-            </button>
-          </div>
 
           {error && (
             <Alert className="mb-6 border-red-200 bg-red-50">
@@ -228,6 +203,20 @@ export function MembershipAuth() {
               }
             </Button>
           </form>
+
+          {/* Mode Toggle Link */}
+          <div className="mt-6 text-center">
+            <button
+              type="button"
+              onClick={() => switchMode(mode === 'login' ? 'signup' : 'login')}
+              className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+            >
+              {mode === 'login' 
+                ? "Ntabwo urafungura konti? Iyandikishe hano"
+                : "Ufite konti? Injira hano"
+              }
+            </button>
+          </div>
         </Card>
       </div>
     </div>
