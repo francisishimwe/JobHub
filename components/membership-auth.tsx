@@ -133,29 +133,29 @@ export function MembershipAuth() {
           </div>
 
           {/* Mode Toggle Buttons */}
-          <div className="grid grid-cols-2 gap-2 mb-6">
-            <Button
+          <div className="grid grid-cols-2 gap-2 mb-6 bg-gray-100 p-1 rounded-lg">
+            <button
               type="button"
               onClick={() => switchMode('login')}
-              variant={mode === 'login' ? 'default' : 'outline'}
-              className={mode === 'login' 
-                ? 'bg-blue-600 hover:bg-blue-700 text-white' 
-                : 'border-blue-600 text-blue-600 hover:bg-blue-50'
-              }
+              className={`transition duration-150 px-4 py-2 rounded-md font-medium ${
+                mode === 'login'
+                  ? 'bg-white shadow-sm text-blue-600'
+                  : 'text-gray-600 hover:text-gray-900 bg-transparent'
+              }`}
             >
               Injira hano (Login)
-            </Button>
-            <Button
+            </button>
+            <button
               type="button"
               onClick={() => switchMode('signup')}
-              variant={mode === 'signup' ? 'default' : 'outline'}
-              className={mode === 'signup' 
-                ? 'bg-blue-600 hover:bg-blue-700 text-white' 
-                : 'border-blue-600 text-blue-600 hover:bg-blue-50'
-              }
+              className={`transition duration-150 px-4 py-2 rounded-md font-medium ${
+                mode === 'signup'
+                  ? 'bg-white shadow-sm text-blue-600'
+                  : 'text-gray-600 hover:text-gray-900 bg-transparent'
+              }`}
             >
               Iyandikishe hano (Signup)
-            </Button>
+            </button>
           </div>
 
           {error && (
