@@ -19,10 +19,23 @@ export async function GET(request: NextRequest) {
       )
     `
 
-    const questions = await sql`
-      SELECT * FROM road_rules_questions 
-      ORDER BY id ASC
-    `
+    // Check if assessment_number query parameter is provided
+    const { searchParams } = new URL(request.url)
+    const assessmentNumber = searchParams.get('assessment_number')
+
+    let questions
+    if (assessmentNumber) {
+      questions = await sql`
+        SELECT * FROM road_rules_questions 
+        WHERE assessment_number = ${assessmentNumber}
+        ORDER BY id ASC
+      `
+    } else {
+      questions = await sql`
+        SELECT * FROM road_rules_questions 
+        ORDER BY id ASC
+      `
+    }
 
     return NextResponse.json({
       success: true,

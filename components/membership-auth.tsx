@@ -79,10 +79,10 @@ export function MembershipAuth() {
           // State A: Not approved yet - redirect to restriction notice page
           if (data.isApproved === false || data.redirectTo === '/auth/not-approved') {
             router.push('/auth/not-approved')
-          } 
-          // State B: Approved - redirect to exam-interview page
+          }
+          // State B: Approved - redirect to assessment selection page
           else if (data.isApproved === true) {
-            router.push('/exam-interview')
+            router.push('/isuzumabumenyi')
           }
           // Fallback: if backend provides redirectTo, use it
           else if (data.redirectTo) {
@@ -90,7 +90,7 @@ export function MembershipAuth() {
           }
           // Default: assume approved if no specific state provided
           else {
-            router.push('/exam-interview')
+            router.push('/isuzumabumenyi')
           }
         } else {
           setError(data.message || "Ikibazo cyo kwinjira. Mugerageze mukanya.")

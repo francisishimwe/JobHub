@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { neon } from '@neondatabase/serverless'
+import { randomBytes } from 'crypto'
 
 export async function POST(request: NextRequest) {
   try {
@@ -42,17 +43,38 @@ export async function POST(request: NextRequest) {
     if (!foundUser.is_approved) {
       return NextResponse.json({
         success: true,
+        isApproved: false,
         message: "Kugirango wemererwe gukora ano masuzumabumenyi, urasabwa guhamagara cg kwandikira Admin kuri (+250 783 074 056) kugirango aguhe uburenganzira. Murakoze!",
-        redirectTo: "/pending-approval"
+        redirectTo: "/auth/not-approved"
       })
     }
 
-    // User is authenticated and approved
-    return NextResponse.json({
+    // Generate session token
+    const sessionToken = randomBytes(32).toString('hex')
+
+    // Update user with session token
+    await sql`
+      UPDATE membership_users 
+      SET session_token = ${sessionToken}
+      WHERE id = ${foundUser.id}
+    `
+
+    // Set session cookie
+    const response = NextResponse.json({
       success: true,
+      isApproved: true,
       message: "Winjiye neza",
       user: foundUser
     })
+
+    response.cookies.set('session_token', sessionToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7 // 7 days
+    })
+
+    return response
   } catch (error) {
     console.error('Login error:', error)
     return NextResponse.json(

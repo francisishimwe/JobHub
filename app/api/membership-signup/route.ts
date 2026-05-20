@@ -14,6 +14,21 @@ export async function POST(request: NextRequest) {
 
     const sql = neon(process.env.DATABASE_URL!)
 
+    // Create membership_users table if it doesn't exist with session_token column
+    await sql`
+      CREATE TABLE IF NOT EXISTS membership_users (
+        id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+        full_name TEXT NOT NULL,
+        phone_number TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL,
+        is_approved BOOLEAN DEFAULT false,
+        status TEXT DEFAULT 'Pending',
+        session_token TEXT,
+        expires_at TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `
+
     // Check if user already exists
     const existingUser = await sql`
       SELECT * FROM membership_users 
@@ -30,8 +45,8 @@ export async function POST(request: NextRequest) {
 
     // Create new user
     const newUser = await sql`
-      INSERT INTO membership_users (full_name, phone_number, password, is_approved, expires_at, created_at)
-      VALUES (${fullName}, ${phoneNumber}, ${password}, false, ${new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()}, ${new Date().toISOString()})
+      INSERT INTO membership_users (full_name, phone_number, password, is_approved, status, expires_at, created_at)
+      VALUES (${fullName}, ${phoneNumber}, ${password}, false, 'Pending', ${new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()}, ${new Date().toISOString()})
       RETURNING *
     `
 
