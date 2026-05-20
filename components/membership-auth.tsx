@@ -97,6 +97,7 @@ export function MembershipAuth() {
         }
       }
     } catch (err) {
+      console.error('Auth submission error:', err)
       setError("Ikibazo gikomeye serivisi. Mugerageze mukanya.")
     } finally {
       setIsLoading(false)

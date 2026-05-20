@@ -29,19 +29,6 @@ export async function POST(request: NextRequest) {
       )
     `
 
-    // Check if user already exists
-    const existingUser = await sql`
-      SELECT * FROM membership_users 
-      WHERE phone_number = ${phoneNumber}
-      LIMIT 1
-    `
-
-    if (existingUser.length > 0) {
-      return NextResponse.json(
-        { success: false, message: "Umuntu uyu nomero ya telefone wamenyekiriye. Mugerageza nomero zitandukwe." },
-        { status: 400 }
-      )
-    }
 
     // Create new user
     const newUser = await sql`
@@ -55,8 +42,17 @@ export async function POST(request: NextRequest) {
       message: "Kugirango wemererwe gukora ano masuzumabumenyi, urasabwa guhamagara cg kwandikira Admin kuri (+250 783 074 056) kugirango aguhe uburenganzira. Murakoze!",
       user: newUser[0]
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Membership signup error:', error)
+    
+    // Check for unique constraint violation on phone_number
+    if (error.code === '23505' || error.message?.includes('unique') || error.message?.includes('phone_number')) {
+      return NextResponse.json(
+        { success: false, message: "Iyi nomero ya telefone yafashwe. Mugerageza indi nomero." },
+        { status: 400 }
+      )
+    }
+    
     return NextResponse.json(
       { success: false, message: "Ikibazo gikomeye serivisi. Mugerageze mukanya." },
       { status: 500 }

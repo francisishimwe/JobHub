@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
 
     if (user.length === 0) {
       return NextResponse.json(
-        { success: false, message: "Numero ya telefone ntayizwi." },
+        { success: false, message: "Reba niba nimero ndetse n'ijambo banga byanditse neza. Niba nta conte ugira banza uyikore." },
         { status: 401 }
       )
     }
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     // Verify password
     if (foundUser.password !== password) {
       return NextResponse.json(
-        { success: false, message: "Ijambo ry'ibanga saryo." },
+        { success: false, message: "Reba niba nimero ndetse n'ijambo banga byanditse neza. Niba nta conte ugira banza uyikore." },
         { status: 401 }
       )
     }
