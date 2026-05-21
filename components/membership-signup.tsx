@@ -47,7 +47,6 @@ export function MembershipSignup() {
     }
 
     try {
-      // 🚨 FIX: This extracts fields from the formData object state so they aren't undefined!
       const { fullName, phoneNumber, password } = formData
 
       const response = await fetch("/api/membership-signup", {
@@ -63,7 +62,7 @@ export function MembershipSignup() {
       if (data.success) {
         setShowPending(true)
       } else {
-        setError(data.message || "Ikibazo cyo kwinjira. Mugerageze mukanya.")
+        setError(data.message || "Ikibazo cyo kwandika konti. Mugerageze mukanya.")
       }
     } catch (err) {
       console.error("Frontend Submit Error:", err)
@@ -87,7 +86,7 @@ export function MembershipSignup() {
               Kugirango wemererwe gukora ano masuzumabumenyi, urasabwa guhamagara cg kwandikira Admin kuri (+250 783 074 056) kugirango aguhe uburenganzira. Murakoze!
             </h2>
             <p className="text-slate-600">
-              Urakunda kumenyesho, murasabwa guhamagara cg kwandikira Admin kugirango aguhe uburenganzira.
+              Uyamaze kwiyandikisha neza. Amakuru yoherejwe kuri Admin.
             </p>
           </div>
         </Card>

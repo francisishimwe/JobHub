@@ -29,7 +29,6 @@ export function MembershipLogin() {
     setError("")
 
     try {
-      // 🚨 FIX: This extracts phoneNumber and password from formData state so the server can read it!
       const { phoneNumber, password } = formData
 
       const response = await fetch("/api/auth/login", {
