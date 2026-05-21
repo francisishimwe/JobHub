@@ -13,7 +13,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (!process.env.DATABASE_URL) {
+    const databaseUrl = process.env.DATABASE_URL || process.env.NEON_DATABASE_URL || process.env.DATABASE_URL_UNPOOLED
+    
+    if (!databaseUrl) {
       console.error("DATABASE_URL environment variable is not set")
       return NextResponse.json(
         { success: false, message: "Database configuration error" },
@@ -21,7 +23,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const sql = neon(process.env.DATABASE_URL)
+    const sql = neon(databaseUrl)
 
     // Find user by phone number
     console.log("Attempting to find user with phone:", phoneNumber)
