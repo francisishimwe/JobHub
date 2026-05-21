@@ -29,21 +29,24 @@ export function MembershipLogin() {
     setError("")
 
     try {
+      // FIX: Safely extract variables from the formData state object
+      const { phoneNumber, password } = formData
+
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ phoneNumber, password }),
       })
 
       const data = await response.json()
 
       if (data.success) {
-        if (data.redirectTo) {
+        if (data.isApproved) {
+          router.push("/isuzumabumenyi")
+        } else if (data.redirectTo) {
           router.push(data.redirectTo)
-        } else {
-          router.push("/exam-interview")
         }
       } else {
         setError(data.message || "Ikibazo cyo kwinjira. Mugerageze mukanya.")

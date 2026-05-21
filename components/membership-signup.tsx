@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { User, Lock, Mail, Phone } from "lucide-react"
+import { User, Lock } from "lucide-react"
 
 interface MembershipFormData {
   fullName: string
@@ -48,12 +48,15 @@ export function MembershipSignup() {
     }
 
     try {
+      // FIX: Safely extract variables from the formData state object
+      const { fullName, phoneNumber, password } = formData
+
       const response = await fetch("/api/membership-signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ fullName, phoneNumber, password }),
       })
 
       const data = await response.json()
