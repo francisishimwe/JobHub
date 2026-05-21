@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Clock, CheckCircle, XCircle } from "lucide-react"
+import { ArrowLeft, Clock } from "lucide-react"
 
 interface RoadRulesQuestion {
   id: string
@@ -130,7 +130,6 @@ export default function AssessmentDetailPage() {
 
   const correctAnswers = userAnswers.filter(a => a.isCorrect).length
   const totalQuestions = questions.length
-  const score = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0
 
   if (loading) {
     return (
@@ -232,36 +231,52 @@ export default function AssessmentDetailPage() {
         )}
 
         {showResults && (
-          <Card className="p-8 text-center mb-6 bg-gradient-to-r from-blue-50 to-indigo-50">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Igisubizo cyawe
-            </h2>
-            <div className="text-6xl font-bold text-blue-600 mb-4">
-              {score}%
-            </div>
-            <p className="text-gray-600 mb-6">
-              Wahisanye {correctAnswers} kuri {totalQuestions} ibibazo neza
-            </p>
-            <div className="flex justify-center gap-4">
-              <Button
-                onClick={handleBackToSelection}
-                variant="outline"
-              >
-                Subira kuri Isuzuma
-              </Button>
-              <Button
-                onClick={() => {
-                  setShowResults(false)
-                  setQuizStarted(false)
-                  setUserAnswers([])
-                  setTimeRemaining(questions.length * 300)
-                }}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                Subirira Isuzuma
-              </Button>
-            </div>
-          </Card>
+          <>
+            {/* Top Navigation Buttons */}
+            <Card className="p-6 mb-6">
+              <div className="flex flex-wrap justify-center gap-4">
+                <Button
+                  onClick={() => {
+                    setShowResults(false)
+                    setQuizStarted(false)
+                    setUserAnswers([])
+                    setTimeRemaining(questions.length * 300)
+                  }}
+                  variant="outline"
+                  className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                >
+                  Subirira Isuzuma
+                </Button>
+                {assessmentId < 10 && (
+                  <Button
+                    onClick={() => router.push(`/isuzumabumenyi/${assessmentId + 1}`)}
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    Isuzuma Ibikurikira
+                  </Button>
+                )}
+                <Button
+                  onClick={handleBackToSelection}
+                  className="bg-slate-600 hover:bg-slate-700 text-white"
+                >
+                  Byarukanire
+                </Button>
+              </div>
+            </Card>
+
+            {/* Score Display */}
+            <Card className="p-8 text-center mb-6 bg-gradient-to-r from-blue-50 to-indigo-50">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Igisubizo cyawe
+              </h2>
+              <div className="text-6xl font-bold text-blue-600 mb-4">
+                Amanota: {correctAnswers}/{totalQuestions}
+              </div>
+              <p className="text-gray-600 mb-6">
+                Wahisanye {correctAnswers} kuri {totalQuestions} ibibazo neza
+              </p>
+            </Card>
+          </>
         )}
 
         {quizStarted && (
@@ -288,12 +303,19 @@ export default function AssessmentDetailPage() {
                       const showResult = showResults
                       
                       let buttonClass = "border-gray-200 hover:border-blue-300 hover:bg-blue-50"
-                      
+                      let textStyle = "text-gray-900"
+                      let showCheckmark = false
+                      let showCross = false
+
                       if (showResult) {
                         if (isCorrect) {
-                          buttonClass = "border-green-500 bg-green-50 text-green-800"
+                          buttonClass = "border-green-500 bg-green-50"
+                          textStyle = "text-green-800 font-medium"
+                          showCheckmark = true
                         } else if (isSelected && !isCorrect) {
-                          buttonClass = "border-red-500 bg-red-50 text-red-800"
+                          buttonClass = "border-red-500 bg-red-50"
+                          textStyle = "text-red-800 font-medium"
+                          showCross = true
                         }
                       } else if (isSelected) {
                         buttonClass = "border-blue-500 bg-blue-50 text-blue-800"
@@ -310,12 +332,12 @@ export default function AssessmentDetailPage() {
                             <span className="font-bold text-lg">
                               {optionLabels[optionIndex]}
                             </span>
-                            <span>{option}</span>
-                            {showResult && isCorrect && (
-                              <CheckCircle className="h-5 w-5 text-green-600 ml-auto" />
+                            <span className={textStyle}>{option}</span>
+                            {showCheckmark && (
+                              <span className="ml-auto text-green-600 text-xl">✅</span>
                             )}
-                            {showResult && isSelected && !isCorrect && (
-                              <XCircle className="h-5 w-5 text-red-600 ml-auto" />
+                            {showCross && (
+                              <span className="ml-auto text-red-600 text-xl">❌</span>
                             )}
                           </div>
                         </button>
@@ -334,9 +356,42 @@ export default function AssessmentDetailPage() {
                   size="lg"
                   disabled={userAnswers.length !== questions.length}
                 >
-                  Ohereza Igisubizo
+                  Ohereza isuzuma
                 </Button>
               </div>
+            )}
+
+            {showResults && (
+              <Card className="p-6 mt-6">
+                <div className="flex flex-wrap justify-center gap-4">
+                  <Button
+                    onClick={() => {
+                      setShowResults(false)
+                      setQuizStarted(false)
+                      setUserAnswers([])
+                      setTimeRemaining(questions.length * 300)
+                    }}
+                    variant="outline"
+                    className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                  >
+                    Subirira Isuzuma
+                  </Button>
+                  {assessmentId < 10 && (
+                    <Button
+                      onClick={() => router.push(`/isuzumabumenyi/${assessmentId + 1}`)}
+                      className="bg-green-600 hover:bg-green-700 text-white"
+                    >
+                      Isuzuma Ibikurikira
+                    </Button>
+                  )}
+                  <Button
+                    onClick={handleBackToSelection}
+                    className="bg-slate-600 hover:bg-slate-700 text-white"
+                  >
+                    Byarukanire
+                  </Button>
+                </div>
+              </Card>
             )}
           </div>
         )}
