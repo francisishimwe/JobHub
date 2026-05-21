@@ -64,6 +64,7 @@ export function MembershipSignup() {
         setError(data.message || "Ikibazo cyo kwinjira. Mugerageze mukanya.")
       }
     } catch (err) {
+      console.error("Frontend Submit Error:", err)
       setError("Ikibazo gikomeye serivisi. Mugerageze mukanya.")
     } finally {
       setIsLoading(false)

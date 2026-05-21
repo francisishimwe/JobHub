@@ -12,8 +12,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const sql = neon(process.env.DATABASE_URL!)
+    if (!process.env.DATABASE_URL) {
+      console.error("DATABASE_URL environment variable is not set")
+      return NextResponse.json(
+        { success: false, message: "Database configuration error" },
+        { status: 500 }
+      )
+    }
 
+    const sql = neon(process.env.DATABASE_URL)
+
+    console.log("Creating membership_users table if not exists")
     // Create membership_users table if it doesn't exist with session_token column
     await sql`
       CREATE TABLE IF NOT EXISTS membership_users (
@@ -29,13 +38,14 @@ export async function POST(request: NextRequest) {
       )
     `
 
-
+    console.log("Inserting new user:", { fullName, phoneNumber })
     // Create new user
     const newUser = await sql`
       INSERT INTO membership_users (full_name, phone_number, password, is_approved, status, expires_at, created_at)
       VALUES (${fullName}, ${phoneNumber}, ${password}, false, 'Pending', ${new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()}, ${new Date().toISOString()})
       RETURNING *
     `
+    console.log("New user created:", newUser[0])
 
     return NextResponse.json({
       success: true,
@@ -43,7 +53,7 @@ export async function POST(request: NextRequest) {
       user: newUser[0]
     })
   } catch (error: any) {
-    console.error('Membership signup error:', error)
+    console.error("Backend Auth Error:", error)
     
     // Check for unique constraint violation on phone_number
     if (error.code === '23505' || error.message?.includes('unique') || error.message?.includes('phone_number')) {

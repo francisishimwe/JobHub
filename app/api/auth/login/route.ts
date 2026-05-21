@@ -13,14 +13,24 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const sql = neon(process.env.DATABASE_URL!)
+    if (!process.env.DATABASE_URL) {
+      console.error("DATABASE_URL environment variable is not set")
+      return NextResponse.json(
+        { success: false, message: "Database configuration error" },
+        { status: 500 }
+      )
+    }
+
+    const sql = neon(process.env.DATABASE_URL)
 
     // Find user by phone number
+    console.log("Attempting to find user with phone:", phoneNumber)
     const user = await sql`
       SELECT * FROM membership_users 
       WHERE phone_number = ${phoneNumber}
       LIMIT 1
     `
+    console.log("User query result:", user)
 
     if (user.length === 0) {
       return NextResponse.json(
@@ -30,6 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     const foundUser = user[0]
+    console.log("Found user:", { id: foundUser.id, phone: foundUser.phone_number, isApproved: foundUser.is_approved })
 
     // Verify password
     if (foundUser.password !== password) {
@@ -40,6 +51,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check approval status
+    console.log("Checking approval status. is_approved:", foundUser.is_approved, "Type:", typeof foundUser.is_approved)
     if (!foundUser.is_approved) {
       return NextResponse.json({
         success: true,
@@ -76,7 +88,7 @@ export async function POST(request: NextRequest) {
 
     return response
   } catch (error) {
-    console.error('Login error:', error)
+    console.error("Backend Auth Error:", error)
     return NextResponse.json(
       { success: false, message: "Ikibazo gikomeye serivisi. Mugerageze mukanya." },
       { status: 500 }
